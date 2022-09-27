@@ -1,0 +1,5 @@
+<Atlas><Texture filename="quest_log_page2.tex" />
+    <Elements>
+        <Element name="quest_log_page2.tex" u1="0.00048828125" u2="0.95361328" v1="0.31689453" v2="0.99951172"/>
+    </Elements>
+</Atlas>

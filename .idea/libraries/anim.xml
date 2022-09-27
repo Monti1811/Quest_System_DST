@@ -1,0 +1,39 @@
+<component name="libraryTable">
+  <library name="anim">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/anim/glommer_lightflower.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/nightmarechester_eyebone.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/shadow_lance.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/chester_boss.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/nightmarechester_ground_fx.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/frogking_p_crown.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/shadow_mitre.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/nightmarechester_splash.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/quest_board.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/frogking_scepter.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/glommer_puddle.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/nightmarechester_ground_fx_gruen.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/purple_goo.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/frogking_anim.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/frogking_beyblade.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/nightmarechester_ground_fx_schwarz.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/nightmarechester_splat.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/blackglommerfuel.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/frogking.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/glommer_boss.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/nightmarechester.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/request_quest.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/shadow_lance_ground.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/quest_stars.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/blackglommerspit_gerat.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/glommerfuelmachine_item.zip!/" />
+      <root url="jar://$PROJECT_DIR$/anim/shadow_crest.zip!/" />
+      <root url="file://$PROJECT_DIR$/../../data/scripts" />
+    </CLASSES>
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$PROJECT_DIR$/../../data/scripts" />
+    </NATIVE>
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,298 @@
+Hello!
+
+When making this mod, I tried to make it as open as possible so that other modders can use their skills to add new ways of questing! If you would like to have some changes to the code so that you can change something easier or something else, let me know and I will see what I can do!
+
+
+Quest_Component:
+
+	If you want to add a quest to a character, call inst.components.quest_component:AddQuest(name). The component will take of the rest.
+	If you want to update a quest with new values, push an event "quest_update" with data values of 
+	{amount = amount,reset = reset,set_amount = set_amount, friendly_goal = bool} or call inst.components.quest_component:UpdateQuest(name,amount,reset,set_amount).
+	amount(number) is added to current amount,reset(bool) resets the amount to 0, set_amount(number) sets it to a certain value and friendly_goal also pushes the event to nearby players so that their quest also updates if they have the same.
+	If you want to remove a quest, call inst.components.quest_component:RemoveQuest(name) and inst.components.quest_component:RemoveAllQuests() 
+	if you want to remove all quests.
+	SetPoints(points) and AddPoints(points) can be used to change the values of the points of a character. SetLevel(new_level) can be used to 
+	change the level of a character.
+	SetOnFinished(fn) is called when a quest is finished with the arguments of the character and a table of the items from the rewards.
+	SetOnLevelUp(fn) is called when a character levels up and has the arguments of the character and the level.
+	ShowQuestHUD() shows the quest log upon being called.
+	StartBossFight(pos) starts a bossfight with a character, pos should be the position of your character before calling this function.
+	GetUnusedQuestNum(diff) returns a random questname of a certain difficulty if set, otherwise it will be completely random.
+	SetQuestData(quest_name,key,value) and GetQuestData(quest_name,key) can be used to store data of your quests. You can use it in the start_fn 
+	of quests to save specific data that needs to be loaded during the next server start.
+
+Quest_LoadPostPass:
+	
+	I only used this to save the boss GUID if a server is restarted during a boss battle, as loadpostpass is not working in components that are not attached to TheWorld.
+	TheWorld.components.quest_loadpostpass:MakeBoss(boss,diff,num,fn) can be called to create a boss from the bosses TUNING table. 
+	The function returns the boss, so you will need to place him somewhere. boss takes an entity as argument, it is used during loadpostpass. 
+	diff is the difficulty ("EASY", "NORMAL" and "DIFFICULT"), num is a key of the table of the difficulty. 
+	fn is run at the end of the function with the argument of the boss creature.
+
+AttackWaves:
+
+	A custom component that attacks a victim for a certain amount of rounds with a certain amount of creatures.
+	In TheWorld.components.attackwaves.victims the victims are saved, you can add to them if you want.
+	In TheWorld.components.attackwaves.attacking_creatures the attacking creatures are saved, you can add to them if you want.
+	TheWorld.components.attackwaves:StartAttack(player,attacksize,delta,difficulty) can be used to start an attackwave.
+	player is the character that should defend the victim, attacksize is a table ({amount,rounds} amount is amount of creatures that spawn each 
+	round, rounds is the amount of rounds). delta is the time between which the attacking creatures spawn. difficulty is the difficulty of the 
+	attackwave from 1 to 5.
+
+TemporyBonus:
+
+	A custom component that adds temporary boni to a character. Can be called with inst.components.temporarybonus:AddBonus(bonus,name,amount,time).
+	bonus is one of the boni found in self.bonusfunctions, name should be the name of the quest or something else if you use it elsewhere.
+	amount is the amount of the boni, for example amount 50 for bonus health gives +50 health. time is the time till the bonus disappears in seconds.
+
+Request:
+
+	Requests give a random quest upon reading them. The different difficulty requests give a random quest of this difficulty.
+	Specific requests give a specific quest upon reading.
+
+	local request = SpawnPrefab("request_quest_specific") 
+	request:SetQuest(quest_name)
+
+	When running this function, the request will give this specific quest upon reading it.
+	If your quest log is full, requests will not be consumed.
+
+own_quests_template.lua:
+
+	Can be used to have a look at how quests should look like. See also quests.lua for more examples.
+
+
+TUNING Values:
+
+	GLOBAL.TUNING.QUEST_COMPONENT.BOSSES
+
+		Contains 3 tables, "EASY", "NORMAL" and "DIFFICULT", where the bosses that can be fought on the boss island are saved.
+
+	GLOBAL.TUNING.QUEST_COMPONENT.BOSSFIGHT_REWARDS
+
+		Contains 3 tables, "EASY", "NORMAL" and "DIFFICULT", where the rewards for fighting bosses are saved.
+
+	GLOBAL.TUNING.QUEST_COMPONENT.QUEST_BOARD.PREFABS_MOBS
+
+		Contains all custom goals that are added to the game. 
+
+	GLOBAL.TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS
+
+		A table that contains custom functions I created to make custom quests. They consist of functions that can be used for quite different tasks, I didnt use all possibilities as there would be too many, so if you want to make some new custom goals, you can use these if you want.
+
+
+Functions that can be used:
+
+If you are using these functions in the command line, dont use the GLOBAL.
+
+GLOBAL.AddQuests(table)
+
+	Adds quests to the quest pool. Use this function to add your quests and don't do it by adding them to the TUNING table, otherwise they won't be added to the difficulty tables. Use a table that can be iterated through by pairs and in the format that is shown in own_quest_template.lua.
+	For examples of start_fn and onfinished have a look at scripts/quests.lua and quest_system/Quest_Board_Util.lua.
+
+	Example:
+
+	local quest = 
+
+	{
+		{
+			name = "Quest for Wilson",	
+			victim = "pigman", 		
+			counter_name = nil, 
+			hovertext = "Kill Pigmans", 
+			description = "This is a description", 
+			amount = 5,				
+			rewards = {
+				pigskin = 3, 
+				butterflywings = 3,
+				}, 
+			points = 100,
+			start_fn = nil,
+			onfinished = nil, 
+			character = "wilson", 
+		},
+	}
+
+	GLOBAL.AddQuests(quest)
+
+
+GLOBAL.SaveOwnQuests()
+	
+	Probably not needed for most, it saves the custom quests that were made by the players.
+
+
+GLOBAL.ExportOwnQuests(name)
+
+	Useful if you want to use the quests you created in game somewhere else or if you want to change them slighty. Will export them in a file in the "steamapps/common/Don't Starve Together/data" folder under the name own_quests_"name".txt. It will be encoded by json.
+
+	Example:
+	GLOBAL.ExportOwnQuests("test")
+
+
+GLOBAL.ImportOwnQuests(name,on_start)
+
+	Used to import your previously exported quests. name is the same you chose for the export function (own_quests_"name".txt). on_start should be set to true if you run this function when starting the server.
+
+	Example:
+	GLOBAL.ImportOwnQuests("test",true)
+
+
+GLOBAL.SetLevelRewards(tab,level)
+
+	If you want to change the level rewards that you get, use this function. If level is nil, the table will be used to replace all level rewards, so be sure to set a reward for each level. If you only want to replace it for a level, set the level accordingly and add a table with the rewards.
+	level needs to be a multiple of 5 starting from 5 to 195.
+	Levels are defined in quest_system/Quest_Board_Util.lua.
+
+	Example 1:
+
+	local reward = {pigskin = 3,butterflywings = 3}
+	GLOBAL.SetLevelRewards(reward,5)
+
+	Example 2:
+	local rewards = {	[5] = {pigskin = 3,butterflywings = 3},
+						[10] = {pigskin = 3,butterflywings = 3},
+						...
+						[195] = {pigskin = 3,butterflywings = 3},
+					}	
+	GLOBAL.SetLevelRewards(rewards)			
+
+
+GLOBAL.AddBosses(boss,difficulty)
+
+	A function to add custom bosses that can be fought when doing the bossfight. boss needs to be a table, have a look at quest_system/tuning_strings.lua GLOBAL.TUNING.QUEST_COMPONENT.BOSSES to see how it should be constructed.
+	Difficulty can be: "EASY", "NORMAL" or "DIFFICULT"
+
+	Example:
+
+	local boss = {	name = "hound", 
+					health = 1000, 
+					damage = 100, 
+					scale = 2,
+					fn = function(boss) print("this function is running with the boss as argument when he is created.") end,
+				}
+	GLOBAL.AddBosses(boss,"NORMAL")
+
+
+GLOBAL.AddCustomGoals(goals,modname)
+
+	Adds custom goals that can be chosen from in the Quest Board. Modname is required to identify the quests that were created for the next start of the server. Dont change the order of the goals between starts of the server as this will cause problems, as the functions that are then called can be something else. As functions cannot be saved, I needed to do it with strings. You can add number to be sure that your goal will always be the same if you change the goals in the future, but pay attention to never use the same number twice. So if you plan on deleting quests, its better to add a number. The mod will automatically add a number beginning from 1 so start your numbers at a higher number like 1000.
+
+	Example 1: Adding a custom goal that is a creature.
+
+	local goals = 
+	{
+		{
+			text = "Text that will be shown in the Quest Board",
+			prefab = "prefab name of the victim",
+			atlas = "images/inventoryimages1.xml", --atlas file of the picture that will be shown in the questlog
+			tex = "axe.tex", --tex file of the picture that will be shown in the questlog
+			number = 1001,
+		},
+		{
+			text = "Woven Shadow",
+			prefab = "stalker_minion1",
+			atlas = "images/inventoryimages1.xml", --atlas file of the picture that will be shown in the questlog
+			tex = "axe.tex", --tex file of the picture that will be shown in the questlog
+			number = 1002,
+		},
+
+	}
+
+	GLOBAL.AddCustomGoals(goals,"mymodname")
+
+	Example 2: Adding a custom goal that is not a creature.
+
+	local goals = 
+
+	{
+		{
+			text = "Text that will be shown in the Quest Board",
+			counter = "What will be shown in the Quest Log under the amount",
+			fn = the function that will be run on accepting the quest,
+			tex = "axe.tex", --tex file of the picture that will be shown in the questlog
+			atlas = "images/inventoryimages1.xml", --atlas file of the picture that will be shown in the questlog
+			number = 1003,
+		},
+		{
+			text = "Create x Amount of Pig Houses",
+			counter = "Pig Houses Created",
+			fn = function(inst,amount,quest_name)
+				GLOBAL.TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["build x y times"](inst,amount,"pighouse",quest_name)
+			end,
+			tex = "pigman.tex", --tex file of the picture that will be shown in the questlog
+			atlas = "images/victims.xml", --atlas file of the picture that will be shown in the questlog
+			number = 1004,
+		},
+	}
+
+	GLOBAL.AddCustomGoals(goals,"mymodname")
+
+
+GLOBAL.AddCustomRewards(rewards)
+
+	Adds custom rewards that can be chosen when creating new quests with the quest board. You need to pass a table of either the prefab names or tables in a table if you want to have another name than the one that is gotten from STRINGS.NAMES.PREFAB shown when choosing the reward in the quest board.
+
+	Example: Custom reward that is an item
+
+	local rewards = 
+	{
+		"butterfly",
+		"butterflywings",
+		{"butterfly","This will be shown instead of Butterfly"}
+
+	}
+
+	GLOBAL.AddCustomRewards(rewards)
+
+GLOBAL.AddCustomFunctionRewards(rewards)
+	
+	Same as AddCustomRewards but for functions. You can add custom functions that are run as a reward.
+
+	Example: Custom reward that is a function
+
+	local rewards = 
+	{
+		text = "This will be shown on the quest board",
+		fn = function() print("this is the function that is run when the rewards are given") end,
+		name = "short_name_for_function",
+	}
+
+	GLOBAL.AddCustomRewards(rewards)
+
+
+GLOBAL.SetBossFightRewards(difficulty,rewards,overwrite)
+
+	Adds or changes the boss fight rewards that can be gained upon defeating a boss creature. difficulty can be "EASY", "NORMAL" or "DIFFICULT". If overwrite is set to true, it will overwrite the rewards of this difficulty with those that you set in rewards. rewards needs to be a table as seen in the examples. item[1] gets a random amount between the values of amount[1]. If you want to have a fixed amount, set it to the same numbers.
+
+	Example 1: Adding rewards
+
+	local rewards = 
+	{
+
+		{
+			items = {"pigskin","custone",},
+			amount = {{10,20},{10,10},},
+		},
+		{
+			items = {"cutgrass","silk",},
+			amount = {{10,20},{10,10},},
+		},
+	}
+
+	GLOBAL.SetBossFightRewards("EASY",rewards)
+
+	Example 2: Overwriting rewards
+
+	local rewards = 
+	{
+
+		{
+			items = {"pigskin","custone",},
+			amount = {{10,20},{10,10},},
+		},
+		{
+			items = {"cutgrass","silk",},
+			amount = {{10,20},{10,10},},
+		},
+	}
+
+	GLOBAL.SetBossFightRewards("NORMAL",rewards,true)

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="30" height="30" tilewidth="64" tileheight="64">
+ <tileset firstgid="1" name="ground" tilewidth="64" tileheight="64">
+  <image source="../../../../../../Don't Starve Mod Tools/mod_tools/Tiled/dont_starve/tiles.png" width="512" height="384"/>
+ </tileset>
+ <layer name="BG_TILES" width="30" height="30">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYBzFo3gUj2IqYyYoppY6Uu3FZS4heWrajQvTKqzpbS8xdtM6fY3aO3BxO5zS80CVGwNVTo7iUTyKRzEyBgByjQPl
+  </data>
+ </layer>
+ <objectgroup name="FG_OBJECTS" width="30" height="30">
+  <object name="portal" type="lavaarena_portal" x="0" y="0"/>
+ </objectgroup>
+</map>

@@ -1,0 +1,5 @@
+--scaling quests                                    : fixed
+--wanda gains 1 age which is 2.5 hp from leveling   : fixed
+--nightfisher fishes are counted even if not night  : probably fixed
+
+gräber ausheben mission
