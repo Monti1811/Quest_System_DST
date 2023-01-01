@@ -128,7 +128,6 @@ end
 
 --local loots = {"lootsetupfn","numrandomloot","chanceloot","chanceloottable","ifnotchanceloot","loot",}
 
---TODO: Crash when having two attackwaves active at once and one of the victims dies which resets the lists and the new one tries to spawn a new attacker on the empty list
 function AttackWaves:ReleaseSpawnAfterTime(player,target,delta,attacksize)
 	devprint("ReleaseSpawnAfterTime",target,delta,attacksize)
 	local prefab = target.prefab

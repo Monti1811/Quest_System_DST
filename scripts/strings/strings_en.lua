@@ -605,7 +605,7 @@ return {
 			NAME = "Wetlands",
 			DESCRIPTION = "It's so nice to be wet, don't you want to be wet like that? \nCan you manage to be wetter than 50%% for a total of %s seconds?",
 			COUNTER = "Seconds wet",
-			HOVER = "Stay at minimum 50%% wetness for %s seconds",
+			HOVER = "Stay at minimum 50%% wetness for %s minutes",
 
 		},
 

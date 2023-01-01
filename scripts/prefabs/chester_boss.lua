@@ -337,6 +337,20 @@ local function OnHaunt(inst)
     return false
 end
 
+local function OnLoad(inst,data)
+    if data then
+        if data.can_do_pickup == nil then
+            inst:RemoveTag("can_do_pickup")
+        end
+    end
+end
+
+local function OnSave(inst,data)
+    if inst:HasTag("can_do_pickup") then
+        data.can_do_pickup = true
+    end
+end
+
 local function create_nightmarechester()
     local inst = CreateEntity()
 
@@ -361,6 +375,7 @@ local function create_nightmarechester()
     inst:AddTag("notraptrigger")
     inst:AddTag("noauradamage")
     inst:AddTag("fridge")
+    inst:AddTag("can_do_pickup")
 
     inst.MiniMapEntity:SetIcon("chester.png")
     inst.MiniMapEntity:SetCanUseCache(false)
@@ -432,6 +447,9 @@ local function create_nightmarechester()
     inst.sg:GoToState("idle")
 
     inst:SetBrain(brain)
+
+    inst.OnLoad = OnLoad
+    inst.OnSave = OnSave
 
     return inst
 end

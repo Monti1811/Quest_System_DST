@@ -138,3 +138,61 @@ end)
 
 AddStategraphActionHandler("wilson", GLOBAL.ActionHandler(SHADOW_ROOK_ATTACK, "doequippedaction"))
 AddStategraphActionHandler("wilson_client", GLOBAL.ActionHandler(SHADOW_ROOK_ATTACK, "doequippedaction"))
+
+--Add a pickup action for nightmarechester
+local function ExtraPickupRange(doer, dest)
+	if dest ~= nil then
+		local target_x, target_y, target_z = dest:GetPoint()
+
+		local is_on_water = GLOBAL.TheWorld.Map:IsOceanTileAtPoint(target_x, 0, target_z) and not GLOBAL.TheWorld.Map:IsPassableAtPoint(target_x, 0, target_z)
+		if is_on_water then
+			return 0.75
+		end
+	end
+	return 0
+end
+
+local CHESTER_PICKUP = GLOBAL.Action({ priority=1, extra_arrive_dist=ExtraPickupRange, mount_valid=true })
+CHESTER_PICKUP.id = "CHESTER_PICKUP"
+CHESTER_PICKUP.priority = 5
+CHESTER_PICKUP.fn =  function(act)
+	if act.doer.components.container ~= nil then
+		act.doer:PushEvent("onpickupitem", { item = act.target })
+		act.doer.components.container:GiveItem(act.target, nil, act.target:GetPosition())
+		return true
+	end
+end
+
+AddAction(CHESTER_PICKUP)
+
+AddStategraphActionHandler("chester", GLOBAL.ActionHandler(CHESTER_PICKUP, "chomp_item"))
+
+--Add a rightclick option to enable/disable pickup chester
+local PICKUP_TOGGLE = AddAction("PICKUP_TOGGLE", "Pickup toggle",function(act)
+	if act.target then
+		if act.target:HasTag("can_do_pickup") then
+			act.target:RemoveTag("can_do_pickup")
+		else
+			act.target:AddTag("can_do_pickup")
+		end
+	end
+end)
+
+PICKUP_TOGGLE.strfn = function(act)
+	if act.target then
+		if act.target:HasTag("can_do_pickup") then
+			return "Disable Pickup ability"
+		else
+			return "Enable Pickup ability"
+		end
+	end
+end
+
+AddComponentAction("SCENE", "container", function(inst, doer, actions, right)
+	if right and inst.prefab == "nightmarechester" then
+		table.insert(actions, PICKUP_TOGGLE)
+	end
+end)
+
+AddStategraphActionHandler("wilson", GLOBAL.ActionHandler(PICKUP_TOGGLE, "dolongaction"))
+AddStategraphActionHandler("wilson_client", GLOBAL.ActionHandler(PICKUP_TOGGLE, "dolongaction"))

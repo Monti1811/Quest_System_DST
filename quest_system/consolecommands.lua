@@ -24,7 +24,7 @@ function GLOBAL.c_showquest(inst)
         print("[Quest System]",inst,"cannot do any quest!")
         return
     end
-    for count = 1,5 do
+    for _ = 1,5 do
         inst.components.quest_component:AddQuest(GetRandomQuest())
     end
     inst.components.quest_component:ShowQuestHUD()
@@ -32,7 +32,7 @@ end
 
 function GLOBAL.c_deletequest(name)
     if GLOBAL.TUNING.QUEST_COMPONENT.QUESTS[name] ~= nil then
-        for k,v in ipairs(GLOBAL.AllPlayers) do
+        for _,v in ipairs(GLOBAL.AllPlayers) do
             if v.components.quest_component then
                 v.components.quest_component:RemoveQuest(name)
             end
@@ -42,7 +42,7 @@ function GLOBAL.c_deletequest(name)
 end
 
 function GLOBAL.c_deleteallquests()
-    for k,v in ipairs(GLOBAL.AllPlayers) do
+    for _,v in ipairs(GLOBAL.AllPlayers) do
         if v.components.quest_component then
             v.components.quest_component:RemoveAllQuests()
         end
@@ -59,7 +59,7 @@ function GLOBAL.c_levelup(levels,inst)
     	return
     end
     levels = levels or 1
-    for count = 1,levels do
+    for _ = 1,levels do
     	inst.components.quest_component:LevelUp()
     end
 end
@@ -154,7 +154,7 @@ function GLOBAL.c_testquests(inst)
     local old_max = inst.components.quest_component.max_amount_of_quests
     inst.components.quest_component.max_amount_of_quests = 9999
     local count = 0
-    for k,v in pairs(GLOBAL.TUNING.QUEST_COMPONENT.QUESTS) do
+    for k in pairs(GLOBAL.TUNING.QUEST_COMPONENT.QUESTS) do
         count = count + 1
         devprint("c_testquests",k,count)
         inst.components.quest_component:AddQuest(k,true)
@@ -177,7 +177,7 @@ end)
 
 AddUserCommand("bossisland_rescue", {
     --aliases = schnitzel,
-    prettyname = function(command) return "debug save" end,
+    prettyname = function() return "debug save" end,
     desc = function() return "Debug Save from Boss Island" end,
     permission = "USER",
     params = {},
@@ -185,7 +185,7 @@ AddUserCommand("bossisland_rescue", {
     usermenu = false,
     servermenu = false,
     vote = false,
-    serverfn = function(params, caller)
+    serverfn = function(_, caller)
         local player = GLOBAL.UserToPlayer(caller.userid)
         if player ~= nil then
             if player.components.quest_component then

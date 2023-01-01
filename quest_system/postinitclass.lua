@@ -362,3 +362,83 @@ end
 AddClassPostConstruct("components/combat_replica", CanBeAttacked)
 
 
+----------------------------------------Brain Post Inits----------------------------------------
+
+local PICKUP_DISTANCE = 7
+local NO_PICKUP_TAGS = { "INLIMBO", "catchable", "fire", "irreplaceable", "heavy", "outofreach", "spider", "_container" }
+
+local function CheckIfItemsPickupable(inst)
+	if not inst:HasTag("can_do_pickup") then
+		return false
+	end
+	local mx, my, mz = inst.Transform:GetWorldPosition()
+	local ents = TheSim:FindEntities(mx, 0, mz, PICKUP_DISTANCE, {"_inventoryitem"}, NO_PICKUP_TAGS)
+	for i, v in ipairs(ents) do
+		if v.components.inventoryitem ~= nil and
+				v.components.inventoryitem.canbepickedup and
+				v.components.stackable ~= nil and
+				inst.components.container:Has(v.prefab, 1) then
+			return true
+		end
+	end
+	return false
+end
+
+local function EatItems(inst)
+	if inst.sg:HasStateTag("busy") then
+		return
+	end
+	local mx, my, mz = inst.Transform:GetWorldPosition()
+	local ents = TheSim:FindEntities(mx, 0, mz, PICKUP_DISTANCE, {"_inventoryitem"}, NO_PICKUP_TAGS)
+	for i, v in ipairs(ents) do
+		if v.components.inventoryitem ~= nil and
+				v.components.inventoryitem.canbepickedup and
+				v.components.stackable ~= nil and
+				inst.components.container:Has(v.prefab, 1) then
+			return GLOBAL.BufferedAction(inst, v, GLOBAL.ACTIONS.CHESTER_PICKUP)
+		end
+	end
+end
+
+require "behaviours/doaction"
+
+AddBrainPostInit("chesterbrain",function(self)
+	local pickup = GLOBAL.WhileNode(function() return CheckIfItemsPickupable(self.inst) end, "Pickup Items",
+			DoAction(self.inst, EatItems))
+	local pos = 0
+	for i,node in ipairs(self.bt.root.children) do
+		if node.name == "Follow" then
+			pos = i + 1
+			break
+		end
+	end
+	table.insert(self.bt.root.children, pos, pickup)
+end)
+
+------------------------------------Stategraph Post Inits-----------------------------------------
+
+AddStategraphState("chester",
+	GLOBAL.State {
+
+		name = "chomp_item",
+		onenter = function(inst)
+			inst.Physics:Stop()
+			inst.AnimState:PlayAnimation("chomp", true)
+		end,
+
+		timeline = {
+			GLOBAL.TimeEvent(5 * GLOBAL.FRAMES, function(inst)
+				inst:PerformBufferedAction()
+			end),
+		},
+
+		events = {
+			GLOBAL.EventHandler("animover", function(inst)
+				inst.sg:GoToState("idle")
+			end),
+		}
+
+	}
+)
+
+

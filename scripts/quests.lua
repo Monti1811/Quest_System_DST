@@ -801,7 +801,7 @@ local quests = {
 	rewards = {nightmarefuel = 80,purpleamulet = 3},
 	points = 1000,
 	start_fn = function(inst,amount,quest_name)
-		local time = 3--math.random(90,180)
+		local time = math.random(90,180)
 		local attacksize = {6,3}
 		local time_inbetween_spawn = 15
 		local diff = 4
@@ -1259,10 +1259,9 @@ local quests = {
 				if inst.components.moisture.moisture > 50 then
 					time = time + 1
 					inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
-					if time >= amount then
+					if time >= amount and inst.check_wetness_quest_component ~= nil then
 						inst.check_wetness_quest_component:Cancel()
 						inst.check_wetness_quest_component = nil
-						return
 					end
 				end
 			end
@@ -1455,7 +1454,7 @@ local quests = {
 	rewards = {nightmarefuel = 10,boards = 3},
 	points = 150,
 	start_fn = function(inst,amount,quest_name)
-		local time = 5--math.random(90,180)
+		local time = math.random(90,180)
 		local attacksize = {5,1}
 		local time_inbetween_spawn = 15
 		local diff = 1
