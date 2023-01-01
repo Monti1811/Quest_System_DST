@@ -336,6 +336,7 @@ function Quest_Component:CompleteQuest(name)
 			self.current_victims[quest.victim] = nil
 		end
 	end
+	self.inst:PushEvent("complete_quest",name)
 	self.quests[name] = nil
 	self.quest_data[name] = nil
 	self.completed_quests = self.completed_quests + 1
