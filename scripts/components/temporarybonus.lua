@@ -174,12 +174,15 @@ local old_SetVal = {}
 local function AddEscapeDeath(inst,amount,name)
 	if inst.components.health then
 		if amount < 0 then
-			if old_SetVal[name] then
-				inst.components.health.SetVal = old_SetVal[name]
-				old_SetVal[name] = nil
+			if old_SetVal[inst.GUID] and old_SetVal[inst.GUID][name] then
+				inst.components.health.SetVal = old_SetVal[inst.GUID][name]
+				old_SetVal[inst.GUID][name] = nil
 			end
 		else
-			old_SetVal[name] = inst.components.health.SetVal or function() end
+			if old_SetVal[inst.GUID] == nil then
+				old_SetVal[inst.GUID] = {}
+			end
+			old_SetVal[inst.GUID][name] = inst.components.health.SetVal or function() end
 			inst.components.health.SetVal = function(self,val,cause,afflicter,...)
 				if self.currenthealth > 0 and val <= 0 then
 					local a,b,c = inst.Transform:GetWorldPosition()
@@ -198,8 +201,11 @@ local function AddEscapeDeath(inst,amount,name)
 					end
 					inst.components.health:SetVal(self:GetMaxWithPenalty()/2)
 					return
+				elseif old_SetVal[inst.GUID][name] then
+					old_SetVal[inst.GUID][name](self,val,cause,afflicter,...)
 				else
-					old_SetVal[name](self,val,cause,afflicter,...)
+					print("No old_SetVal was found, please report that!")
+					dumptable(old_SetVal)
 				end
 			end
 		end
