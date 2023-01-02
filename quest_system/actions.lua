@@ -181,12 +181,17 @@ end)
 PICKUP_TOGGLE.strfn = function(act)
 	if act.target then
 		if act.target:HasTag("can_do_pickup") then
-			return "Disable Pickup ability"
+			devprint("DISABLE", GLOBAL.STRINGS.ACTIONS.PICKUP_TOGGLE.DISABLE)
+			return "DISABLE"
 		else
-			return "Enable Pickup ability"
+			return "ENABLE"
 		end
 	end
 end
+
+GLOBAL.STRINGS.ACTIONS.PICKUP_TOGGLE = {}
+GLOBAL.STRINGS.ACTIONS.PICKUP_TOGGLE.DISABLE = "Disable Pickup ability"
+GLOBAL.STRINGS.ACTIONS.PICKUP_TOGGLE.ENABLE = "Enable Pickup ability"
 
 AddComponentAction("SCENE", "container", function(inst, doer, actions, right)
 	if right and inst.prefab == "nightmarechester" then

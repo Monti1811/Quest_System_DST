@@ -2745,6 +2745,8 @@ local quests = {
 		--TODO: damage with weapon also counts
 		local current_amount = GetCurrentAmount(inst,quest_name)
 		local function OnDamageDone(inst,data)
+			devprint("OnDamageDone", inst)
+			devdumptable(data)
 			if data then
 				if data.damageresolved > 0 then
 					if data.weapon == nil then

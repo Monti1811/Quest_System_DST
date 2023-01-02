@@ -435,6 +435,8 @@ for _,v in ipairs(strings_to_add) do
 	AddString(v)
 end
 
+---------------------------------------Action Strings--------------------------------------------------
+
 if GLOBAL.STRINGS.CHARACTERS.GENERIC.ACTIONFAIL.FIGHT_GLOMMER == nil then
 	GLOBAL.STRINGS.CHARACTERS.GENERIC.ACTIONFAIL.FIGHT_GLOMMER = {}
 end

@@ -511,10 +511,6 @@ local Quest_Widget = Class(Screen, function(self, inst)
 
   local CalculatePoints = TUNING.QUEST_COMPONENT.CalculatePoints
 
-  --TODO : other clients probably don't appear because the players are not loaded if outside of loading range
-  --need to save the values in a table in TheWorld (perhaps save it from the last time they saw them and only actualize it
-  --when they are again near each other
-
   local list_elements = {}
   local ClientObjs = GetPlayerTable()
   local ranked_players = {}       
