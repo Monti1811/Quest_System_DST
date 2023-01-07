@@ -396,8 +396,8 @@ end
 AddClientModRPCHandler("Quest_System_RPC", "AddCustomQuestMakerToClient", AddCustomQuestMakerToClient)
 
 --RPC to show the different temp bonis on the client
-local function AddTempBoniToClient(inst,num,boni,empty)
-	devprint("AddTempBoniToClient",inst,num,boni,empty)
+local function AddTempBoniToClient(inst,num,boni,empty,time)
+	devprint("AddTempBoniToClient",inst,num,boni,empty,time)
 	if num and inst.HUD and inst.HUD.controls then
 		if empty then
 			if inst.HUD.controls["tempboni"..num] then
@@ -405,7 +405,7 @@ local function AddTempBoniToClient(inst,num,boni,empty)
 			end
 		else
 			if boni and inst.HUD.controls["tempboni"..num] then
-				inst.HUD.controls["tempboni"..num]:SetBoniPicture(boni)
+				inst.HUD.controls["tempboni"..num]:SetBoniPicture(boni,time)
 			end
 		end
 	end

@@ -2575,7 +2575,7 @@ local quests = {
 	end,
 	onfinished = function(inst)
 	end,
-	difficulty = 4,
+	difficulty = 5,
 	tex = "glommerflower.tex",
 	atlas = "images/inventoryimages1.xml",
 	hovertext = GetQuestString("Your True Friends","HOVER"),

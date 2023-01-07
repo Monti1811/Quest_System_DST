@@ -47,7 +47,7 @@ function AttackWaveTimer:DoTimer(time,victim,atlas)
     self.progressbar:SetTooltip(string.format("Time till %s arrives: %i",name,time))
     self.progressbar:SetTooltipPos(0,-50,0)
     --Update the time and description
-    self.updatetask = self.inst:DoPeriodicTask(1,function()
+    self.updatetask = self.inst:DoSimPeriodicTask(1,function()
         time = time - 1
         local percent = time/orig_time
         self.progressbar:GetAnimState():SetPercent("fill_progress", percent)

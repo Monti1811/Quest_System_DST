@@ -14,6 +14,13 @@ local function mysplit (inputstr, sep)
     return t
 end
 
+local function toMin(time)
+	time = time or 0
+	local minute = time/60
+	local seconds = math.fmod(time,60)
+	return minute..":"..seconds
+end
+
 local string = {
 
 	health = function(amount)
@@ -132,12 +139,18 @@ local Temp_Boni = Class(Widget, function(self, owner)
 	self.level = self.button:AddChild(Image("images/victims.xml", "arrow_1.tex"))
 	self.level:SetScale(scale/1.7)
 
+	--self.task = nil
+
 end)
 
-function Temp_Boni:SetBoniPicture(boni)
-	devprint("Temp_Boni:SetBoniPicture",boni)
+function Temp_Boni:SetBoniPicture(boni,time)
+	devprint("Temp_Boni:SetBoniPicture",boni,time)
 	if boni then
 		self:Show()
+		if self.task ~= nil then
+			self.task:Cancel()
+			self.task = nil
+		end
 		local str = mysplit(boni,"_")
 		devprint("str",str[1],str[2])
 		local atlas = "images/victims.xml"
@@ -149,17 +162,25 @@ function Temp_Boni:SetBoniPicture(boni)
 			tooltip,num = string[str[1]](tonumber(str[2]))
 		end
 		devprint("tooltip",tooltip,num)
-		self.button:SetTooltip(tooltip or "?")
+		tooltip = tooltip or "Error"
+		self.button:SetTooltip(tooltip.."Time left: "..toMin(time))
 		if num and num > 0 and str[2] then
 			local tex2 = "arrow_"..(num)..".tex"
 			self.level:SetTexture(atlas,tex2)
 		else
 			self.level:Hide()
 		end
+		self.task = self.inst:DoSimPeriodicTask(1, function()
+			self.button:SetTooltip(tooltip.."Time left: "..toMin(time))
+		end)
 	end
 end
 
 function Temp_Boni:RemoveBoniPicture()
+	if self.task ~= nil then
+		self.task:Cancel()
+		self.task = nil
+	end
 	self:Hide()
 end
 
