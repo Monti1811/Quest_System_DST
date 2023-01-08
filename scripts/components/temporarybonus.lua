@@ -289,7 +289,7 @@ function TemporaryBonus:AddBonus(bonus,name,amount,time)
 	end)
 	self.inst:DoTaskInTime(1+math.random()/2,function()
 		if self.inst.userid then
-			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "AddTempBoniToClient"),self.inst.userid,self.inst,num,bonus.."_"..amount,time)
+			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "AddTempBoniToClient"),self.inst.userid,self.inst,num,bonus.."_"..amount,nil,time)
 		end
 	end)
 

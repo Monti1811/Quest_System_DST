@@ -16,8 +16,11 @@ end
 
 local function toMin(time)
 	time = time or 0
-	local minute = time/60
-	local seconds = math.fmod(time,60)
+	local minute = math.floor(time/60)
+	local seconds = math.floor(math.fmod(time,60))
+	if seconds < 10 then
+		seconds = "0"..seconds
+	end
 	return minute..":"..seconds
 end
 
@@ -140,6 +143,7 @@ local Temp_Boni = Class(Widget, function(self, owner)
 	self.level:SetScale(scale/1.7)
 
 	--self.task = nil
+	--self.time = nil
 
 end)
 
@@ -163,7 +167,8 @@ function Temp_Boni:SetBoniPicture(boni,time)
 		end
 		devprint("tooltip",tooltip,num)
 		tooltip = tooltip or "Error"
-		self.button:SetTooltip(tooltip.."Time left: "..toMin(time))
+		self.button:SetTooltip(tooltip.."\nTime left: "..toMin(time))
+		self.time = time
 		if num and num > 0 and str[2] then
 			local tex2 = "arrow_"..(num)..".tex"
 			self.level:SetTexture(atlas,tex2)
@@ -171,7 +176,8 @@ function Temp_Boni:SetBoniPicture(boni,time)
 			self.level:Hide()
 		end
 		self.task = self.inst:DoSimPeriodicTask(1, function()
-			self.button:SetTooltip(tooltip.."Time left: "..toMin(time))
+			self.time = self.time - 1
+			self.button:SetTooltip(tooltip.."\nTime left: "..toMin(self.time))
 		end)
 	end
 end
