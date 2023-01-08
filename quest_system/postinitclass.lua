@@ -367,6 +367,21 @@ AddClassPostConstruct("components/combat_replica", CanBeAttacked)
 local PICKUP_DISTANCE = 7
 local NO_PICKUP_TAGS = { "INLIMBO", "catchable", "fire", "irreplaceable", "heavy", "outofreach", "spider", "_container" }
 
+-- Checks if a specific item is able to be chomped
+local function IsCorrectItem(inst, v)
+	local container = inst.components.container_proxy
+			and inst.components.container_proxy:GetMaster()
+			and inst.components.container_proxy:GetMaster().components.container
+			or inst.components.container or nil
+	if v.components.inventoryitem ~= nil and
+			v.components.inventoryitem.canbepickedup and
+			v.components.stackable ~= nil and
+			container and container:Has(v.prefab, 1) then
+		return true
+	end
+	return false
+end
+
 local function CheckIfItemsPickupable(inst)
 	if not inst:HasTag("can_do_pickup") then
 		return false
@@ -374,10 +389,7 @@ local function CheckIfItemsPickupable(inst)
 	local mx, my, mz = inst.Transform:GetWorldPosition()
 	local ents = TheSim:FindEntities(mx, 0, mz, PICKUP_DISTANCE, {"_inventoryitem"}, NO_PICKUP_TAGS)
 	for i, v in ipairs(ents) do
-		if v.components.inventoryitem ~= nil and
-				v.components.inventoryitem.canbepickedup and
-				v.components.stackable ~= nil and
-				inst.components.container:Has(v.prefab, 1) then
+		if IsCorrectItem(inst, v) then
 			return true
 		end
 	end
@@ -391,10 +403,7 @@ local function EatItems(inst)
 	local mx, my, mz = inst.Transform:GetWorldPosition()
 	local ents = TheSim:FindEntities(mx, 0, mz, PICKUP_DISTANCE, {"_inventoryitem"}, NO_PICKUP_TAGS)
 	for i, v in ipairs(ents) do
-		if v.components.inventoryitem ~= nil and
-				v.components.inventoryitem.canbepickedup and
-				v.components.stackable ~= nil and
-				inst.components.container:Has(v.prefab, 1) then
+		if IsCorrectItem(inst, v) and v.components.stackable ~= nil then
 			return GLOBAL.BufferedAction(inst, v, GLOBAL.ACTIONS.CHESTER_PICKUP)
 		end
 	end

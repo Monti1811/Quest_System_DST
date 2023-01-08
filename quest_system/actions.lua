@@ -156,7 +156,11 @@ local CHESTER_PICKUP = GLOBAL.Action({ priority=1, extra_arrive_dist=ExtraPickup
 CHESTER_PICKUP.id = "CHESTER_PICKUP"
 CHESTER_PICKUP.priority = 5
 CHESTER_PICKUP.fn =  function(act)
-	if act.doer.components.container ~= nil then
+	local container = act.doer.components.container_proxy
+			and act.doer.components.container_proxy:GetMaster()
+			and act.doer.components.container_proxy:GetMaster().components.container
+			or act.doer.components.container or nil
+	if container ~= nil then
 		act.doer:PushEvent("onpickupitem", { item = act.target })
 		act.doer.components.container:GiveItem(act.target, nil, act.target:GetPosition())
 		return true
