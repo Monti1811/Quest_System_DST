@@ -358,6 +358,7 @@ local function ontakefuel(inst)
     end
     inst.AnimState:PlayAnimation("use")
     inst.AnimState:PushAnimation("working_nospin",true)
+    inst.components.fueled:StartConsuming()
 end
 
 local function onsave(inst,data)
@@ -443,13 +444,14 @@ local function gerat()
     --inst.components.periodicspawner:SetSpawnTestFn(SpawnTest)
 
     inst:AddComponent("fueled")
-    inst.components.fueled.fueltype = FUELTYPE.MAGIC
+    inst.components.fueled.fueltype = FUELTYPE.NIGHTMARE
     inst.components.fueled:InitializeFuelLevel(480*4)
     inst.components.fueled:SetDepletedFn(OnEmpty)
     --inst.components.fueled:SetUpdateFn(fuelupdate)
     inst.components.fueled:SetTakeFuelFn(ontakefuel)
     inst.components.fueled:SetFirstPeriod(TUNING.TURNON_FUELED_CONSUMPTION, TUNING.TURNON_FULL_FUELED_CONSUMPTION)
     inst.components.fueled.accepting = true
+    inst.components.fueled:StartConsuming()
     
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
