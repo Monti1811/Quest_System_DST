@@ -1,9 +1,9 @@
 --scaling quests                                    : fixed
 --wanda gains 1 age which is 2.5 hp from leveling   : fixed
 --nightfisher fishes are counted even if not night  : probably fixed
---Wanda can't do quests that require damage received: TODO
+--Wanda can't do quests that require damage received: was never a problem ?!
 --glommer machine doesn't lose durability           : fixed
---RPG level quest shows %s instead of specific amount: TODO
+--RPG level quest shows %s instead of specific amount: probably fixed
 --Feuchtgebiete 2 mal zur auswahl gehabt: TODO
 
 gräber ausheben mission

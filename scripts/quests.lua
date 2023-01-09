@@ -2179,7 +2179,7 @@ local quests = {
 	name = "The RPG Expert",
 	victim = "",
 	counter_name = GetQuestString("The RPG Expert","COUNTER"),
-	description = GetQuestString("The RPG Expert","DESCRIPTION"),
+	description = GetQuestString("The RPG Expert","DESCRIPTION", 3),
 	amount = 3,
 	rewards = {[":func:health;10"] = 8,[":func:sanity;10"] = 8,[":func:hunger;10"] = 8,[":func:damagereduction;0.9"] = 8,[":func:damage;2"] = 8},
 	points = 125,
@@ -2198,7 +2198,7 @@ local quests = {
 	difficulty = 1,
 	tex = "arrow_3.tex",
 	atlas = "images/victims.xml",
-	hovertext = GetQuestString("The RPG Expert","HOVER"),
+	hovertext = GetQuestString("The RPG Expert","HOVER", 3),
 	},
 	custom_vars_fn = function(inst,amount,quest_name)
 		local max_scale = inst.components.quest_component and inst.components.quest_component.scaled_quests[quest_name] and inst.components.quest_component.scaled_quests[quest_name] + 1 or 1
@@ -2219,7 +2219,6 @@ local quests = {
 					{[":func:health;50"] = 16,[":func:sanity;50"] = 16,[":func:hunger;50"] = 16,[":func:damagereduction;0.7"] = 16,[":func:damage;10"] = 16},
 				}
 				quest.rewards = reward_scale[scale]
-				quest.hovertext = GetQuestString(quest.name,"HOVER",vars[scale][1])
 				quest.difficulty = scale
 			end
 			quest.hovertext = GetQuestString(quest.name,"HOVER",vars[scale][1])
@@ -2262,8 +2261,6 @@ local quests = {
 		local OnEquipRod = function() end
 		local OnUnEquipRod = function() end
 		local function OnNight(inst,isnight)
-			--TODO: fishes also count during the day
-			--Probably fixed by changing old_ondone in the function OnDisable
 			if not isnight then 
 				OnDisable(inst)
 				return 
@@ -2742,7 +2739,6 @@ local quests = {
 	rewards = {[":func:damage;10"] = 8},
 	points = 275,
 	start_fn = function(inst,amount,quest_name)
-		--TODO: damage with weapon also counts
 		local current_amount = GetCurrentAmount(inst,quest_name)
 		local function OnDamageDone(inst,data)
 			devprint("OnDamageDone", inst)
