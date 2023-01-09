@@ -445,6 +445,22 @@ end
 
 AddClientModRPCHandler("Quest_System_RPC", "AddTimerToClient", AddTimerToClient)
 
+--RPC to change the amount of enemies defeated on the client
+local function ChangeEnemiesDefeated(inst,victim)
+	devprint("ChangeEnemiesDefeated",inst,victim)
+	if inst.HUD and victim then
+		if inst.HUD.controls["attackwavetimer"..victim] ~= nil then
+			local self = inst.HUD.controls["attackwavetimer"..victim]
+			if self then
+				self.counter = self.counter + 1
+				self.wave:SetString(string.format("Wave %s\n%s/%s enemies ",self.wave_num, self.counter, self.victims_num))
+			end
+		end
+	end
+end
+
+AddClientModRPCHandler("Quest_System_RPC", "ChangeEnemiesDefeated", ChangeEnemiesDefeated)
+
 local function RemoveTimerFromClient(inst,victim)
 	devprint("RemoveTimerFromClient",inst,victim)
 	if victim and inst.HUD and inst.HUD.controls then

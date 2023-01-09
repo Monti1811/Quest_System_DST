@@ -68,12 +68,15 @@ function AttackWaveTimer:DoWave(time,victim,atlas,num)
     local target_atlas = GetInventoryItemAtlas(victimtex,true) or atlas or "images/victims.xml"
     time = time or 1
     num = num or 1
+    self.wave_num = num
+    self.victims_num = time
+    self.counter = 0
     self.victim = self.root:AddChild(Image(target_atlas, victimtex))
     self.victim:SetPosition(75, 0)
     self.victim:MoveToFront()
     self.victim:SetTooltip(string.format("This wave contains %s enemies that you must defeat",time))
     self.victim:SetTooltipPos(0,-50,0)
-    self.wave = self.root:AddChild(Text(BODYTEXTFONT, 33, string.format("Wave %s\n%s enemies",num,time)))
+    self.wave = self.root:AddChild(Text(BODYTEXTFONT, 33, string.format("Wave %s\n0/%s enemies",num,time)))
     self.wave:SetPosition(-30,0,0)
 end
 

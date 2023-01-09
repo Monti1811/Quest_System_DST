@@ -1460,7 +1460,7 @@ local quests = {
 		local diff = 1
 		local function StartWaves(player)
 			if TheWorld and TheWorld.components.attackwaves then
-				TheWorld.components.attackwaves:StartAttack(inst,attacksize,time_inbetween_spawn,diff,"stalker_minion1")
+				TheWorld.components.attackwaves:StartAttack(inst,attacksize,time_inbetween_spawn,diff,math.random() < 0.5 and "stalker_minion1" or "stalker_minion2")
 			end
 		end
 		inst.attack_wave_task_woven_shadow = inst:DoTaskInTime(time,StartWaves)

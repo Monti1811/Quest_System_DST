@@ -137,29 +137,41 @@ function AttackWaves:ReleaseSpawnAfterTime(player,target,delta,attacksize)
 	local current_attacking_creatures = self.current_attacking_creatures[player.userid]
 	local difficulty = self.difficulty[player.userid][prefab]
 
-	for k,v in pairs(current_attacking_creatures[prefab]) do
-		if v.components.health and v.components.health:IsDead() then
-			current_attacking_creatures[prefab][k] = nil
-		elseif v.components.combat then
-			v.components.combat:SetTarget(target)
+	if release_spawns[prefab] ~= nil then
+		release_spawns[prefab]:Cancel()
+		release_spawns[prefab] = nil
+	end
+
+	for creature in pairs(current_attacking_creatures[prefab]) do
+		if creature.components.combat then
+			creature.components.combat:SetTarget(target)
 		end
 	end
 
 	if attack_num[prefab] >= attacksize[1] then
-		if release_spawns[prefab] ~= nil then
-			release_spawns[prefab]:Cancel()
-			release_spawns[prefab] = nil
+		if next(current_attacking_creatures[prefab]) == nil then
+			attack_num[prefab] = 0
+			attack_rounds[prefab] = attack_rounds[prefab] + 1
+			release_spawns[prefab] = self.inst:DoTaskInTime(5, function() self:DoAttackWave(player,target,attacksize,delta) end)
+			return
+		else
+			release_spawns[prefab] = self.inst:DoTaskInTime(5,function()
+				self:ReleaseSpawnAfterTime(player,target,delta,attacksize)
+			end)
+			return
 		end
-		attack_num[prefab] = 0
-		attack_rounds[prefab] = attack_rounds[prefab] + 1
-		release_spawns[prefab] = self.inst:DoTaskInTime(5, function() self:DoAttackWave(player,target,attacksize,delta) end)
-		return
 	end
 
 	local time = delta * (math.random(50,150) / 100)
 	local spawn = ReleaseSpawn(self,target,difficulty)
 	if spawn == nil then print("[Attackwaves] Something broke, the spawn is nil",spawn,target) return end
-	table.insert(current_attacking_creatures[prefab],spawn)
+	current_attacking_creatures[prefab][spawn] = true
+	spawn:ListenForEvent("death", function()
+		if current_attacking_creatures[prefab] then
+			current_attacking_creatures[prefab][spawn] = nil
+		end
+		SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "ChangeEnemiesDefeated"),player.userid,player,target.prefab)
+	end)
 	--Remove the loot of the spawned enemies
 	--[[if spawn.components.lootdropper ~= nil then
 		for k,v in ipairs(loots) do
@@ -238,17 +250,16 @@ function AttackWaves:DoAttackWave(player,target,attacksize,delta)
 	if attack_round >= attacksize[2] then
 		if next(current_attacking_creatures[target.prefab]) == nil then
 			player:PushEvent("succesfully_defended")
-			self.current_victims[player.userid]:Remove()
 			player.components.talker:Say(STRINGS_AW.MISSION_SUCCESS)
+			SpawnPrefab("shadow_puff_large_front").Transform:SetPosition(self.current_victims[player.userid]:GetPosition():Get())
+			self.current_victims[player.userid]:Remove()
 			PurgeSavedValues(self,player,target.prefab)
 			return
 		else
-			for k,v in pairs(current_attacking_creatures[target.prefab]) do
-				if v.components.health and v.components.health:IsDead() then
-					current_attacking_creatures[target.prefab][k] = nil
-				elseif v.components.combat then
+			for creature in pairs(current_attacking_creatures[target.prefab]) do
+				if creature.components.combat then
 					--print("setting target",v,target)
-					v.components.combat:SetTarget(target)
+					creature.components.combat:SetTarget(target)
 				end
 			end
 			self.DoAttackWave_task[player.userid][target.prefab] = self.inst:DoTaskInTime(5,function() self:DoAttackWave(player,target,attacksize,delta) end)
@@ -282,12 +293,12 @@ function AttackWaves:StopAttacks(player,victim)
 	end
 	devdumptable(current_attacking_creatures)
 	if current_attacking_creatures[victim] == nil then return end
-	for _,v in ipairs(current_attacking_creatures[victim]) do
-		if v:IsValid() then
+	for creature in pairs(current_attacking_creatures[victim]) do
+		if creature:IsValid() then
 			--if v.components.health then
 			--v.components.health:Kill()
 			--else
-			v:Remove()
+			creature:Remove()
 			--end
 		end
 	end
@@ -310,12 +321,12 @@ function AttackWaves:StopAllAttacks(player)
 		end
 		for _,v in ipairs(current_attacking_creatures) do
 			if v == nil then return end
-			for _,vv in ipairs(v) do
-				if vv:IsValid() then
+			for creature in pairs(v) do
+				if creature:IsValid() then
 					--if vv.components.health then
 					--vv.components.health:Kill()
 					--else
-					vv:Remove()
+					creature:Remove()
 					--end
 				end
 			end
