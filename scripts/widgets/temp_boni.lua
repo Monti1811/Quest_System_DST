@@ -168,7 +168,7 @@ function Temp_Boni:SetBoniPicture(boni,time)
 		devprint("tooltip",tooltip,num)
 		tooltip = tooltip or "Error"
 		self.button:SetTooltip(tooltip.."\nTime left: "..toMin(time))
-		self.time = time
+		self.time = time or 0
 		if num and num > 0 and str[2] then
 			local tex2 = "arrow_"..(num)..".tex"
 			self.level:SetTexture(atlas,tex2)

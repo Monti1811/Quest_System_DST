@@ -314,7 +314,8 @@ local function ChangeBoniClient(self,name,num)
 		self.boni_num[num] = self.boni_num[num+1]
 		local tab = self.current_active_boni[self.boni_num[num]]
 		if tab and self.inst.userid then
-			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "AddTempBoniToClient"),self.inst.userid,self.inst,num,tab.bonus.."_"..tab.amount)
+			local time_passed = GetTime() - tab.starting_time
+			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "AddTempBoniToClient"),self.inst.userid,self.inst,num,tab.bonus.."_"..tab.amount, tab.time - time_passed)
 			ChangeBoniClient(self,nil,num+1)
 		end
 	else
