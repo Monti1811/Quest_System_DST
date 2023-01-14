@@ -640,6 +640,20 @@ local function Retry(self,difficulty)
 	end
 end
 
+local function GetCharacterQuest(self,difficulty)
+	local tab2
+	if difficulty and TUNING.QUEST_COMPONENT["QUESTS_"..self.inst.prefab.."_DIFFICULTY_"..difficulty] ~= nil then
+		tab2 = TUNING.QUEST_COMPONENT["QUESTS_"..self.inst.prefab.."_DIFFICULTY_"..difficulty]
+	else
+		tab2 = TUNING.QUEST_COMPONENT["QUESTS_"..self.inst.prefab]
+	end
+	local item = GetRandomItem(tab2)
+	if item and item.unlisted == true then
+		return GetCharacterQuest(self,difficulty)
+	end
+	return item
+end
+
 FindUnusedQuest = function(self,difficulty)
 	local tab = nil
 	if difficulty and TUNING.QUEST_COMPONENT["QUESTS_DIFFICULTY_"..difficulty] ~= nil then
@@ -667,24 +681,14 @@ FindUnusedQuest = function(self,difficulty)
 	--if _item.scale and self.scaled_quests[_item.overridename or _item.name] and self.scaled_quests[_item.overridename or _item.name] < _item.scale - 1 then
 	 	--return Retry(self,difficulty)
 	--end
-	local _item2
+
 	--If character quests exist for this character, look for one
-	if TUNING.QUEST_COMPONENT["QUESTS_"..self.inst.prefab] ~= nil then
-		local tab2
-		if difficulty and TUNING.QUEST_COMPONENT["QUESTS_"..self.inst.prefab.."_DIFFICULTY_"..difficulty] ~= nil then
-			tab2 = TUNING.QUEST_COMPONENT["QUESTS_"..self.inst.prefab.."_DIFFICULTY_"..difficulty] 
-		else
-			tab2 = TUNING.QUEST_COMPONENT["QUESTS_"..self.inst.prefab]
-		end
-		_item2 = GetRandomItem(tab2)
-	end
+	local _item2 = TUNING.QUEST_COMPONENT["QUESTS_"..self.inst.prefab] ~= nil and GetCharacterQuest(self,difficulty)
+
+
 	--If a character quest was chosen, check if this character quest should be chosen, depending on the chosen character quest probability
-	local item
-	if _item2 and math.random() < TUNING.QUEST_COMPONENT.PROB_CHAR_QUEST then
-		item = _item2
-	else
-		item = _item
-	end
+	local item = math.random() < TUNING.QUEST_COMPONENT.PROB_CHAR_QUEST and _item2 or _item
+
 	--If this quest is already active, look for a new one.
 	if self.quests[item.name] ~= nil then
 		return Retry(self,difficulty)
