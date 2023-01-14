@@ -172,6 +172,7 @@ function Temp_Boni:SetBoniPicture(boni,time)
 		if num and num > 0 and str[2] then
 			local tex2 = "arrow_"..(num)..".tex"
 			self.level:SetTexture(atlas,tex2)
+			self.level:Show()
 		else
 			self.level:Hide()
 		end
