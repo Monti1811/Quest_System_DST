@@ -399,6 +399,12 @@ local function TeleportTo(inst,teleportee,pos)
     inst:TurnOff()
 end
 
+local function OnInit(inst)
+    local ceiling = GLOBAL.SpawnPrefab("boss_island_ceiling")
+    ceiling.parent = inst
+    ceiling.Transform:SetPosition(inst:GetPosition():Get());
+end
+
 AddPrefabPostInit("lavaarena_portal",function(inst)
 
 	inst:AddTag("antlion_sinkhole_blocker")
@@ -410,22 +416,33 @@ AddPrefabPostInit("lavaarena_portal",function(inst)
 
 	inst.portalfx = nil
 	inst.TurnOn = function()
-		if inst.portalfx ~= nil then
-			return
+		if inst.portalfx == nil then
+            inst.portalfx = SpawnPrefab("lavaarena_portal_activefx")
+            inst.portalfx.Transform:SetPosition(inst:GetPosition():Get())
 		end
-		inst.portalfx = SpawnPrefab("lavaarena_portal_activefx")
-		inst.portalfx.Transform:SetPosition(inst:GetPosition():Get())
+		inst.counter = inst.counter + 1
 		inst:AddTag("can_be_used")
 	end
 
 	inst.TurnOff = function()
-		if inst.portalfx == nil then
-			return
-		end
-		inst.portalfx.AnimState:PlayAnimation("portal_pst")
-		inst.portalfx:ListenForEvent("animover", inst.portalfx.Remove)
-		inst.portalfx = nil
-		inst:RemoveTag("can_be_used")
+        inst.counter = math.max(inst.counter - 1,0)
+        if inst.counter == 0 then
+            if inst.portalfx ~= nil then
+                inst.portalfx.AnimState:PlayAnimation("portal_pst")
+                inst.portalfx:ListenForEvent("animover", inst.portalfx.Remove)
+                inst.portalfx = nil
+            end
+            inst:RemoveTag("can_be_used")
+            inst:DoTaskInTime(1, function()
+                local x,y,z = inst:GetPosition():Get()
+                local items = TheSim:FindEntities(x, y, z, 30, {"_inventoryitem"}, {"INLIMBO"})
+                for _, item in ipairs(items) do
+                    if item:IsValid() then
+                        item:Remove()
+                    end
+                end
+            end)
+        end
 	end
 
 	inst:AddComponent("teleporter")
@@ -433,6 +450,10 @@ AddPrefabPostInit("lavaarena_portal",function(inst)
 
 
 	inst.TeleportTo = TeleportTo
+
+    inst:DoTaskInTime(0, OnInit)
+
+    inst.counter = 0
 end)
 
 --[[local UpvalueHacker = require("quest_util/upvaluehacker")

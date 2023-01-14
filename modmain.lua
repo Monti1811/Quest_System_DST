@@ -55,6 +55,7 @@ PrefabFiles = {
 	"questboard",
 	"request_quest",
 	"quest_system_fx",
+	"boss_island_ceiling",
 
 	--Custom Rewards
 	"glommer_lightflower",

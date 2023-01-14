@@ -805,12 +805,12 @@ function Quest_Component:DoInit()
 			end
 			self:AddQuestToClient(v.name,v.current_amount,ConcatTable(v.custom_vars))
 		end
+		self.bossplatform = self.bossplatform or TheSim:FindFirstEntityWithTag("teleporter_boss_island")
 		if TheWorld.components.quest_loadpostpass then
 			--Find the boss if there was one.
 			local boss_saved = TheWorld.components.quest_loadpostpass.bosses[self.bossid] and TheWorld.components.quest_loadpostpass.bosses[self.bossid][1]
 			if boss_saved and boss_saved ~= "nothing" then
 				self.boss = boss_saved
-				self.bossplatform = self.bossplatform or TheSim:FindFirstEntityWithTag("teleporter_boss_island")
 				OnDeaths(self)
 				self.boss.target_inst = self.boss:DoTaskInTime(3,Retarget,self.inst)
 			end
