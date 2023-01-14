@@ -127,6 +127,10 @@ local function fn_all(difficulty,particular)
     	GetUnusedQuestWithDifficulty(inst,reader,difficulty)
     end
 
+    MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
+    MakeSmallPropagator(inst)
+    MakeHauntableLaunchAndIgnite(inst)
+
     if particular == true then
         inst.SetQuest = SetQuest
     end
