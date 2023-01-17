@@ -87,7 +87,7 @@ end
 function Quest_LoadPostPass:OnLoad(data)
     if data ~= nil then
         if data._bosses ~= nil then
-            for k,v in pairs(data._bosses) do
+            for _,v in pairs(data._bosses) do
                 if v[1] ~= nil then
                     local tab = {"nothing",v[2],v[3]}
                     self.bosses[v[1]] = tab

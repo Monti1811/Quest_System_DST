@@ -204,10 +204,11 @@ function AttackWaves:StartAttack(player,attacksize,delta,difficulty,_victim)
 	difficulty = difficulty or 1 --difficulty is 1 to 5
 	self.difficulty[player.userid][_victim] = difficulty
 	self.current_victims[player.userid] = victim
-	if victim.components.health then
-		victim.components.health.maxhealth = 200 + 200 * (difficulty-1)
-		victim.components.health:SetPercent(1)
-		victim.components.health:StopRegen()
+	local health = victim.components.health
+	if health then
+		health.maxhealth = 200 + 200 * (difficulty-1)
+		health:SetPercent(1)
+		health:StopRegen()
 	end
 	if victim.prefab == "stalker_minion1" or victim.prefab == "stalker_minion2" then
 		devprint("StopBrain")
@@ -286,9 +287,10 @@ function AttackWaves:StopAttacks(player,victim)
 		release_spawns[victim] = nil
 	end
 	for _,v in ipairs(tasks_to_stop) do
-		if self[v][player.userid][victim] ~= nil then
-			self[v][player.userid][victim]:Cancel()
-			self[v][player.userid][victim] = nil
+		local task = self[v][player.userid]
+		if task[victim] ~= nil then
+			task[victim]:Cancel()
+			task[victim] = nil
 		end
 	end
 	devdumptable(current_attacking_creatures)
@@ -314,9 +316,10 @@ function AttackWaves:StopAllAttacks(player)
 			release_spawns[victim] = nil
 		end
 		for _,v in ipairs(tasks_to_stop) do
-			if self[v][player.userid][victim] ~= nil then
-				self[v][player.userid][victim]:Cancel()
-				self[v][player.userid][victim] = nil
+			local task = self[v][player.userid]
+			if task[victim] ~= nil then
+				task[victim]:Cancel()
+				task[victim] = nil
 			end
 		end
 		for _,v in ipairs(current_attacking_creatures) do

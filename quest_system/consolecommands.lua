@@ -160,6 +160,7 @@ function GLOBAL.c_testquests(inst)
         inst.components.quest_component:AddQuest(k,true)
         devprint("finished adding quest",k)
     end
+    GLOBAL.c_completeallquests(inst)
     inst.components.quest_component.max_amount_of_quests = old_max
 end
 

@@ -77,9 +77,7 @@ local function RemoveValues(player,quest_name)
 end
 
 local function ScaleQuest(inst,quest,val)
-	if inst.components.quest_component then
-		inst.components.quest_component.scaled_quests[quest] = val
-	end
+	inst.components.quest_component.scaled_quests[quest] = val
 end
 
 --Quests
@@ -430,20 +428,19 @@ local quests = {
 						inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
 					end
 				end
-				if inst.components.quest_component and inst.components.quest_component.quest_data[quest_name] then
+				if inst.components.quest_component.quest_data[quest_name] then
 					inst.components.quest_component.quest_data[quest_name].bosses = bosses
 				end
 				if bosses.bearger == true and bosses.deerclops == true and bosses.moose == true and bosses.antlion == true then
 					inst:RemoveEventCallback("killed",OnKilled_Quest)
 					inst:RemoveEventCallback("killedbyfriend",OnKilled_Quest)
 					inst:StopWatchingWorldState("season",OnSeasonChange)
-					if inst.components.quest_component then
-						inst.components.quest_component.quest_data[quest_name] = nil
-					end
+
+					inst.components.quest_component.quest_data[quest_name] = nil
 				end
 			end
 		end
-		if inst.components.quest_component and inst.components.quest_component.quest_data[quest_name] and inst.components.quest_component.quest_data[quest_name].bosses == nil then
+		if inst.components.quest_component.quest_data[quest_name] and inst.components.quest_component.quest_data[quest_name].bosses == nil then
 			inst.components.quest_component.quest_data[quest_name].bosses = bosses
 		end
 		OnSeasonChange = function(inst,season)
@@ -511,9 +508,7 @@ local quests = {
 			inst:RemoveEventCallback("killed",OnKilled_Quest)
 			inst:RemoveEventCallback("killedbyfriend",OnKilled_Quest)
 			inst:StopWatchingWorldState("season",OnSeasonChange)
-			if inst.components.quest_component then
-				inst.components.quest_component.quest_data[quest_name] = nil
-			end
+			inst.components.quest_component.quest_data[quest_name] = nil
 		end
 		OnForfeit(inst,OnForfeitedQuest,quest_name)
 	end,
@@ -814,7 +809,7 @@ local quests = {
 		SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "AddTimerToClient"),inst.userid,inst,time,"chester")
 		local OnWin = function() end
 		local function OnLose(inst,victim)
-			print("OnLose",inst,victim)
+			devprint("OnLose",inst,victim)
 			if victim == "chester" and inst.components.quest_component then
 				inst.components.quest_component:RemoveQuest(quest_name)
 				inst:RemoveEventCallback("succesfully_defended",OnWin)
@@ -854,7 +849,7 @@ local quests = {
 	victim = "shark",
 	counter_name = nil,
 	description = GetQuestString("The Sharks Demise","DESCRIPTION"),
-	amount = 5,
+	amount = 2,
 	rewards = {fishmeat = 20,blowdart_yellow = 10},
 	points = 1000,
 	start_fn = nil,
@@ -862,7 +857,7 @@ local quests = {
 	difficulty = 4,
 	tex = "shark.tex",
 	atlas = "images/victims.xml",
-	hovertext = GetKillString("shark",5),
+	hovertext = GetKillString("shark",2),
 	},
 	--29
 	{
@@ -1523,8 +1518,8 @@ local quests = {
 	counter_name = GetQuestString("The Biggest Veggy","COUNTER"),
 	description = GetQuestString("The Biggest Veggy","DESCRIPTION"),
 	amount = 1,
-	rewards = {mandrake = 2,plantmeat = 6},
-	points = 250,
+	rewards = {mandrake = 3, plantmeat = 6, beeswax = 3},
+	points = 650,
 	start_fn = function(inst,amount,quest_name)
 		local data = inst.components.quest_component.quests[quest_name] and inst.components.quest_component.quests[quest_name].custom_vars
 		local veggy = data and data.victim or "eggplant_oversized"
@@ -1549,7 +1544,7 @@ local quests = {
 		OnForfeit(inst,OnForfeitedQuest,quest_name)
 	end,
 	onfinished = nil,
-	difficulty = 2,
+	difficulty = 3,
 	tex = "eggplant.tex",
 	atlas = "images/inventoryimages1.xml",
 	hovertext = GetQuestString("The Biggest Veggy","HOVER"),
@@ -3161,7 +3156,7 @@ local quests = {
 	victim = "",
 	counter_name = GetQuestString("The Fish Fisher","COUNTER"),
 	description = GetQuestString("The Fish Fisher","DESCRIPTION"),
-	amount = 5,
+	amount = 2,
 	rewards = {messagebottleempty = 3,fig = 20},
 	points = 485,
 	start_fn = function(inst,amount,quest_name)
@@ -3325,9 +3320,26 @@ local quests = {
 	rewards = {[":func:escapedeath;1"] = 16,winter_food2 = 1,winter_food7 = 1,brush = 1},
 	points = 500,
 	start_fn = function(inst,amount,quest_name)
-		TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["trade x amount of item y with pigking"](inst,amount,"trinket_4",quest_name)
+		local function OnKilled(inst, data)
+			if math.random() < 0.05 then
+				local victim = data.victim
+				if victim and victim.components.lootdropper then
+					victim.components.lootdropper:FlingItem(SpawnPrefab("trinket_4"))
+				end
+			end
+		end
+		local function RemoveDwarfDropper(inst)
+			inst:RemoveEventCallback("killed", OnKilled)
+		end
+		inst:ListenForEvent("killed", OnKilled)
+		TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["trade x amount of item y with pigking"](inst,amount,"trinket_4",quest_name,RemoveDwarfDropper)
+
 	end,
-	onfinished = nil,
+	onfinished = function(inst)
+		inst:DoTaskInTime(0,function()
+			inst.components.quest_component:AddQuest("The Cold Never Bothered Me Anyway!")
+		end)
+	end,
 	difficulty = 3,
 	tex = "trinket_4.tex",
 	atlas = "images/inventoryimages2.xml",
@@ -3378,9 +3390,6 @@ local quests = {
 	rewards = { fireflies = 1,frogking_p_crown = 1,frogking_scepter = 1, nightstick = 1},
 	points = 2000,
 	start_fn = function(inst,amount,quest_name)
-		if not TUNING.QUEST_COMPONENT.DEV_MODE then
-			return 
-		end
 		local current = GetCurrentAmount(inst,quest_name)
 		local FrogRain, StopFrogRain = FrogKing.SpawnFrogRain(inst,{1,0.09,0.09,1})
 		local function SpawnFrogKing(inst)

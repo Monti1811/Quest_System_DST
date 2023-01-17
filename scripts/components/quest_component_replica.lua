@@ -1,3 +1,6 @@
+local QUESTS = TUNING.QUEST_COMPONENT.QUESTS
+
+
 local function OnShowHUDDirty(inst)
 	if inst and inst.HUD then
 		local screen = TheFrontEnd:GetActiveScreen()
@@ -13,20 +16,6 @@ local function OnShowHUDDirty(inst)
 	end
 end
 
-local function UnconcatString(str)
-	devprint("UnconcatString",str)
-	if str == nil then return end
-	local new_tab = {}
-	local tab = string.split(str,",")
-	--devdumptable(tab)
-	for _,kv_pairs in ipairs(tab) do
-		local pair = string.split(kv_pairs,"=")
-		new_tab[pair[1]] = pair[2]
-	end
-	devdumptable(new_tab)
-	return new_tab
-end
-
 local limits = {10,25,50,100,500}
 
 local function GetRank(rank)
@@ -38,14 +27,26 @@ local function GetRank(rank)
 	return 5
 end
 
-local function OnPossibleQuestDirty(self,inst,num)
-	devprint("OnPossibleQuestDirty",inst,num,self["_quest"..num]:value())
-	self["quest"..num] = self["_quest"..num]:value()
-	if string.find(self["quest"..num],"@") and string.find(self["quest"..num],"=") then
-		local quest_data = string.split(self["quest"..num],"@")
-		devprint("is data quest",quest_data[1],quest_data[2])
-		self["quest"..num] = quest_data[1]
-		self.quest_data[quest_data[1]] = UnconcatString(quest_data[2])
+local function OnPossibleQuestDirty(self)
+	local val = self._selectable_quests:value()
+	devprint("OnPossibleQuestDirty",val)
+	if val ~= "" then
+		self.selectable_quests = json.decode(val)
+	end
+
+end
+
+
+local function OnAcceptedLevelRewards(self)
+	local num = self._accepted_level_rewards:value()
+	devprint("OnAcceptedLevelRewards",self,num)
+	for i = 1,39 do
+		local char = num:byte(i)
+		if char == 49 then
+			self.accepted_level_rewards[i*5] = true
+		else
+			self.accepted_level_rewards[i*5] = nil
+		end
 	end
 end
 
@@ -61,24 +62,20 @@ local Quest_Component = Class(function(self, inst)
     self._bossfight = net_byte(inst.GUID, "quest_component._bossfight")
     self._rank = net_byte(inst.GUID, "quest_component._rank")
 
-    self._quest1 = net_string(inst.GUID, "quest_component._quest1","quest_component._quest1_dirty")
-    self._quest2 = net_string(inst.GUID, "quest_component._quest2","quest_component._quest2_dirty")
-    self._quest3 = net_string(inst.GUID, "quest_component._quest3","quest_component._quest3_dirty")
+	self.selectable_quests = {}
+    self._selectable_quests = net_string(inst.GUID, "quest_component._selectable_quests","quest_component._selectable_quests_dirty")
 
     self._max_amount_of_quests = net_byte(inst.GUID, "quest_component._max_amount_of_quests")
 
-    for count = 5,195,5 do
-    	self["accepted_level_rewards"..count] = net_bool(inst.GUID,"quest_component.accepted_level_rewards"..count)
-    	self["accepted_level_rewards"..count]:set(false)
-    end
+	self.accepted_level_rewards = {}
+    self._accepted_level_rewards = net_string(inst.GUID,"quest_component._accepted_level_rewards", "quest_component._accepted_level_rewards_dirty")
 
     self._acceptedquest = net_bool(inst.GUID,"quest_component._acceptedquest")
 
-    for i = 1,3 do
-    	self.inst:ListenForEvent("quest_component._quest"..i.."_dirty", function()
-    		OnPossibleQuestDirty(self,inst,i)
-    	end)
-    end
+	self._OnPossibleQuestDirty = function() OnPossibleQuestDirty(self) end
+	self._OnAcceptedLevelRewards = function() OnAcceptedLevelRewards(self) end
+	self.inst:ListenForEvent("quest_component._selectable_quests_dirty", self._OnPossibleQuestDirty)
+	self.inst:ListenForEvent("quest_component._accepted_level_rewards_dirty", self._OnAcceptedLevelRewards)
 
     if not TheWorld.ismastersim then
 		self.inst:ListenForEvent("quest_component._showhud", OnShowHUDDirty)
@@ -90,14 +87,14 @@ end)
 
 function Quest_Component:AddQuest(name,current_amount,custom_vars)
 	devprint("[Quest System] Adding Quest",name,current_amount,custom_vars)
-	if name and TUNING.QUEST_COMPONENT.QUESTS[name] then
-		local quest = TUNING.QUEST_COMPONENT.QUESTS[name]
+	if name and QUESTS[name] then
+		local quest = QUESTS[name]
 		local new_quest = deepcopy(quest)
 		new_quest.current_amount = current_amount or 0
 		if new_quest.current_amount >= new_quest.amount then
 			new_quest.completed = true
 		end
-		new_quest.custom_vars = UnconcatString(custom_vars)
+		new_quest.custom_vars = custom_vars
 		self.quest_data[name] = self.custom_vars
 		if new_quest.variable_fn ~= nil and type(new_quest.variable_fn) == "function" then
 			new_quest = new_quest.variable_fn(self.inst,new_quest,new_quest.custom_vars)
@@ -131,7 +128,7 @@ function Quest_Component:MarkQuestAsFinished(name)
 	devdumptable(self._quests)
 	if self._quests[name] == nil then return end
 	self._quests[name].completed = true
-	name = TUNING.QUEST_COMPONENT.QUESTS[name] and TUNING.QUEST_COMPONENT.QUESTS[name].name or name
+	name = QUESTS[name] and QUESTS[name].name or name
 	Networking_Announcement(name..": "..STRINGS.QUEST_COMPONENT.QUEST_LOG.SUCCESS)
 end
 
@@ -143,9 +140,9 @@ end
 -------------------------------------------------------
 
 function Quest_Component:GetPossibleQuests()
-	local quest1,quest2,quest3 = self.quest1,self.quest2,self.quest3
-	devprint("get possible quests",quest1,quest2,quest3)
-	return {quest1,quest2,quest3}
+	devprint("Quest_Component:GetPossibleQuests()")
+	devdumptable(self.selectable_quests)
+	return self.selectable_quests
 end
 
 local rank_str = {"D","C","B","A","S"}

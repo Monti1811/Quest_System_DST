@@ -1,4 +1,14 @@
 -------------------------PlayerPostInit---------------------------
+local net_float = GLOBAL.net_float
+local net_bool = GLOBAL.net_bool
+local net_string = GLOBAL.net_string
+local QUEST_COMPONENT = GLOBAL.TUNING.QUEST_COMPONENT
+local TheCamera = GLOBAL.TheCamera
+local unpack = GLOBAL.unpack
+local SpawnPrefab = GLOBAL.SpawnPrefab
+local Vector3 = GLOBAL.Vector3
+local AllPlayers = GLOBAL.AllPlayers
+local TheSim = GLOBAL.TheSim
 
 local NIGHTVISION_COLOURCUBES =
 {
@@ -11,44 +21,45 @@ local NIGHTVISION_COLOURCUBES =
 AddPlayerPostInit(function(inst)
 
     --Add netvars needed for the level system to be shown in the quest log
-    if GLOBAL.TUNING.QUEST_COMPONENT.LEVELSYSTEM == 1 then
+    if QUEST_COMPONENT.LEVELSYSTEM == 1 then
         inst.q_system = {
-            healthbonus = GLOBAL.net_float(inst.GUID,"healthbonus"),
-            sanitybonus = GLOBAL.net_float(inst.GUID,"sanitybonus"),
-            hungerbonus = GLOBAL.net_float(inst.GUID,"hungerbonus"),
-            speedbonus = GLOBAL.net_float(inst.GUID,"speedbonus"),
-            summerinsulationbonus = GLOBAL.net_float(inst.GUID,"summerinsulationbonus"),
-            winterinsulationbonus = GLOBAL.net_float(inst.GUID,"winterinsulationbonus"),
-            workmultiplierbonus = GLOBAL.net_float(inst.GUID,"workmultiplierbonus"),
+            healthbonus = net_float(inst.GUID,"healthbonus"),
+            sanitybonus = net_float(inst.GUID,"sanitybonus"),
+            hungerbonus = net_float(inst.GUID,"hungerbonus"),
+            speedbonus = net_float(inst.GUID,"speedbonus"),
+            summerinsulationbonus = net_float(inst.GUID,"summerinsulationbonus"),
+            winterinsulationbonus = net_float(inst.GUID,"winterinsulationbonus"),
+            workmultiplierbonus = net_float(inst.GUID,"workmultiplierbonus"),
         }  
-        for k,v in pairs(inst.q_system) do
+        for k in pairs(inst.q_system) do
             inst.q_system[k]:set(0)
         end
     end
 
     --Add netvar to trigger the reversing of the camera for quest with merms
-    inst.net_cameratrigger = GLOBAL.net_bool(inst.GUID,"net_cameratrigger","net_cameratriggerdirty")
+    inst.net_cameratrigger = net_bool(inst.GUID,"net_cameratrigger","net_cameratriggerdirty")
     inst.net_cameratrigger:set(false)
-    inst:ListenForEvent("net_cameratriggerdirty",function(inst)
-        if GLOBAL.TheCamera then
-            GLOBAL.TheCamera.turned = inst.net_cameratrigger:value()
+    inst:ListenForEvent("net_cameratriggerdirty",function()
+        if TheCamera then
+            TheCamera.turned = inst.net_cameratrigger:value()
         end
     end)
 
     --Add nightvision for temp reward of night vision
-    inst.net_nightvisiontrigger = GLOBAL.net_bool(inst.GUID,"net_nightvisiontrigger","net_nightvisiontriggerdirty")
+    inst.net_nightvisiontrigger = net_bool(inst.GUID,"net_nightvisiontrigger","net_nightvisiontriggerdirty")
     inst.net_nightvisiontrigger:set(false)
-    inst:ListenForEvent("net_nightvisiontriggerdirty",function(inst)
-        if inst.components.playervision then
+    inst:ListenForEvent("net_nightvisiontriggerdirty",function()
+        local playervision = inst.components.playervision
+        if playervision then
             local val = inst.net_nightvisiontrigger:value()
-            inst.components.playervision:ForceNightVision(val)
-            inst.components.playervision:SetCustomCCTable(val and NIGHTVISION_COLOURCUBES or nil)
+            playervision:ForceNightVision(val)
+            playervision:SetCustomCCTable(val and NIGHTVISION_COLOURCUBES or nil)
         end
     end)
 
     --Adding netvar to transmit current points of all players
     inst.player_qs_points = {}
-    inst.net_player_qs_points = GLOBAL.net_string(inst.GUID,"net_player_qs_points","net_player_qs_points_dirty")
+    inst.net_player_qs_points = net_string(inst.GUID,"net_player_qs_points","net_player_qs_points_dirty")
     inst:ListenForEvent("net_player_qs_points_dirty",function()
         local str = inst.net_player_qs_points:value()
         inst.player_qs_points = json.decode(str)
@@ -62,7 +73,7 @@ AddPlayerPostInit(function(inst)
 	inst:AddComponent("quest_component")
     --Add the temporary bonus component which makes you able to get temporary boni (seems like it does what it says)
     inst:AddComponent("temporarybonus")
-    if GLOBAL.TUNING.QUEST_COMPONENT.LEVELSYSTEM == 1 then
+    if QUEST_COMPONENT.LEVELSYSTEM == 1 then
         --Add level component if it's enabled
         inst:AddComponent("levelupcomponent")
     end
@@ -70,18 +81,18 @@ AddPlayerPostInit(function(inst)
     --Need to save quests and more if a player rerolls to another character so that he doesn't lose his progress.
     --No need to save levelupcomponent as it doesn't save anything and orients itself on the quest component
     local old_SaveForReroll = inst.SaveForReroll or function() end
-    inst.SaveForReroll = function(inst,...)
-        local data = old_SaveForReroll(inst,...) or {}
-        data.quest_component = inst.components.quest_component ~= nil and inst.components.quest_component:OnSave() or nil
+    inst.SaveForReroll = function(_inst,...)
+        local data = old_SaveForReroll(_inst,...) or {}
+        data.quest_component = _inst.components.quest_component ~= nil and _inst.components.quest_component:OnSave() or nil
         --data.levelupcomponent = inst.components.levelupcomponent ~= nil and inst.components.levelupcomponent:OnSave() or nil
         return next(data) ~= nil and data or nil
     end
 
     local old_LoadForReroll = inst.LoadForReroll or function() end
-    inst.LoadForReroll = function(inst,data,...)
-        local ret = old_LoadForReroll(inst,data,...)
-        if data.quest_component ~= nil and inst.components.quest_component ~= nil then
-            inst.components.quest_component:OnLoad(data.quest_component)
+    inst.LoadForReroll = function(_inst,data,...)
+        old_LoadForReroll(_inst,data,...)
+        if data.quest_component ~= nil and _inst.components.quest_component ~= nil then
+            _inst.components.quest_component:OnLoad(data.quest_component)
         end
         --[[if data.levelupcomponent ~= nil and inst.components.levelupcomponent ~= nil then
             inst.components.levelupcomponent:OnLoad(data.levelupcomponent)
@@ -89,11 +100,11 @@ AddPlayerPostInit(function(inst)
     end
 
     local old_OnDespawn = inst.OnDespawn or function() end
-    inst.OnDespawn = function(inst,migrationdata,...)
-        if migrationdata == nil and inst.components.inventory then
-            inst.components.inventory:DropEverythingWithTag("godly_item")
+    inst.OnDespawn = function(_inst,migrationdata,...)
+        if migrationdata == nil and _inst.components.inventory then
+            _inst.components.inventory:DropEverythingWithTag("godly_item")
         end
-        return old_OnDespawn(inst,migrationdata,...)
+        return old_OnDespawn(_inst,migrationdata,...)
     end
 
 end)
@@ -125,7 +136,7 @@ AddPrefabPostInitAny(function(inst)
         return inst
     end
     local drop = Request_Drop()
-    inst.components.lootdropper:AddChanceLoot(drop,GLOBAL.TUNING.QUEST_COMPONENT.REQUEST_QUEST)
+    inst.components.lootdropper:AddChanceLoot(drop,QUEST_COMPONENT.REQUEST_QUEST)
 end)
 
 --Add an event if something is trapped (used for quests)
@@ -148,24 +159,24 @@ AddPrefabPostInit("trap",Trapping)
 --Add an event when a fertilizer is used (for quests)
 local fertilizers = {"spoiled_fish_small","spoiled_fish","soil_amender_low","soil_amender_med","soil_amender_high","soil_amender_fermented","spoiled_food","rottenegg","compost","compostwrap","poop","guano","fertilizer","glommerfuel","treegrowthsolution",}
 
-for k,v in ipairs(fertilizers) do
+for _,v in ipairs(fertilizers) do
     AddPrefabPostInit(v,function(inst)
         if not GLOBAL.TheWorld.ismastersim then
             return inst
         end
         local old_onfertilize = inst.components.fertilizer.onappliedfn or function() end
-        inst.components.fertilizer.onappliedfn = function(inst, final_use, doer, target,...)
+        inst.components.fertilizer.onappliedfn = function(_inst, final_use, doer, target,...)
             if doer then
-                doer:PushEvent("has_fertilized",{fertilizer = inst.prefab, target = target})
+                doer:PushEvent("has_fertilized",{fertilizer = _inst.prefab, target = target})
             end
-            return GLOBAL.unpack{old_onfertilize(inst, final_use, doer, target,...)}
+            return unpack{old_onfertilize(_inst, final_use, doer, target,...)}
         end
         local old_ondeploy = inst.components.deployable.ondeploy or function() end
-        inst.components.deployable.ondeploy = function(inst, pt, deployer,...)
+        inst.components.deployable.ondeploy = function(_inst, pt, deployer,...)
             if deployer then
-                deployer:PushEvent("has_fertilized_ground",{fertilizer = inst.prefab})
+                deployer:PushEvent("has_fertilized_ground",{fertilizer = _inst.prefab})
             end
-            return GLOBAL.unpack{old_ondeploy(inst, pt, deployer,...)}
+            return unpack{old_ondeploy(_inst, pt, deployer,...)}
         end
     end)
 end
@@ -180,19 +191,20 @@ AddPrefabPostInit("winch",function(inst)
     if not GLOBAL.TheWorld.ismastersim then
         return inst
     end
-    if inst.components.winch then
-        local old_onfullyraisedfn = inst.components.winch.onfullyraisedfn or function() end
-        inst.components.winch.onfullyraisedfn = function(inst,...)
+    local winch = inst.components.winch
+    if winch then
+        local old_onfullyraisedfn = winch.onfullyraisedfn or function() end
+        winch.onfullyraisedfn = function(_inst,...)
             if inst.components.inventory ~= nil and inst.components.inventory:GetItemInSlot(1) then
                 local pos = Vector3(inst.Transform:GetWorldPosition())
                 local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 12)
-                for k,v in pairs(ents) do
+                for _,v in pairs(ents) do
                     if v:HasTag("player") then
                         v:PushEvent("raised_salvageable")
                     end
                 end
             end
-            return old_onfullyraisedfn(inst,...)
+            return old_onfullyraisedfn(_inst,...)
         end
     end
 end)
@@ -202,9 +214,10 @@ local function OnSewn(inst)
     if not GLOBAL.TheWorld.ismastersim then
         return inst
     end
-    if inst.components.sewing then
-        local old_onsewn = inst.components.sewing.onsewn
-        inst.components.sewing.onsewn = function(inst,target,doer,...)
+    local sewing = inst.components.sewing
+    if sewing then
+        -- local old_onsewn = inst.components.sewing.onsewn
+        sewing.onsewn = function(_,target,doer,...)
             doer:PushEvent("repair",target)
         end
     end
@@ -215,21 +228,23 @@ AddPrefabPostInit("sewing_tape",OnSewn)
 
 --Add an event that fires if a vegetables is harvested
 local veggies = {}
-for k,v in pairs(require("prefabs/farm_plant_defs").PLANT_DEFS) do
+for k in pairs(require("prefabs/farm_plant_defs").PLANT_DEFS) do
     table.insert(veggies,k)
     table.insert(veggies,k.."_oversized")
+end
+
+local function OnLootDropped(inst)
+    local pos = inst:GetPosition()
+    local player = GLOBAL.FindClosestPlayerInRangeSq(pos.x,pos.y,pos.z,5)
+    if player then
+        player:PushEvent("harvested_veg",inst)
+    end
 end
 
 for _,veg in ipairs(veggies) do
     AddPrefabPostInit(veg,function(inst)
         if GLOBAL.TheWorld.ismastersim then
-            inst:ListenForEvent("on_loot_dropped",function(inst)
-                local pos = inst:GetPosition()
-                local player = GLOBAL.FindClosestPlayerInRangeSq(pos.x,pos.y,pos.z,5)
-                if player then
-                    player:PushEvent("harvested_veg",inst)
-                end
-            end)
+            inst:ListenForEvent("on_loot_dropped",OnLootDropped)
         end
     end)
 end
@@ -242,68 +257,73 @@ local function GetSpawnPoint(pt)
 end
 
 --Change glommer statue to be activable for quest line
+local function OnActivate(inst,doer)
+    local glommer_boss_comp = GLOBAL.TheWorld.components.glommer_boss_comp
+    if next(glommer_boss_comp.glommers) ~= nil or glommer_boss_comp.chester ~= nil then
+        return false,"GLOMMER_ACTIVE"
+    end
+    doer:RemoveTag("can_fight_glommer")
+    local chester_sounds = {"hurt","pant","death","open","close","pop","boing","lick"}
+    local glommer_sounds = {"flap","idle_voice","vomit_voice","vomit_liquid","bounce_voice","bounce_ground","hurt_voice","die_voice","sleep_voice"}
+    local function PlaySound(_inst,sound)
+        if sound == "chester" then
+            _inst.SoundEmitter:PlaySound("dontstarve/creatures/chester/"..chester_sounds[math.random(#chester_sounds)])
+        else
+            _inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/glommer/"..glommer_sounds[math.random(#glommer_sounds)])
+        end
+    end
+    local function PlaySounds(_inst,count)
+        count = count or 2
+        for _ = 1,count do
+            _inst:DoTaskInTime(math.random()/2,PlaySound,"chester")
+            _inst:DoTaskInTime(math.random()/2,PlaySound,"glommer")
+        end
+        if count >=10 then
+            return
+        end
+        local new_count = count+1
+        _inst:DoTaskInTime(1,PlaySounds,new_count)
+    end
+    PlaySounds(inst,2)
+    inst:DoTaskInTime(10,function()
+        doer:PushEvent("started_glommer_fight")
+        glommer_boss_comp:StartBossfight(doer)
+        local pos = doer:GetPosition()
+        local chesterboss = SpawnPrefab("chester_boss")
+        local tries = 0
+        local function FindSpawnPoint(position)
+            local pt = GetSpawnPoint(position)
+            tries = tries + 1
+            if pt then
+                return pt
+            elseif tries > 200 then
+                pt = Vector3(0,0,0)
+            else
+                return FindSpawnPoint(position)
+            end
+        end
+        local spawn_point = FindSpawnPoint(pos)
+        chesterboss.Transform:SetPosition(spawn_point.x,10,spawn_point.z)
+        chesterboss.sg:GoToState("appear")
+        glommer_boss_comp.chester = chesterboss
+    end)
+end
+
+local function CanActivateFn(_, doer)
+    if doer:HasTag("can_fight_glommer") then
+        return true
+    end
+    return false
+end
+
 AddPrefabPostInit("statueglommer",function(inst)
     if not GLOBAL.TheWorld.ismastersim then
         return inst
     end
     inst:AddComponent("activatable")
-    inst.components.activatable.OnActivate = function(inst,doer)
-        if next(GLOBAL.TheWorld.components.glommer_boss_comp.glommers) ~= nil or GLOBAL.TheWorld.components.glommer_boss_comp.chester ~= nil then
-            return false,"GLOMMER_ACTIVE"
-        end
-        doer:RemoveTag("can_fight_glommer")
-        local chester_sounds = {"hurt","pant","death","open","close","pop","boing","lick"}
-        local glommer_sounds = {"flap","idle_voice","vomit_voice","vomit_liquid","bounce_voice","bounce_ground","hurt_voice","die_voice","sleep_voice"}
-        local function PlaySound(inst,sound)
-            if sound == "chester" then
-                inst.SoundEmitter:PlaySound("dontstarve/creatures/chester/"..chester_sounds[math.random(#chester_sounds)])
-            else
-                inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/glommer/"..glommer_sounds[math.random(#glommer_sounds)])
-            end
-        end
-        local function PlaySounds(inst,count)
-            count = count or 2
-            for i = 1,count do
-                inst:DoTaskInTime(math.random()/2,PlaySound,"chester")
-                inst:DoTaskInTime(math.random()/2,PlaySound,"glommer")
-            end
-            if count >=10 then
-                return
-            end
-            local new_count = count+1
-            inst:DoTaskInTime(1,PlaySounds,new_count)
-        end
-        PlaySounds(inst,2)
-        inst:DoTaskInTime(10,function()
-            doer:PushEvent("started_glommer_fight")
-            GLOBAL.TheWorld.components.glommer_boss_comp:StartBossfight(doer)
-            local pos = doer:GetPosition()
-            local chesterboss = GLOBAL.SpawnPrefab("chester_boss")
-            local tries = 0
-            local function FindSpawnPoint(pos)
-                local pt = GetSpawnPoint(pos)
-                tries = tries + 1
-                if pt then
-                    return pt 
-                elseif tries > 200 then
-                    pt = GLOBAL.Vector3(0,0,0)
-                else
-                    return FindSpawnPoint(pos)
-                end
-            end
-            local spawn_point = FindSpawnPoint(pos)
-            chesterboss.Transform:SetPosition(spawn_point.x,10,spawn_point.z)
-            chesterboss.sg:GoToState("appear")
-            GLOBAL.TheWorld.components.glommer_boss_comp.chester = chesterboss
-        end)
-    end
+    inst.components.activatable.OnActivate = OnActivate
     inst.components.activatable.inactive = false
-    inst.components.activatable.CanActivateFn = function(inst,doer)
-        if doer:HasTag("can_fight_glommer") then
-            return true
-        end
-        return false
-    end
+    inst.components.activatable.CanActivateFn = CanActivateFn
 end)
 
 
@@ -320,13 +340,13 @@ AddPrefabPostInit("world",function(inst)
 
     inst:DoPeriodicTask(30,function()
         local tab = {}
-        for k,v in ipairs(GLOBAL.AllPlayers) do
+        for _,v in ipairs(AllPlayers) do
             if v.components.quest_component then
                 tab[v.userid] = TUNING.QUEST_COMPONENT.CalculatePoints(v.components.quest_component.level,v.components.quest_component.points)
             end
         end
         local str = json.encode(tab)
-        for k,v in ipairs(GLOBAL.AllPlayers) do
+        for _,v in ipairs(AllPlayers) do
             v.net_player_qs_points:set(str)
         end
     end)
@@ -334,10 +354,11 @@ AddPrefabPostInit("world",function(inst)
 end)
 
 --Add the teleport function to the lavaarena portal to return to the initial starting point
-local function teleport_end(teleportee, pos)
+local function teleport_end(teleportee)
 
-    if teleportee.components.inventory ~= nil and teleportee.components.inventory:IsHeavyLifting() then
-        teleportee.components.inventory:DropItem(teleportee.components.inventory:Unequip(EQUIPSLOTS.BODY),true,true)
+    local inventory = teleportee.components.inventory
+    if inventory ~= nil and inventory:IsHeavyLifting() then
+        inventory:DropItem(inventory:Unequip(EQUIPSLOTS.BODY),true,true)
     end
 
     if teleportee:HasTag("player") then
@@ -353,8 +374,9 @@ local function teleport_end(teleportee, pos)
             teleportee.components.health:SetInvincible(false)
         end
     end
-    if teleportee.components.quest_component then
-    	teleportee.components.quest_component.pos_before_fight = nil
+    local quest_component = teleportee.components.quest_component
+    if quest_component then
+    	quest_component.pos_before_fight = nil
     	teleportee:RemoveTag("won_against_boss")
     	teleportee:RemoveTag("currently_in_bossfight")
     end
@@ -372,7 +394,7 @@ local function teleport_continue(teleportee, pos)
         teleportee:ScreenFade(true, 1)
         teleportee.sg.statemem.teleport_task = teleportee:DoTaskInTime(1, teleport_end, pos)
     else
-        teleport_end(teleportee, pos)
+        teleport_end(teleportee)
     end
 end
 
@@ -382,8 +404,9 @@ local function TeleportTo(inst,teleportee,pos)
     if isplayer then
         teleportee.sg:GoToState("forcetele")
     else
-        if teleportee.components.health ~= nil then
-            teleportee.components.health:SetInvincible(true)
+        local health = teleportee.components.health
+        if health ~= nil then
+            health:SetInvincible(true)
         end
         if teleportee.DynamicShadow ~= nil then
             teleportee.DynamicShadow:Enable(false)
@@ -400,9 +423,43 @@ local function TeleportTo(inst,teleportee,pos)
 end
 
 local function OnInit(inst)
-    local ceiling = GLOBAL.SpawnPrefab("boss_island_ceiling")
+    local ceiling = SpawnPrefab("boss_island_ceiling")
     ceiling.parent = inst
     ceiling.Transform:SetPosition(inst:GetPosition():Get());
+end
+
+local NO_REMOVING = {"INLIMBO", "irreplaceable", "godly_item"}
+
+local function RemoveItems(inst)
+    local x,y,z = inst:GetPosition():Get()
+    local items = TheSim:FindEntities(x, y, z, 30, {"_inventoryitem"}, NO_REMOVING)
+    for _, item in ipairs(items) do
+        if item:IsValid() then
+            item:Remove()
+        end
+    end
+end
+
+local function TurnOn(inst)
+    if inst.portalfx == nil then
+        inst.portalfx = SpawnPrefab("lavaarena_portal_activefx")
+        inst.portalfx.Transform:SetPosition(inst:GetPosition():Get())
+    end
+    inst.counter = inst.counter + 1
+    inst:AddTag("can_be_used")
+end
+
+local function TurnOff(inst)
+    inst.counter = math.max(inst.counter - 1,0)
+    if inst.counter == 0 then
+        if inst.portalfx ~= nil then
+            inst.portalfx.AnimState:PlayAnimation("portal_pst")
+            inst.portalfx:ListenForEvent("animover", inst.portalfx.Remove)
+            inst.portalfx = nil
+        end
+        inst:RemoveTag("can_be_used")
+        inst:DoTaskInTime(1, RemoveItems)
+    end
 end
 
 AddPrefabPostInit("lavaarena_portal",function(inst)
@@ -415,39 +472,12 @@ AddPrefabPostInit("lavaarena_portal",function(inst)
 	end
 
 	inst.portalfx = nil
-	inst.TurnOn = function()
-		if inst.portalfx == nil then
-            inst.portalfx = SpawnPrefab("lavaarena_portal_activefx")
-            inst.portalfx.Transform:SetPosition(inst:GetPosition():Get())
-		end
-		inst.counter = inst.counter + 1
-		inst:AddTag("can_be_used")
-	end
+	inst.TurnOn = TurnOn
 
-	inst.TurnOff = function()
-        inst.counter = math.max(inst.counter - 1,0)
-        if inst.counter == 0 then
-            if inst.portalfx ~= nil then
-                inst.portalfx.AnimState:PlayAnimation("portal_pst")
-                inst.portalfx:ListenForEvent("animover", inst.portalfx.Remove)
-                inst.portalfx = nil
-            end
-            inst:RemoveTag("can_be_used")
-            inst:DoTaskInTime(1, function()
-                local x,y,z = inst:GetPosition():Get()
-                local items = TheSim:FindEntities(x, y, z, 30, {"_inventoryitem"}, {"INLIMBO"})
-                for _, item in ipairs(items) do
-                    if item:IsValid() then
-                        item:Remove()
-                    end
-                end
-            end)
-        end
-	end
+	inst.TurnOff = TurnOff
 
 	inst:AddComponent("teleporter")
 	inst.components.teleporter.enabled = false
-
 
 	inst.TeleportTo = TeleportTo
 
@@ -484,9 +514,9 @@ end
 
 local function RemoveQuestFromTuning(name)
     if name then
-        GLOBAL.TUNING.QUEST_COMPONENT.QUESTS[name] = nil
+        QUEST_COMPONENT.QUESTS[name] = nil
         for i = 1,5 do
-            GLOBAL.TUNING.QUEST_COMPONENT["QUESTS_DIFFICULTY_"..i][name] = nil
+            QUEST_COMPONENT["QUESTS_DIFFICULTY_"..i][name] = nil
         end
     end
 end
@@ -494,16 +524,17 @@ end
 --Add keyhandler for opening the quest log (and for me to open the quest board without clicking on it)
 AddSimPostInit(function() 
     GLOBAL.TheInput:AddKeyHandler(function(key, down)
-        if not down then return end 
-        if key == GLOBAL.TUNING.QUEST_COMPONENT.HOTKEY_QUESTLOG then
-            if GLOBAL.ThePlayer then
-                if GLOBAL.ThePlayer.HUD:IsCraftingOpen() then 
+        if not down then return end
+        local ThePlayer = GLOBAL.ThePlayer
+        if key == QUEST_COMPONENT.HOTKEY_QUESTLOG then
+            if ThePlayer then
+                if ThePlayer.HUD:IsCraftingOpen() then
                     return
                 end
                 local screen = TheFrontEnd:GetActiveScreen()
                 if not screen or not screen.name then return true end
                 if screen.name:find("HUD") then
-                    TheFrontEnd:PushScreen(require("screens/quest_widget")(GLOBAL.ThePlayer))
+                    TheFrontEnd:PushScreen(require("screens/quest_widget")(ThePlayer))
                     return true
                 else
                     if screen.name == "Quest_Widget" then
@@ -513,14 +544,14 @@ AddSimPostInit(function()
             end
         end
         if key == GLOBAL.KEY_O then
-            if GLOBAL.ThePlayer and GLOBAL.ThePlayer.userid == "KU_7veFKyHP" then
-                if GLOBAL.ThePlayer.HUD:IsCraftingOpen() then 
+            if ThePlayer and ThePlayer.userid == "KU_7veFKyHP" then
+                if ThePlayer.HUD:IsCraftingOpen() then
                     return
                 end
                 local screen = TheFrontEnd:GetActiveScreen()
                 if not screen or not screen.name then return true end
                 if screen.name:find("HUD") then
-                    TheFrontEnd:PushScreen(require("screens/quest_board_widget")(GLOBAL.ThePlayer))
+                    TheFrontEnd:PushScreen(require("screens/quest_board_widget")(ThePlayer))
                     return true
                 else
                     if screen.name == "Quest_Board_Widget" then
@@ -531,70 +562,76 @@ AddSimPostInit(function()
         end
     end)
 
+    local TUNING = GLOBAL.TUNING
     --Check world settings and disable quests if they are impossible to complete
-    if GLOBAL.TUNING.SPAWN_EYEOFTERROR == false then
+    if TUNING.SPAWN_EYEOFTERROR == false then
         RemoveQuestFromTuning("The Eye of Cthulhu")
         RemoveQuestFromTuning("Twins Of Destruction")
     end
-    if GLOBAL.TUNING.SPAWN_BEARGER == false then
+    if TUNING.SPAWN_BEARGER == false then
         RemoveQuestFromTuning("The Fearful Trial")
     end
-    if GLOBAL.TUNING.SPAWN_DEERCLOPS == false then
+    if TUNING.SPAWN_DEERCLOPS == false then
         RemoveQuestFromTuning("The Fearful Trial")
         RemoveQuestFromTuning("Mage of the Manor Baldur")
     end
-    if GLOBAL.TUNING.MOOSE_DENSITY == 0 then
+    if TUNING.MOOSE_DENSITY == 0 then
         RemoveQuestFromTuning("The Fearful Trial")
     end
-    if GLOBAL.TUNING.SPAWN_DRAGONFLY == false then
+    if TUNING.SPAWN_DRAGONFLY == false then
         --RemoveQuestFromTuning("The Fearful Trial")
     end
-    if GLOBAL.TUNING.LEIF_PERCENT_CHANCE == 0 then
+    if TUNING.LEIF_PERCENT_CHANCE == 0 then
         RemoveQuestFromTuning("Treebeard's end")
     end
-    if GLOBAL.TUNING.SPAWN_CRABKING == false then
+    if TUNING.SPAWN_CRABKING == false then
         RemoveQuestFromTuning("The Impregnable Fortress")
     end
-    if GLOBAL.TUNING.BEEQUEEN_SPAWN_WORK_THRESHOLD == 0 then
+    if TUNING.BEEQUEEN_SPAWN_WORK_THRESHOLD == 0 then
         --RemoveQuestFromTuning("Treebeard's end")
     end
-    if GLOBAL.TUNING.SPAWN_TOADSTOOL == false then
+    if TUNING.SPAWN_TOADSTOOL == false then
         RemoveQuestFromTuning("The Biggest Frog")
     end
-    if GLOBAL.TUNING.SPAWN_MALBATROSS == false then
+    if TUNING.SPAWN_MALBATROSS == false then
         RemoveQuestFromTuning("The Bane of Lake Nen")
     end
-    if GLOBAL.TUNING.SPAWN_KLAUS == false then
+    if TUNING.SPAWN_KLAUS == false then
         RemoveQuestFromTuning("Ho Ho Ho")
     end
-    if GLOBAL.TUNING.SPAWN_SPIDERQUEEN == false then
+    if TUNING.SPAWN_SPIDERQUEEN == false then
         --RemoveQuestFromTuning("Ho Ho Ho")
     end
-    if GLOBAL.TUNING.SPAWN_MUTATED_HOUNDS == false then
+    if TUNING.SPAWN_MUTATED_HOUNDS == false then
         RemoveQuestFromTuning("Orcus's Living Dead")
     end
-    if GLOBAL.TUNING.SHARK_SPAWN_CHANCE == 0 then
+    if TUNING.SHARK_SPAWN_CHANCE == 0 then
         RemoveQuestFromTuning("The Sharks Demise")
     end
-    if GLOBAL.TUNING.MERMHOUSE_ENABLED == false then
+    if TUNING.MERMHOUSE_ENABLED == false then
         RemoveQuestFromTuning("Mirror of Merms")
     end
-    if GLOBAL.TUNING.HUNT_COOLDOWN == -1 then
+    if TUNING.HUNT_COOLDOWN == -1 then
         RemoveQuestFromTuning("Detective Work")
     end
-    if GLOBAL.TUNING.MOSQUITO_POND_ENABLED == false then
+    if TUNING.MOSQUITO_POND_ENABLED == false then
         RemoveQuestFromTuning("Off to donate blood")
     end
-    if GLOBAL.TUNING.PIGHOUSE_ENABLED == false then
+    if TUNING.PIGHOUSE_ENABLED == false then
         RemoveQuestFromTuning("Front Pigs") 
         RemoveQuestFromTuning("Beyond the Charming Hamlet")
     end
 
     --Compability with Epic Healthbar
-    if TUNING.EPICHEALTHBAR ~= nil and type(TUNING.EPICHEALTHBAR) == "table" then
-        TUNING.EPICHEALTHBAR.THEMES.CHESTER_BOSS = { 162 / 255, 0 / 255, 202 / 255 }
-        TUNING.EPICHEALTHBAR.PHASES.CHESTER_BOSS = { 0.5 }
+    local EPICHEALTHBAR = TUNING.EPICHEALTHBAR
+    if EPICHEALTHBAR ~= nil and type(EPICHEALTHBAR) == "table" then
+        local THEMES = EPICHEALTHBAR.THEMES
+        THEMES.CHESTER_BOSS = { 162 / 255, 0 / 255, 202 / 255 }
+        EPICHEALTHBAR.PHASES.CHESTER_BOSS = { 0.5 }
 
-        TUNING.EPICHEALTHBAR.THEMES.GLOMMER_BOSS = { 247 / 255, 247 / 255, 247 / 255 }
+        THEMES.GLOMMER_BOSS = { 247 / 255, 247 / 255, 247 / 255 }
+
+        THEMES.FROGKING = { 16 / 255, 69 / 255, 2 / 255 }
+        EPICHEALTHBAR.PHASES.FROGKING = { 0.33, 0.66 }
     end
 end)

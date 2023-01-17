@@ -2,12 +2,13 @@ local function SpawnFrogRain(inst,color)
 	local _frogs = {}
 	local _scheduledtasks = {}
 	local _activeplayers = {}
+	local ScheduleSpawn
 	for k,v in ipairs(AllPlayers) do
 		_activeplayers[k] = v
 	end
 	local _updating = false
-	local function OnPlayerJoined(src, player)
-	    for i, v in ipairs(_activeplayers) do
+	local function OnPlayerJoined(_, player)
+	    for _, v in ipairs(_activeplayers) do
 	        if v == player then
 	            return
 	        end
@@ -103,7 +104,7 @@ local function SpawnFrogRain(inst,color)
 	    _scheduledtasks[player] = nil
 	    reschedule(player)
 	end
-	local function ScheduleSpawn(player, initialspawn)
+	ScheduleSpawn = function(player, initialspawn)
 	    if _scheduledtasks[player] == nil then
 	        _scheduledtasks[player] = player:DoTaskInTime(math.random()+0.1, SpawnFrogForPlayer, ScheduleSpawn)
 	    end
@@ -111,17 +112,17 @@ local function SpawnFrogRain(inst,color)
 	local function FrogRain(inst,force)
 		if not _updating then
             _updating = true
-            for i, v in ipairs(_activeplayers) do
+            for _, v in ipairs(_activeplayers) do
                 ScheduleSpawn(v, true)
             end
         elseif force then
-            for i, v in ipairs(_activeplayers) do
+            for _, v in ipairs(_activeplayers) do
                 CancelSpawn(v)
                 ScheduleSpawn(v, true)
             end
 	    elseif _updating then
 	        _updating = false
-	        for i, v in ipairs(_activeplayers) do
+	        for _, v in ipairs(_activeplayers) do
 	            CancelSpawn(v)
 	        end
 	    end
@@ -129,7 +130,7 @@ local function SpawnFrogRain(inst,color)
 	local function StopFrogRain(inst)
 		inst:RemoveEventCallback("ms_playerjoined", OnPlayerJoined, TheWorld)
 		inst:RemoveEventCallback("ms_playerleft", OnPlayerLeft, TheWorld)
-		for k,v in ipairs(_activeplayers) do
+		for _,v in ipairs(_activeplayers) do
 			CancelSpawn(v)
 		end
 	end

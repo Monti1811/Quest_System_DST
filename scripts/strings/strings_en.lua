@@ -1070,7 +1070,7 @@ return {
 			NAME = "The %s Fisher",
 			DESCRIPTION = "I'm in dire need of a %s for a special project of mine! \nBut I can't seem to catch them! \nIf someone would be able to bring me 5 of them, I would be very grateful!",
 			COUNTER = "%s fished",
-			HOVER = "Fish 5 %s",
+			HOVER = "Fish 2 %s",
 
 		},
 

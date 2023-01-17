@@ -4,6 +4,11 @@
 --Wanda can't do quests that require damage received: was never a problem ?!
 --glommer machine doesn't lose durability           : fixed
 --RPG level quest shows %s instead of specific amount: probably fixed
---Feuchtgebiete 2 mal zur auswahl gehabt: TODO
+--Feuchtgebiete 2 mal zur auswahl gehabt			: TODO
+--Bossfight when 2 players at same time				: probably fixed
+--make quests burnable								: fixed
+--Fix temp_boni when too many (more than 5)			: fixed
+--Refactor custom quests to json encode				: fixed
+--Mirror of merms also influence other players		: TODO
 
 gräber ausheben mission

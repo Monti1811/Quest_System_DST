@@ -39,81 +39,93 @@ local LevelUpComponent = Class(function(self, inst)
 end)
 
 function LevelUpComponent:SetValues()
-	if self.inst.components.health then
-		local old_health = self.inst.components.health.maxhealth
-		local old_percent = self.inst.components.health:GetPercent()
-		self.inst.components.health:SetMaxHealth(old_health + self.bonus.healthbonus)
-		self.inst.components.health:SetPercent(old_percent)
+	local health = self.inst.components.health
+	if health then
+		local old_health = health.maxhealth
+		local old_percent = health:GetPercent()
+		health:SetMaxHealth(old_health + self.bonus.healthbonus)
+		health:SetPercent(old_percent)
 	end
 
-	if self.inst.components.hunger then
-		local old_hunger = self.inst.components.hunger.max
-		local old_percent = self.inst.components.hunger:GetPercent()
-		self.inst.components.hunger:SetMax(old_hunger + self.bonus.hungerbonus)
-		self.inst.components.hunger:SetPercent(old_percent)
+	local hunger = self.inst.components.hunger
+	if hunger then
+		local old_hunger =hunger.max
+		local old_percent = hunger:GetPercent()
+		hunger:SetMax(old_hunger + self.bonus.hungerbonus)
+		hunger:SetPercent(old_percent)
 	end
 
-	if self.inst.components.sanity then
-		local old_sanity = self.inst.components.sanity.max
-		local old_percent = self.inst.components.sanity:GetPercent()
-		self.inst.components.sanity:SetMax(old_sanity + self.bonus.sanitybonus)
-		self.inst.components.sanity:SetPercent(old_percent)
+	local sanity = self.inst.components.sanity
+	if sanity then
+		local old_sanity = sanity.max
+		local old_percent = sanity:GetPercent()
+		sanity:SetMax(old_sanity + self.bonus.sanitybonus)
+		sanity:SetPercent(old_percent)
 	end
 
-	if self.inst.components.temperature then
-		local old_summerinsulation = self.inst.components.temperature.inherentsummerinsulation
-		self.inst.components.temperature.inherentsummerinsulation = old_summerinsulation + self.bonus.summerinsulationbonus
-		local old_winterinsulation = self.inst.components.temperature.inherentinsulation
-		self.inst.components.temperature.inherentinsulation = old_winterinsulation + self.bonus.winterinsulationbonus
+	local temperature = self.inst.components.temperature
+	if temperature then
+		local old_summerinsulation = temperature.inherentsummerinsulation
+		temperature.inherentsummerinsulation = old_summerinsulation + self.bonus.summerinsulationbonus
+		local old_winterinsulation =temperature.inherentinsulation
+		temperature.inherentinsulation = old_winterinsulation + self.bonus.winterinsulationbonus
 	end
 
-	if self.inst.components.locomotor then
-		self.inst.components.locomotor:SetExternalSpeedMultiplier(self.inst, "levelupcomponent", 1 + self.bonus.speedbonus)
+	local locomotor = self.inst.components.locomotor
+	if locomotor then
+		locomotor:SetExternalSpeedMultiplier(self.inst, "levelupcomponent", 1 + self.bonus.speedbonus)
 	end
 
-	if self.inst.components.workmultiplier then
+	local workmultiplier = self.inst.components.workmultiplier
+	if workmultiplier then
 		for k,v in pairs(self.bonus.workmultiplierbonus) do
-			self.inst.components.workmultiplier:AddMultiplier(k,v,self.inst)
+			workmultiplier:AddMultiplier(k,v,self.inst)
 		end
 	end
 end
 
 function LevelUpComponent:RemoveValues()
-	if self.inst.components.health then
-		local old_health = self.inst.components.health.maxhealth
-		local old_percent = self.inst.components.health:GetPercent()
-		self.inst.components.health:SetMaxHealth(old_health - self.bonus.healthbonus)
-		self.inst.components.health:SetPercent(old_percent)
+	local health = self.inst.components.health
+	if health then
+		local old_health = health.maxhealth
+		local old_percent = health:GetPercent()
+		health:SetMaxHealth(old_health - self.bonus.healthbonus)
+		health:SetPercent(old_percent)
 	end
 
-	if self.inst.components.hunger then
-		local old_hunger = self.inst.components.hunger.max
-		local old_percent = self.inst.components.hunger:GetPercent()
-		self.inst.components.hunger:SetMax(old_hunger - self.bonus.hungerbonus)
-		self.inst.components.hunger:SetPercent(old_percent)
+	local hunger = self.inst.components.hunger
+	if hunger then
+		local old_hunger = hunger.max
+		local old_percent = hunger:GetPercent()
+		hunger:SetMax(old_hunger - self.bonus.hungerbonus)
+		hunger:SetPercent(old_percent)
 	end
 
-	if self.inst.components.sanity then
-		local old_sanity = self.inst.components.sanity.max
-		local old_percent = self.inst.components.sanity:GetPercent()
-		self.inst.components.sanity:SetMax(old_sanity - self.bonus.sanitybonus)
-		self.inst.components.sanity:SetPercent(old_percent)
+	local sanity = self.inst.components.sanity
+	if sanity then
+		local old_sanity = sanity.max
+		local old_percent = sanity:GetPercent()
+		sanity:SetMax(old_sanity - self.bonus.sanitybonus)
+		sanity:SetPercent(old_percent)
 	end
 
-	if self.inst.components.temperature then
-		local old_summerinsulation = self.inst.components.temperature.inherentsummerinsulation
-		self.inst.components.temperature.inherentsummerinsulation = old_summerinsulation - self.bonus.summerinsulationbonus
-		local old_winterinsulation = self.inst.components.temperature.inherentinsulation
-		self.inst.components.temperature.inherentinsulation = old_winterinsulation - self.bonus.winterinsulationbonus
+	local temperature = self.inst.components.temperature
+	if temperature then
+		local old_summerinsulation = temperature.inherentsummerinsulation
+		temperature.inherentsummerinsulation = old_summerinsulation - self.bonus.summerinsulationbonus
+		local old_winterinsulation = temperature.inherentinsulation
+		temperature.inherentinsulation = old_winterinsulation - self.bonus.winterinsulationbonus
 	end
 
-	if self.inst.components.locomotor then
-		self.inst.components.locomotor:RemoveExternalSpeedMultiplier(self.inst, "levelupcomponent")
+	local locomotor = self.inst.components.locomotor
+	if locomotor then
+		locomotor:RemoveExternalSpeedMultiplier(self.inst, "levelupcomponent")
 	end
 
-	if self.inst.components.workmultiplier then
-		for k,v in pairs(self.bonus.workmultiplierbonus) do
-			self.inst.components.workmultiplier:RemoveMultiplier(k,self.inst)
+	local workmultiplier = self.inst.components.workmultiplier
+	if workmultiplier then
+		for k in pairs(self.bonus.workmultiplierbonus) do
+			workmultiplier:RemoveMultiplier(k,self.inst)
 		end
 	end
 end
@@ -144,19 +156,21 @@ function LevelUpComponent:Init()
 	end)
 end
 
+--[[
+
 function LevelUpComponent:OnSave()
-	--[[local data = {}
+	local data = {}
 	--data.bonus = self.bonus
-	return data]]
+	return data
 end
 
 function LevelUpComponent:OnLoad(data)
-	--[[if data then
+	if data then
 		if data.bonus ~= nil then
 			--self.bonus = data.bonus
 		end
-	end]]
+	end
 end
-
+]]
 
 return LevelUpComponent

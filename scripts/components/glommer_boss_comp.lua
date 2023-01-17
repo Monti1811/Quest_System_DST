@@ -11,16 +11,16 @@ local Glommer_Boss_Comp = Class(function(self,inst)
 	--self.chester = nil
 	--self.glommer_boss = nil
 
-	self.ondeath = function(inst) 
+	self.ondeath = function()
 		self:OnDeath()
 	end
 
 	self:Init()
 
-	self._OnTimerDone = function(inst,data)
+	self._OnTimerDone = function(_,data)
 		devprint("timerdone",data.name)
 		if data and data.name == "remove_bosses" then
-			for k,v in pairs(self.glommers) do
+			for _,v in pairs(self.glommers) do
 				if v:IsValid() then
 					v.sg:GoToState("flyaway")
 				end
@@ -42,7 +42,7 @@ local Glommer_Boss_Comp = Class(function(self,inst)
 
 	self.inst:ListenForEvent("timerdone",self._OnTimerDone)
 
-	local function OnBossesDead(world)
+	local function OnBossesDead()
 		--print("OnBossesDead")
 		if next(self.glommers) == nil and self.chester == nil then
 			--print("remove timer")
@@ -56,7 +56,7 @@ local Glommer_Boss_Comp = Class(function(self,inst)
 end)
 
 function Glommer_Boss_Comp:Init()
-	self.inst:DoTaskInTime(1,function(inst)
+	self.inst:DoTaskInTime(1,function()
 		if next(self.glommers) ~= nil then
 			self:ApplyAmountChanges()
 		end
@@ -74,7 +74,7 @@ function Glommer_Boss_Comp:StartBossfight(target)
 	devprint("Glommer_Boss_Comp:StartBossfight",target,self.amount)
 	local target_pos = Point(target.Transform:GetWorldPosition())
 	self.amount = self.max_amount
-	for i = 1,self.max_amount do
+	for _ = 1,self.max_amount do
 		local glommer = SpawnPrefab("glommer_small")
 		table.insert(self.glommers,glommer)
 		local pos = GetSpawnPoint(target_pos) or target_pos
@@ -143,7 +143,7 @@ end
 function Glommer_Boss_Comp:OnSave()
 	local data = {}
 	local glommers = {}
-	for k,v in pairs(self.glommers) do
+	for _,v in pairs(self.glommers) do
 		table.insert(glommers,v.GUID)
     end
     data.spawning_glommer_boss = self.spawning_glommer_boss
@@ -174,7 +174,7 @@ end
 function Glommer_Boss_Comp:LoadPostPass(newents, savedata)
 	if savedata ~= nil then
 		if savedata.glommers ~= nil then
-            for k,v in pairs(savedata.glommers) do
+            for _,v in pairs(savedata.glommers) do
                 local targ = newents[v]
                 if targ ~= nil and targ.entity then
                 	if targ.entity.prefab == "chester_boss" then

@@ -1021,7 +1021,7 @@ return {
 			NAME = "Der %s-Fischer",
 			DESCRIPTION = "Ich brauche dringend einen %s für ein besonderes Projekt von mir! \nAber ich kann sie einfach nicht fangen! \nWenn jemand in der Lage wäre, mir 5 davon zu bringen, wäre ich sehr dankbar!",
 			COUNTER = "%s gefangen",
-			HOVER = "Angle 5 %s",
+			HOVER = "Angle 2 %s",
 
 		},
 

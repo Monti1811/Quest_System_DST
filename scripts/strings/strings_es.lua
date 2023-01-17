@@ -1016,7 +1016,7 @@ return {
 			NAME = "El Pescador de %s",
 			DESCRIPTION = "¡Necesito urgentemente un %s para un proyecto especial mío! \n¡Pero parece que no puedo atraparlos! \n ¡Si alguien pudiera traerme 5 de ellos, estaría muy agradecido!",
 			COUNTER = "%s pescados",
-			HOVER = "Pescado 5 %s",
+			HOVER = "Pescado 2 %s",
 
 		},
 

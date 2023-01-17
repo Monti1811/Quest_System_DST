@@ -54,17 +54,19 @@ local function AddHungerRate(inst,amount,name)
 end
 
 local function AddHealthRate(inst,amount,name)
-	if inst.components.health then
+	local health = inst.components.health
+	if health then
+		local taskname = "healtask_"..name
 		if amount < 0 then
-			if inst["healtask_"..name] ~= nil then
-				inst["healtask_"..name]:Cancel()
-				inst["healtask_"..name] = nil
+			if inst[taskname] ~= nil then
+				inst[taskname]:Cancel()
+				inst[taskname] = nil
 			end
 		else
 			amount = inst.prefab == "wanda" and amount * TUNING.OLDAGE_HEALTH_SCALE or amount
-			inst["healtask_"..name] = inst:DoPeriodicTask(10,function() 
-				if inst.components.health and not inst.components.health:IsDead() then
-					inst.components.health:DoDelta(amount)
+			inst[taskname] = inst:DoPeriodicTask(10,function()
+				if health and not health:IsDead() then
+					health:DoDelta(amount)
 				end
 			end)
 		end
@@ -72,43 +74,48 @@ local function AddHealthRate(inst,amount,name)
 end
 
 local function AddDamage(inst,amount)
-	if inst.components.combat then
-		local old_damage = inst.components.combat.defaultdamage
-		inst.components.combat:SetDefaultDamage(old_damage + amount)
+	local combat = inst.components.combat
+	if combat then
+		local old_damage = combat.defaultdamage
+		combat:SetDefaultDamage(old_damage + amount)
 	end
 end
 
 local function AddDamageReduction(inst,amount,name)
-	if inst.components.combat then
+	local combat = inst.components.combat
+	if combat then
 		if amount < 0 then
-			inst.components.combat.externaldamagetakenmultipliers:RemoveModifier(inst,name)
+			combat.externaldamagetakenmultipliers:RemoveModifier(inst,name)
 		else
-			inst.components.combat.externaldamagetakenmultipliers:SetModifier(inst,amount,name)
+			combat.externaldamagetakenmultipliers:SetModifier(inst,amount,name)
 		end		
 	end
 end
 
 local function AddRange(inst,amount)
-	if inst.components.combat then
-		local old_attackrange = inst.components.combat.attackrange
-		local old_hitrange = inst.components.combat.hitrange
-		inst.components.combat.attackrange = old_attackrange + amount
-		inst.components.combat.hitrange = old_hitrange + amount
+	local combat = inst.components.combat
+	if combat then
+		local old_attackrange = combat.attackrange
+		local old_hitrange = combat.hitrange
+		combat.attackrange = old_attackrange + amount
+		combat.hitrange = old_hitrange + amount
 	end
 end
 
 
 local function AddWinterInsulation(inst,amount)
-	if inst.components.temperature then
-		local old_insulation = inst.components.temperature.inherentinsulation
-		inst.components.temperature.inherentinsulation = old_insulation + amount
+	local temperature = inst.components.temperature
+	if temperature then
+		local old_insulation = temperature.inherentinsulation
+		temperature.inherentinsulation = old_insulation + amount
 	end
 end
 
 local function AddSummerInsulation(inst,amount)
-	if inst.components.temperature then
-		local old_insulation = inst.components.temperature.inherentsummerinsulation
-		inst.components.temperature.inherentsummerinsulation = old_insulation + amount
+	local temperature = inst.components.temperature
+	if temperature then
+		local old_insulation = temperature.inherentsummerinsulation
+		temperature.inherentsummerinsulation = old_insulation + amount
 	end
 end
 
@@ -119,14 +126,15 @@ local actions = {
 }
 
 local function AddWorkingBonus(inst,amount)
-	if inst.components.workmultiplier ~= nil then
+	local workmultiplier = inst.components.workmultiplier
+	if workmultiplier ~= nil then
 		if amount < 0 then
 			for _,v in ipairs(actions) do
-				inst.components.workmultiplier:RemoveMultiplier(v,inst)
+				workmultiplier:RemoveMultiplier(v,inst)
 			end
 		else
 			for _,v in ipairs(actions) do
-				inst.components.workmultiplier:AddMultiplier(v,amount,inst)
+				workmultiplier:AddMultiplier(v,amount,inst)
 			end
 		end
 	end
@@ -135,23 +143,25 @@ end
 local sleepboni = {"hunger_bonus_mult","health_bonus_mult"}
 
 local function AddSleepingBonus(inst,amount)
-	if inst.components.sleepingbaguser then
+	local sleepingbaguser = inst.components.sleepingbaguser
+	if sleepingbaguser then
 		for _,v in ipairs(sleepboni) do
-			local old = inst.components.sleepingbaguser[v]
-			inst.components.sleepingbaguser[v] = old + amount
+			local old = sleepingbaguser[v]
+			sleepingbaguser[v] = old + amount
 		end
 	end
 end
 
 local function AddNightSight(inst,amount)
-	if inst.components.playervision then
+	local playervision = inst.components.playervision
+	if playervision then
 		if amount < 0 then
-			inst.components.playervision:ForceNightVision(false)
+			playervision:ForceNightVision(false)
 			if inst.net_nightvisiontrigger then
 				inst.net_nightvisiontrigger:set(false)
 			end
 		else
-			inst.components.playervision:ForceNightVision(true)
+			playervision:ForceNightVision(true)
 			if inst.net_nightvisiontrigger then
 				inst.net_nightvisiontrigger:set(true)
 			end
@@ -160,11 +170,12 @@ local function AddNightSight(inst,amount)
 end
 
 local function AddSpeedbonus(inst,amount,name)
-	if inst.components.locomotor then
+	local locomotor = inst.components.locomotor
+	if locomotor then
 		if amount < 0 then
-			inst.components.locomotor:RemoveExternalSpeedMultiplier(inst,name)
+			locomotor:RemoveExternalSpeedMultiplier(inst,name)
 		else
-			inst.components.locomotor:SetExternalSpeedMultiplier(inst,name,amount)
+			locomotor:SetExternalSpeedMultiplier(inst,name,amount)
 		end		
 	end
 end
@@ -172,34 +183,36 @@ end
 local old_SetVal = {}
 
 local function AddEscapeDeath(inst,amount,name)
-	if inst.components.health then
+	local health = inst.components.health
+	local tempbonus = inst.components.temporarybonus
+	local taskname = name.."escapedeath"
+	if health then
 		if amount < 0 then
 			if old_SetVal[inst.GUID] and old_SetVal[inst.GUID][name] then
-				inst.components.health.SetVal = old_SetVal[inst.GUID][name]
+				health.SetVal = old_SetVal[inst.GUID][name]
 				old_SetVal[inst.GUID][name] = nil
 			end
 		else
 			if old_SetVal[inst.GUID] == nil then
 				old_SetVal[inst.GUID] = {}
 			end
-			old_SetVal[inst.GUID][name] = inst.components.health.SetVal or function() end
-			inst.components.health.SetVal = function(self,val,cause,afflicter,...)
+			old_SetVal[inst.GUID][name] = health.SetVal or function() end
+			health.SetVal = function(self,val,cause,afflicter,...)
 				if self.currenthealth > 0 and val <= 0 then
 					local a,b,c = inst.Transform:GetWorldPosition()
 					local fx = SpawnPrefab("wathgrithr_spirit")
 					fx.Transform:SetPosition(a,b,c)
 					if amount > 1 then
-						local tempbonus = inst.components.temporarybonus
-						local time = tempbonus.current_active_boni[name.."escapedeath"] and tempbonus.current_active_boni[name.."escapedeath"].time or 60
-						local time_start = tempbonus.current_active_boni[name.."escapedeath"] and tempbonus.current_active_boni[name.."escapedeath"].starting_time or 0
+						local time = tempbonus.current_active_boni[taskname] and tempbonus.current_active_boni[taskname].time or 60
+						local time_start = tempbonus.current_active_boni[taskname] and tempbonus.current_active_boni[taskname].starting_time or 0
 						local time_left = time - (GetTime() - time_start)
 						devprint("escapedeath",time,time_start,time_left,inst["remove_task"..name])
-						inst.components.temporarybonus:RemoveBonus("escapedeath",name,amount)
-						inst.components.temporarybonus:AddBonus("escapedeath",name,amount-1,time_left)
+						tempbonus:RemoveBonus("escapedeath",name,amount)
+						tempbonus:AddBonus("escapedeath",name,amount-1,time_left)
 					else
-						inst.components.temporarybonus:RemoveBonus("escapedeath",name,amount)
+						tempbonus:RemoveBonus("escapedeath",name,amount)
 					end
-					inst.components.health:SetVal(self:GetMaxWithPenalty()/2)
+					health:SetVal(self:GetMaxWithPenalty()/2)
 					return
 				elseif old_SetVal[inst.GUID][name] then
 					old_SetVal[inst.GUID][name](self,val,cause,afflicter,...)
@@ -326,14 +339,16 @@ end
 
 function TemporaryBonus:RemoveBonus(bonus,name,amount)
 	devprint("TemporaryBonus:RemoveBonus",bonus,name,amount)
-	if self.current_active_boni[name..bonus] == nil then return end
-	if self.inst["remove_task"..name] ~= nil then
-		self.inst["remove_task"..name]:Cancel()
-		self.inst["remove_task"..name] = nil
+	local taskname = "remove_task"..name
+	local name_bonus = name..bonus
+	if self.current_active_boni[name_bonus] == nil then return end
+	if self.inst[taskname] ~= nil then
+		self.inst[taskname]:Cancel()
+		self.inst[taskname] = nil
 	end
 	self.current_boni = self.current_boni - 1
 	--local old_name = self.current_active_boni[name..bonus].name
-	self.current_active_boni[name..bonus] = nil
+	self.current_active_boni[name_bonus] = nil
 	if self.bonusfunctions[bonus] ~= nil then
 		self.bonusfunctions[bonus](self.inst,-amount,name)
 	end
@@ -378,6 +393,7 @@ end
 
 function TemporaryBonus:OnLoad(data)
 	if data.current_active_boni ~= nil and next(data.current_active_boni) ~= nil then
+		devprint("TemporaryBonus:OnLoad")
 		devdumptable(data.current_active_boni)
 		for k,v in pairs(data.current_active_boni) do
 			current_active_boni_loaded[k] = v

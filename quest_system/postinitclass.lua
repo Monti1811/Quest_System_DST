@@ -1,4 +1,11 @@
 -------------------------------------------------Class Post Constructs-----------------------------------------------
+local TheInput = GLOBAL.TheInput
+local unpack = GLOBAL.unpack
+local QUEST_COMPONENT = GLOBAL.TUNING.QUEST_COMPONENT
+local STR_QUEST_COMPONENT = GLOBAL.STRINGS.QUEST_COMPONENT
+local TheSim = GLOBAL.TheSim
+local TheNet = GLOBAL.TheNet
+
 
 local color_table 
 if TUNING.QUEST_COMPONENT.COLORBLINDNESS == 1 then
@@ -23,8 +30,8 @@ end
 AddClassPostConstruct("widgets/hoverer",function(hoverer)
 	local old_SetColour = hoverer.text.SetColour
 	hoverer.text.SetColour = function(self, colour1, colour2, colour3, colour4)
-		colour = { colour1, colour2, colour3, colour4 }
-		local target = GLOBAL.TheInput:GetWorldEntityUnderMouse()		
+		local colour = { colour1, colour2, colour3, colour4 }
+		local target = TheInput:GetWorldEntityUnderMouse()
 		if target ~= nil then 
 			if target:HasTag("Quest_Boss_easy") then
 				colour = color_table[1] --{ 0 / 255, 100 / 255, 0 / 255, 1 }		--green
@@ -40,7 +47,7 @@ end)
 
 
 --Add button to open quest log
-if GLOBAL.TUNING.QUEST_COMPONENT.BUTTON == 1 or GLOBAL.TUNING.QUEST_COMPONENT.BUTTON == 2 then
+if QUEST_COMPONENT.BUTTON == 1 or QUEST_COMPONENT.BUTTON == 2 then
 	local function adjustButtons(self)
 		local x, y
 		local width, height = TheSim:GetScreenSize()
@@ -48,9 +55,8 @@ if GLOBAL.TUNING.QUEST_COMPONENT.BUTTON == 1 or GLOBAL.TUNING.QUEST_COMPONENT.BU
 		width  = width  / scale.x / 2
 		height = height / scale.y / 2
 		local allign = {}
-		local sizeb = 64 
 		local sized = 10 
-		if GLOBAL.TUNING.QUEST_COMPONENT.BUTTON == 1 then
+		if QUEST_COMPONENT.BUTTON == 1 then
 			x = width - 29
 			y = -2*height + 102 + sized
 			allign = {-1,1}
@@ -70,26 +76,26 @@ if GLOBAL.TUNING.QUEST_COMPONENT.BUTTON == 1 or GLOBAL.TUNING.QUEST_COMPONENT.BU
 	local function AddButtonQuestLog(self)
 		self.Button_QuestLog = self.top_root:AddChild(Button_QuestLog(self.owner))
 		adjustButtons(self)
-		self.owner.HUD.inst:ListenForEvent("refreshhudsize", function(_self, scale) adjustButtons(self) end)
+		self.owner.HUD.inst:ListenForEvent("refreshhudsize", function() adjustButtons(self) end)
 	end
 
 	AddClassPostConstruct("widgets/controls", AddButtonQuestLog)
 end
 
-if GLOBAL.TUNING.QUEST_COMPONENT.BUTTON == 3 then
+if QUEST_COMPONENT.BUTTON == 3 then
 	local Button_QuestLog = require "widgets/button_questlog"
 	AddClassPostConstruct("screens/redux/pausescreen",function(self)
 		self.Button_QuestLog = self.proot:AddChild(Button_QuestLog(self.owner,true))
 		local items = self.menu and self.menu:GetNumberOfItems() or 7
 		local y = items == 6 and 180 or 210
 		self.Button_QuestLog:SetPosition(100,y)
-		self.Button_QuestLog:SetHoverText(GLOBAL.STRINGS.QUEST_COMPONENT.QUEST_LOG.BUTTON)
+		self.Button_QuestLog:SetHoverText(STR_QUEST_COMPONENT.QUEST_LOG.BUTTON)
 	end)
 end
 
 --Add indicators of which bonis are active at the moment
 local function adjustButtons2(self)
-	local x,y,x1,y1,x2,y2,x3,y3,x4,y4
+	local x0,y0,x1,y1,x2,y2,x3,y3,x4,y4
 	local width, height = TheSim:GetScreenSize()
 	local scale = self.top_root:GetScale()
 	width  = width  / scale.x / 2
@@ -125,18 +131,18 @@ local function AddButtonTempBoni(self)
 		self["tempboni"..count]:Hide()
 	end
 	adjustButtons2(self)
-	local screensize = {GLOBAL.TheSim:GetScreenSize()}
-	self.owner.HUD.inst:ListenForEvent("refreshhudsize", function(_self, scale) adjustButtons2(self) end)
+	local screensize = {TheSim:GetScreenSize()}
+	self.owner.HUD.inst:ListenForEvent("refreshhudsize", function() adjustButtons2(self) end)
 end
 
 AddClassPostConstruct("widgets/controls", AddButtonTempBoni)
 
 
 --Adding checkboxes to playerstatusscreen to decide who can make quests
-if GLOBAL.TUNING.QUEST_COMPONENT.CUSTOM_QUESTS == 3 then
+if QUEST_COMPONENT.CUSTOM_QUESTS == 3 then
 	local function IsEnabled(userid)
 		if userid then
-			if GLOBAL.TUNING.QUEST_COMPONENT.CAN_CREATE_CUSTOM_QUESTS[userid] == true then
+			if QUEST_COMPONENT.CAN_CREATE_CUSTOM_QUESTS[userid] == true then
 				return true
 			end
 		end
@@ -160,7 +166,7 @@ if GLOBAL.TUNING.QUEST_COMPONENT.CUSTOM_QUESTS == 3 then
 		self.DoInit = function(self,ClientObjs,...)
 			local ret = {old_DoInit(self,ClientObjs,...)}
 			if self.scroll_list ~= nil then
-				local clients = GLOBAL.TheNet:GetClientTable() or {}
+				local clients = TheNet:GetClientTable() or {}
 				for _,playerListing in ipairs(self.player_widgets) do
 					local enabled = IsEnabled(playerListing.userid)
 					playerListing.checkbox = playerListing:AddChild(ImageButton("images/global_redux.xml", "checkbox_normal.tex", "checkbox_focus.tex", "checkbox_normal.tex", nil, nil, {1,1}, {0,0}))
@@ -217,10 +223,10 @@ if GLOBAL.TUNING.QUEST_COMPONENT.CUSTOM_QUESTS == 3 then
 			    			end
 			    		end)
 			    	end
-			    	return GLOBAL.unpack(ret2)
+			    	return unpack(ret2)
 				end
 			end
-			return GLOBAL.unpack(ret)
+			return unpack(ret)
 		end
 	end
 
@@ -231,11 +237,11 @@ end
 AddClassPostConstruct("cameras/followcamera",function(self)
 	self.turned = false
 	local old_Apply = self.Apply
-	self.Apply = function(self,...)
-		local ret = old_Apply(self,...)
-		if self.turned then
-			local pitch = self.pitch * DEGREES
-		    local heading = self.heading * DEGREES
+	self.Apply = function(_self,...)
+		local ret = old_Apply(_self,...)
+		if _self.turned then
+			local pitch = _self.pitch * DEGREES
+		    local heading = _self.heading * DEGREES
 		    local cos_pitch = math.cos(pitch)
 		    local cos_heading = math.cos(heading)
 		    local sin_heading = math.sin(heading)
@@ -243,7 +249,7 @@ AddClassPostConstruct("cameras/followcamera",function(self)
 		    local dy = -math.sin(pitch)
 		    local dz = -cos_pitch * sin_heading
 			--right
-		    local right = (self.heading - 90) * DEGREES --right is changed to make the camera change perspective
+		    local right = (_self.heading - 90) * DEGREES --right is changed to make the camera change perspective
 		    local rx = math.cos(right)
 		    local ry = 0
 		    local rz = math.sin(right)
@@ -261,13 +267,14 @@ end)
 --Add colour change to flames that are shown if burning to match the colour of chester_boss
 AddClassPostConstruct("widgets/fireover",function(self)
 	local old_OnUpdate = self.OnUpdate
-	self.OnUpdate = function(self,dt,...)
-		local ret = old_OnUpdate(self,dt,...)
-		if self.owner:HasTag("green_flames") then
+	self.OnUpdate = function(_self,dt,...)
+		local ret = old_OnUpdate(_self,dt,...)
+		local animstate = _self.anim:GetAnimState()
+		if _self.owner:HasTag("green_flames") then
 			if TheNet:IsServerPaused() then return end
-		    self.anim:GetAnimState():SetAddColour(0, 0.8, 0, self.alpha * self.alphamult)
+			animstate:SetAddColour(0, 0.8, 0, _self.alpha * _self.alphamult)
 		else
-			self.anim:GetAnimState():SetAddColour(0, 0, 0, 0)
+			animstate:SetAddColour(0, 0, 0, 0)
 		end
 		return ret
 	end
@@ -292,29 +299,27 @@ end
 
 	--------------------------------------------Component Post Inits-------------------------------------------------
 
---Stop player from dropping inventory when dying in a boss fight
-local function inventorypostinit(Inventory,inst)
-  local OriginalDropEverything = Inventory.DropEverything
-  
-  	function Inventory:DropEverything(ondeath,keepequip,...)
-    	if inst:HasTag("currently_in_bossfight") then
-    		--print(string.format("[Quest System] %s died in the boss fight but didn't lose his items!"),inst.name)
-    	else
-      		return OriginalDropEverything(self,ondeath,keepequip,...)
-    	end
-  	end
+--Don't drop items if in a boss fight
+local function DropNothing(self)
+	local old_DropEverything = self.DropEverything
+	function self:DropEverything(...)
+		if self.inst:HasTag("currently_in_bossfight") then
+			return
+		end
+		return old_DropEverything(self,...)
+	end
 end
 
-AddComponentPostInit("inventory", inventorypostinit)
+AddComponentPostInit("inventory", DropNothing)
 
 --Push an event to the leader if a follower is added
 local function LeaderEvent(self)
 	local old_AddFollower = self.AddFollower
-	self.AddFollower = function(self,follower,...)		
-		if self.inst then
-			self.inst:PushEvent("added_follower",{follower = follower})
+	self.AddFollower = function(_self,follower,...)
+		if _self.inst then
+			_self.inst:PushEvent("added_follower",{follower = follower})
 		end
-		return old_AddFollower(self,follower,...)
+		return old_AddFollower(_self,follower,...)
 	end
 end
 
@@ -369,9 +374,10 @@ local NO_PICKUP_TAGS = { "INLIMBO", "catchable", "fire", "irreplaceable", "heavy
 
 -- Checks if a specific item is able to be chomped
 local function IsCorrectItem(inst, v)
-	local container = inst.components.container_proxy
-			and inst.components.container_proxy:GetMaster()
-			and inst.components.container_proxy:GetMaster().components.container
+	local proxy = inst.components.container_proxy
+	local container = proxy
+			and proxy:GetMaster()
+			and proxy:GetMaster().components.container
 			or inst.components.container or nil
 	if v.components.inventoryitem ~= nil and
 			v.components.inventoryitem.canbepickedup and
@@ -386,7 +392,7 @@ local function CheckIfItemsPickupable(inst)
 	if not inst:HasTag("can_do_pickup") then
 		return false
 	end
-	local mx, my, mz = inst.Transform:GetWorldPosition()
+	local mx, _, mz = inst.Transform:GetWorldPosition()
 	local ents = TheSim:FindEntities(mx, 0, mz, PICKUP_DISTANCE, {"_inventoryitem"}, NO_PICKUP_TAGS)
 	for i, v in ipairs(ents) do
 		if IsCorrectItem(inst, v) then
@@ -400,7 +406,7 @@ local function EatItems(inst)
 	if inst.sg:HasStateTag("busy") then
 		return
 	end
-	local mx, my, mz = inst.Transform:GetWorldPosition()
+	local mx, _, mz = inst.Transform:GetWorldPosition()
 	local ents = TheSim:FindEntities(mx, 0, mz, PICKUP_DISTANCE, {"_inventoryitem"}, NO_PICKUP_TAGS)
 	for i, v in ipairs(ents) do
 		if IsCorrectItem(inst, v) and v.components.stackable ~= nil then
@@ -436,7 +442,7 @@ AddStategraphState("chester",
 		end,
 
 		timeline = {
-			GLOBAL.TimeEvent(5 * GLOBAL.FRAMES, function(inst)
+			GLOBAL.TimeEvent(10 * GLOBAL.FRAMES, function(inst)
 				inst:PerformBufferedAction()
 			end),
 		},

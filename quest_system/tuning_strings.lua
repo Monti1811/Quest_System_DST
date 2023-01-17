@@ -1,18 +1,26 @@
 ----------------------------------------------------------------------------------------------
+local STRINGS = GLOBAL.STRINGS
+local NAMES = STRINGS.NAMES
+local TUNING = GLOBAL.TUNING
+local GetTableSize = GLOBAL.GetTableSize
+local TheWorld = GLOBAL.TheWorld
 
-GLOBAL.TUNING.QUEST_COMPONENT = {}
-GLOBAL.TUNING.QUEST_COMPONENT.QUEST_BOARD = {}
+TUNING.QUEST_COMPONENT = {}
+
+local QUEST_COMPONENT = TUNING.QUEST_COMPONENT
+QUEST_COMPONENT.QUEST_BOARD = {}
 --Check the config if the configs that can be client bound should be defined by the client or the server
 local CLIENT_DATA = GetModConfigData("CLIENT_DATA") or false
-GLOBAL.TUNING.QUEST_COMPONENT.GLOBAL_REWARDS = GetModConfigData("GLOBAL_REWARDS") or false
+QUEST_COMPONENT.GLOBAL_REWARDS = GetModConfigData("GLOBAL_REWARDS") or false
 
 --Get the language config
-GLOBAL.TUNING.QUEST_COMPONENT.LANGUAGE = GetModConfigData("LANGUAGE",CLIENT_DATA) or "en"
-GLOBAL.STRINGS.QUEST_COMPONENT = require("strings/strings_"..GLOBAL.TUNING.QUEST_COMPONENT.LANGUAGE)
+QUEST_COMPONENT.LANGUAGE = GetModConfigData("LANGUAGE",CLIENT_DATA) or "en"
+STRINGS.QUEST_COMPONENT = require("strings/strings_"..GLOBAL.TUNING.QUEST_COMPONENT.LANGUAGE)
+local STR_QUEST_COMPONENT = GLOBAL.STRINGS.QUEST_COMPONENT
 
-GLOBAL.TUNING.QUEST_COMPONENT.QUESTS = {}
+QUEST_COMPONENT.QUESTS = {}
 for count = 1,5 do
-	GLOBAL.TUNING.QUEST_COMPONENT["QUESTS_DIFFICULTY_"..count] = {}
+	QUEST_COMPONENT["QUESTS_DIFFICULTY_"..count] = {}
 end
 
 -----------------------------------Functions for getting the correct strings without crashing------------------
@@ -37,20 +45,20 @@ end
 --Used for my quests to give back a str from the wanted category. If it doesn't exist in one language,
 --search for the same one in another language, otherwise give back an empty string.
 function GLOBAL.GetQuestString(name,str,...)
-	if GLOBAL.STRINGS.QUEST_COMPONENT.QUESTS[name] then
-		if GLOBAL.STRINGS.QUEST_COMPONENT.QUESTS[name][str] then
-			return FormatString(GLOBAL.STRINGS.QUEST_COMPONENT.QUESTS[name][str],...)
+	if STR_QUEST_COMPONENT.QUESTS[name] then
+		if STR_QUEST_COMPONENT.QUESTS[name][str] then
+			return FormatString(STR_QUEST_COMPONENT.QUESTS[name][str],...)
 		end
 	end
-	for k,v in ipairs(_strings) do
+	for _,v in ipairs(_strings) do
 		if v.QUESTS[name] then
 			if v.QUESTS[name][str] then
 				return FormatString(v.QUESTS[name][str],...)
 			end
 		end
 	end
-	if GLOBAL.TUNING.QUEST_COMPONENT.QUESTS[name] ~= nil then
-		return FormatString(GLOBAL.TUNING.QUEST_COMPONENT.QUESTS[name].name,...)
+	if QUEST_COMPONENT.QUESTS[name] ~= nil then
+		return FormatString(QUEST_COMPONENT.QUESTS[name].name,...)
 	end
 	return ""
 end
@@ -58,15 +66,16 @@ end
 --Used for the quest board and log. Gives back the string defined in TUNING
 function GLOBAL.GetRewardString(name)
 	if string.find(name,":func:") then
-		if GLOBAL.TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[name] ~= nil then
-			local str = GLOBAL.TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[name][2]
+		local end_fn = QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[name]
+		if end_fn ~= nil then
+			local str = end_fn[2]
 			return str
 		end
 	end
 end
 
 function GLOBAL.GetKillString(victim,amount)
-	return GLOBAL.STRINGS.QUEST_COMPONENT.QUEST_LOG.KILL.." "..(amount or 1).." "..(GLOBAL.STRINGS.NAMES[string.upper(victim or "")] or "Error")
+	return STR_QUEST_COMPONENT.QUEST_LOG.KILL.." "..(amount or 1).." "..(NAMES[string.upper(victim or "")] or "Error")
 end
 
 function GLOBAL.ChangeQuestTuning(quest,fn)
@@ -78,61 +87,68 @@ end
 
 -----------------------------------------------Different config options---------------------------------------------------------------
 
-GLOBAL.TUNING.QUEST_COMPONENT.REQUEST_QUEST = GetModConfigData("REQUEST_QUEST") ~= nil and GetModConfigData("REQUEST_QUEST") or 0.01
-GLOBAL.TUNING.QUEST_COMPONENT.CUSTOM_QUESTS = GetModConfigData("CUSTOM_QUESTS") ~= nil and GetModConfigData("CUSTOM_QUESTS") or 1
-GLOBAL.TUNING.QUEST_COMPONENT.HOTKEY_QUESTLOG = GetModConfigData("HOTKEY_QUESTLOG",CLIENT_DATA) ~= nil and GetModConfigData("HOTKEY_QUESTLOG",CLIENT_DATA) or 1
-GLOBAL.TUNING.QUEST_COMPONENT.MANAGE_CUSTOM_QUESTS = GetModConfigData("MANAGE_CUSTOM_QUESTS") ~= nil and GetModConfigData("MANAGE_CUSTOM_QUESTS") or 1 
-GLOBAL.TUNING.QUEST_COMPONENT.BOSS_DIFFICULTY = GetModConfigData("BOSS_DIFFICULTY") ~= nil and GetModConfigData("BOSS_DIFFICULTY") or 1
-GLOBAL.TUNING.QUEST_COMPONENT.LEVEL_RATE = GetModConfigData("LEVEL_RATE") ~= nil and GetModConfigData("LEVEL_RATE") or 1
-GLOBAL.TUNING.QUEST_COMPONENT.BUTTON = GetModConfigData("BUTTON",CLIENT_DATA) ~= nil and GetModConfigData("BUTTON",CLIENT_DATA) or 2
-GLOBAL.TUNING.QUEST_COMPONENT.COLORBLINDNESS = GetModConfigData("COLORBLINDNESS",CLIENT_DATA) ~= nil and GetModConfigData("COLORBLINDNESS",CLIENT_DATA) or 0 
-GLOBAL.TUNING.QUEST_COMPONENT.RESET_QUESTS = GetModConfigData("RESET_QUESTS") ~= nil and GetModConfigData("RESET_QUESTS") or 0
-GLOBAL.TUNING.QUEST_COMPONENT.PROB_CHAR_QUEST = GetModConfigData("PROB_CHAR_QUEST") ~= nil and GetModConfigData("PROB_CHAR_QUEST") or 0.1
-GLOBAL.TUNING.QUEST_COMPONENT.GIVE_CREATOR_QUEST = GetModConfigData("GIVE_CREATOR_QUEST") ~= nil and GetModConfigData("GIVE_CREATOR_QUEST") or 0
-GLOBAL.TUNING.QUEST_COMPONENT.BOSSFIGHTS = GetModConfigData("BOSSFIGHTS") ~= nil and GetModConfigData("BOSSFIGHTS") or true
-GLOBAL.TUNING.QUEST_COMPONENT.FRIENDLY_KILLS = GetModConfigData("FRIENDLY_KILLS") ~= nil and GetModConfigData("FRIENDLY_KILLS") or true
-GLOBAL.TUNING.QUEST_COMPONENT.REWARDS_AMOUNT = GetModConfigData("REWARDS_AMOUNT") or 1
-GLOBAL.TUNING.QUEST_COMPONENT.RANK = GetModConfigData("RANK") or false
-GLOBAL.TUNING.QUEST_COMPONENT.MAX_AMOUNT_GODLY_ITEMS = GetModConfigData("MAX_AMOUNT_GODLY_ITEMS") or 1
-GLOBAL.TUNING.QUEST_COMPONENT.BASE_QUEST_SLOTS = GetModConfigData("BASE_QUEST_SLOTS") or 10
+QUEST_COMPONENT.REQUEST_QUEST = GetModConfigData("REQUEST_QUEST") ~= nil and GetModConfigData("REQUEST_QUEST") or 0.01
+QUEST_COMPONENT.CUSTOM_QUESTS = GetModConfigData("CUSTOM_QUESTS") ~= nil and GetModConfigData("CUSTOM_QUESTS") or 1
+QUEST_COMPONENT.HOTKEY_QUESTLOG = GetModConfigData("HOTKEY_QUESTLOG",CLIENT_DATA) ~= nil and GetModConfigData("HOTKEY_QUESTLOG",CLIENT_DATA) or 1
+QUEST_COMPONENT.MANAGE_CUSTOM_QUESTS = GetModConfigData("MANAGE_CUSTOM_QUESTS") ~= nil and GetModConfigData("MANAGE_CUSTOM_QUESTS") or 1
+QUEST_COMPONENT.BOSS_DIFFICULTY = GetModConfigData("BOSS_DIFFICULTY") ~= nil and GetModConfigData("BOSS_DIFFICULTY") or 1
+QUEST_COMPONENT.LEVEL_RATE = GetModConfigData("LEVEL_RATE") ~= nil and GetModConfigData("LEVEL_RATE") or 1
+QUEST_COMPONENT.BUTTON = GetModConfigData("BUTTON",CLIENT_DATA) ~= nil and GetModConfigData("BUTTON",CLIENT_DATA) or 2
+QUEST_COMPONENT.COLORBLINDNESS = GetModConfigData("COLORBLINDNESS",CLIENT_DATA) ~= nil and GetModConfigData("COLORBLINDNESS",CLIENT_DATA) or 0
+QUEST_COMPONENT.RESET_QUESTS = GetModConfigData("RESET_QUESTS") ~= nil and GetModConfigData("RESET_QUESTS") or 0
+QUEST_COMPONENT.PROB_CHAR_QUEST = GetModConfigData("PROB_CHAR_QUEST") ~= nil and GetModConfigData("PROB_CHAR_QUEST") or 0.1
+QUEST_COMPONENT.GIVE_CREATOR_QUEST = GetModConfigData("GIVE_CREATOR_QUEST") ~= nil and GetModConfigData("GIVE_CREATOR_QUEST") or 0
+QUEST_COMPONENT.BOSSFIGHTS = GetModConfigData("BOSSFIGHTS") ~= nil and GetModConfigData("BOSSFIGHTS") or true
+QUEST_COMPONENT.FRIENDLY_KILLS = GetModConfigData("FRIENDLY_KILLS") ~= nil and GetModConfigData("FRIENDLY_KILLS") or true
+QUEST_COMPONENT.REWARDS_AMOUNT = GetModConfigData("REWARDS_AMOUNT") or 1
+QUEST_COMPONENT.RANK = GetModConfigData("RANK") or false
+QUEST_COMPONENT.MAX_AMOUNT_GODLY_ITEMS = GetModConfigData("MAX_AMOUNT_GODLY_ITEMS") or 1
+QUEST_COMPONENT.BASE_QUEST_SLOTS = GetModConfigData("BASE_QUEST_SLOTS") or 10
 
-if GLOBAL.TUNING.QUEST_COMPONENT.RANK == true then
-	GLOBAL.TUNING.QUEST_COMPONENT.RANK = 0
+if QUEST_COMPONENT.RANK == true then
+	QUEST_COMPONENT.RANK = 0
 end
 if not MODROOT:find("workshop-") then
-	GLOBAL.TUNING.QUEST_COMPONENT.DEV_MODE = true
-	print("GLOBAL.TUNING.QUEST_COMPONENT.DEV_MODE",GLOBAL.TUNING.QUEST_COMPONENT.DEV_MODE)
+	QUEST_COMPONENT.DEV_MODE = true
+	print("GLOBAL.TUNING.QUEST_COMPONENT.DEV_MODE",QUEST_COMPONENT.DEV_MODE)
+	print(GLOBAL.ThePlayer)
+	print(GLOBAL.TheNet:GetUserID())
 end
 
-GLOBAL.TUNING.QUEST_COMPONENT.LEVELSYSTEM = GetModConfigData("LEVELSYSTEM") ~= nil and GetModConfigData("LEVELSYSTEM") or 1
-GLOBAL.TUNING.QUEST_COMPONENT.LEVELUPRATE = GetModConfigData("LEVELUPRATE") ~= nil and GetModConfigData("LEVELUPRATE") or 1
+QUEST_COMPONENT.LEVELSYSTEM = GetModConfigData("LEVELSYSTEM") ~= nil and GetModConfigData("LEVELSYSTEM") or 1
+QUEST_COMPONENT.LEVELUPRATE = GetModConfigData("LEVELUPRATE") ~= nil and GetModConfigData("LEVELUPRATE") or 1
 
-GLOBAL.TUNING.QUEST_COMPONENT.DEBUG = GetModConfigData("DEBUG") ~= nil and GetModConfigData("DEBUG") or 0 
+QUEST_COMPONENT.DEBUG = GetModConfigData("DEBUG") ~= nil and GetModConfigData("DEBUG") or 0
 
 ----------------------------------------Initialize quests---------------------------------------------------
 
 local function AddQuestToTuning(v)
 	if v.name ~= nil then
-		GLOBAL.TUNING.QUEST_COMPONENT.QUESTS[v.name] = v
+		QUEST_COMPONENT.QUESTS[v.name] = v
 		if v.difficulty then
-			if GLOBAL.TUNING.QUEST_COMPONENT["QUESTS_DIFFICULTY_"..v.difficulty] then
-				GLOBAL.TUNING.QUEST_COMPONENT["QUESTS_DIFFICULTY_"..v.difficulty][v.name] = v
+			local diff_quest = "QUESTS_DIFFICULTY_"..v.difficulty
+			if QUEST_COMPONENT[diff_quest] then
+				QUEST_COMPONENT[diff_quest][v.name] = v
 			end
 		end
 		if v.character ~= nil then
 			--adding table to tables of characterspecific quests
-			if GLOBAL.TUNING.QUEST_COMPONENT["QUESTS_"..v.character] == nil then
-				GLOBAL.TUNING.QUEST_COMPONENT["QUESTS_"..v.character] = {}
+			local char_quest = "QUESTS_"..v.character
+			if QUEST_COMPONENT[char_quest] == nil then
+				QUEST_COMPONENT[char_quest] = {}
 			end
-			if GLOBAL.TUNING.QUEST_COMPONENT["QUESTS_"..v.character][v.name] == nil then
-				GLOBAL.TUNING.QUEST_COMPONENT["QUESTS_"..v.character][v.name] = v
+			local quest = QUEST_COMPONENT[char_quest]
+			if quest[v.name] == nil then
+				quest[v.name] = v
 			end
 			--adding quests to tables of specific difficulties
-			if GLOBAL.TUNING.QUEST_COMPONENT["QUESTS_"..v.character.."_DIFFICULTY_"..v.difficulty] == nil then
-				GLOBAL.TUNING.QUEST_COMPONENT["QUESTS_"..v.character.."_DIFFICULTY_"..v.difficulty] = {}
+			local char_diff_quest = "QUESTS_"..v.character.."_DIFFICULTY_"..v.difficulty
+			if QUEST_COMPONENT[char_diff_quest] == nil then
+				QUEST_COMPONENT[char_diff_quest] = {}
 			end
-			if GLOBAL.TUNING.QUEST_COMPONENT["QUESTS_"..v.character.."_DIFFICULTY_"..v.difficulty][v.name] == nil then
-				GLOBAL.TUNING.QUEST_COMPONENT["QUESTS_"..v.character.."_DIFFICULTY_"..v.difficulty][v.name] = v
+			local quest_ = QUEST_COMPONENT[char_diff_quest]
+			if quest_[v.name] == nil then
+				quest_[v.name] = v
 			end
 		end
 	end
@@ -145,51 +161,51 @@ local quests = require ("quests")
 local quests_characters = {} --require("quests_characters") --TODO make some character specific quests
 local quests_to_remove = {}
 --Check the file for quests to remove. If there is a file, replace the empty table with the inverted return of the file
-local f,err = GLOBAL.loadfile("scripts/remove_quests") 
+local f = GLOBAL.loadfile("scripts/remove_quests")
 if f and type(f) == "function" then
 	quests_to_remove = table.invert(f())
 end
 if INITIAL_QUESTS ~= true then
-	for k,v in ipairs(quests) do
+	for _,v in ipairs(quests) do
 		if quests_to_remove[v.name] == nil then
 			counting = counting + 1
-			if counting >= GLOBAL.TUNING.QUEST_COMPONENT.INITIAL_QUESTS then 
+			if counting >= QUEST_COMPONENT.INITIAL_QUESTS then
 				break
 			end
 			AddQuestToTuning(v)
 		end
 	end
 else
-	for k,v in ipairs(quests) do
+	for _,v in ipairs(quests) do
 		if quests_to_remove[v.name] == nil then
 			AddQuestToTuning(v)
 		end
 	end
-	for char,char_quests in pairs(quests_characters) do
-		for k,v in ipairs(char_quests) do
+	for _,char_quests in pairs(quests_characters) do
+		for _,v in ipairs(char_quests) do
 			AddQuestToTuning(v)
 		end
 	end
 end
 
-print("[Quest System] Amount of quests:",GLOBAL.GetTableSize(GLOBAL.TUNING.QUEST_COMPONENT.QUESTS))
+print("[Quest System] Amount of quests:",GetTableSize(QUEST_COMPONENT.QUESTS))
 for count = 1,5 do
-	print("[Quest System] Amount of quests difficulty "..count..":",GLOBAL.GetTableSize(GLOBAL.TUNING.QUEST_COMPONENT["QUESTS_DIFFICULTY_"..count]))
+	print("[Quest System] Amount of quests difficulty "..count..":",GetTableSize(QUEST_COMPONENT["QUESTS_DIFFICULTY_"..count]))
 end
 -----------------------------------------------------------------------------------------------------------------
 --create tables where custom quests are saved
-GLOBAL.TUNING.QUEST_COMPONENT.OWN_QUESTS = {}
-GLOBAL.TUNING.QUEST_COMPONENT.OWN_QUESTS2 = {}
+QUEST_COMPONENT.OWN_QUESTS = {}
+QUEST_COMPONENT.OWN_QUESTS2 = {}
 
-GLOBAL.TUNING.QUEST_COMPONENT.CAN_CREATE_CUSTOM_QUESTS = {}
+QUEST_COMPONENT.CAN_CREATE_CUSTOM_QUESTS = {}
 
 ---------------------------------------------------------------------------------------------------------------
 
-GLOBAL.TUNING.QUEST_COMPONENT.CalculatePoints = function(level,points)
+QUEST_COMPONENT.CalculatePoints = function(level,points)
     if level and points then
         local max_points = 0
         for count = 1,(level - 1) do
-            max_points = max_points + (count * 25 + 100) * GLOBAL.TUNING.QUEST_COMPONENT.LEVEL_RATE
+            max_points = max_points + (count * 25 + 100) * QUEST_COMPONENT.LEVEL_RATE
         end
         max_points = max_points + points
         return max_points
@@ -197,20 +213,33 @@ GLOBAL.TUNING.QUEST_COMPONENT.CalculatePoints = function(level,points)
     return 0
 end
 
-GLOBAL.TUNING.QUEST_COMPONENT.CalculateLevel = function(points)
+QUEST_COMPONENT.CalculateLevel = function(points)
     if points then
-        local max_points = 125 * GLOBAL.TUNING.QUEST_COMPONENT.LEVEL_RATE
+        local max_points = 125 * QUEST_COMPONENT.LEVEL_RATE
         local level = 1
         while points >= max_points do
-			devprint("CalculateLevel",level,points,max_points)
+			--devprint("CalculateLevel",level,points,max_points)
 			level = level + 1
 			points = points - max_points
-            max_points = (level * 25 + 100) * GLOBAL.TUNING.QUEST_COMPONENT.LEVEL_RATE
-			devprint("CalculateLevel after loop",level,points,max_points)
+            max_points = (level * 25 + 100) * QUEST_COMPONENT.LEVEL_RATE
+			--devprint("CalculateLevel after loop",level,points,max_points)
         end
         return level,points
     end
     return 1,0
+end
+
+--Save the already once encoded strings in a table, as the quests don't change
+--Helps the server to be more efficient with it's resources
+local quest_zip_buffer = {}
+
+function GLOBAL.ZipAndEncodeStringBuffer(str)
+	if quest_zip_buffer[str] ~= nil then
+		return quest_zip_buffer[str]
+	end
+	local new_str = GLOBAL.ZipAndEncodeString(str)
+	quest_zip_buffer[str] = new_str
+	return new_str
 end
 
 -------------------------------------------Boss characteristics-----------------------------------------------
@@ -224,12 +253,12 @@ local function moose(inst)
 end	
 
 local function minotaur(inst)
-	local function OnDeath(inst)
-		GLOBAL.TheWorld:DoTaskInTime(0,function()
+	local function OnDeath()
+		TheWorld:DoTaskInTime(0,function()
 			if inst:IsValid() then
 				local pos = inst:GetPosition()
-				local minotaurchest =  TheSim:FindEntities(pos.x,pos.y,pos.z,3, {"CLASSIFIED"})
-				for k,v in ipairs(minotaurchest) do
+				local minotaurchest = TheSim:FindEntities(pos.x,pos.y,pos.z,3, {"CLASSIFIED"})
+				for _,v in ipairs(minotaurchest) do
 					if v.prefab == "minotaurchestspawner" and v:IsValid() then
 						v:Remove()
 					end
@@ -241,7 +270,7 @@ local function minotaur(inst)
 end
 
 local function mutated_penguin(inst)
-	inst:DoTaskInTime(2*GLOBAL.FRAMES,function(inst)
+	inst:DoTaskInTime(2*GLOBAL.FRAMES,function()
 		inst.OnEntityWake = nil
 		inst.OnEntitySleep = nil
 	end)
@@ -258,7 +287,7 @@ local function birchnutdrake(inst)
 	end
 end
 
-GLOBAL.TUNING.QUEST_COMPONENT.BOSSES = {
+QUEST_COMPONENT.BOSSES = {
 	EASY = {
 
 		{name = "hound", 				health = 1000, damage = 100, scale = 2},
@@ -317,7 +346,7 @@ GLOBAL.TUNING.QUEST_COMPONENT.BOSSES = {
 
 -------------------------------------Bossfight rewards---------------------------------------------
 
-GLOBAL.TUNING.QUEST_COMPONENT.BOSSFIGHT_REWARDS = {
+QUEST_COMPONENT.BOSSFIGHT_REWARDS = {
 	
 	EASY = {
 
@@ -397,14 +426,14 @@ GLOBAL.TUNING.QUEST_COMPONENT.BOSSFIGHT_REWARDS = {
 
 local function AddString(name,name2)
 	name2 = name2 or name
-	if GLOBAL.STRINGS.QUEST_COMPONENT.NAMES[name2] then
-		GLOBAL.STRINGS.NAMES[name] = GLOBAL.STRINGS.QUEST_COMPONENT.NAMES[name2]
+	if STR_QUEST_COMPONENT.NAMES[name2] then
+		NAMES[name] = STR_QUEST_COMPONENT.NAMES[name2]
 	end
-	if GLOBAL.STRINGS.QUEST_COMPONENT.DESCRIBE[name2] then
-		GLOBAL.STRINGS.CHARACTERS.GENERIC.DESCRIBE[name] = GLOBAL.STRINGS.QUEST_COMPONENT.DESCRIBE[name2]
+	if STR_QUEST_COMPONENT.DESCRIBE[name2] then
+		STRINGS.CHARACTERS.GENERIC.DESCRIBE[name] = STR_QUEST_COMPONENT.DESCRIBE[name2]
 	end
-	if GLOBAL.STRINGS.QUEST_COMPONENT.RECIPE_DESC[name2] then
-		GLOBAL.STRINGS.RECIPE_DESC[name] = GLOBAL.STRINGS.QUEST_COMPONENT.RECIPE_DESC[name2]
+	if STR_QUEST_COMPONENT.RECIPE_DESC[name2] then
+		STRINGS.RECIPE_DESC[name] = STR_QUEST_COMPONENT.RECIPE_DESC[name2]
 	end
 end
 
@@ -437,10 +466,10 @@ end
 
 ---------------------------------------Action Strings--------------------------------------------------
 
-if GLOBAL.STRINGS.CHARACTERS.GENERIC.ACTIONFAIL.FIGHT_GLOMMER == nil then
-	GLOBAL.STRINGS.CHARACTERS.GENERIC.ACTIONFAIL.FIGHT_GLOMMER = {}
+if STRINGS.CHARACTERS.GENERIC.ACTIONFAIL.FIGHT_GLOMMER == nil then
+	STRINGS.CHARACTERS.GENERIC.ACTIONFAIL.FIGHT_GLOMMER = {}
 end
-GLOBAL.STRINGS.CHARACTERS.GENERIC.ACTIONFAIL.FIGHT_GLOMMER.GLOMMER_ACTIVE = "A Friend Fight is still not finished!"
+STRINGS.CHARACTERS.GENERIC.ACTIONFAIL.FIGHT_GLOMMER.GLOMMER_ACTIVE = "A Friend Fight is still not finished!"
 
 
 ---------------------------------------Add loading tips--------------------------------------------------
@@ -485,21 +514,21 @@ if LOADING_TIPS ~= 0 then
 	--Change the PickLoadingTip and CalculateLoadingTipWeights fn so that they also calculate the new category and choose the correct text for them
 	AddClassPostConstruct("loadingtipsdata",function(self)
 		local old_PickLoadingTip = self.PickLoadingTip
-		self.PickLoadingTip = function(self,loadingscreen,...)
-			local tipdata = old_PickLoadingTip(self,loadingscreen,...)
+		self.PickLoadingTip = function(_self,loadingscreen,...)
+			local tipdata = old_PickLoadingTip(_self,loadingscreen,...)
 			--print("PickLoadingTip",loadingscreen)
 			--GLOBAL.dumptable(tipdata)
 			if tipdata and tipdata.icon == "loadingtip_quest_board.tex" then
-				tipdata.text = self:GenerateControlTipText(tipdata.id)
+				tipdata.text = _self:GenerateControlTipText(tipdata.id)
 				--GLOBAL.dumptable(tipdata)
 			end
 			return tipdata
 		end
 
 		local old_CalculateLoadingTipWeights = self.CalculateLoadingTipWeights
-		self.CalculateLoadingTipWeights = function(self,...)
-			local loadingtipweights = old_CalculateLoadingTipWeights(self,...)
-			loadingtipweights[GLOBAL.LOADING_SCREEN_TIP_CATEGORIES.QUEST_SYSTEM] = self:GenerateLoadingTipWeights(STRINGS.UI.LOADING_SCREEN_QUEST_SYSTEM_TIPS)
+		self.CalculateLoadingTipWeights = function(_self,...)
+			local loadingtipweights = old_CalculateLoadingTipWeights(_self,...)
+			loadingtipweights[GLOBAL.LOADING_SCREEN_TIP_CATEGORIES.QUEST_SYSTEM] = _self:GenerateLoadingTipWeights(STRINGS.UI.LOADING_SCREEN_QUEST_SYSTEM_TIPS)
 			return loadingtipweights
 		end
 	end)
