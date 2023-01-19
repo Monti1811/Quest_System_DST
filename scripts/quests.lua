@@ -3043,7 +3043,7 @@ local quests = {
 	tex = "thulecite.tex",
 	atlas = "images/inventoryimages2.xml",
 	hovertext = GetQuestString("The Ancient Craft","HOVER",5),
-	reward_rock_avocado_fruit_atlas = "images/inventoryimages2.xml",
+	reward_rock_avocado_fruit_tex = "rock_avocado_fruit_rockhard.tex",
 	},
 	--87
 	{

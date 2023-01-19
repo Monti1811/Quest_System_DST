@@ -89,7 +89,7 @@ local function OnKilled2(inst,data)
 		local quest_component = inst.components.quest_component
 		local health = victim.components.health
 		if health then
-			local points = math.floor(health / 100)
+			local points = math.floor(health.maxhealth / 100 * 0.7)
 			quest_component:AddPoints(points)
 		end
 		local current_victim = quest_component.current_victims[victim.prefab]
