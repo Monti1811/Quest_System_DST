@@ -656,7 +656,7 @@ end
 
 local function GetCharacterQuest(self,difficulty)
 	local tab2
-	local char_diff_quests = "QUESTS_"..self.inst.prefab.."_DIFFICULTY_"..difficulty
+	local char_diff_quests = "QUESTS_"..self.inst.prefab.."_DIFFICULTY_"..(difficulty or 1)
 	if difficulty and QUEST_COMPONENT[char_diff_quests] ~= nil then
 		tab2 = QUEST_COMPONENT[char_diff_quests]
 	else
@@ -671,7 +671,7 @@ end
 
 FindUnusedQuest = function(self,difficulty)
 	local tab
-	local quest_diff = "QUESTS_DIFFICULTY_"..difficulty
+	local quest_diff = "QUESTS_DIFFICULTY_"..(difficulty or 1)
 	if difficulty and QUEST_COMPONENT[quest_diff] ~= nil then
 		tab = QUEST_COMPONENT[quest_diff]
 	else

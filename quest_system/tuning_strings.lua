@@ -318,7 +318,6 @@ QUEST_COMPONENT.BOSSES = {
 		{name = "pigguard", 	health = 4000, damage = 125, scale = 1.7},
 		{name = "krampus", 		health = 4000, damage = 125, scale = 1.7},
 		{name = "merm", 		health = 4000, damage = 125, scale = 1.7},
-		{name = "rocky", 		health = 5000, damage = 125, scale = 1.5},
 		{name = "spider_moon", 	health = 3500, damage = 150, scale = 1.9},
 		{name = "tallbird", 	health = 4000, damage = 150, scale = 1.7},
 		{name = "warglet", 		health = 3000, damage = 125, scale = 1.7},
@@ -327,6 +326,7 @@ QUEST_COMPONENT.BOSSES = {
 
 	DIFFICULT = {
 
+		{name = "rocky", 			health = 5000, damage = 175, scale = 2},
 		{name = "deerclops", 		health = 12000, damage = 200, scale = 2.1},
 		{name = "minotaur", 		health = 10000, damage = 200, scale = 2.1, 	fn = minotaur},
 		{name = "stalker", 			health = 6000,  damage = 200, scale = 1.4},
