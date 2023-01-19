@@ -139,3 +139,6 @@ for name,num in pairs(additional_content) do
 		modimport("mod_util/"..name..".lua")
 	end
 end
+
+--Insight support
+modimport("mod_util/insight.lua")

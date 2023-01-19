@@ -457,7 +457,9 @@ local strings_to_add = {
 	"ADDITIONAL QUEST SLOTS",
 	"SHADOW_CREST",
 	"SHADOW_MITRE",
-	"SHADOW_LANCE"
+	"SHADOW_LANCE",
+	"FROGKING_P_CROWN",
+	"FROGKING_SCEPTER",
 }
 
 for _,v in ipairs(strings_to_add) do 
