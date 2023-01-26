@@ -458,8 +458,10 @@ local strings_to_add = {
 	"SHADOW_CREST",
 	"SHADOW_MITRE",
 	"SHADOW_LANCE",
+	"FROGKING",
 	"FROGKING_P_CROWN",
 	"FROGKING_SCEPTER",
+	"FROGKING_BEYBLADE",
 }
 
 for _,v in ipairs(strings_to_add) do 

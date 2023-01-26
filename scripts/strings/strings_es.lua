@@ -23,10 +23,10 @@ return {
 		SHADOW_CREST = "Cresta de la Sombra",
 		SHADOW_MITRE = "Mitra de la Sombra",
 		SHADOW_LANCE = "Lanza de la Sombra",
-		FROGKING_P_CROWN = "Frogking Crown",
-		FROGKING_SCEPTER = "Frogking Scepter",
+		FROGKING = "Rey rana",
 		FROGKING_P_CROWN = "Corona de la rana",
 		FROGKING_SCEPTER = "Cetro de las ranas",
+		FROGKING_BEYBLADE = "Peonza de diamantes",
 	},
 
 	DESCRIBE = {
@@ -50,9 +50,10 @@ return {
 		SHADOW_CREST = "¡Un poco macabro tener a tu enemigo en la cabeza pero esto es demasiado bueno!",
 		SHADOW_MITRE = "Parece que todavía tiene algo del Obispo de las Sombras...",
 		SHADOW_LANCE = "¡Un arma sedienta de sangre parece, especialmente contra enemigos lunares!",
+		FROGKING = "¡Este da miedo!",
 		FROGKING_P_CROWN = "¡Una corona que hará que todas las ranas te vean como su rey!",
 		FROGKING_SCEPTER = "Un cetro que gobierna a sus súbditos con puños de hierro",
-
+		FROGKING_BEYBLADE = "¡Mejor que no te golpee este!",
 	},
 
 	RECIPE_DESC = {

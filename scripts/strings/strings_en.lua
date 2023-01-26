@@ -23,8 +23,10 @@ return {
 		SHADOW_CREST = "Shadow Crest",
 		SHADOW_MITRE = "Shadow Mitre",
 		SHADOW_LANCE = "Shadow Lance",
+		FROGKING = "Frogking",
 		FROGKING_P_CROWN = "Frogking Crown",
 		FROGKING_SCEPTER = "Frogking Scepter",
+		FROGKING_BEYBLADE = "Diamond Spinner",
 	},
 
 	DESCRIBE = {
@@ -48,8 +50,10 @@ return {
 		SHADOW_CREST = "A bit macabre to have your enemy on your head but this is too good!",
 		SHADOW_MITRE = "Seems like it still has some of the Shadow Bishop in it...",
 		SHADOW_LANCE = "A blood thirsty weapon it seems, especially against lunar enemies!",
+		FROGKING = "This one looks scary!",
 		FROGKING_P_CROWN = "A crown that will make all frogs see you as their king!",
 		FROGKING_SCEPTER = "A scepter which rules its subjets with iron fists.",
+		FROGKING_BEYBLADE = "Better not get hit by this one!",
 	},
 
 	RECIPE_DESC = {

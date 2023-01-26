@@ -23,9 +23,10 @@ return {
 		SHADOW_CREST = "Crête de l'ombre",
 		SHADOW_MITRE = "Mitre de l'ombre",
 		SHADOW_LANCE = "Lance de l'ombre",
+		FROGKING = "Roi des Grenouilles",
 		FROGKING_P_CROWN = "Couronne de grenouille",
 		FROGKING_SCEPTER = "Sceptre de la grenouille",
-		
+		FROGKING_BEYBLADE = "Toupie diamantée",
 	},
 
 	DESCRIBE = {
@@ -49,9 +50,10 @@ return {
 		SHADOW_CREST = "Un peu macabre d'avoir son ennemi sur sa tête mais c'est trop bien !",
 		SHADOW_MITRE = "On dirait qu'il y a encore un peu de l'évêque de l'ombre dedans...",
 		SHADOW_LANCE = "Une arme assoiffée de sang on dirait, surtout contre les ennemis lunaires !",
+		FROGKING = "Celui-là a l'air effrayant!",
 		FROGKING_P_CROWN = "Une couronne qui fera que toutes les grenouilles vous verront comme leur roi !",
 		FROGKING_SCEPTER = "Un sceptre qui dirige ses sujets d'une main de fer",
-
+		FROGKING_BEYBLADE = "Mieux vaut ne pas être touché par celle-là !",
 	},
 
 	RECIPE_DESC = {

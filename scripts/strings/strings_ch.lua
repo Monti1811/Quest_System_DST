@@ -23,8 +23,10 @@ return {
 		SHADOW_CREST = "影子山庄",
 		SHADOW_MITRE = "影子密特",
 		SHADOW_LANCE = "影子长矛",
+		FROGKING="蛙鸣",
 		FROGKING_P_CROWN = "蛙人之冠",
 		FROGKING_SCEPTER = "蛙人权杖",
+		FROGKING_BEYBLADE = "钻石陀螺",
 	},
 
 	DESCRIBE = {
@@ -48,8 +50,10 @@ return {
 		SHADOW_CREST = "让你的敌人在你的头上，有点恐怖，但这太好啦！",
 		SHADOW_MITRE = "似乎它还有一些影子主教的影子...",
 		SHADOW_LANCE = "看来是个嗜血的武器，尤其是对付月球上的敌人！",
+		FROGKING = "这个人看起来很可怕！",
 		FROGKING_P_CROWN = "一个能让所有青蛙都视你为国王的皇冠！",
 		FROGKING_SCEPTER = "一根权杖，用铁拳统治它的臣民。",
+		FROGKING_BEYBLADE = "最好不要被这个人打中！",
 	},
 
 	RECIPE_DESC = {

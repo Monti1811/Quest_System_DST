@@ -23,8 +23,10 @@ return {
 		SHADOW_CREST = "Schattenkamm",
 		SHADOW_MITRE = "Schattenmitra",
 		SHADOW_LANCE = "Schattenlanze",
+		FROGKING = "Froschkönig",
 		FROGKING_P_CROWN = "Froschkönigkrone",
 		FROGKING_SCEPTER = "Froschkönigzepter",
+		FROGKING_BEYBLADE = "Diamantenkreisel",
 	},
 
 	DESCRIBE = {
@@ -48,8 +50,10 @@ return {
 		SHADOW_CREST = "Ein bisschen makaber, seinen Feind auf dem Kopf zu haben, aber das ist zu gut!",
 		SHADOW_MITRE = "Scheint noch etwas vom Schattenbischof in sich zu haben...",
 		SHADOW_LANCE = "Eine blutdurstige Waffe, besonders gegen Mondfeinde!",
+		FROGKING = "Der da sieht gefährlich aus!",
 		FROGKING_P_CROWN = "Eine Krone, die alle Frösche dazu bringt, dich als ihren König anzusehen!",
 		FROGKING_SCEPTER = "Ein Zepter, das seine Untertanen mit eisernen Fäusten regiert.",
+		FROGKING_BEYBLADE = "Better not get hit by this one!",
 	},
 
 	RECIPE_DESC = {
