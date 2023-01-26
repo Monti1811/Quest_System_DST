@@ -371,7 +371,7 @@ function TemporaryBonus:Init()
 	self.inst:DoTaskInTime(1,function()
 		devdumptable(current_active_boni_loaded)
 		for _,v in pairs(current_active_boni_loaded) do
-			if v.time > 0 then
+			if v.time > 5 then
 				self:AddBonus(v.bonus,v.name,v.amount,v.time)
 			end
 		end

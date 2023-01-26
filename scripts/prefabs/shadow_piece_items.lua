@@ -31,6 +31,7 @@ local function RookAttack(inst,player,target)
 		shadow_rook.Transform:SetScale(scale,scale,scale)
 		shadow_rook.Transform:SetPosition(player:GetPosition():Get())
 		shadow_rook:LevelUp(3)
+		shadow_rook.components.combat:SetDefaultDamage(300)
 		shadow_rook.sg:GoToState("attack",target)
 		shadow_rook:ListenForEvent("newstate",function(shadow_rook,data)
 			if data and data.statename ~= "attack" and data.statename ~= "attack_teleport" then
@@ -60,7 +61,7 @@ local function OnEquip(inst, owner)
 
 	inst.onequipfn_crest = function(player,data)
     	if data and data.damage then
-    		inst.components.fueled:DoDelta(-data.damage*2)
+    		inst.components.fueled:DoDelta(-data.damage*3)
     	end
     end
     inst:ListenForEvent("attacked",inst.onequipfn_crest,owner)

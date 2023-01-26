@@ -5,7 +5,6 @@ local function AddPrefabDescriptors()
     if not _G.rawget(_G, "Insight") then return end
     local prefab_descriptors = _G.Insight.prefab_descriptors
     for _, item in ipairs(fuel_armor_items) do
-        devprint("Insight",item, prefab_descriptors[item])
         prefab_descriptors[item] = {
             Describe = function(inst, context)
                 local description
@@ -16,12 +15,11 @@ local function AddPrefabDescriptors()
                 }
             end
         }
-        devprint("Insight2",item, prefab_descriptors[item])
     end
     prefab_descriptors["shadow_lance"] = {
         Describe = function(inst, context)
             local description
-            description = string.format(context.lstr.weapon_damage,context.lstr.weapon_damage_type.normal, "85").."against Lunar targets"
+            description = string.format(context.lstr.weapon_damage,context.lstr.weapon_damage_type.normal, "85").." against Lunar targets"
 
             return {
                 priority = 48.9,
@@ -43,7 +41,7 @@ local function AddPrefabDescriptors()
     prefab_descriptors["frogking_p_crown"] = {
         Describe = function(inst, context)
             local description
-            description = "Frogs are friendly"
+            description = "Frogs and Merms are friendly"
 
             return {
                 priority = 0,
@@ -97,6 +95,24 @@ local function AddPrefabDescriptors()
                 priority = 1,
                 description = description,
                 alt_description = alt_description,
+                respawn_time = respawn_time
+            }
+        end
+    }
+    prefab_descriptors.nightmarechester_eyebone = {
+        Describe = function(inst, context)
+
+            local respawn_time
+            local description
+
+            if inst.respawntask and inst.respawntime then
+                respawn_time = inst.respawntime - GLOBAL.GetTime()
+                description = string.format("<color=MOB_SPAWN><prefab=nightmarechester></color> will respawn in: %s", context.time:SimpleProcess(respawn_time))
+            end
+
+            return {
+                priority = 0,
+                description = description,
                 respawn_time = respawn_time
             }
         end

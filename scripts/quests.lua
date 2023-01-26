@@ -1251,7 +1251,7 @@ local quests = {
 		local time = GetCurrentAmount(inst,quest_name)
 		local function CheckWetness(inst)
 			if inst.components.moisture then
-				if inst.components.moisture.moisture > 50 then
+				if inst.components.moisture.moisture >= 50 then
 					time = time + 1
 					inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
 					if time >= amount and inst.check_wetness_quest_component ~= nil then
@@ -3387,13 +3387,13 @@ local quests = {
 	counter_name = GetQuestString("Kiss The Frog!","COUNTER"),
 	description = GetQuestString("Kiss The Frog!","DESCRIPTION"),
 	amount = 50,
-	rewards = { fireflies = 1,frogking_p_crown = 1,frogking_scepter = 1, nightstick = 1},
+	rewards = { fireflies = 1, nightstick = 1},
 	points = 2000,
 	start_fn = function(inst,amount,quest_name)
 		local current = GetCurrentAmount(inst,quest_name)
 		local FrogRain, StopFrogRain = FrogKing.SpawnFrogRain(inst,{1,0.09,0.09,1})
 		local function SpawnFrogKing(inst)
-			local spawn_point = GetSpawnPoint(pt)
+			local spawn_point = GetSpawnPoint(inst:GetPosition())
 			local frogking = SpawnPrefab("frogking")
 			if frogking then
 				frogking.Transform:SetPosition(spawn_point.x, 0, spawn_point.z)

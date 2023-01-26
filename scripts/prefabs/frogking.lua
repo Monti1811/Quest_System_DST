@@ -242,6 +242,10 @@ local function OnLoad(inst, data)
             inst.engaged = true
         end
     end
+    local healthpct = inst.components.health:GetPercent()
+    inst.level =   (healthpct > 0.66 and 1)
+                or (healthpct > 0.33 and 2)
+                or 3
 end
 
 --------------------------------------------------------------------------
@@ -368,13 +372,13 @@ local function common_fn(build)
     inst.components.health.nofadeout = true
 
     inst:AddComponent("healthtrigger")
-    inst.components.healthtrigger:AddTrigger(20000, EnterPhase2Trigger)
-    inst.components.healthtrigger:AddTrigger(10000, EnterPhase3Trigger)
+    inst.components.healthtrigger:AddTrigger(0.66, EnterPhase2Trigger)
+    inst.components.healthtrigger:AddTrigger(0.33, EnterPhase3Trigger)
 
     inst:AddComponent("combat")
-    inst.components.combat:SetAttackPeriod(4)
-    inst.components.combat.playerdamagepercent = .5
-    inst.components.combat:SetRange(3)
+    inst.components.combat:SetAttackPeriod(2.5)
+    inst.components.combat.playerdamagepercent = .75
+    inst.components.combat:SetRange(4.5)
     inst.components.combat:SetRetargetFunction(3, RetargetFn)
     inst.components.combat:SetKeepTargetFunction(KeepTargetFn)
     inst.components.combat.battlecryenabled = false
@@ -498,8 +502,11 @@ local function OnHitBeyblade(inst,target)
             cooldown = nil
         end
     end)
+    if target:HasTag("imprisoned") then
+        return
+    end
     --Launch the hit object
-    if target:HasTag("player") then
+    if target.sg and target:HasTag("player") then
         target.sg:GoToState("knockback",{radius = 2,knocker = inst})
     elseif target.components.inventoryitem then
         Launch2(target,inst,10,2,0.1,0,15)
@@ -598,7 +605,7 @@ local function beyblade()
     end)
 
     inst:DoTaskInTime(0,Homing)
-    inst:DoPeriodicTask(1,Homing)
+    inst:DoPeriodicTask(3,Homing)
 
     MakeHauntableLaunch(inst)
 
@@ -626,6 +633,7 @@ local function Imprison(inst)
     for _,player in ipairs(players) do
         if player.components.playercontroller ~= nil then
             player.components.playercontroller:Enable(false)
+            player:AddTag("imprisoned")
             player.DynamicShadow:Enable(false)
             player.AnimState:SetMultColour(0,0,0,0)
             player:DoTaskInTime(5,function()
@@ -633,6 +641,7 @@ local function Imprison(inst)
                     player.components.playercontroller:Enable(true)
                     player.AnimState:SetMultColour(1,1,1,1)
                     player.DynamicShadow:Enable(true)
+                    player:RemoveTag("imprisoned")
                 end
             end)
         end
@@ -654,8 +663,9 @@ local function crown()
     phys:SetCollisionGroup(COLLISION.GIANTS)
     phys:ClearCollisionMask()
     inst.Physics:CollidesWith(COLLISION.ITEMS)
+    inst.Physics:CollidesWith(COLLISION.CHARACTERS)
     inst.Physics:CollidesWith(COLLISION.WORLD)
-    phys:CollidesWith(COLLISION.GIANTS)
+    --phys:CollidesWith(COLLISION.GIANTS)
     phys:SetCylinder(3, 3)
 
     inst.AnimState:SetBank("frogking_crown")
@@ -665,7 +675,7 @@ local function crown()
     local scale = 1
     inst.AnimState:SetScale(scale,scale,scale)
 
-
+    inst:SetPrefabNameOverride("frogking_p_crown")
 
     inst.entity:SetPristine()
 
@@ -841,7 +851,6 @@ local insects = {butterfly = true,antlion = true,glommer = true,mosquito = true,
                 beeguard = true,dragonfly = true,lordfruitfly = true,fruitfly = true,}
 
 local function DamageFn(inst,attacker,target)
-    devprint("DamageFn",inst,attacker,target)
     if target and target.prefab and insects[target.prefab] ~= nil then
         return 90
     end
@@ -865,6 +874,8 @@ local function scepter()
     inst.AnimState:SetBank("frogking_scepter")
     inst.AnimState:SetBuild("frogking_scepter")
     inst.AnimState:PlayAnimation("idle_loop")
+    local scale = 0.7
+    inst.AnimState:SetScale(scale,scale)
 
     inst:AddTag("tool")
     inst:AddTag("sharp")

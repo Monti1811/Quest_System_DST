@@ -7,7 +7,7 @@ local BURROWING_CD = 45
 local DESTROYSTUFF_IGNORE_TAGS = { "INLIMBO", "mushroomsprout", "NET_workable" }
 local BOUNCESTUFF_MUST_TAGS = { "_inventoryitem" }
 local BOUNCESTUFF_CANT_TAGS = { "locomotor", "INLIMBO" }
-SPORECLOUD_TAGS = { "sporecloud" }
+local SPORECLOUD_TAGS = { "sporecloud" }
 
 local function _dist2dsq(p1, p2)
     local dx = p1.x - p2.x
@@ -87,16 +87,6 @@ local function DoChannelingShake(inst)
     BounceStuff(inst)
 end
 
-local function DoSporeBombShake(inst)
-    ShakeAllCameras(CAMERASHAKE.FULL, .35, .02, .3, inst, 40)
-    BounceStuff(inst)
-end
-
-local function DoMushroomBombShake(inst)
-    ShakeAllCameras(CAMERASHAKE.VERTICAL, .35, .02, .3, inst, 40)
-    BounceStuff(inst)
-end
-
 local function DoPoundShake(inst)
     ShakeAllCameras(CAMERASHAKE.VERTICAL, .35, .02, 1, inst, 40)
     BounceStuff(inst)
@@ -110,10 +100,6 @@ end
 
 local MUSHROOMSPROUT_BLOCKER_TAGS = { "frogking_beyblade", "pond", "INLIMBO" } -- NOTES(JBK): Any of these tags will stop Toadstool from breaking things do not add tags from MUSHROOMSPROUT_BREAK_ONEOF_TAGS here.
 local MUSHROOMSPROUT_BREAK_ONEOF_TAGS = { "playerskeleton", "DIG_workable", "HAMMER_workable", "CHOP_WORKABLE", "soil" }
-local MUSHROOMSPROUT_TOSS_MUST_TAGS = { "_inventoryitem" }
-local MUSHROOMSPROUT_TOSS_CANT_TAGS = { "locomotor", "INLIMBO" }
-local MUSHROOMSPROUT_TOSSFLOWERS_MUST_TAGS = { "quickpick", "pickable" }
-local MUSHROOMSPROUT_TOSSFLOWERS_CANT_TAGS = { "intense" }
 
 local function NoHoles(pt)
     return not TheWorld.Map:IsPointNearHole(pt)
@@ -140,7 +126,7 @@ local function SpawnBeyblades(inst)
             pt.z = pt.z + offset.z
             if TheSim:CountEntities(pt.x, 0, pt.z, min_spacing, MUSHROOMSPROUT_BLOCKER_TAGS) <= 0 then
                 --destroy skeletons and diggables and structures and trees
-                for i, v in ipairs(TheSim:FindEntities(pt.x, 0, pt.z, 1.2, nil, nil, MUSHROOMSPROUT_BREAK_ONEOF_TAGS)) do
+                for _, v in ipairs(TheSim:FindEntities(pt.x, 0, pt.z, 1.2, nil, nil, MUSHROOMSPROUT_BREAK_ONEOF_TAGS)) do
                     if v.components.workable then
                         v.components.workable:Destroy(inst)
                     else
