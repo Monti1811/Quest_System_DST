@@ -419,7 +419,11 @@ local quests = {
 		if inst.components.quest_component.quest_data[quest_name] == nil then
 			inst.components.quest_component.quest_data[quest_name] = {}
 		end
-		local bosses = inst.components.quest_component:GetQuestData(quest_name,"bosses") or {bearger = false,deerclops = false,moose = false,antlion = false}
+		local bosses = inst.components.quest_component:GetQuestData(quest_name,"bosses")
+		if bosses == nil then
+			bosses = {bearger = false,deerclops = false,moose = false,antlion = false}
+			inst.components.quest_component:SetQuestData(quest_name, "bosses", bosses)
+		end
 		local function OnKilled_Quest(inst,data)
 			if data and data.victim then
 				for k,v in pairs(bosses) do
@@ -428,9 +432,7 @@ local quests = {
 						inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
 					end
 				end
-				if inst.components.quest_component.quest_data[quest_name] then
-					inst.components.quest_component.quest_data[quest_name].bosses = bosses
-				end
+				inst.components.quest_component:SetQuestData(quest_name, "bosses", bosses)
 				if bosses.bearger == true and bosses.deerclops == true and bosses.moose == true and bosses.antlion == true then
 					inst:RemoveEventCallback("killed",OnKilled_Quest)
 					inst:RemoveEventCallback("killedbyfriend",OnKilled_Quest)
@@ -446,7 +448,7 @@ local quests = {
 		OnSeasonChange = function(inst,season)
 			devprint("OnSeasonChange",inst,season)
 			if season then
-				local boss = inst.components.quest_component.quest_data[quest_name].bosses
+				local boss = inst.components.quest_component.quest_data[quest_name].bosses or {}
 				local season_bosses = {autumn = "bearger",winter = "deerclops",spring = "moose",summer = "antlion"}
 				for seasons,boss_monster in pairs(season_bosses) do
 					if seasons == season then

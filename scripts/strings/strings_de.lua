@@ -194,7 +194,7 @@ return {
 		TOTAL_POINTS = "Gesamtpunktzahl",
 		ASK_FORFEIT = "Bist du dir sicher, dass du diese Mission aufgeben willst?",
 		HEALTHBONUS = "Gesundheitszunahme:",
-		SANITYBONUS = "Verstandszunahme",
+		SANITYBONUS = "Verstandszunahme:",
 		HUNGERBONUS = "Hungerszunahme:",
 		SPEEDBONUS = "Geschwindigkeitszunahme:",
 		WINTERINSULATIONBONUS = "Kälteisolierungszunahme:",

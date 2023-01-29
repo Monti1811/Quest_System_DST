@@ -67,9 +67,11 @@ local AttackWaves = Class(function(self,inst)
 		if player == nil then return end
 		devprint("ms_playerleft",self.current_victims[player.userid])
 		if self.players[player.userid] ~= nil then
-			for _,v in ipairs(self.players[player.userid]) do
-				if self.current_victims[player.userid][v] then
-					self.current_victims[player.userid][v]:Remove()
+			if self.current_victims[player.userid] ~= nil then
+				for _,v in ipairs(self.players[player.userid]) do
+					if self.current_victims[player.userid][v] then
+						self.current_victims[player.userid][v]:Remove()
+					end
 				end
 			end
 			self:StopAllAttacks(player)
@@ -308,8 +310,8 @@ function AttackWaves:StopAttacks(player,victim)
 end
 
 function AttackWaves:StopAllAttacks(player)
-	local release_spawns = self.release_spawns[player.userid]
-	local current_attacking_creatures = self.current_attacking_creatures[player.userid]
+	local release_spawns = self.release_spawns[player.userid] or {}
+	local current_attacking_creatures = self.current_attacking_creatures[player.userid] or {}
 	for _,victim in ipairs(self.players[player.userid]) do
 		if release_spawns[victim] ~= nil then
 			release_spawns[victim]:Cancel()
@@ -322,16 +324,16 @@ function AttackWaves:StopAllAttacks(player)
 				task[victim] = nil
 			end
 		end
-		for _,v in ipairs(current_attacking_creatures) do
-			if v == nil then return end
-			for creature in pairs(v) do
-				if creature:IsValid() then
-					--if vv.components.health then
-					--vv.components.health:Kill()
-					--else
-					creature:Remove()
-					--end
-				end
+	end
+	for _,v in ipairs(current_attacking_creatures) do
+		if v == nil then return end
+		for creature in pairs(v) do
+			if creature:IsValid() then
+				--if vv.components.health then
+				--vv.components.health:Kill()
+				--else
+				creature:Remove()
+				--end
 			end
 		end
 	end
