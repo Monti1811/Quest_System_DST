@@ -1,4 +1,4 @@
-local function SpawnFrogRain(inst,color)	
+local function SpawnFrogRain(inst,color)
 	local _frogs = {}
 	local _scheduledtasks = {}
 	local _activeplayers = {}
@@ -139,4 +139,117 @@ local function SpawnFrogRain(inst,color)
 	return FrogRain, StopFrogRain
 end
 
-return {SpawnFrogRain = SpawnFrogRain}
+local function SpawnFrogRainSingle(inst,color)
+	local _frogs = {}
+	local _scheduledtasks
+	local ScheduleSpawn
+	local _updating = false
+	local function CancelSpawn()
+		if _scheduledtasks ~= nil then
+			_scheduledtasks:Cancel()
+			_scheduledtasks = nil
+		end
+	end
+	local function AutoRemoveTarget(inst, target)
+		if _frogs[target] ~= nil and target:IsAsleep() then
+			target:Remove()
+		end
+	end
+	local function OnPlayerLeft(src, player)
+		if player == inst then
+			CancelSpawn()
+			return
+		end
+	end
+	local function OnTargetSleep(target)
+		inst:DoTaskInTime(0, AutoRemoveTarget, target)
+	end
+	local function StopTrackingFn(target)
+		local restore = _frogs[target]
+		if restore ~= nil then
+			target.persists = restore
+			_frogs[target] = nil
+			inst:RemoveEventCallback("entitysleep", OnTargetSleep, target)
+		end
+	end
+
+	local function StartTrackingFn(target)
+		_frogs[target] = target.persists == true
+		target.persists = false
+		inst:ListenForEvent("entitysleep", OnTargetSleep, target)
+		inst:ListenForEvent("onremove", StopTrackingFn, target)
+		inst:ListenForEvent("enterlimbo", StopTrackingFn, target)
+		inst:ListenForEvent("exitlimbo", StartTrackingFn, target)
+	end
+	local function GetSpawnPoint(pt)
+		local function TestSpawnPoint(offset)
+			local spawnpoint = pt + offset
+			return TheWorld.Map:IsAboveGroundAtPoint(spawnpoint:Get())
+		end
+
+		local theta = math.random() * 2 * PI
+		local radius = math.random() * TUNING.FROG_RAIN_SPAWN_RADIUS
+		local resultoffset = FindValidPositionByFan(theta, radius, 12, TestSpawnPoint)
+
+		if resultoffset ~= nil then
+			return pt + resultoffset
+		end
+	end
+
+	local function SpawnFrog(spawn_point)
+		local frog = SpawnPrefab("frog")
+		if color then
+			--frog.AnimState:SetMultColour(0.1,0.1,0.1,1)
+			frog.AnimState:SetMultColour(unpack(color))
+			--frog.AnimState:SetAddColour(unpack(color))
+		end
+		frog.persists = false
+		if math.random() < .5 then
+			frog.Transform:SetRotation(180)
+		end
+		frog.sg:GoToState("fall")
+		frog.Physics:Teleport(spawn_point.x, 35, spawn_point.z)
+		return frog
+	end
+
+	local FROGS_MUST_TAGS = { "frog" }
+	local function SpawnFrogForPlayer(player, reschedule)
+		local pt = player:GetPosition()
+		local ents = TheSim:FindEntities(pt.x, pt.y, pt.z, TUNING.FROG_RAIN_MAX_RADIUS, FROGS_MUST_TAGS)
+		if #ents < 50 then
+			local spawn_point = GetSpawnPoint(pt)
+			if spawn_point ~= nil then
+				-- print("Spawning a frog for player ",player)
+				local frog = SpawnFrog(spawn_point)
+				StartTrackingFn(frog)
+			end
+		end
+		_scheduledtasks = nil
+		reschedule(player)
+	end
+	ScheduleSpawn = function(player, initialspawn)
+		if _scheduledtasks == nil then
+			_scheduledtasks = player:DoTaskInTime(math.random()+0.1, SpawnFrogForPlayer, ScheduleSpawn)
+		end
+	end
+	local function FrogRain2(inst,force)
+		if not _updating then
+			_updating = true
+			ScheduleSpawn(inst, true)
+		elseif force then
+			CancelSpawn(inst)
+			ScheduleSpawn(inst, true)
+		elseif _updating then
+			_updating = false
+			CancelSpawn(inst)
+		end
+	end
+	local function StopFrogRain2(inst)
+		inst:RemoveEventCallback("ms_playerleft", OnPlayerLeft, TheWorld)
+		CancelSpawn(inst)
+	end
+	inst:ListenForEvent("ms_playerleft", OnPlayerLeft, TheWorld)
+	return FrogRain2, StopFrogRain2
+end
+
+return {SpawnFrogRain = SpawnFrogRain, SpawnFrogRainSingle = SpawnFrogRainSingle}

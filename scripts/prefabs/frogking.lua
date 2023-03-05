@@ -706,7 +706,7 @@ end
 --------------------------------------------------------------------------------------------------------------------------------------
 
 
-local SpawnFrogRain = require("quest_util/frogking").SpawnFrogRain
+local SpawnFrogRainSingle = require("quest_util/frogking").SpawnFrogRainSingle
 
 local assets_p_crown =
 { 
@@ -826,7 +826,7 @@ local prefabs_scepter =
 }
 
 local function SummonFrogRain(inst)
-    local FrogRain, StopFrogRain = SpawnFrogRain(inst,{1,0.09,0.09,1})    --42,3.4,3.4
+    local FrogRain, StopFrogRain = SpawnFrogRainSingle(inst,{1,0.09,0.09,1})    --42,3.4,3.4
     TheWorld:PushEvent("ms_forceprecipitation", true)
     FrogRain(inst)
     inst.components.fueled:DoDelta(-100)
@@ -847,8 +847,18 @@ local function OnUnequip(inst, owner)
     owner.AnimState:Show("ARM_normal")
 end
 
-local insects = {butterfly = true,antlion = true,glommer = true,mosquito = true,bee = true,killerbee = true,
-                beeguard = true,dragonfly = true,lordfruitfly = true,fruitfly = true,}
+local insects = {
+    butterfly = true,
+    antlion = true,
+    glommer = true,
+    mosquito = true,
+    bee = true,
+    killerbee = true,
+    beeguard = true,
+    dragonfly = true,
+    lordfruitfly = true,
+    fruitfly = true,
+}
 
 local function DamageFn(inst,attacker,target)
     if target and target.prefab and insects[target.prefab] ~= nil then
