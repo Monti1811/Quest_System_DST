@@ -26,9 +26,9 @@ local prefabs = {
 local bosses = {
 	EASY = {
 
-		{name = "cherryling", health = 1000, damage = 100, scale = 2,},
+		--{name = "cherryling", health = 1000, damage = 100, scale = 2,},
 		{name = "cherry_bee", health = 1000, damage = 100, scale = 2,},
-		{name = "cherry_beeguard", health = 1000, damage = 100, scale = 2,},
+		--{name = "cherry_beeguard", health = 1000, damage = 100, scale = 2,},
 
 	},
 

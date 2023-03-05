@@ -14,11 +14,12 @@
         <Element name="request_quest_difficult.tex" u1="0.87548828" u2="0.93701172" v1="0.75097656" v2="0.87402344"/>
         <Element name="request_quest_easy.tex" u1="0.93798828" u2="0.99951172" v1="0.75097656" v2="0.87402344"/>
         <Element name="request_quest_normal.tex" u1="0.50048828" u2="0.56201172" v1="0.62597656" v2="0.74902344"/>
-        <Element name="request_quest_very_difficult.tex" u1="0.56298828" u2="0.62451172" v1="0.62597656" v2="0.74902344"/>
-        <Element name="request_quest_very_easy.tex" u1="0.62548828" u2="0.68701172" v1="0.62597656" v2="0.74902344"/>
+        <Element name="request_quest_specific.tex" u1="0.56298828" u2="0.62451172" v1="0.62597656" v2="0.74902344"/>
+        <Element name="request_quest_very_difficult.tex" u1="0.62548828" u2="0.68701172" v1="0.62597656" v2="0.74902344"/>
+        <Element name="request_quest_very_easy.tex" u1="0.68798828" u2="0.74951172" v1="0.62597656" v2="0.74902344"/>
         <Element name="scroll_list_bg.tex" u1="0.00048828125" u2="0.49951172" v1="0.0009765625" v2="0.99902344"/>
-        <Element name="shadow_crest.tex" u1="0.68798828" u2="0.74951172" v1="0.62597656" v2="0.74902344"/>
-        <Element name="shadow_lance.tex" u1="0.75048828" u2="0.81201172" v1="0.62597656" v2="0.74902344"/>
-        <Element name="shadow_mitre.tex" u1="0.81298828" u2="0.87451172" v1="0.62597656" v2="0.74902344"/>
+        <Element name="shadow_crest.tex" u1="0.75048828" u2="0.81201172" v1="0.62597656" v2="0.74902344"/>
+        <Element name="shadow_lance.tex" u1="0.81298828" u2="0.87451172" v1="0.62597656" v2="0.74902344"/>
+        <Element name="shadow_mitre.tex" u1="0.87548828" u2="0.93701172" v1="0.62597656" v2="0.74902344"/>
     </Elements>
 </Atlas>

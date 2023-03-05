@@ -254,10 +254,10 @@ end
 
 local function minotaur(inst)
 	local function OnDeath()
-		TheWorld:DoTaskInTime(0,function()
+		GLOBAL.TheWorld:DoTaskInTime(0,function()
 			if inst:IsValid() then
 				local pos = inst:GetPosition()
-				local minotaurchest = TheSim:FindEntities(pos.x,pos.y,pos.z,3, {"CLASSIFIED"})
+				local minotaurchest = GLOBAL.TheSim:FindEntities(pos.x,pos.y,pos.z,3, {"CLASSIFIED"})
 				for _,v in ipairs(minotaurchest) do
 					if v.prefab == "minotaurchestspawner" and v:IsValid() then
 						v:Remove()

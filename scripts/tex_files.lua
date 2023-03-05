@@ -33,6 +33,7 @@ local images_quest_system = {
 	"request_quest_normal",
 	"request_quest_difficult",
 	"request_quest_very_difficult",
+	"request_quest_specific",
 	"glommer_lightflower",
 	"glommerfuelmachine_item",
 	"blackglommerfuel",
