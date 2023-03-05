@@ -134,7 +134,9 @@ local additional_content = {
 
 for name,num in pairs(additional_content) do
 	if GetModConfigData(string.upper(name)) == true and GLOBAL.KnownModIndex:IsModEnabledAny("workshop-"..num) then
-		table.insert(Assets,Asset("ATLAS", "images/victims_"..name..".xml"))
+		if kleifileexists(MODS_ROOT..modname.."/images/victims_"..name..".xml") then
+			table.insert(Assets,Asset("ATLAS", "images/victims_"..name..".xml"))
+		end
 		--RegisterCustomAtlases("victims_"..name)
 		modimport("mod_util/"..name..".lua")
 	end
