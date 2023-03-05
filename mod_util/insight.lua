@@ -1,6 +1,27 @@
 local _G = GLOBAL
 local fuel_armor_items = {"shadow_crest", "shadow_mitre"} --, "shadow_lance"
 
+local pickup_levels = {
+    [1] = 0,
+    [2] = 50,
+    [3] = 200,
+    [4] = 500,
+    [5] = 1000,
+}
+
+local function getPickupLevel(inst)
+    if inst.picked_up_items then
+        for lvl, val in ipairs(pickup_levels) do
+            if inst.picked_up_items < val then
+                return lvl - 1
+            end
+        end
+        return 5
+    else
+        return 0
+    end
+end
+
 local function AddPrefabDescriptors()
     if not _G.rawget(_G, "Insight") then return end
     local prefab_descriptors = _G.Insight.prefab_descriptors
@@ -109,7 +130,11 @@ local function AddPrefabDescriptors()
                 respawn_time = inst.respawntime - GLOBAL.GetTime()
                 description = string.format("<color=MOB_SPAWN><prefab=nightmarechester></color> will respawn in: %s", context.time:SimpleProcess(respawn_time))
             end
-
+            local pet = next(inst.components.petleash.pets)
+            if pet then
+                local pickup_level = getPickupLevel(pet)
+                description = (description and description.."\n" or "").."Pickup Level: "..pickup_level.."\n"..pet.picked_up_items..(pickup_level < 5 and "/"..pickup_levels[pickup_level+1] or "")
+            end
             return {
                 priority = 0,
                 description = description,

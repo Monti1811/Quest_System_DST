@@ -339,16 +339,20 @@ end
 
 local function OnLoad(inst,data)
     if data then
-        if data.can_do_pickup == nil then
-            inst:RemoveTag("can_do_pickup")
+        if data.can_do_pickup_nightmarechester == nil then
+            inst:RemoveTag("can_do_pickup_nightmarechester")
+        end
+        if data.picked_up_items then
+            inst.picked_up_items = data.picked_up_items
         end
     end
 end
 
 local function OnSave(inst,data)
-    if inst:HasTag("can_do_pickup") then
-        data.can_do_pickup = true
+    if inst:HasTag("can_do_pickup_nightmarechester") then
+        data.can_do_pickup_nightmarechester = true
     end
+    data.picked_up_items = inst.picked_up_items
 end
 
 local function create_nightmarechester()
@@ -375,7 +379,7 @@ local function create_nightmarechester()
     inst:AddTag("notraptrigger")
     inst:AddTag("noauradamage")
     inst:AddTag("fridge")
-    inst:AddTag("can_do_pickup")
+    inst:AddTag("can_do_pickup_nightmarechester")
 
     inst.MiniMapEntity:SetIcon("chester.png")
     inst.MiniMapEntity:SetCanUseCache(false)
@@ -442,6 +446,8 @@ local function create_nightmarechester()
     AddHauntableCustomReaction(inst, OnHaunt, false, false, true)
 
     inst.sounds = sounds
+
+    inst.picked_up_items = 0
 
     inst:SetStateGraph("SGchester")
     inst.sg:GoToState("idle")

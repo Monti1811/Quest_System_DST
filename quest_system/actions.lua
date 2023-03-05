@@ -167,6 +167,7 @@ local CHESTER_PICKUP = AddAction("CHESTER_PICKUP", "Pickup chester", function(ac
 	if container ~= nil then
 		act.doer:PushEvent("onpickupitem", { item = act.target })
 		act.doer.components.container:GiveItem(act.target, nil, act.target:GetPosition())
+		act.doer.picked_up_items = act.doer.picked_up_items + 1
 		return true
 	end
 end)
@@ -177,18 +178,18 @@ AddStategraphActionHandler("chester", ActionHandler(CHESTER_PICKUP, "chomp_item"
 --Add a rightclick option to enable/disable pickup chester
 local PICKUP_TOGGLE = AddAction("PICKUP_TOGGLE", "Pickup toggle",function(act)
 	if act.target then
-		if act.target:HasTag("can_do_pickup") then
-			act.target:RemoveTag("can_do_pickup")
+		if act.target:HasTag("can_do_pickup_nightmarechester") then
+			act.target:RemoveTag("can_do_pickup_nightmarechester")
 		else
-			act.target:AddTag("can_do_pickup")
+			act.target:AddTag("can_do_pickup_nightmarechester")
 		end
+		return true
 	end
 end)
 
 PICKUP_TOGGLE.strfn = function(act)
 	if act.target then
-		if act.target:HasTag("can_do_pickup") then
-			devprint("DISABLE", STR_ACTIONS.PICKUP_TOGGLE.DISABLE)
+		if act.target:HasTag("can_do_pickup_nightmarechester") then
 			return "DISABLE"
 		else
 			return "ENABLE"

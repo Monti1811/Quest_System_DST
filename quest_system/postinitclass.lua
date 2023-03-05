@@ -370,6 +370,31 @@ AddClassPostConstruct("components/combat_replica", CanBeAttacked)
 ----------------------------------------Brain Post Inits----------------------------------------
 
 local PICKUP_DISTANCE = 7
+
+local pickup_levels = {
+	[1] = 0,
+	[2] = 50,
+	[3] = 200,
+	[4] = 500,
+	[5] = 1000,
+}
+
+local function getPickupLevel(inst)
+	if inst.picked_up_items then
+		for lvl, val in ipairs(pickup_levels) do
+			if inst.picked_up_items < val then
+				return lvl - 1
+			end
+		end
+		return 5
+	else
+		return 0
+	end
+end
+
+local function getPickupDistance(inst)
+	return PICKUP_DISTANCE + getPickupLevel(inst)
+end
 local NO_PICKUP_TAGS = { "INLIMBO", "catchable", "fire", "irreplaceable", "heavy", "outofreach", "spider", "_container" }
 
 -- Checks if a specific item is able to be chomped
@@ -389,11 +414,11 @@ local function IsCorrectItem(inst, v)
 end
 
 local function CheckIfItemsPickupable(inst)
-	if not inst:HasTag("can_do_pickup") then
+	if not inst:HasTag("can_do_pickup_nightmarechester") then
 		return false
 	end
 	local mx, _, mz = inst.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(mx, 0, mz, PICKUP_DISTANCE, {"_inventoryitem"}, NO_PICKUP_TAGS)
+	local ents = TheSim:FindEntities(mx, 0, mz, getPickupDistance(inst), {"_inventoryitem"}, NO_PICKUP_TAGS)
 	for i, v in ipairs(ents) do
 		if IsCorrectItem(inst, v) then
 			return true
@@ -407,7 +432,7 @@ local function EatItems(inst)
 		return
 	end
 	local mx, _, mz = inst.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(mx, 0, mz, PICKUP_DISTANCE, {"_inventoryitem"}, NO_PICKUP_TAGS)
+	local ents = TheSim:FindEntities(mx, 0, mz, getPickupDistance(inst), {"_inventoryitem"}, NO_PICKUP_TAGS)
 	for i, v in ipairs(ents) do
 		if IsCorrectItem(inst, v) and v.components.stackable ~= nil then
 			return GLOBAL.BufferedAction(inst, v, GLOBAL.ACTIONS.CHESTER_PICKUP)
