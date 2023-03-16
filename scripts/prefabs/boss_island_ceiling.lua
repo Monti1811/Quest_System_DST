@@ -4,7 +4,7 @@ local function GetNormalPosition(portal, collider)
 end
 
 local function OnCollideCeiling(inst, collider)
-    devprint("OnCollideCeiling",inst,collider)
+    --devprint("OnCollideCeiling",inst,collider)
     if collider and collider.Transform ~= nil then
         local cy, cx, cz = collider.Transform:GetWorldPosition()
 

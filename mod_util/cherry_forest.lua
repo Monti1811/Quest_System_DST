@@ -23,6 +23,35 @@ local prefabs = {
 	--"squittle", --WIP
 }
 
+
+local function cherry_beequeen(inst)
+	--devprint("cherry_beequeen sg", inst, inst.sg)
+	if inst.sg and inst.sg.sg then
+		if inst.sg.sg.events then
+			--devprint(inst.sg.sg.events.flee)
+			inst.sg.sg.events.flee = nil
+			--devprint(inst.sg.sg.events.flee)
+		end
+	end
+	inst:DoTaskInTime(2,function()
+		--devprint("cherry_beequeen", inst, inst.brain)
+		local flee_node
+		local pos
+		if inst.brain then
+			for i,node in ipairs(inst.brain.bt.root.children) do
+				if node.name == "FaceEntity" then
+					pos = i+1
+					flee_node = inst.brain.bt.root.children[pos] and inst.brain.bt.root.children[pos].children[1]
+				end
+			end
+		end
+		if flee_node then
+			table.remove(inst.brain.bt.root.children[pos].children, 1)
+		end
+		--devprint("cherry_beequeen after" , inst, inst.brain)
+	end)
+end
+
 local bosses = {
 	EASY = {
 
@@ -34,7 +63,7 @@ local bosses = {
 
 	DIFFICULT = {
 
-		{name = "cherry_beequeen", health = 10000, damage = 200, scale = 1.7,},
+		{name = "cherry_beequeen", health = 6000, damage = 200, scale = 1.7, fn = cherry_beequeen},
 		
 	},
 }

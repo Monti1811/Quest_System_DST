@@ -301,6 +301,7 @@ function GLOBAL.SetLevelRewards(tab,level)
 end
 
 function GLOBAL.AddBosses(boss,difficulty)
+	--devprint("AddBosses", boss, difficulty, boss.name)
 	local boss_difficulty = QUEST_COMPONENT.BOSSES[difficulty]
 	if difficulty and boss_difficulty ~= nil then
 		if boss then

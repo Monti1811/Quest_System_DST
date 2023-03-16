@@ -564,6 +564,7 @@ local function OnDeaths(self,difficulty)
 end
 
 function Quest_Component:StartBossFight(pos,diff,num)
+	devprint("StartBossFight",pos,diff,num)
 	self.pos_before_fight = pos or Vector3(0,0,0)--{x=0,y=0,z=0}
 	self.bossplatform = self.bossplatform or TheSim:FindFirstEntityWithTag("teleporter_boss_island")
 	local quest_loadpostpass = TheWorld.components.quest_loadpostpass
@@ -943,9 +944,10 @@ function Quest_Component:OnLoad(data)
 		if data.scaled_quests ~= nil and next(data.scaled_quests) ~= nil then
 			self.scaled_quests = data.scaled_quests
 		end
-
 		if data.selectable_quests ~= nil then
-			for _,quest in ipairs(data.selectable_quests) do
+			devdumptable(data.selectable_quests)
+			for i = 1,#data.selectable_quests do
+				local quest = data.selectable_quests[i]
 				if QUESTS[ quest.name ] ~= nil then
 					table.insert(self.selectable_quests,quest)
 				end

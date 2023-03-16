@@ -64,7 +64,7 @@ function GLOBAL.c_levelup(levels,inst)
     end
 end
 
-function GLOBAL.c_startbossfight(diff,num,inst)
+function GLOBAL.c_startbossfight(boss_prefab, diff, num, inst)
     if not inst then
         inst = GLOBAL.ThePlayer--GLOBAL.ConsoleWorldEntityUnderMouse()
     end
@@ -73,7 +73,18 @@ function GLOBAL.c_startbossfight(diff,num,inst)
         return
     end
     local pos = inst:GetPosition()
-    inst.components.quest_component:StartBossFight(pos,diff,num)
+    if boss_prefab then
+        for difficulty, bosses in pairs(GLOBAL.TUNING.QUEST_COMPONENT.BOSSES) do
+            for number, boss in ipairs(bosses) do
+                if boss.name == boss_prefab then
+                    diff = difficulty
+                    num = number
+                    break
+                end
+            end
+        end
+    end
+    inst.components.quest_component:StartBossFight(pos, diff, num)
 end
 
 function GLOBAL.c_resetquests(diff,inst)

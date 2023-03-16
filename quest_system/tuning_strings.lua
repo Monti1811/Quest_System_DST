@@ -287,6 +287,25 @@ local function birchnutdrake(inst)
 	end
 end
 
+local function beequeen(inst)
+	inst:DoTaskInTime(2,function()
+		devprint("beequeen", inst, inst.brain)
+		local flee_node
+		local pos
+		if inst.brain then
+			for i,node in ipairs(inst.brain.bt.root.children) do
+				if node.name == "FaceEntity" then
+					pos = i+1
+					flee_node = inst.brain.bt.root.children[pos] and inst.brain.bt.root.children[pos].children[1]
+				end
+			end
+		end
+		if flee_node then
+			table.remove(inst.brain.bt.root.children[pos].children, 1)
+		end
+	end)
+end
+
 QUEST_COMPONENT.BOSSES = {
 	EASY = {
 
@@ -340,6 +359,7 @@ QUEST_COMPONENT.BOSSES = {
 		{name = "eyeofterror", 		health = 10000, damage = 200, scale = 1.8},
 		{name = "twinofterror1", 	health = 11000, damage = 200, scale = 1.6},
 		{name = "twinofterror2", 	health = 11000, damage = 200, scale = 1.6},
+		{name = "beequeen", 		health = 6000, damage = 200, scale = 1.6,	fn = beequeen},
 
 	},
 } 
@@ -352,23 +372,23 @@ QUEST_COMPONENT.BOSSFIGHT_REWARDS = {
 
 		{
 			items = {"pigskin","cutstone",},
-			amount = {{10,20},{5,10},},
+			amount = {{4,7},{2,4},},
 		},
 		{
 			items = {"boards","nitre",},
-			amount = {{10,20},{15,25},},
+			amount = {{2,4,{5,15},},
 		},
 		{
 			items = {"cutgrass","cutstone",},
-			amount = {{30,40},{5,10},},
+			amount = {{5,15},{2,4},},
 		},
 		{
 			items = {"silk","marble",},
-			amount = {{10,20},{5,10},},
+			amount = {{4,7},{4,7},},
 		},
 		{
 			items = {"flint","gears",},
-			amount = {{10,20},{2,5},},
+			amount = {{5,15},{1,4},},
 		},
 	},
 
@@ -376,23 +396,23 @@ QUEST_COMPONENT.BOSSFIGHT_REWARDS = {
 
 		{	
 			items = {"redgem","wathgrithrhat",},
-			amount = {{10,20},{1,2},},
+			amount = {{3,5},{1,2},},
 		},
 		{	
 			items = {"bluegem","beardhair",},
-			amount = {{10,20},{5,10},},
+			amount = {{3,5},{3,5},},
 		},
 		{	
 			items = {"purplegem","honeycomb",},
-			amount = {{10,20},{3,7},},
+			amount = {{3,5},{1,3},},
 		},
 		{	
 			items = {"manrabbit_tail","butter","livinglog",},
-			amount = {{5,10},{2,5},{5,10},},
+			amount = {{1,4},{1,2},{3,5},},
 		},
 		{	
 			items = {"moonrocknugget","dragonfruit","jellybean",},
-			amount = {{10,20},{3,7},{3,6},},
+			amount = {{3,6},{2,4},{1,4},},
 		},
 
 	},
@@ -400,15 +420,15 @@ QUEST_COMPONENT.BOSSFIGHT_REWARDS = {
 
 		{
 			items = {"greengem","ruins_bat",},
-			amount = {{1,5},{1,3},},
+			amount = {{1,5},{1,1},},
 		},
 		{
 			items = {"yellowgem","ruinshat",},
-			amount = {{1,5},{1,3},},
+			amount = {{1,5},{1,1},},
 		},
 		{
 			items = {"orangegem","armorruins",},
-			amount = {{1,5},{1,3},},
+			amount = {{1,5},{1,1},},
 		},
 		{
 			items = {"eyebrellahat","yellowamulet",},
@@ -416,8 +436,25 @@ QUEST_COMPONENT.BOSSFIGHT_REWARDS = {
 		},
 		{
 			items = {"opalstaff","shroom_skin",},
-			amount = {{1,2},{2,4},},
+			amount = {{1,2},{1,3},},
 		},
+		{
+			items = {"yellowstaff","deerclops_eyeball",},
+			amount = {{1,2},{0,1},},
+		},
+		{
+			items = {"greenamulet","bearger_fur",},
+			amount = {{1,2},{0,1},},
+		},
+		{
+			items = {"orangeamulet","goose_feather",},
+			amount = {{1,2},{2,6},},
+		},
+		{
+			items = {"greenstaff","townportaltalisman",},
+			amount = {{1,2},{2,6},},
+		},
+	}
 
 	},
 }
