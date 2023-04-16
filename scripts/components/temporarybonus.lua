@@ -206,7 +206,7 @@ local function AddEscapeDeath(inst,amount,name)
 						local time = tempbonus.current_active_boni[taskname] and tempbonus.current_active_boni[taskname].time or 60
 						local time_start = tempbonus.current_active_boni[taskname] and tempbonus.current_active_boni[taskname].starting_time or 0
 						local time_left = time - (GetTime() - time_start)
-						devprint("escapedeath",time,time_start,time_left,inst["remove_task"..name])
+						devprint("escapedeath",time,time_start,time_left,inst["remove_task"..name.."escapedeath"])
 						tempbonus:RemoveBonus("escapedeath",name,amount)
 						tempbonus:AddBonus("escapedeath",name,amount-1,time_left)
 					else
@@ -268,6 +268,12 @@ local TemporaryBonus = Class(function(self, inst)
 
 end)
 
+local function getName(self, name, bonus, count)
+	if self.current_active_boni[name.."_"..count..bonus] ~= nil then
+		return getName(self, name, bonus, count + 1)
+	end
+	return name.."_"..count
+end
 
 function TemporaryBonus:AddBonus(bonus,name,amount,time)
 	devprint("TemporaryBonus:AddBonus",bonus,name,amount,time)
@@ -281,8 +287,9 @@ function TemporaryBonus:AddBonus(bonus,name,amount,time)
 	end
 	self.current_boni = self.current_boni + 1
 	if self.current_active_boni[name..bonus] ~= nil then
-		name = name.."_1"
+		name = getName(self, name, bonus, 1)
 	end
+	local bonusname = name..bonus
 	local tab = {
 		name = name,
 		bonus = bonus,
@@ -290,17 +297,18 @@ function TemporaryBonus:AddBonus(bonus,name,amount,time)
 		time = time,
 		starting_time = GetTime(),
 	}
-	self.current_active_boni[name..bonus] = tab
-	table.insert(self.boni_num,name..bonus)
-	devprint(name..bonus)
+	self.current_active_boni[bonusname] = tab
+	table.insert(self.boni_num,bonusname)
+	devprint(bonusname)
 	local num = #self.boni_num
 	if self.bonusfunctions[bonus] ~= nil then
 		self.bonusfunctions[bonus](self.inst,tonumber(amount),name)
 	end
-	self.inst["remove_task"..name] = self.inst:DoTaskInTime(time,function()
+	self.inst["remove_task"..bonusname] = self.inst:DoTaskInTime(time,function()
+		--devprint("removetask is active", name, bonus, amount)
 		self:RemoveBonus(bonus,name,amount)
 	end)
-	self.inst:DoTaskInTime(1+math.random()/2,function()
+	self.inst:DoTaskInTime(math.random()/2,function()
 		if self.inst.userid then
 			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "AddTempBoniToClient"),self.inst.userid,self.inst,num,bonus.."_"..amount,nil,time)
 		end
@@ -339,8 +347,8 @@ end
 
 function TemporaryBonus:RemoveBonus(bonus,name,amount)
 	devprint("TemporaryBonus:RemoveBonus",bonus,name,amount)
-	local taskname = "remove_task"..name
 	local name_bonus = name..bonus
+	local taskname = "remove_task"..name_bonus
 	if self.current_active_boni[name_bonus] == nil then return end
 	if self.inst[taskname] ~= nil then
 		self.inst[taskname]:Cancel()
@@ -368,7 +376,7 @@ end
 local current_active_boni_loaded = {}
 
 function TemporaryBonus:Init()
-	self.inst:DoTaskInTime(1,function()
+	self.inst:DoTaskInTime(3,function()
 		devdumptable(current_active_boni_loaded)
 		for _,v in pairs(current_active_boni_loaded) do
 			if v.time > 5 then
@@ -386,8 +394,8 @@ function TemporaryBonus:OnSave()
 		v.time = v.time - time_passed
 		data.current_active_boni[k] = v
 	end
-	--print("TemporaryBonus save")
-	--dumptable(data)
+	devprint("TemporaryBonus save")
+	devdumptable(data)
 	return data
 end
 

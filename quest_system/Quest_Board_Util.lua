@@ -618,6 +618,9 @@ local custom_functions = {
 			if data and data.target and targets[data.target.GUID] == nil then
 				data.target:ListenForEvent("loot_prefab_spawned",LookForLoot)
 				targets[data.target.GUID] = true
+				player:DoTaskInTime(10, function()
+					targets[data.target.GUID] = nil
+				end)
 			end
 		end
 		player:ListenForEvent("working",ListenForEventWorkable)
@@ -685,7 +688,7 @@ local custom_functions = {
 			end
 		end
 		local function OnUnEquipRod(_,data)
-			if data and data.eslot == EQUIPSLOTS.HANDS and data.item then
+			if data and data.item and data.eslot == EQUIPSLOTS.HANDS and data.item then
 				local oceanfishingrod = data.item.components.oceanfishingrod
 				if data.item.prefab == "oceanfishingrod" and oceanfishingrod ~= nil and old_ondone ~= nil then
 					oceanfishingrod.ondonefishing = old_ondone
@@ -746,7 +749,7 @@ local custom_functions = {
 			end
 		end
 		local function OnUnEquipStaff(_,data)
-			if data and data.eslot == EQUIPSLOTS.HANDS then
+			if data and data.item and data.eslot == EQUIPSLOTS.HANDS then
 				local spellcaster = data.item.components.spellcaster
 				if data.item.prefab == "telestaff" and spellcaster ~= nil and old_ondone ~= nil then
 					spellcaster.onspellcast = old_ondone

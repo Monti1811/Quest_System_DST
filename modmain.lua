@@ -106,8 +106,8 @@ modimport("quest_system/tuning_strings.lua") 		--initialization of variables
 modimport("quest_system/RPC.lua") 					--setting all RPC calls needed for communication between server and client
 modimport("quest_system/Quest_Board_Util.lua")		--loading helper functions for the quest board and quest log as well as functions for quests
 modimport("quest_system/postinitfns.lua")			--loading all postinit fns added to prefabs
-modimport("quest_system/postinitclass.lua")			--loading all postinit fns added to classes 
-modimport("quest_system/actions.lua")				--loading new/changed actions 
+modimport("quest_system/postinitclass.lua")			--loading all postinit fns added to classes
+modimport("quest_system/actions.lua")				--loading new/changed actions
 modimport("quest_system/consolecommands.lua")		--loading custom console commands to make debugging easier (and cheating if you want to ;))
 modimport("quest_system/init_custom_quests.lua")	--loading the custom quests saved as a persistent string and/or json encoded string
 modimport("quest_system/recipes.lua")				--loading new recipes
