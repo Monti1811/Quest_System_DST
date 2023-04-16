@@ -112,9 +112,9 @@ local prefabs = {
 	"pigman_florist",
 	{prefab = "pigman_erudite",name = "Pig Erudite"},
 	{prefab = "pigman_hatmaker",name = "Pig Hatmaker"},
-	"pigman_storeowner", 
-	"pigman_banker",  
-	"pigman_collector",     
+	"pigman_storeowner",
+	"pigman_banker",
+	"pigman_collector",
 	{prefab = "pigman_hunter",name = "Pig Hunter"},
 	"pigman_mayor",
 	"pigman_mechanic",
@@ -124,15 +124,15 @@ local prefabs = {
 	{prefab = "pigman_royalguard_2",name = "Royal Guard 2"},
 	"pigman_farmer",
 	"pigman_miner",
-	{prefab = "pigman_queen",name = "Pig Queen"}, 
+	{prefab = "pigman_queen",name = "Pig Queen"},
 	"pig_eskimo",
-	"pig_shopkeeper", 
+	"pig_shopkeeper",
 	"pig_royalguard_rich",
 	"pig_royalguard_rich_2",
 	"pigman_royalguard_3",
 	"piko",
 	"piko_orange",
-	{prefab = "pinkman",name = "Pink Man"}, 
+	{prefab = "pinkman",name = "Pink Man"},
 	"pirateghost",
 	"pigghost",
 	"pog",
@@ -204,7 +204,7 @@ local prefabs = {
 
 
 AddSimPostInit(function()
-	for k,v in ipairs(prefabs) do
+	for _,v in ipairs(prefabs) do
 		if type(v) == "table" then
 			local goal = AddPrefabToGoals(v.prefab,v.atlas,v.tex,v.name)
 			table.insert(goals,goal)

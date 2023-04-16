@@ -63,14 +63,14 @@ local bosses = {
 		{name = "knook", health = 10000, damage = 200, scale = 1.7,},
 		{name = "bight", health = 10000, damage = 200, scale = 1.7,},
 		{name = "roship", health = 10000, damage = 200, scale = 1.7,},
-		{name = "moonmaw_dragonfly", health = 10000, damage = 200, scale = 1.7,},
+		--{name = "moonmaw_dragonfly", health = 10000, damage = 200, scale = 1.7,}, --may spawn to other players
 		{name = "hoodedwidow", health = 8000, damage = 200, scale = 1.7,},
 	},
 }
 
 local function RemoveBoss(diff,boss)
-	for k,boss in ipairs(bosses[diff]) do
-		if boss.name == boss then
+	for k,boss_data in ipairs(bosses[diff]) do
+		if boss_data.name == boss then
 			 return table.remove(bosses[diff],k)
 		end
 	end
