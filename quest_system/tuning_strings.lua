@@ -376,7 +376,7 @@ QUEST_COMPONENT.BOSSFIGHT_REWARDS = {
 		},
 		{
 			items = {"boards","nitre",},
-			amount = {{2,4,{5,15},},
+			amount = {{2,4},{5,15},}
 		},
 		{
 			items = {"cutgrass","cutstone",},
@@ -454,8 +454,6 @@ QUEST_COMPONENT.BOSSFIGHT_REWARDS = {
 			items = {"greenstaff","townportaltalisman",},
 			amount = {{1,2},{2,6},},
 		},
-	}
-
 	},
 }
 
@@ -533,12 +531,12 @@ if LOADING_TIPS ~= 0 then
 
 	local start_tab = 
 		{
-		    QUEST_SYSTEM = 4 * LOADING_TIPS,
+		    QUEST_SYSTEM = 0.5 * LOADING_TIPS,
 		}
 
 	local end_tab = 
 	{
-	    QUEST_SYSTEM = 1.5 * LOADING_TIPS,
+	    QUEST_SYSTEM = 0.5 * LOADING_TIPS,
 	}
 	--Add custom weights for this category
 	SetLoadingTipCategoryWeights(GLOBAL.LOADING_SCREEN_TIP_CATEGORY_WEIGHTS_START,start_tab)
@@ -547,9 +545,9 @@ if LOADING_TIPS ~= 0 then
 	--Make a new strings table and add the strings to them
 	STRINGS.UI.LOADING_SCREEN_QUEST_SYSTEM_TIPS = {}
 	for key,tip in pairs(STRINGS.QUEST_COMPONENT.LOADING_TIPS) do
-		AddLoadingTip(STRINGS.UI.LOADING_SCREEN_QUEST_SYSTEM_TIPS,key,tip)
+		AddLoadingTip(STRINGS.UI.LOADING_SCREEN_QUEST_SYSTEM_TIPS,"TIP_QS_"..string.upper(key),tip)
 		--Also add it LOADING_SCREEN_OTHER_TIPS so that GenerateControlTipText finds the correct text
-		AddLoadingTip(STRINGS.UI.LOADING_SCREEN_OTHER_TIPS,key,tip)
+		AddLoadingTip(STRINGS.UI.LOADING_SCREEN_OTHER_TIPS,"TIP_QS_"..string.upper(key),tip)
 	end
 
 	--Change the PickLoadingTip and CalculateLoadingTipWeights fn so that they also calculate the new category and choose the correct text for them

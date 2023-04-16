@@ -292,12 +292,12 @@ local WAKE_TO_FOLLOW_DISTANCE = 14
 local SLEEP_NEAR_LEADER_DISTANCE = 7
 
 local function ShouldWakeUp(inst)
-    return DefaultWakeTest(inst) or not inst.components.follower:IsNearLeader(WAKE_TO_FOLLOW_DISTANCE)
+    return true
 end
 
 local function ShouldSleep(inst)
     --print(inst, "ShouldSleep", DefaultSleepTest(inst), not inst.sg:HasStateTag("open"), inst.components.follower:IsNearLeader(SLEEP_NEAR_LEADER_DISTANCE))
-    return DefaultSleepTest(inst) and not inst.sg:HasStateTag("open") and inst.components.follower:IsNearLeader(SLEEP_NEAR_LEADER_DISTANCE) and not TheWorld.state.isfullmoon
+    return false
 end
 
 local function ShouldKeepTarget()
@@ -407,7 +407,7 @@ local function create_nightmarechester()
 
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(666)
-    inst.components.health:StartRegen(TUNING.CHESTER_HEALTH_REGEN_AMOUNT, TUNING.CHESTER_HEALTH_REGEN_PERIOD)
+    inst.components.health:StartRegen(33, 3)
 
     inst:AddComponent("inspectable")
     inst.components.inspectable:RecordViews()
