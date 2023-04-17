@@ -30,16 +30,34 @@ local function MakeTables(self,userid,victim)
 	end
 end
 
+local function isSummer()
+	return TheWorld.state.season == "summer" or TheWorld.state.season == "autumn"
+end
+
+local function StopBrainStalkerMinion(inst)
+	devprint("StopBrainStalkerMinion")
+	inst:StopBrain()
+	inst:SetBrain(nil)
+	inst.components.timer:StopTimer("selfdestruct")
+	inst.OnEntitySleep = nil
+end
+
+local function StopBrain(inst)
+	devprint("StopBrain")
+	inst:StopBrain()
+	inst:SetBrain(nil)
+end
+
 local AttackWaves = Class(function(self,inst)
 	self.inst = inst
 	self.attacking_creatures = {
-		{"killerbee","frog","spider","bat",
+		{"killerbee","frog","spider","bat","hedgehound","beeguard"
 		--"mosquito"
 		},
-		{"hound","firehound","icehound","beeguard","spider_water","mutatedhound","eyeofterror_mini",},
-		{"bunnyman","spider_warrior","spider_hider","spider_spitter","spider_moon",},
-		{"walrus","grassgator","beefalo","worm","merm","pigman",},
-		{"bishop","rook","knight","leif","koalefant_summer","warglet",--[["rocky",]]},	--rocky is too strong I think, takes too much time to kill
+		{"hound",function() return isSummer() and "firehound" or "icehound" end,},--"beeguard",--"spider_water","mutatedhound","eyeofterror_mini","slurper","molebat"},
+		{"bunnyman","spider_warrior","spider_hider","spider_spitter","spider_moon","powder_monkey","spider_healer"},
+		{"walrus","grassgator","beefalo","worm","merm","pigman","krampus","prime_mate",},
+		{"bishop","rook","knight","leif",function() return isSummer() and "koalefant_summer" or "koalefant_winter" end,"warglet", --[["rocky",]]},	--rocky is too strong I think, takes too much time to kill
 	}
 	self.current_attacking_creatures = {}
 	self.attack_num = {}
@@ -49,14 +67,14 @@ local AttackWaves = Class(function(self,inst)
 	self.DoAttackWave_task = {}
 
 	self.victims = {
-		"glommer",
-		"butterfly",
-		"moonbutterfly",
-		"dustmoth",
-		"stalker_minion1",
-		"stalker_minion2",
-		"chester",
-		"hutch",
+		glommer = true,
+		butterfly = StopBrain,
+		moonbutterfly = true,
+		dustmoth = true,
+		stalker_minion1 = StopBrainStalkerMinion,
+		stalker_minion2 = StopBrainStalkerMinion,
+		chester = true,
+		hutch = true,
 	}
 	self.current_victims = {}
 	self.release_spawns = {}
@@ -101,7 +119,8 @@ local function SummonSpawn(self,pt,difficulty)
 	difficulty = type(difficulty) == "number" and difficulty or 1
     local spawn_pt = GetSpawnPoint(pt)
     if spawn_pt ~= nil then
-    	local prefab = self.attacking_creatures[difficulty] and self.attacking_creatures[difficulty][math.random(#self.attacking_creatures[difficulty])] or "hound"
+		local list = self.attacking_creatures[difficulty] or {}
+    	local prefab = FunctionOrValue(list[math.random(#list)]) or "hound"
         local spawn = SpawnPrefab(prefab)
         if spawn ~= nil then
             spawn.Physics:Teleport(spawn_pt:Get())
@@ -196,8 +215,8 @@ function AttackWaves:StartAttack(player,attacksize,delta,difficulty,_victim)
 	devprint("StartAttack",player,attacksize,delta,difficulty)
 	local pos = Vector3(player.Transform:GetWorldPosition())
 	local new_pos = FindWalkableOffset(pos,math.random()*PI*2,20,8,true,false)
-	local prefab = self.victims[math.random(#self.victims)]
-	local victim = SpawnPrefab(_victim)
+	local prefab = _victim or GetRandomItemWithIndex(self.victims)
+	local victim = SpawnPrefab(prefab)
 	if victim == nil then
 		print("[Attackwaves] The Victim could not be spawned",victim,_victim,prefab)
 		return
@@ -212,12 +231,8 @@ function AttackWaves:StartAttack(player,attacksize,delta,difficulty,_victim)
 		health:SetPercent(1)
 		health:StopRegen()
 	end
-	if victim.prefab == "stalker_minion1" or victim.prefab == "stalker_minion2" then
-		devprint("StopBrain")
-		victim:StopBrain()
-		victim:SetBrain(nil)
-		victim.components.timer:StopTimer("selfdestruct")
-		victim.OnEntitySleep = nil
+	if self.victims[prefab] ~= nil and type(self.victims[prefab]) == "function" then
+		self.victims[prefab](victim)
 	end
 	victim.persists = false
 	victim.Transform:SetPosition(pos.x+new_pos.x,pos.y+new_pos.y,pos.z+new_pos.z)

@@ -198,10 +198,17 @@ function Quest_Component:AddQuest(name,debug)
 	if GetTableSize(self.quests) >= self.max_amount_of_quests then return end
 	if name == nil or QUESTS[name] == nil then
 		print("[Quest System] This quest doesn't exist!",name)
+		return
 	end
 	local quest = QUESTS[name]
-	if self.quests[name] ~= nil then print("[Quest System] You already have this quest",name) return end
-	if TheWorld.components.quest_loadpostpass:CanQuestLineBeDone(name) == false then print("[Quest System] This quest is already active for somebody else",name) return end
+	if self.quests[name] ~= nil then
+		print("[Quest System] You already have this quest",name)
+		return
+	end
+	if TheWorld.components.quest_loadpostpass:CanQuestLineBeDone(name) == false then
+		print("[Quest System] This quest is already active for somebody else",name)
+		return
+	end
 	if quest.character and not debug then
 		if quest.character ~= self.inst.prefab then
 			print("[Quest System] Tried to add a character specific quest to another character:",name,quest.character)
@@ -247,7 +254,7 @@ function Quest_Component:AddQuest(name,debug)
 			local T_fn = QUEST_BOARD.PREFABS_MOBS[fn]
 			devprint(fn, T_fn)
 			if T_fn ~= nil then
-				T_fn(self.inst,new_quest.amount,new_quest.name)
+				T_fn.fn(self.inst,new_quest.amount,new_quest.name)
 			else
 				print("[Quest System] Something broke, the start_fn doesn't exist anymore. Did you disable a mod that added more options to quest making?",name,quest.start_fn)
 			end

@@ -13,6 +13,18 @@ local function GetUnusedQuestWithDifficulty(inst,reader,difficulty,quest_name)
             reader.components.talker:Say(STRINGS.QUEST_COMPONENT.REQUEST_QUEST.FULL_LOG)
             return
         end
+        if TheWorld.components.quest_loadpostpass:CanQuestLineBeDone(quest_name) == false then
+            reader.components.talker:Say(string.format("The quest %s of a quest line is already active for somebody else",quest_name))
+            inst.quest_name = quest_name
+            return
+        end
+        local character = TUNING.QUEST_COMPONENT.QUESTS[quest_name] and TUNING.QUEST_COMPONENT.QUESTS[quest_name].character
+        if character then
+            if reader.prefab == character then
+                reader.components.talker:Say(string.format("This quest can only be accepted by %s",STRINGS.NAMES[character] or character))
+                return
+            end
+        end
         inst.used = true
         quest_name = quest_name or reader.components.quest_component:GetUnusedQuestNum(type(difficulty) == "number" and difficulty or nil)
         reader.components.quest_component:AddQuest(quest_name)           
@@ -52,22 +64,7 @@ local difficulties = {
 }
 
 local function SetQuest(inst,quest_name)
-    if inst.components.simplebook then
-        inst.components.simplebook.onreadfn = function(inst,reader)
-            local character = TUNING.QUEST_COMPONENT.QUESTS[quest_name] and TUNING.QUEST_COMPONENT.QUESTS[quest_name].character
-            if character then
-                if reader.prefab == character then
-                    reader.components.talker:Say(string.format("This quest can only be accepted by %s",STRINGS.NAMES[character] or character))
-                    return
-                end
-            end
-            if inst.used == true then 
-                return 
-            end
-            GetUnusedQuestWithDifficulty(inst,reader,nil,quest_name)
-        end
-        inst.quest_name = quest_name
-    end
+    inst.quest_name = quest_name
     if inst.components.named == nil then
         inst:AddComponent("named")
     end
@@ -124,7 +121,7 @@ local function fn_all(difficulty,particular)
     inst:AddComponent("simplebook")
     inst.components.simplebook.onreadfn = function(inst,reader)
         if inst.used == true then return end
-    	GetUnusedQuestWithDifficulty(inst,reader,difficulty)
+    	GetUnusedQuestWithDifficulty(inst,reader,difficulty, inst.quest_name)
     end
 
     MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
