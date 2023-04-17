@@ -377,11 +377,15 @@ local current_active_boni_loaded = {}
 
 function TemporaryBonus:Init()
 	self.inst:DoTaskInTime(3,function()
+		devprint("TemporaryBonus:Init")
 		devdumptable(current_active_boni_loaded)
-		for _,v in pairs(current_active_boni_loaded) do
-			if v.time > 5 then
-				self:AddBonus(v.bonus,v.name,v.amount,v.time)
+		if current_active_boni_loaded[self.inst.userid] ~= nil then
+			for _,v in pairs(current_active_boni_loaded[self.inst.userid]) do
+				if v.time > 5 then
+					self:AddBonus(v.bonus,v.name,v.amount,v.time)
+				end
 			end
+			current_active_boni_loaded[self.inst.userid] = nil
 		end
 	end)
 end
@@ -403,8 +407,10 @@ function TemporaryBonus:OnLoad(data)
 	if data.current_active_boni ~= nil and next(data.current_active_boni) ~= nil then
 		devprint("TemporaryBonus:OnLoad")
 		devdumptable(data.current_active_boni)
+		local userid = self.inst.userid or 1
+		current_active_boni_loaded[userid] = {}
 		for k,v in pairs(data.current_active_boni) do
-			current_active_boni_loaded[k] = v
+			current_active_boni_loaded[userid][k] = v
 		end
 	end
 end
