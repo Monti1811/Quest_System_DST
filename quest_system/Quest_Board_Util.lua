@@ -2348,7 +2348,8 @@ local FunctionsForCustomQuests = {
 			custom_functions["protect x from y creatures z times"](player,amount,5,3,10,1,"glommer",quest_name)
 		end,
 		"Times Protected",
-		"glommer.tex"
+		"glommer.tex",
+		"images/victims.xml"
 	},
 	{
 		"Protect a Butterfly from x creatures for 3 Easy Waves",
@@ -2356,7 +2357,8 @@ local FunctionsForCustomQuests = {
 			custom_functions["protect x from y creatures z times"](player,amount,7,3,10,2,"butterfly",quest_name)
 		end,
 		"Times Protected",
-		"butterfly.tex"
+		"butterfly.tex",
+		"images/victims.xml"
 	},
 	{
 		"Protect a Woven Shadow from x creatures for 3 Medium Waves",
@@ -2364,7 +2366,8 @@ local FunctionsForCustomQuests = {
 			custom_functions["protect x from y creatures z times"](player,amount,7,3,10,3,"stalker_minion1",quest_name)
 		end,
 		"Times Protected",
-		"stalker_minion1.tex"
+		"stalker_minion1.tex",
+		"images/victims.xml"
 	},
 	{
 		"Protect a Woven Shadow from x creatures for 3 Difficult Waves",
@@ -2372,7 +2375,8 @@ local FunctionsForCustomQuests = {
 			custom_functions["protect x from y creatures z times"](player,amount,7,3,10,4,"stalker_minion2",quest_name)
 		end,
 		"Times Protected",
-		"stalker_minion2.tex"
+		"stalker_minion2.tex",
+		"images/victims.xml"
 	},
 	{
 		"Protect a Dust Moth from x creatures for 3 Very Difficult Waves",
@@ -2380,7 +2384,8 @@ local FunctionsForCustomQuests = {
 			custom_functions["protect x from y creatures z times"](player,amount,7,3,10,5,"dustmoth",quest_name)
 		end,
 		"Times Protected",
-		"dustmoth.tex"
+		"dustmoth.tex",
+		"images/victims.xml"
 	},
 	{
 		"Protect a Moon Moth from x creatures for 5 Very Difficult Waves",
@@ -2388,7 +2393,8 @@ local FunctionsForCustomQuests = {
 			custom_functions["protect x from y creatures z times"](player,amount,7,5,15,5,"moonbutterfly",quest_name)
 		end,
 		"Times Protected",
-		"moonbutterfly.tex"
+		"moonbutterfly.tex",
+		"images/victims.xml"
 	},
 
 	--Temperature Missions

@@ -1,7 +1,7 @@
 name = "Quest System [BETA]"
 description = "Introduces a quest system into the game!\n\nOpen your quest log to see which quests you can do.\nBuild the quest board to accept new quests or be lucky enough to find requests in the wild!\n\nLevel up, get stronger and compete against powerful Boss Creatures to receive rewards!"
 author = "Monti"
-version = "1.0.104"
+version = "1.0.105"
 
 forumthread = ""
 
