@@ -1,16 +1,16 @@
 local Widget = require "widgets/widget"
 local Text = require "widgets/text"
 local Image = require "widgets/image"
-local Button = require "widgets/button"
+--local Button = require "widgets/button"
 local TextButton = require "widgets/textbutton"
 local TextEdit = require "widgets/textedit"
 local Screen = require "widgets/screen"
-local Templates = require "widgets/templates"
+--local Templates = require "widgets/templates"
 local Templates_R = require "widgets/redux/templates"
 local ImageButton = require "widgets/imagebutton"
 local ScrollableList = require "widgets/scrollablelist"
-local FilterBar = require "widgets/redux/filterbar"
-local ItemExplorer = require "widgets/redux/itemexplorer"
+--local FilterBar = require "widgets/redux/filterbar"
+--local ItemExplorer = require "widgets/redux/itemexplorer"
 local STRINGS_QB = STRINGS.QUEST_COMPONENT.QUEST_BOARD
 local STRINGS_QL = STRINGS.QUEST_COMPONENT.QUEST_LOG
 local QUEST_BOARD = TUNING.QUEST_COMPONENT.QUEST_BOARD
@@ -646,8 +646,8 @@ function Quest_Board_Widget:ShowCustomQuests()
         bg.edit:SetHoverText(STRINGS_QB.EDIT_QUEST)
         bg.edit:SetOnClick( function()
             self.root5:Kill()
-            self:CreateNewQuest()
             self.editing_custom_quest = quest.name
+            self:CreateNewQuest()
 
             --Rewards
             local k = 1
@@ -1182,15 +1182,22 @@ function Quest_Board_Widget:CreateNewQuest()
     self.add_quest = self.root4:AddChild(ImageButton("images/global_redux.xml", "button_carny_long_normal.tex", "button_carny_long_hover.tex", "button_carny_long_disabled.tex", "button_carny_long_down.tex"))
     self.add_quest:SetPosition(0, -80, 0)
     self.add_quest:SetTextSize(30)
-    self.add_quest:SetText(STRINGS_QB.ADD_QUEST)
     self.add_quest:SetScale(0.8)
+    local add_quest_text = self.editing_custom_quest and STRINGS_QB.EDIT_QUEST or STRINGS_QB.ADD_QUEST
+    devprint("add_quest:SetText", self.editing_custom_quest, self.editing_custom_quest and STRINGS_QB.EDIT_QUEST or STRINGS_QB.ADD_QUEST, add_quest_text)
+    self.add_quest:SetText("Test")
+    self.add_quest.text:SetAutoSizingString(add_quest_text,275)
     self.add_quest:SetOnClick(function()
         if not self.editing_custom_quest then
             for k,v in pairs(QUESTS) do
                 if k == self.new_custom_quest[STRINGS_QB.TITLE] then
-                    self.add_quest:SetText(STRINGS_QB.QUEST_EXISTS)
+                    --self.add_quest:SetText(STRINGS_QB.QUEST_EXISTS)
+                    self.add_quest.text:SetAutoSizingString(STRINGS_QB.QUEST_EXISTS,275)
+                    self.add_quest:Disable()
                     self.inst:DoTaskInTime(3,function()
-                        self.add_quest:SetText(STRINGS_QB.ADD_QUEST)
+                        self.add_quest:SetTextSize(30)
+                        self.add_quest.text:SetAutoSizingString(STRINGS_QB.ADD_QUEST,275)
+                        self.add_quest:Enable()
                     end)
                     return
                 end
@@ -1198,7 +1205,8 @@ function Quest_Board_Widget:CreateNewQuest()
         end
         self:AddQuestVerify()
     end)
-    self.add_quest.text:SetAutoSizingString(STRINGS_QB.ADD_QUEST,275)
+
+
 
     if TUNING.QUEST_COMPONENT.DEV_MODE then
         self.add_random_quest = self.root4:AddChild(ImageButton("images/global_redux.xml", "button_carny_long_normal.tex", "button_carny_long_hover.tex", "button_carny_long_disabled.tex", "button_carny_long_down.tex"))
@@ -1309,63 +1317,68 @@ end
 
 function Quest_Board_Widget:AddQuestVerify()
     local button1 = {
-    text = STRINGS_QB.YES,
-    cb = function()
-        if self.editing_custom_quest ~= self.new_custom_quest[STRINGS_QB.TITLE] then
-            SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["DeleteQuest"],self.editing_custom_quest)
-            TUNING.QUEST_COMPONENT.OWN_QUESTS[self.editing_custom_quest] = nil
-        end
-        self.editing_custom_quest = nil
-        local atlas_path = self.new_custom_quest[STRINGS_QB.VICTIM] and QUEST_BOARD.PREFABS_MOBS[self.new_custom_quest[STRINGS_QB.VICTIM]]
-        local victim = GetRewardPrefab(self.new_custom_quest[STRINGS_QB.VICTIM],QUEST_BOARD.PREFABS_MOBS) or "pigman"
-        local reward1_amount = self.new_custom_quest[STRINGS_QB.REWARD1.." "..STRINGS_QB.AMOUNT]
-        local reward2_amount = self.new_custom_quest[STRINGS_QB.REWARD2.." "..STRINGS_QB.AMOUNT]
-        local reward3_amount = self.new_custom_quest[STRINGS_QB.REWARD3.." "..STRINGS_QB.AMOUNT]
-        local quest = {
-        rewards = {
-        [GetRewardPrefab(self.new_custom_quest[STRINGS_QB.REWARD1],QUEST_BOARD.PREFABS_ITEMS)] = reward1_amount ~= 0 and reward1_amount or nil,
-        [GetRewardPrefab(self.new_custom_quest[STRINGS_QB.REWARD2],QUEST_BOARD.PREFABS_ITEMS)] = reward2_amount ~= 0 and reward2_amount or nil,
-        [GetRewardPrefab(self.new_custom_quest[STRINGS_QB.REWARD3],QUEST_BOARD.PREFABS_ITEMS)] = reward3_amount ~= 0 and reward3_amount or nil,
-        },
+        text = STRINGS_QB.YES,
+        cb = function()
+            if self.editing_custom_quest ~= self.new_custom_quest[STRINGS_QB.TITLE] then
+                SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["DeleteQuest"],self.editing_custom_quest)
+                TUNING.QUEST_COMPONENT.OWN_QUESTS[self.editing_custom_quest] = nil
+            end
+            local atlas_path = self.new_custom_quest[STRINGS_QB.VICTIM] and QUEST_BOARD.PREFABS_MOBS[self.new_custom_quest[STRINGS_QB.VICTIM]]
+            local victim = GetRewardPrefab(self.new_custom_quest[STRINGS_QB.VICTIM],QUEST_BOARD.PREFABS_MOBS) or "pigman"
+            local reward1_amount = self.new_custom_quest[STRINGS_QB.REWARD1.." "..STRINGS_QB.AMOUNT]
+            local reward2_amount = self.new_custom_quest[STRINGS_QB.REWARD2.." "..STRINGS_QB.AMOUNT]
+            local reward3_amount = self.new_custom_quest[STRINGS_QB.REWARD3.." "..STRINGS_QB.AMOUNT]
+            local quest = {
+                rewards = {
+                    [GetRewardPrefab(self.new_custom_quest[STRINGS_QB.REWARD1],QUEST_BOARD.PREFABS_ITEMS)] = reward1_amount ~= 0 and reward1_amount or nil,
+                    [GetRewardPrefab(self.new_custom_quest[STRINGS_QB.REWARD2],QUEST_BOARD.PREFABS_ITEMS)] = reward2_amount ~= 0 and reward2_amount or nil,
+                    [GetRewardPrefab(self.new_custom_quest[STRINGS_QB.REWARD3],QUEST_BOARD.PREFABS_ITEMS)] = reward3_amount ~= 0 and reward3_amount or nil,
+                },
 
-        amount = tonumber(self.new_custom_quest[STRINGS_QB.AMOUNT_OF_KILLS]) > 0 and tonumber(self.new_custom_quest[STRINGS_QB.AMOUNT_OF_KILLS]) or 10,
+                amount = tonumber(self.new_custom_quest[STRINGS_QB.AMOUNT_OF_KILLS]) > 0 and tonumber(self.new_custom_quest[STRINGS_QB.AMOUNT_OF_KILLS]) or 10,
 
-        name = self.new_custom_quest[STRINGS_QB.TITLE] or "No_Name_"..math.random(0,1000000000),
+                name = self.new_custom_quest[STRINGS_QB.TITLE] or "No_Name_"..math.random(0,1000000000),
 
-        description = self.new_custom_quest["text"] or "No Description",
+                description = self.new_custom_quest["text"] or "No Description",
 
-        points = tonumber(self.new_custom_quest[STRINGS_QB.POINTS]) or 100,
+                points = tonumber(self.new_custom_quest[STRINGS_QB.POINTS]) or 100,
 
-        difficulty = tonumber(self.new_custom_quest[STRINGS_QB.DIFFICULTY]) or 1,
+                difficulty = tonumber(self.new_custom_quest[STRINGS_QB.DIFFICULTY]) or 1,
 
-        atlas = atlas_path and atlas_path.atlas or nil,
+                atlas = atlas_path and atlas_path.atlas or nil,
 
-        author = self.owner and self.owner.name or nil,
-        }
-        if string.find(victim,"start_fn_") then
-        local GOAL_TABLE =  QUEST_BOARD.PREFABS_MOBS[string.gsub(victim,"start_fn_","")]
-        quest.counter_name = GOAL_TABLE and GOAL_TABLE["counter"]
-        quest.start_fn = victim
-        quest.victim = ""
-        quest.tex = GOAL_TABLE and GOAL_TABLE["tex"]
-        quest.atlas = GOAL_TABLE and GOAL_TABLE["atlas"]
-        else
-        quest.victim = victim
-        quest.tex = victim..".tex"
-        end
-        devprint("adding quest")
-        devdumptable(quest)
-        local json_quest = ZipAndEncodeStringBuffer(json.encode(quest))
-        SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["AddQuestToQuestPoolServer"],json_quest)
+                author = self.owner and self.owner.name or nil,
+            }
 
-        self.askquestion:Kill()
-        self.root4:Hide()
-        self.root:Show()
-        self.cancel_button:Show()
-        QUEST_BOARD.CUSTOM_QUEST = nil
-        self.new_custom_quest = {}
-        Networking_Announcement(STRINGS_QB.ADDED_SUCCESFULLY.." "..quest.name.."!")
-    end,
+            if string.find(victim,"start_fn_") then
+                local GOAL_TABLE =  QUEST_BOARD.PREFABS_MOBS[string.gsub(victim,"start_fn_","")]
+                quest.counter_name = GOAL_TABLE and GOAL_TABLE["counter"]
+                quest.start_fn = victim
+                quest.victim = ""
+                quest.tex = GOAL_TABLE and GOAL_TABLE["tex"]
+                quest.atlas = GOAL_TABLE and GOAL_TABLE["atlas"]
+            else
+                quest.victim = victim
+                quest.tex = victim..".tex"
+            end
+
+            devprint("adding quest")
+            devdumptable(quest)
+            local json_quest = ZipAndEncodeStringBuffer(json.encode(quest))
+            SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["AddQuestToQuestPoolServer"],json_quest)
+            if self.editing_custom_quest == nil and QUEST_COMPONENT.GIVE_CREATOR_QUEST ~= 0 then
+                SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["GiveQuest"], quest.name)
+            end
+            self.editing_custom_quest = nil
+
+            self.askquestion:Kill()
+            self.root4:Hide()
+            self.root:Show()
+            self.cancel_button:Show()
+            QUEST_BOARD.CUSTOM_QUEST = nil
+            self.new_custom_quest = {}
+            Networking_Announcement(STRINGS_QB.ADDED_SUCCESFULLY.." "..quest.name.."!")
+        end,
     }
     local button2 = {
     text = STRINGS_QB.NO,
