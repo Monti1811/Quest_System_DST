@@ -233,6 +233,7 @@ end
 --Helps the server to be more efficient with it's resources
 local quest_zip_buffer = {}
 
+--TODO: May make problems now that custom quests can be changed
 function GLOBAL.ZipAndEncodeStringBuffer(str)
 	if quest_zip_buffer[str] ~= nil then
 		return quest_zip_buffer[str]

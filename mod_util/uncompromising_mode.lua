@@ -51,9 +51,9 @@ local bosses = {
 
 	NORMAL = {
 
-		{name = "lightninghound", health = 3500, damage = 150, scale = 2,},
-		{name = "magmahound", health = 3500, damage = 150, scale = 2,},
-		{name = "sporehound", health = 3500, damage = 150, scale = 2,},
+		{name = "lightninghound", health = 3000, damage = 150, scale = 2,},
+		{name = "magmahound", health = 3000, damage = 150, scale = 2,},
+		{name = "sporehound", health = 3000, damage = 150, scale = 2,},
 		{name = "spider_trapdoor", health = 4000, damage = 150, scale = 2,},
 
 	},

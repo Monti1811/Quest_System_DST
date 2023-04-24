@@ -121,24 +121,12 @@ AddModRPCHandler("Quest_System_RPC", "AddCustomQuestMakerToServer", AddCustomQue
 --RPC to add a quest. Is sent form the quest board after creating the quest, is the first one that is called
 local function AddQuestToQuestPoolServer(inst,data)
 	devprint("AddQuestToQuestPoolServer",inst,data)
-	local quest = json.decode(DecodeAndUnzipString(data))
+	--local quest = json.decode(DecodeAndUnzipString(data))
 	--Don't run MakeQuest here as SendModRPCToShard also runs on this shard
 	SendModRPCToShard(GetShardModRPC("Quest_System_RPC","AddQuestToQuestPoolShards"),nil,data)
 	--for k,v in pairs(QUEST_COMPONENT.QUESTS) do
 		--print(k,v)
 	--end
-	--wait a bit and then give the creator requests if they want it
-	if QUEST_COMPONENT.GIVE_CREATOR_QUEST ~= 0 then
-		inst:DoTaskInTime(1,function()
-			for _ = 1, QUEST_COMPONENT.GIVE_CREATOR_QUEST do
-				local request = SpawnPrefab("request_quest_specific")
-				if request and inst.components.inventory then
-					request:SetQuest(quest.name)
-					inst.components.inventory:GiveItem(request)
-				end
-			end
-		end)
-	end
 end
 
 AddModRPCHandler("Quest_System_RPC", "AddQuestToQuestPoolServer", AddQuestToQuestPoolServer)
@@ -161,6 +149,19 @@ end
 
 AddModRPCHandler("Quest_System_RPC", "Make_Random_Quest", Make_Random_Quest)
 
+local function GiveQuest(inst, name)
+	inst:DoTaskInTime(0.5,function()
+		for _ = 1, QUEST_COMPONENT.GIVE_CREATOR_QUEST do
+			local request = SpawnPrefab("request_quest_specific")
+			if request and inst.components.inventory then
+				request:SetQuest(name)
+				inst.components.inventory:GiveItem(request)
+			end
+		end
+	end)
+end
+
+AddModRPCHandler("Quest_System_RPC", "GiveQuest", GiveQuest)
 
 ----------------------------ShardRPC-----------------------------------------
 

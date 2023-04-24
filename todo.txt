@@ -9,7 +9,7 @@
 --make quests burnable								: fixed
 --Fix temp_boni when too many (more than 5)			: fixed
 --Refactor custom quests to json encode				: fixed
---Mirror of merms also influence other players		: TODO
+--Mirror of merms also influence other players		: TODO (I think I will leave it as an intented feature)
 --rockavocadofruit.tex wird nicht in questbuch angezeigt: fixed
 
 gräber ausheben mission
