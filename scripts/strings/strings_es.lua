@@ -160,7 +160,8 @@ return {
 		ASK_REMOVE_QUEST = "¿Eliminar la búsqueda \"%s\"?",
 		MANAGE_QUESTS = "Gestionar las misiones personalizadas",
 		REQUIREMENTS = "Prerrequisitos",
-
+		EDIT_QUEST = "Editar búsqueda",
+		ASK_OVERWRITE_QUEST = "¿Quieres cambiar la búsqueda %s a esta versión? La quest será eliminada del registro de quest de todos los jugadores!",
 	},
 
 	QUEST_LOG = {

@@ -159,8 +159,8 @@ return {
 		ASK_REMOVE_QUEST = "Should the Quest \"%s\" be deleted?",
 		MANAGE_QUESTS = "Manage Custom Quests",
 		REQUIREMENTS = "Requirements",
-		
-
+		EDIT_QUEST = "Edit quest",
+		ASK_OVERWRITE_QUEST = "Do you want to change the quest %s to this version? The quest will be deleted from the quest log of all players!",
 
 	},
 

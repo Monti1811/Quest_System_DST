@@ -161,7 +161,8 @@ return {
 		ASK_REMOVE_QUEST = "Supprimer la quête \"%s\"?",
 		MANAGE_QUESTS = "Gérer les quêtes personnalisées",
 		REQUIREMENTS = "Prérequis",
-
+		EDIT_QUEST = "Modifier la quête",
+		ASK_OVERWRITE_QUEST = "Voulez-vous échanger la quête %s pour cette version ? La quête sera supprimée du journal des quêtes de tous les joueurs !",
 	},
 
 	QUEST_LOG = {

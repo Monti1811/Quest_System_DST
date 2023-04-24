@@ -160,7 +160,8 @@ return {
 		ASK_REMOVE_QUEST = "Soll die Mission \"%s\" gelöscht werden?",
 		MANAGE_QUESTS = "Benutzerdefinierte Missionen verwalten",
 		REQUIREMENTS = "Vorrausetzungen",
-
+		EDIT_QUEST = "Mission bearbeiten",
+		ASK_OVERWRITE_QUEST = "Willst du die Mission %s zu dieser Version ändern? Die Mission wird dann vom Missionshandbuch aller Spieler entfernt!",
 	},
 
 	QUEST_LOG = {

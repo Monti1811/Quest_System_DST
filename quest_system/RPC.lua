@@ -203,7 +203,7 @@ end
 AddShardModRPCHandler("Quest_System_RPC", "AddCustomQuestMakerToShards", AddCustomQuestMakerToShards)
 
 local function RemoveQuestShard(shard_id,name)
-	devprint("AddCustomQuestMakerToShards",shard_id,name)
+	devprint("RemoveQuestShard",shard_id,name)
 	if QUEST_COMPONENT.QUESTS[name] ~= nil then
         for _,v in ipairs(AllPlayers) do
 			local quest_component = v.components.quest_component
@@ -213,7 +213,7 @@ local function RemoveQuestShard(shard_id,name)
         end
         QUEST_COMPONENT.QUESTS[name] = nil
         QUEST_COMPONENT.OWN_QUESTS[name] = nil
-        SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "AddCustomQuestMakerToClient"),nil,name)
+        SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "DeleteQuestFromClient"),nil,name)
     end
 end
 

@@ -49,6 +49,24 @@ local button_positions = {
     {{-175,170,0},{-175,70,0},{-175,-30,0},{175,170,0},{175,70,0},{175,-30,0}},
 }
 
+local spinner_cat = {
+    --"Description",
+    {STRINGS_QB.REWARD1,QUEST_BOARD.PREFABS_ITEMS},
+    {STRINGS_QB.REWARD2,QUEST_BOARD.PREFABS_ITEMS},
+    {STRINGS_QB.REWARD3,QUEST_BOARD.PREFABS_ITEMS},
+    {STRINGS_QB.DIFFICULTY,QUEST_BOARD.NUMBERS["1_5"]},
+    {STRINGS_QB.VICTIM,QUEST_BOARD.PREFABS_MOBS},
+    --{STRINGS_QB.NUMBERS,QUEST_BOARD.NUMBERS["1_40"]},
+    --{STRINGS_QB.FOODS,QUEST_BOARD.PREFABS_FOODS},
+    --{STRINGS_QB.ITEMS,QUEST_BOARD.PREFABS_ITEMS},
+}
+
+local spinner_rewards = {
+    {STRINGS_QB.REWARD1.." "..STRINGS_QB.AMOUNT,QUEST_BOARD.NUMBERS["0_40"]},
+    {STRINGS_QB.REWARD2.." "..STRINGS_QB.AMOUNT,QUEST_BOARD.NUMBERS["0_40"]},
+    {STRINGS_QB.REWARD3.." "..STRINGS_QB.AMOUNT,QUEST_BOARD.NUMBERS["0_40"]},
+}
+
 local Quest_Board_Widget = Class(Screen, function(self, owner)
     local button_amount = 0
 	self.owner = owner
@@ -622,6 +640,65 @@ function Quest_Board_Widget:ShowCustomQuests()
         bg.points = bg:AddChild(Text(UIFONT, 25,STRINGS_QB.POINTS..": "..quest.points)) 
         bg.points:SetPosition(180,9)
 
+        bg.edit = bg:AddChild(ImageButton("images/global_redux.xml", "radiobutton_filled_gold_new.tex"))
+        bg.edit:SetPosition(195, 40, 0)
+        bg.edit:SetScale(0.5)
+        bg.edit:SetHoverText(STRINGS_QB.EDIT_QUEST)
+        bg.edit:SetOnClick( function()
+            self.root5:Kill()
+            self:CreateNewQuest()
+            self.editing_custom_quest = quest.name
+
+            --Rewards
+            local k = 1
+            for prefab,amount in pairs(quest.rewards) do
+                local reward_tab = STRINGS_QB["REWARD"..k]
+                self.new_custom_quest[reward_tab] = prefab
+                local text = GetRewardString(prefab,amount) or STRINGS.NAMES[string.upper(prefab)]
+                self.new_custom_quest[reward_tab.."_text"] = text
+                self["text_button_"..k].button.text:SetAutoSizingString(text,140)
+                self.new_custom_quest[reward_tab.." "..STRINGS_QB.AMOUNT] = amount
+                self["spinner_rewards_"..k].spinner:SetSelected(amount)
+                k = k + 1
+            end
+            --Add the remaining rewards that are nonexistent as a 0 amount reward
+            if k < 4 then
+                for i = k, 3 do
+                    local reward_tab = STRINGS_QB["REWARD"..i]
+                    self.new_custom_quest[reward_tab.." "..STRINGS_QB.AMOUNT] = 0
+                    self["spinner_rewards_"..i].spinner:SetSelected(0)
+                end
+            end
+            --Victim
+            local victim_text
+            local victim_data
+            if quest.start_fn and type(quest.start_fn) == "string" and string.find(quest.start_fn,"start_fn_") then
+                local fn = string.gsub(quest.start_fn,"start_fn_","")
+                local victim = QUEST_BOARD.PREFABS_MOBS[fn]
+                victim_text = victim.text
+                victim_data = victim.data
+            elseif quest.victim then
+                victim_text = STRINGS.NAMES[string.upper(quest.victim)]
+                victim_data = quest.victim
+            end
+            self.new_custom_quest[STRINGS_QB.VICTIM] = victim_data
+            self["text_button_5"].button.text:SetAutoSizingString(victim_text,230)
+            --Difficulty
+            self.new_custom_quest[STRINGS_QB.DIFFICULTY] = quest.difficulty
+            self["spinner_4"].spinner:SetSelected(quest.difficulty)
+            --Amount
+            self.new_custom_quest[STRINGS_QB.AMOUNT_OF_KILLS] = quest.amount
+            self["spinner_6"].textbox:SetString(quest.amount)
+            --Points
+            self.new_custom_quest[STRINGS_QB.POINTS] = quest.points
+            self["spinner_7"].textbox:SetString(quest.points)
+            --Title
+            self.new_custom_quest[STRINGS_QB.TITLE] = quest.name
+            self["spinner_rewards_4"].textbox:SetString(quest.name)
+            --Description
+            self.new_custom_quest.text = quest.description
+        end)
+
         bg.remove = bg:AddChild(ImageButton("images/global_redux.xml", "close.tex"))
         bg.remove:SetPosition(235, 40, 0)
         bg.remove:SetScale(0.8)
@@ -709,23 +786,6 @@ function Quest_Board_Widget:CheckLevelRewards()
     end)
 end
 
-local spinner_cat = {
-    --"Description",
-    {STRINGS_QB.REWARD1,QUEST_BOARD.PREFABS_ITEMS},
-    {STRINGS_QB.REWARD2,QUEST_BOARD.PREFABS_ITEMS},
-    {STRINGS_QB.REWARD3,QUEST_BOARD.PREFABS_ITEMS},
-    {STRINGS_QB.DIFFICULTY,QUEST_BOARD.NUMBERS["1_5"]},
-    {STRINGS_QB.VICTIM,QUEST_BOARD.PREFABS_MOBS},
-    --{STRINGS_QB.NUMBERS,QUEST_BOARD.NUMBERS["1_40"]},
-    --{STRINGS_QB.FOODS,QUEST_BOARD.PREFABS_FOODS},
-    --{STRINGS_QB.ITEMS,QUEST_BOARD.PREFABS_ITEMS},
-}
-
-local spinner_rewards = {
-    {STRINGS_QB.REWARD1.." "..STRINGS_QB.AMOUNT,QUEST_BOARD.NUMBERS["0_40"]},
-    {STRINGS_QB.REWARD2.." "..STRINGS_QB.AMOUNT,QUEST_BOARD.NUMBERS["0_40"]},
-    {STRINGS_QB.REWARD3.." "..STRINGS_QB.AMOUNT,QUEST_BOARD.NUMBERS["0_40"]},
-}
 
 local search_subwords = function( search, str, sub_len )
     local str_len = string.len(str)
@@ -1125,13 +1185,15 @@ function Quest_Board_Widget:CreateNewQuest()
     self.add_quest:SetText(STRINGS_QB.ADD_QUEST)
     self.add_quest:SetScale(0.8)
     self.add_quest:SetOnClick(function()
-        for k,v in pairs(QUESTS) do
-            if k == self.new_custom_quest[STRINGS_QB.TITLE] then
-                self.add_quest:SetText(STRINGS_QB.QUEST_EXISTS)
-                self.inst:DoTaskInTime(3,function() 
-                    self.add_quest:SetText(STRINGS_QB.ADD_QUEST)
-                end)
-                return
+        if not self.editing_custom_quest then
+            for k,v in pairs(QUESTS) do
+                if k == self.new_custom_quest[STRINGS_QB.TITLE] then
+                    self.add_quest:SetText(STRINGS_QB.QUEST_EXISTS)
+                    self.inst:DoTaskInTime(3,function()
+                        self.add_quest:SetText(STRINGS_QB.ADD_QUEST)
+                    end)
+                    return
+                end
             end
         end
         self:AddQuestVerify()
@@ -1155,11 +1217,30 @@ function Quest_Board_Widget:CreateNewQuest()
     self.back_button:SetPosition(-410, -160, 0)
     self.back_button:SetOnClick(function()
         self.root4:Hide()
-        self.root:Show()
         self.list1:Hide()
         self.list2:Hide()
         self.list3:Hide()
         self.list5:Hide()
+        if self.editing_custom_quest then
+            --Set all edited values back  to nil
+            self.editing_custom_quest = nil
+            self.new_custom_quest[STRINGS_QB.DIFFICULTY] = nil
+            self.new_custom_quest[STRINGS_QB.AMOUNT_OF_KILLS] = nil
+            self.new_custom_quest[STRINGS_QB.POINTS] = nil
+            self.new_custom_quest[STRINGS_QB.TITLE] = nil
+            self.new_custom_quest.text = ""
+            for k,v in pairs(spinner_cat) do
+                self.new_custom_quest[v[1]] = nil
+                self.new_custom_quest[v[1].."_text"] = nil
+                self.new_custom_quest[v[1].."_modname"] = nil
+                if k < 4 then
+                    self.new_custom_quest[v[1].." "..STRINGS_QB.AMOUNT] = 1
+                end
+            end
+            self:ShowCustomQuests()
+            return
+        end
+        self.root:Show()
     end)
 end
 
@@ -1230,49 +1311,61 @@ function Quest_Board_Widget:AddQuestVerify()
     local button1 = {
     text = STRINGS_QB.YES,
     cb = function()
+        if self.editing_custom_quest ~= self.new_custom_quest[STRINGS_QB.TITLE] then
+            SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["DeleteQuest"],self.editing_custom_quest)
+            TUNING.QUEST_COMPONENT.OWN_QUESTS[self.editing_custom_quest] = nil
+        end
+        self.editing_custom_quest = nil
         local atlas_path = self.new_custom_quest[STRINGS_QB.VICTIM] and QUEST_BOARD.PREFABS_MOBS[self.new_custom_quest[STRINGS_QB.VICTIM]]
         local victim = GetRewardPrefab(self.new_custom_quest[STRINGS_QB.VICTIM],QUEST_BOARD.PREFABS_MOBS) or "pigman"
+        local reward1_amount = self.new_custom_quest[STRINGS_QB.REWARD1.." "..STRINGS_QB.AMOUNT]
+        local reward2_amount = self.new_custom_quest[STRINGS_QB.REWARD2.." "..STRINGS_QB.AMOUNT]
+        local reward3_amount = self.new_custom_quest[STRINGS_QB.REWARD3.." "..STRINGS_QB.AMOUNT]
         local quest = {
-            rewards = {
-                [GetRewardPrefab(self.new_custom_quest[STRINGS_QB.REWARD1],QUEST_BOARD.PREFABS_ITEMS)] = self.new_custom_quest[STRINGS_QB.REWARD1.." "..STRINGS_QB.AMOUNT] or 1,
-                [GetRewardPrefab(self.new_custom_quest[STRINGS_QB.REWARD2],QUEST_BOARD.PREFABS_ITEMS)] = self.new_custom_quest[STRINGS_QB.REWARD2.." "..STRINGS_QB.AMOUNT] or 1,
-                [GetRewardPrefab(self.new_custom_quest[STRINGS_QB.REWARD3],QUEST_BOARD.PREFABS_ITEMS)] = self.new_custom_quest[STRINGS_QB.REWARD3.." "..STRINGS_QB.AMOUNT] or 1,
-            },
+        rewards = {
+        [GetRewardPrefab(self.new_custom_quest[STRINGS_QB.REWARD1],QUEST_BOARD.PREFABS_ITEMS)] = reward1_amount ~= 0 and reward1_amount or nil,
+        [GetRewardPrefab(self.new_custom_quest[STRINGS_QB.REWARD2],QUEST_BOARD.PREFABS_ITEMS)] = reward2_amount ~= 0 and reward2_amount or nil,
+        [GetRewardPrefab(self.new_custom_quest[STRINGS_QB.REWARD3],QUEST_BOARD.PREFABS_ITEMS)] = reward3_amount ~= 0 and reward3_amount or nil,
+        },
 
-            amount = tonumber(self.new_custom_quest[STRINGS_QB.AMOUNT_OF_KILLS]) > 0 and tonumber(self.new_custom_quest[STRINGS_QB.AMOUNT_OF_KILLS]) or 10,
+        amount = tonumber(self.new_custom_quest[STRINGS_QB.AMOUNT_OF_KILLS]) > 0 and tonumber(self.new_custom_quest[STRINGS_QB.AMOUNT_OF_KILLS]) or 10,
 
-            name = self.new_custom_quest[STRINGS_QB.TITLE] or "No_Name_"..math.random(0,1000000000),
+        name = self.new_custom_quest[STRINGS_QB.TITLE] or "No_Name_"..math.random(0,1000000000),
 
-            description = self.new_custom_quest["text"] or "No Description",
+        description = self.new_custom_quest["text"] or "No Description",
 
-            points = tonumber(self.new_custom_quest[STRINGS_QB.POINTS]) or 100,
+        points = tonumber(self.new_custom_quest[STRINGS_QB.POINTS]) or 100,
 
-            difficulty = tonumber(self.new_custom_quest[STRINGS_QB.DIFFICULTY]) or 1,
+        difficulty = tonumber(self.new_custom_quest[STRINGS_QB.DIFFICULTY]) or 1,
 
-            atlas = atlas_path and atlas_path.atlas ~= "images/victims.xml" and atlas_path.atlas,
+        atlas = atlas_path and atlas_path.atlas or nil,
 
-            author = self.owner and self.owner.name or nil,
+        author = self.owner and self.owner.name or nil,
         }
         if string.find(victim,"start_fn_") then
-            local GOAL_TABLE =  QUEST_BOARD.PREFABS_MOBS[string.gsub(victim,"start_fn_","")]
-            quest.counter_name = GOAL_TABLE and GOAL_TABLE["counter"]
-            quest.start_fn = victim
-            quest.victim = ""
-            quest.tex = GOAL_TABLE and GOAL_TABLE["tex"]
+        local GOAL_TABLE =  QUEST_BOARD.PREFABS_MOBS[string.gsub(victim,"start_fn_","")]
+        quest.counter_name = GOAL_TABLE and GOAL_TABLE["counter"]
+        quest.start_fn = victim
+        quest.victim = ""
+        quest.tex = GOAL_TABLE and GOAL_TABLE["tex"]
+        quest.atlas = GOAL_TABLE and GOAL_TABLE["atlas"]
         else
-            quest.victim = victim
-            quest.tex = victim..".tex"
+        quest.victim = victim
+        quest.tex = victim..".tex"
         end
+        devprint("adding quest")
+        devdumptable(quest)
         local json_quest = ZipAndEncodeStringBuffer(json.encode(quest))
         SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["AddQuestToQuestPoolServer"],json_quest)
 
         self.askquestion:Kill()
         self.root4:Hide()
         self.root:Show()
+        self.cancel_button:Show()
         QUEST_BOARD.CUSTOM_QUEST = nil
         self.new_custom_quest = {}
-            Networking_Announcement(STRINGS_QB.ADDED_SUCCESFULLY.." "..quest.name.."!")
-            end,
+        Networking_Announcement(STRINGS_QB.ADDED_SUCCESFULLY.." "..quest.name.."!")
+    end,
     }
     local button2 = {
     text = STRINGS_QB.NO,
@@ -1281,7 +1374,8 @@ function Quest_Board_Widget:AddQuestVerify()
     end,
     }
 
-    self.askquestion = self.root4:AddChild(Templates_R.CurlyWindow(450,300,nil,{button1,button2},nil,STRINGS_QB.ASK_ADD_QUEST))
+    local question = self.editing_custom_quest and string.format(STRINGS_QB.ASK_OVERWRITE_QUEST, self.editing_custom_quest) or STRINGS_QB.ASK_ADD_QUEST
+    self.askquestion = self.root4:AddChild(Templates_R.CurlyWindow(450,300,nil,{button1,button2},nil,question))
     self.askquestion.body:SetSize(40)
     self.askquestion.body:SetPosition(0, 70)
 end

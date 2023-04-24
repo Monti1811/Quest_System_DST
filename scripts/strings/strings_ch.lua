@@ -159,7 +159,9 @@ return {
 		REMOVE_QUEST = "从任务库中删除任务",
 		ASK_REMOVE_QUEST = "应该删除任务\"%s\"吗？",
 		MANAGE_QUESTS = "管理自定义任务",
-
+		REQUIREMENTS = "要求",
+		EDIT_QUEST = "编辑任务",
+		ASK_OVERWRITE_QUEST = "你想把任务%s改为这个版本吗？该任务将从所有玩家的任务日志中删除！",
 	},
 
 	QUEST_LOG = {
