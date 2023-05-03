@@ -107,7 +107,68 @@ AddPlayerPostInit(function(inst)
         return old_OnDespawn(_inst,migrationdata,...)
     end
 
+    if QUEST_COMPONENT.KEEP_LEVELS == 1 then
+        local old_OnSave = inst.OnSave or function()  end
+        inst.OnSave = function(...)
+            if not GLOBAL.TheWorld.ismastershard then
+                local data = {
+                    [inst.userid] = {
+                        inst.components.quest_component.level,
+                        inst.components.quest_component.points,
+                    }
+                }
+                --Only send to values to the mastershard
+                SendModRPCToShard(GetShardModRPC("Quest_System_RPC","SubmitShardLevels"),1,json.encode(data))
+                return
+            end
+            if QUEST_COMPONENT.CURRENT_LEVELS then
+                QUEST_COMPONENT.CURRENT_LEVELS[inst.userid] = {
+                    inst.components.quest_component.level,
+                    inst.components.quest_component.points,
+                }
+                return old_OnSave(...)
+            end
+        end
+        local old_OnNewSpawn = inst.OnNewSpawn
+        inst.OnNewSpawn = function(...)
+            local levels = QUEST_COMPONENT.CURRENT_LEVELS[inst.userid]
+            if levels ~= nil then
+                inst:DoTaskInTime(1.5, function()
+                    inst.components.quest_component:SetLevel(levels[1])
+                    inst.components.quest_component:SetPoints(levels[2])
+                end)
+            end
+            return old_OnNewSpawn(...)
+        end
+    end
 end)
+
+if QUEST_COMPONENT.KEEP_LEVELS == 1 then
+    AddSimPostInit(function()
+        --Let the game save the levels of the player when the reset is started
+        local TheNetTable = GLOBAL.getmetatable(GLOBAL.TheNet).__index
+        local old_SendWorldResetRequestToServer = TheNetTable.SendWorldResetRequestToServer
+        TheNetTable.SendWorldResetRequestToServer = function(self)
+            --devprint("SendWorldResetRequestToServer", self)
+            --Save all levels from the mastershard
+            for _, player in ipairs(GLOBAL.AllPlayers) do
+                QUEST_COMPONENT.CURRENT_LEVELS[player.userid] = {
+                    player.components.quest_component.level,
+                    player.components.quest_component.points,
+                }
+            end
+            --Save all levels from the different shards
+            for shard_id in pairs(Shard_GetConnectedShards()) do
+                SendModRPCToShard(GetShardModRPC("Quest_System_RPC","GetShardLevels"),shard_id)
+            end
+            --Add a delay so that there is enough time to transmit the levels from the other shards
+            GLOBAL.TheWorld:DoTaskInTime(1, function()
+                GLOBAL.SaveOwnQuests()
+                old_SendWorldResetRequestToServer(self)
+            end)
+        end
+    end)
+end
 
 
 

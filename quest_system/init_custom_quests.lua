@@ -219,6 +219,10 @@ AddSimPostInit(function()
 		print("[Quest System] own_quests.lua loaded! Amount :",quests_own)
 	end
     TheWorld:ListenForEvent("ms_playerjoined",AddLocalQuests)
+
+	--Load the old level values
+	QUEST_COMPONENT.CURRENT_LEVELS = DataContainer:GetValue("quest_system_levels") or {}
+
 end)
 
 -------------------------------------------Global function to add or save custom quests-------------------------------------------------------
@@ -228,6 +232,7 @@ function GLOBAL.SaveOwnQuests()
     print("[Quest System] Saving own quests!")
     DataContainer:SetValue("quest_system", QUEST_COMPONENT.OWN_QUESTS)
     DataContainer:SetValue("quest_system_questmakers",QUEST_COMPONENT.CAN_CREATE_CUSTOM_QUESTS)
+	DataContainer:SetValue("quest_system_levels",QUEST_COMPONENT.CURRENT_LEVELS)
     DataContainer:Save()
     --[[if QUEST_COMPONENT.OWN_QUESTS ~= nil then
         local text = json.encode(QUEST_COMPONENT.OWN_QUESTS)

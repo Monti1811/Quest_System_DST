@@ -231,6 +231,34 @@ end
 
 AddShardModRPCHandler("Quest_System_RPC", "ChangeBlackGlommerFuelCounter", ChangeBlackGlommerFuelCounter)
 
+if QUEST_COMPONENT.KEEP_LEVELS == 1 then
+
+	local function SubmitShardLevels(shard_id, data)
+		devprint("SubmitShardLevels",shard_id, data)
+		local level_data = json.decode(data)
+		for userid, lvl in pairs(level_data) do
+			QUEST_COMPONENT.CURRENT_LEVELS[userid] = lvl
+		end
+	end
+
+	AddShardModRPCHandler("Quest_System_RPC", "SubmitShardLevels", SubmitShardLevels)
+
+	local function GetShardLevels(shard_id)
+		devprint("GetShardLevels",shard_id)
+		local data = {}
+		for _, player in ipairs(GLOBAL.AllPlayers) do
+			data[player.userid] = {
+				player.components.quest_component.level,
+				player.components.quest_component.points,
+			}
+		end
+		--Only send to values to the mastershard
+		SendModRPCToShard(GetShardModRPC("Quest_System_RPC","SubmitShardLevels"),1,json.encode(data))
+	end
+
+	AddShardModRPCHandler("Quest_System_RPC", "GetShardLevels", GetShardLevels)
+
+end
 ---------------------------ClientRPC----------------------------------
 
 --RPC to add a certain quest to a client. Better than a netvar as I can change the name so I don't need to make one for each different quest

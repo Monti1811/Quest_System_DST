@@ -156,7 +156,7 @@ local Quest_Component = Class(function(self, inst)
     self.boss_place = nil
 
     self.completed_quests = 0
-	--self.accepted_level_rewards = nil
+	self.accepted_level_rewards = "000000000000000000000000000000000000000"
     self.quest_data = {}
 
 	self.selectable_quests = {}
@@ -437,12 +437,13 @@ function Quest_Component:LevelUp()
 end
 
 function Quest_Component:SetLevel(new_level)
+	devprint("Quest_Component:SetLevel", new_level, self.level)
 	if self.level == new_level then return end
 	if self.level > new_level then
 		self.level = new_level
 		self:RecalculatePointCap()
 	else
-		for _ = self.level,new_level do
+		for _ = self.level, (new_level - 1) do
     		self.inst.components.quest_component:LevelUp()
     	end
     end

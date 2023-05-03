@@ -1,7 +1,7 @@
 name = "Quest System [BETA]"
 description = "Introduces a quest system into the game!\n\nOpen your quest log to see which quests you can do.\nBuild the quest board to accept new quests or be lucky enough to find requests in the wild!\n\nLevel up, get stronger and compete against powerful Boss Creatures to receive rewards!"
 author = "Monti"
-version = "1.0.106"
+version = "1.0.107"
 
 forumthread = ""
 
@@ -496,6 +496,18 @@ Title("Level System",""),
             {description = "Enormous", data = 2.5, hover = "500% of normal bonus"}, 
         },
         default = 1,
+    },
+
+    {
+        name = "KEEP_LEVELS",
+        label = "Keep Levels",
+        hover = "Choose if levels are kept if the server is regenerated or not",
+        options =
+        {
+            {description = "Reset", data = 0, hover = "Levels are reset during regeneration"},
+            {description = "Kept", data = 1, hover = "Levels are kept during regeneration"},
+        },
+        default = 0,
     },
 
 Title("Mod Quests",""),
