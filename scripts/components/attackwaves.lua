@@ -48,16 +48,79 @@ local function StopBrain(inst)
 	inst:SetBrain(nil)
 end
 
+local function OnDeath(inst)
+	local pos = inst:GetPosition()
+	TheWorld:DoTaskInTime(0, function()
+		local ents = TheSim:FindEntities(pos.x, pos.y, pos.z, 3, { "monkey_token" }, nil, nil)
+		if ents[1] and ents[1].prefab == "cursed_monkey_token" then
+			ents[1]:Remove()
+		end
+	end)
+end
+
+local post_fns = {
+	powder_monkey = function(inst)
+		inst:ListenForEvent("death", OnDeath)
+	end,
+	prime_mate = function(inst)
+		local oar = SpawnPrefab("oar_monkey")
+		oar:AddTag("personal_possession")
+		inst.components.inventory:GiveItem(oar)
+		inst.components.inventory:Equip(oar)
+		inst:ListenForEvent("death", OnDeath)
+	end
+}
+
 local AttackWaves = Class(function(self,inst)
 	self.inst = inst
 	self.attacking_creatures = {
-		{"killerbee","frog","spider","bat","hedgehound","beeguard"
-		--"mosquito"
+		{
+			"killerbee",
+			"frog",
+			"spider",
+			"bat",
+			"hedgehound",
+			"beeguard",
+			--"mosquito",
 		},
-		{"hound",function() return isSummer() and "firehound" or "icehound" end,},--"beeguard",--"spider_water","mutatedhound","eyeofterror_mini","slurper","molebat"},
-		{"bunnyman","spider_warrior","spider_hider","spider_spitter","spider_moon","powder_monkey","spider_healer"},
-		{"walrus","grassgator","beefalo","worm","merm","pigman","krampus","prime_mate",},
-		{"bishop","rook","knight","leif",function() return isSummer() and "koalefant_summer" or "koalefant_winter" end,"warglet", --[["rocky",]]},	--rocky is too strong I think, takes too much time to kill
+		{
+			"hound",
+			function() return isSummer() and "firehound" or "icehound" end,
+			"beeguard",
+			"spider_water",
+			"mutatedhound",
+			"eyeofterror_mini",
+			"slurper",
+			"molebat",
+		},
+		{
+			"bunnyman",
+			"spider_warrior",
+			"spider_hider",
+			"spider_spitter",
+			"spider_moon",
+			"powder_monkey",
+			"spider_healer",
+		},
+		{
+			"walrus",
+			"grassgator",
+			"beefalo",
+			"worm",
+			"merm",
+			"pigman",
+			"krampus",
+			"prime_mate",
+		},
+		{
+			"bishop",
+			"rook",
+			"knight",
+			"leif",
+			function() return isSummer() and "koalefant_summer" or "koalefant_winter" end,
+			"warglet",
+			--[["rocky",]] --rocky is too strong I think, takes too much time to kill
+		},
 	}
 	self.current_attacking_creatures = {}
 	self.attack_num = {}
@@ -125,6 +188,9 @@ local function SummonSpawn(self,pt,difficulty)
         if spawn ~= nil then
             spawn.Physics:Teleport(spawn_pt:Get())
             spawn:FacePoint(pt)
+			if post_fns[spawn.prefab] ~= nil then
+				post_fns[spawn.prefab](spawn)
+			end
             SpawnPrefab("shadow_puff_large_front").Transform:SetPosition(spawn_pt:Get())
             if spawn.components.spawnfader ~= nil then
                 spawn.components.spawnfader:FadeIn()
@@ -278,6 +344,9 @@ function AttackWaves:DoAttackWave(player,target,attacksize,delta)
 				if creature.components.combat then
 					--print("setting target",v,target)
 					creature.components.combat:SetTarget(target)
+				end
+				if not creature:IsValid() then
+					current_attacking_creatures[target.prefab] = nil
 				end
 			end
 			self.DoAttackWave_task[player.userid][target.prefab] = self.inst:DoTaskInTime(5,function() self:DoAttackWave(player,target,attacksize,delta) end)
