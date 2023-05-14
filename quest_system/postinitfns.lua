@@ -108,7 +108,7 @@ AddPlayerPostInit(function(inst)
     end
 
     if QUEST_COMPONENT.KEEP_LEVELS == 1 then
-        local old_OnSave = inst.OnSave or function()  end
+        local old_OnSave = inst.OnSave or function() end
         inst.OnSave = function(...)
             if not GLOBAL.TheWorld.ismastershard then
                 local data = {
@@ -119,15 +119,15 @@ AddPlayerPostInit(function(inst)
                 }
                 --Only send to values to the mastershard
                 SendModRPCToShard(GetShardModRPC("Quest_System_RPC","SubmitShardLevels"),1,json.encode(data))
-                return
+                return old_OnSave(...)
             end
             if QUEST_COMPONENT.CURRENT_LEVELS then
                 QUEST_COMPONENT.CURRENT_LEVELS[inst.userid] = {
                     inst.components.quest_component.level,
                     inst.components.quest_component.points,
                 }
-                return old_OnSave(...)
             end
+            return old_OnSave(...)
         end
         local old_OnNewSpawn = inst.OnNewSpawn
         inst.OnNewSpawn = function(...)
