@@ -197,7 +197,7 @@ local function createQuestCard(self,quest, x, y, scale, num)
     self["quest_"..num].victim:EnableWordWrap(true)
     self["quest_"..num].victim:EnableWhitespaceWrap(true)
 
-    local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or "images/avatars.xml"
+    local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml") or "images/avatars.xml"
     self["quest_"..num].image = self["quest__"..num]:AddChild(Image(target_atlas, quest.tex or "avatar_unknown.tex"))
     self["quest_"..num].image:SetPosition(x, y - 80)
     self["quest_"..num].image:MoveToFront()

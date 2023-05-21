@@ -377,7 +377,7 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
     self.__show_quest2.victim:EnableWordWrap(true)
     self.__show_quest2.victim:EnableWhitespaceWrap(true)
 
-    local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or "images/avatars.xml"
+    local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml") or "images/avatars.xml"
     self.__show_quest2.image = self.show_quest:AddChild(Image(target_atlas, quest.tex or "avatar_unknown.tex"))
     self.__show_quest2.image:SetPosition(progress_x, progress_y + 10)
     if quest.start_fn and type(quest.start_fn) == "string" and string.find(quest.start_fn,"start_fn_") then
@@ -1319,7 +1319,7 @@ function Quest_Board_Widget:AddQuestVerify()
     local button1 = {
         text = STRINGS_QB.YES,
         cb = function()
-            if self.editing_custom_quest ~= self.new_custom_quest[STRINGS_QB.TITLE] then
+            if self.editing_custom_quest ~= nil and self.editing_custom_quest ~= self.new_custom_quest[STRINGS_QB.TITLE] then
                 SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["DeleteQuest"],self.editing_custom_quest)
                 TUNING.QUEST_COMPONENT.OWN_QUESTS[self.editing_custom_quest] = nil
             end

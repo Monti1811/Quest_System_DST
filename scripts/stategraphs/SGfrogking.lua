@@ -1114,7 +1114,6 @@ local states =
 
 local function OnUnfreezeTask(inst)
     inst.sg.mem._unfreezetask = nil
-    inst:UpdateLevel()
 end
 
 CommonStates.AddFrozenStates(states,

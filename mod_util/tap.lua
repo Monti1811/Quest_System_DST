@@ -47,7 +47,7 @@ AddSimPostInit(function()
 		local prefab = v.text
 		local name = GLOBAL.STRINGS.NAMES[string.upper(prefab)]
 		v.text = name and "Build x "..name or "No Name"
-		v.counter = v.text
+		v.counter = name
 	end
 	GLOBAL.AddCustomGoals(goals,"TheArchitectPack")
 end)
