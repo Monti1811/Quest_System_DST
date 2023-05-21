@@ -114,9 +114,9 @@ modimport("quest_system/recipes.lua")				--loading new recipes
 if GLOBAL.TUNING.QUEST_COMPONENT.DEV_MODE then
 	modimport("quest_system/random_quest_generator.lua") --load the random quest generator
 	--Debug
-	--GLOBAL.CHEATS_ENABLED = true
-	--GLOBAL.require( 'debugkeys' )
-	--GLOBAL.require( 'debugprint' )
+	GLOBAL.CHEATS_ENABLED = true
+	GLOBAL.require( 'debugkeys' )
+	GLOBAL.require( 'debugprint' )
 
 end
 
@@ -130,9 +130,11 @@ local additional_content = {
 	cherry_forest = 1289779251,
 	feast_famine = 1908933602,
 	epic = 1615010027,
+	functional_medal = 1909182187,
 }
 
 for name,num in pairs(additional_content) do
+	devprint("adding mod content", name, num, GetModConfigData(string.upper(name)),GLOBAL.KnownModIndex:IsModEnabledAny("workshop-"..num))
 	if GetModConfigData(string.upper(name)) == true and GLOBAL.KnownModIndex:IsModEnabledAny("workshop-"..num) then
 		if kleifileexists(MODS_ROOT..modname.."/images/victims_"..name..".xml") then
 			table.insert(Assets,Asset("ATLAS", "images/victims_"..name..".xml"))
@@ -141,6 +143,13 @@ for name,num in pairs(additional_content) do
 		modimport("mod_util/"..name..".lua")
 	end
 end
+
+AddSimPostInit(function()
+	if GetModConfigData("MUSHA") == true and GLOBAL.Prefabs.musha ~= nil then
+		modimport("mod_util/musha.lua")
+	end
+end)
+
 
 --Insight support
 modimport("mod_util/insight.lua")

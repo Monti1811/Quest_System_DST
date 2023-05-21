@@ -1,7 +1,7 @@
 name = "Quest System [BETA]"
 description = "Introduces a quest system into the game!\n\nOpen your quest log to see which quests you can do.\nBuild the quest board to accept new quests or be lucky enough to find requests in the wild!\n\nLevel up, get stronger and compete against powerful Boss Creatures to receive rewards!"
 author = "Monti"
-version = "1.0.107"
+version = "1.0.110"
 
 forumthread = ""
 
@@ -518,6 +518,8 @@ Title("Mod Quests",""),
     MakeAdditionalModConfig("LEGION","Legion"),
     MakeAdditionalModConfig("CHERRY_FOREST","Cherry Forest"),
     MakeAdditionalModConfig("FEAST_FAMINE","Feast and Famine"),
+    MakeAdditionalModConfig("MUSHA","Musha"),
+    MakeAdditionalModConfig("FUNCTIONAL_MEDAL","Functional Medal"),
 
 Title("Miscellaneous",""),
 
