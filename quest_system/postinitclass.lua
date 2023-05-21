@@ -351,6 +351,19 @@ end
 
 AddComponentPostInit("sleepingbaguser", OnSleep)
 
+local function OnCatchFish(self)
+	local old__LaunchFishProjectile = self._LaunchFishProjectile
+	function self:_LaunchFishProjectile(fish, ...)
+		local ret = old__LaunchFishProjectile(self,fish, ...)
+		if self.fisher then
+			self.fisher:PushEvent("caught_fish",fish)
+		end
+		return ret
+	end
+end
+
+AddComponentPostInit("oceanfishingrod", OnCatchFish)
+
 --Stop players from attacking the victims in attackwaves
 local function CanBeAttacked(self)
 	local old_CanBeAttacked = self.CanBeAttacked

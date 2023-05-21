@@ -2252,66 +2252,26 @@ local quests = {
 	points = 225,
 	start_fn = function(inst,amount,quest_name)
 		local fishes = GetCurrentAmount(inst,quest_name)
-		local old_ondone = function() end
-		local OnCatchFish = function() end
-		local OnDisable = function() end
-		local OnEquipRod = function() end
-		local OnUnEquipRod = function() end
-		local function OnNight(inst,isnight)
-			if not isnight then 
-				OnDisable(inst)
-				return 
-			end
-			OnEquipRod = function (inst,data)
-				if data and data.eslot == EQUIPSLOTS.HANDS and data.item then
-					if data.item.prefab == "oceanfishingrod" and data.item.components.oceanfishingrod ~= nil then
-						old_ondone = data.item.components.oceanfishingrod.ondonefishing or function() end
-						data.item.components.oceanfishingrod.ondonefishing = function(item,reason,lost_tackle,fisher,target,...)
-							OnCatchFish(item,reason,lost_tackle,fisher,target)
-							return unpack{old_ondone(item,reason,lost_tackle,fisher,target,...)}
-						end
-					end
-				end
-			end
-			OnUnEquipRod = function (inst,data)
-				if data and data.eslot == EQUIPSLOTS.HANDS and data.item then
-					if data.item.prefab == "oceanfishingrod" and data.item.components.oceanfishingrod ~= nil and old_ondone ~= nil then
-						data.item.components.oceanfishingrod.ondonefishing = old_ondone
-					end
-				end
-			end
-			OnCatchFish = function(rod,reason,lost_tackle,fisher,target)
-				if reason == "success" and lost_tackle == false then
-					fishes = fishes + 1
-					inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
-					if fishes >= amount then
-						rod.components.oceanfishingrod.ondonefishing = old_ondone
-						inst:RemoveEventCallback("equip",OnEquipRod)
-						inst:RemoveEventCallback("unequip",OnUnEquipRod)
-						inst:StopWatchingWorldState("isnight",OnNight)
-					end
-				end
-			end
-			inst:ListenForEvent("equip",OnEquipRod)
-			inst:ListenForEvent("unequip",OnUnEquipRod)
-			if inst.components.inventory then
-				local handitem = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) 
-				if handitem and handitem.prefab == "oceanfishingrod" then
-					OnEquipRod(inst,{eslot = EQUIPSLOTS.HANDS,item = handitem})
+		local function OnCaughtFish(inst, caught_fish)
+			if caught_fish then
+				inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
+				fishes = fishes  + 1
+				if fishes >= amount then
+					inst:RemoveEventCallback("caught_fish", OnCaughtFish)
 				end
 			end
 		end
-		OnDisable = function(inst)
+		local function OnDisable(inst)
 			fishes = 0
 			inst:PushEvent("quest_update",{quest = quest_name,reset = true})
-			inst:RemoveEventCallback("equip",OnEquipRod)
-			inst:RemoveEventCallback("unequip",OnUnEquipRod)
-			if inst.components.inventory then
-				local handitem = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-				if handitem and handitem.prefab == "oceanfishingrod" then
-					handitem.components.oceanfishingrod.ondonefishing = old_ondone or function() end
-				end
+			inst:RemoveEventCallback("caught_fish", OnCaughtFish)
+		end
+		local function OnNight(inst,isnight)
+			if not isnight then
+				OnDisable(inst)
+				return
 			end
+			inst:ListenForEvent("caught_fish", OnCaughtFish)
 		end
 
 		if TheWorld.state.isnight == true then
@@ -2320,14 +2280,7 @@ local quests = {
 		inst:WatchWorldState("isnight", OnNight)
 		local function OnForfeitedQuest(inst)
 			inst:StopWatchingWorldState("isnight", OnNight)
-			inst:RemoveEventCallback("equip",OnEquipRod)
-			inst:RemoveEventCallback("unequip",OnUnEquipRod)
-			if inst.components.inventory then
-				local handitem = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) 
-				if handitem and handitem.prefab == "oceanfishingrod" then
-					handitem.components.oceanfishingrod.ondonefishing = old_ondone or function() end
-				end
-			end
+			inst:RemoveEventCallback("caught_fish", OnCaughtFish)
 		end
 		OnForfeit(inst,OnForfeitedQuest,quest_name)
 	end,
@@ -2351,6 +2304,7 @@ local quests = {
 		local OnFreezeOther = function() end
 		local OnFreeze = function() end
 		local frozen_creatures = {}
+		local listened_creatures = {}
 		local function OnFreeze(bird)
 			if frozen_creatures[bird.GUID] then
 				return 
@@ -2368,6 +2322,10 @@ local quests = {
 			if data then
 				if data.target and data.target.prefab == "tallbird" then
 					if data.weapon and (data.weapon.prefab == "icestaff" or (data.weapon.prefab == "slingshot" and data.projectile == "slingshotammo_freeze_proj")) then
+						if listened_creatures[data.target.GUID] ~= nil then
+							return
+						end
+						listened_creatures[data.target.GUID] = true
 						data.target:ListenForEvent("freeze",OnFreeze)
 						if data.target.listenforfreezetask ~= nil then
 							data.target.listenforfreezetask:Cancel()
@@ -2378,6 +2336,7 @@ local quests = {
 								victim.listenforfreezetask:Cancel()
 								victim.listenforfreezetask = nil
 								victim:RemoveEventCallback("freeze",OnFreeze)
+								listened_creatures[victim.GUID] = nil
 							end
 						end)
 					end
@@ -3334,7 +3293,7 @@ local quests = {
 			inst:RemoveEventCallback("killed", OnKilled)
 		end
 		inst:ListenForEvent("killed", OnKilled)
-		TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["trade x amount of item y with pigking"](inst,amount,"trinket_4",quest_name,RemoveDwarfDropper)
+		TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["trade x amount of item y with pigking"](inst,amount, {"trinket_4"},quest_name,RemoveDwarfDropper)
 
 	end,
 	onfinished = function(inst)

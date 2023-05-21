@@ -652,12 +652,35 @@ local custom_functions = {
 		if not pigking then
 			return
 		end
+		trade_item = type(trade_item) == "string" and {trade_item} or trade_item
 		local function OnTrade(_,data)
-			if data and data.giver == player and (trade_item == nil or trade_item == (data.item and data.item.prefab)) then
-				player:PushEvent("quest_update",{quest = quest_name,amount = 1})
-				trades = trades  + 1
-				if trades >= amount then
-					pigking:RemoveEventCallback("quest_update",OnTrade)
+			if data then
+				if data.giver == player then
+					if trade_item == nil then
+						player:PushEvent("quest_update",{quest = quest_name,amount = 1})
+						trades = trades  + 1
+						if trades >= amount then
+							pigking:RemoveEventCallback("quest_update",OnTrade)
+							if callback then
+								callback(player)
+							end
+						end
+					else
+						local item_prefab = data.item and data.item.prefab
+						for _,prefab in ipairs(trade_item) do
+							if prefab == item_prefab then
+								player:PushEvent("quest_update",{quest = quest_name,amount = 1})
+								trades = trades  + 1
+								if trades >= amount then
+									pigking:RemoveEventCallback("quest_update",OnTrade)
+									if callback then
+										callback(player)
+									end
+								end
+								return
+							end
+						end
+					end
 				end
 			end
 		end 
@@ -673,61 +696,20 @@ local custom_functions = {
 
 	["catch x amount of y fish"] = function(player,amount,fish,quest_name)
 		local fishes = GetCurrentAmount(player,quest_name)
-		local old_ondone
-		local OnCatchFish
-		local function OnEquipRod(_,data)
-			if data and data.eslot == EQUIPSLOTS.HANDS and data.item then
-				local oceanfishingrod = data.item.components.oceanfishingrod
-				if data.item.prefab == "oceanfishingrod" and oceanfishingrod ~= nil then
-					old_ondone = oceanfishingrod.ondonefishing or function() end
-					oceanfishingrod.ondonefishing = function(item,reason,lost_tackle,fisher,target,...)
-						OnCatchFish(item,reason,lost_tackle,fisher,target)
-						return unpack{old_ondone(item,reason,lost_tackle,fisher,target,...)}
-					end
-				end
-			end
-		end
-		local function OnUnEquipRod(_,data)
-			if data and data.item and data.eslot == EQUIPSLOTS.HANDS and data.item then
-				local oceanfishingrod = data.item.components.oceanfishingrod
-				if data.item.prefab == "oceanfishingrod" and oceanfishingrod ~= nil and old_ondone ~= nil then
-					oceanfishingrod.ondonefishing = old_ondone
-				end
-			end
-		end
-		OnCatchFish = function(rod,reason,lost_tackle,fisher,target)
-			if reason == "success" and lost_tackle == false then
-				if fish == nil or fish == target.prefab then
-					fishes = fishes + 1
-					player:PushEvent("quest_update",{quest = quest_name,amount = 1})
-				end
+		local function OnCaughtFish(inst, caught_fish)
+			if caught_fish and (fish == nil or caught_fish.prefab == fish) then
+				player:PushEvent("quest_update",{quest = quest_name,amount = 1})
+				fishes = fishes  + 1
 				if fishes >= amount then
-					rod.components.oceanfishingrod.ondonefishing = old_ondone
-					player:RemoveEventCallback("equip",OnEquipRod)
-					player:RemoveEventCallback("unequip",OnUnEquipRod)
+					inst:RemoveEventCallback("caught_fish", OnCaughtFish)
 				end
 			end
 		end
-		player:ListenForEvent("equip",OnEquipRod)
-		player:ListenForEvent("unequip",OnUnEquipRod)
-		if player.components.inventory then
-			local handitem = player.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-			if handitem and handitem.prefab == "oceanfishingrod" then
-				OnEquipRod(player,{eslot = EQUIPSLOTS.HANDS,item = handitem})
-			end
-		end
+
+		player:ListenForEvent("caught_fish", OnCaughtFish)
+
 		local function OnForfeitedQuest(_player)
-			_player:RemoveEventCallback("equip",OnEquipRod)
-			_player:RemoveEventCallback("unequip",OnUnEquipRod)
-			if _player.components.inventory then
-				local handitem = _player.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-				if handitem and handitem.prefab == "oceanfishingrod" then
-					local oceanfishingrod = handitem.components.oceanfishingrod
-					if oceanfishingrod ~= nil and old_ondone ~= nil then
-						oceanfishingrod.ondonefishing = old_ondone
-					end
-				end
-			end
+			_player:RemoveEventCallback("caught_fish", OnCaughtFish)
 		end
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
