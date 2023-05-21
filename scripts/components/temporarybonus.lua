@@ -156,6 +156,9 @@ local function AddNightSight(inst,amount)
 	local playervision = inst.components.playervision
 	if playervision then
 		if amount < 0 then
+			if inst.components.temporarybonus:HasBonus("nightvision") then
+				return
+			end
 			playervision:ForceNightVision(false)
 			if inst.net_nightvisiontrigger then
 				inst.net_nightvisiontrigger:set(false)
@@ -176,13 +179,13 @@ local function AddSpeedbonus(inst,amount,name)
 			locomotor:RemoveExternalSpeedMultiplier(inst,name)
 		else
 			locomotor:SetExternalSpeedMultiplier(inst,name,amount)
-		end		
+		end
 	end
 end
 
 local old_SetVal = {}
 
-local function AddEscapeDeath(inst,amount,name)
+local function AddEscapeDeath(inst,amount,name,bonusname)
 	local health = inst.components.health
 	local tempbonus = inst.components.temporarybonus
 	local taskname = name.."escapedeath"
@@ -207,10 +210,10 @@ local function AddEscapeDeath(inst,amount,name)
 						local time_start = tempbonus.current_active_boni[taskname] and tempbonus.current_active_boni[taskname].starting_time or 0
 						local time_left = time - (GetTime() - time_start)
 						devprint("escapedeath",time,time_start,time_left,inst["remove_task"..name.."escapedeath"])
-						tempbonus:RemoveBonus("escapedeath",name,amount)
+						tempbonus:RemoveBonus("escapedeath",name,amount,bonusname)
 						tempbonus:AddBonus("escapedeath",name,amount-1,time_left)
 					else
-						tempbonus:RemoveBonus("escapedeath",name,amount)
+						tempbonus:RemoveBonus("escapedeath",name,amount,bonusname)
 					end
 					health:SetVal(self:GetMaxWithPenalty()/2)
 					return
@@ -238,7 +241,7 @@ local TemporaryBonus = Class(function(self, inst)
     	sanityaura = AddSanityAura,
     	hungerrate = AddHungerRate,
     	healthrate = AddHealthRate,
-    	
+
     	damage = AddDamage,
     	damagereduction = AddDamageReduction,
     	range = AddRange,
@@ -275,15 +278,28 @@ local function getName(self, name, bonus, count)
 	return name.."_"..count
 end
 
+local function FindSmallestBonus(self)
+	local smallest_name, smallest_val = "", 1000000000000
+	for name, bonus in pairs(self.current_active_boni) do
+		local time_passed = GetTime() - bonus.starting_time
+		local time_left = bonus.time - time_passed
+		if time_left < smallest_val then
+			smallest_val = time_left
+			smallest_name = name
+		end
+	end
+	return smallest_name, self.current_active_boni[smallest_name]
+end
+
 function TemporaryBonus:AddBonus(bonus,name,amount,time)
 	devprint("TemporaryBonus:AddBonus",bonus,name,amount,time)
 	name = name or ""
 	if self.current_boni >= self.max_boni then
 		print("[TemporaryBonus] Max Amount of Boni was reached! Removing one prior Bonus")
-		local _,item = GetRandomItemWithIndex(self.current_active_boni)
-		self:RemoveBonus(item.bonus,item.name,item.amount)
-		self.inst:DoTaskInTime(0.1,function() self:AddBonus(bonus,name,amount,time) end)	
-		return	
+		local bonusname, item = FindSmallestBonus(self)--GetRandomItemWithIndex(self.current_active_boni)
+		self:RemoveBonus(item.bonus,item.name,item.amount,bonusname)
+		self.inst:DoTaskInTime(0.1,function() self:AddBonus(bonus,name,amount,time) end)
+		return
 	end
 	self.current_boni = self.current_boni + 1
 	if self.current_active_boni[name..bonus] ~= nil then
@@ -295,6 +311,7 @@ function TemporaryBonus:AddBonus(bonus,name,amount,time)
 		bonus = bonus,
 		amount = amount,
 		time = time,
+		bonusname = bonusname,
 		starting_time = GetTime(),
 	}
 	self.current_active_boni[bonusname] = tab
@@ -302,11 +319,11 @@ function TemporaryBonus:AddBonus(bonus,name,amount,time)
 	devprint(bonusname)
 	local num = #self.boni_num
 	if self.bonusfunctions[bonus] ~= nil then
-		self.bonusfunctions[bonus](self.inst,tonumber(amount),name)
+		self.bonusfunctions[bonus](self.inst,tonumber(amount),name, bonusname)
 	end
 	self.inst["remove_task"..bonusname] = self.inst:DoTaskInTime(time,function()
-		--devprint("removetask is active", name, bonus, amount)
-		self:RemoveBonus(bonus,name,amount)
+		devprint("removetask is active", name, bonus, amount,bonusname)
+		self:RemoveBonus(bonus,name,amount, bonusname)
 	end)
 	self.inst:DoTaskInTime(math.random()/2,function()
 		if self.inst.userid then
@@ -336,6 +353,7 @@ local function ChangeBoniClient(self,name,num)
 		local tab = self.current_active_boni[self.boni_num[num]]
 		if tab and self.inst.userid then
 			local time_passed = GetTime() - tab.starting_time
+			devprint("changing time passed",time_passed, tab.starting_time, GetTime(),  tab.bonus.."_"..tab.amount, num)
 			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "AddTempBoniToClient"),self.inst.userid,self.inst,num,tab.bonus.."_"..tab.amount, nil, tab.time - time_passed)
 			ChangeBoniClient(self,nil,num+1)
 		end
@@ -345,9 +363,9 @@ local function ChangeBoniClient(self,name,num)
 end
 
 
-function TemporaryBonus:RemoveBonus(bonus,name,amount)
-	devprint("TemporaryBonus:RemoveBonus",bonus,name,amount)
-	local name_bonus = name..bonus
+function TemporaryBonus:RemoveBonus(bonus, name, amount, name_bonus)
+	devprint("TemporaryBonus:RemoveBonus",bonus, name, amount, name_bonus)
+	name_bonus = name_bonus or name..bonus
 	local taskname = "remove_task"..name_bonus
 	if self.current_active_boni[name_bonus] == nil then return end
 	if self.inst[taskname] ~= nil then
@@ -363,14 +381,23 @@ function TemporaryBonus:RemoveBonus(bonus,name,amount)
 
 	local num = 1
 	for k,v in ipairs(self.boni_num) do
-		if v == name..bonus then 
+		if v == name_bonus then
 			num = k
 			break
 		end
 	end
 	SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "AddTempBoniToClient"),self.inst.userid,self.inst,num,nil,true)
-	ChangeBoniClient(self,name..bonus)
-	
+	ChangeBoniClient(self,name_bonus)
+
+end
+
+function TemporaryBonus:HasBonus(bonus)
+	for name, boni in pairs(self.current_active_boni) do
+		if boni.bonus == bonus then
+			return true
+		end
+	end
+	return false
 end
 
 local current_active_boni_loaded = {}
