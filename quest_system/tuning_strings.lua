@@ -13,9 +13,48 @@ QUEST_COMPONENT.QUEST_BOARD = {}
 local CLIENT_DATA = GetModConfigData("CLIENT_DATA") or false
 QUEST_COMPONENT.GLOBAL_REWARDS = GetModConfigData("GLOBAL_REWARDS") or false
 
+-----------------------------------------------Different config options---------------------------------------------------------------
+
+QUEST_COMPONENT.REQUEST_QUEST = GetModConfigData("REQUEST_QUEST") ~= nil and GetModConfigData("REQUEST_QUEST") or 0.01
+QUEST_COMPONENT.CUSTOM_QUESTS = GetModConfigData("CUSTOM_QUESTS") ~= nil and GetModConfigData("CUSTOM_QUESTS") or 1
+QUEST_COMPONENT.HOTKEY_QUESTLOG = GetModConfigData("HOTKEY_QUESTLOG",CLIENT_DATA) ~= nil and GetModConfigData("HOTKEY_QUESTLOG",CLIENT_DATA) or 1
+QUEST_COMPONENT.MANAGE_CUSTOM_QUESTS = GetModConfigData("MANAGE_CUSTOM_QUESTS") ~= nil and GetModConfigData("MANAGE_CUSTOM_QUESTS") or 1
+QUEST_COMPONENT.BOSS_DIFFICULTY = GetModConfigData("BOSS_DIFFICULTY") ~= nil and GetModConfigData("BOSS_DIFFICULTY") or 1
+QUEST_COMPONENT.LEVEL_RATE = GetModConfigData("LEVEL_RATE") ~= nil and GetModConfigData("LEVEL_RATE") or 1
+QUEST_COMPONENT.BUTTON = GetModConfigData("BUTTON",CLIENT_DATA) ~= nil and GetModConfigData("BUTTON",CLIENT_DATA) or 2
+QUEST_COMPONENT.COLORBLINDNESS = GetModConfigData("COLORBLINDNESS",CLIENT_DATA) ~= nil and GetModConfigData("COLORBLINDNESS",CLIENT_DATA) or 0
+QUEST_COMPONENT.RESET_QUESTS = GetModConfigData("RESET_QUESTS") ~= nil and GetModConfigData("RESET_QUESTS") or 0
+QUEST_COMPONENT.PROB_CHAR_QUEST = GetModConfigData("PROB_CHAR_QUEST") ~= nil and GetModConfigData("PROB_CHAR_QUEST") or 0.1
+QUEST_COMPONENT.GIVE_CREATOR_QUEST = GetModConfigData("GIVE_CREATOR_QUEST") ~= nil and GetModConfigData("GIVE_CREATOR_QUEST") or 0
+QUEST_COMPONENT.BOSSFIGHTS = GetModConfigData("BOSSFIGHTS") ~= nil and GetModConfigData("BOSSFIGHTS") or true
+QUEST_COMPONENT.FRIENDLY_KILLS = GetModConfigData("FRIENDLY_KILLS") ~= nil and GetModConfigData("FRIENDLY_KILLS") or true
+QUEST_COMPONENT.REWARDS_AMOUNT = GetModConfigData("REWARDS_AMOUNT") or 1
+QUEST_COMPONENT.RANK = GetModConfigData("RANK") or false
+QUEST_COMPONENT.MAX_AMOUNT_GODLY_ITEMS = GetModConfigData("MAX_AMOUNT_GODLY_ITEMS") or 1
+QUEST_COMPONENT.BASE_QUEST_SLOTS = GetModConfigData("BASE_QUEST_SLOTS") or 10
+QUEST_COMPONENT.KEEP_LEVELS = GetModConfigData("KEEP_LEVELS") or 0
+
+if QUEST_COMPONENT.RANK == true then
+	QUEST_COMPONENT.RANK = 0
+end
+if not MODROOT:find("workshop-") then
+	QUEST_COMPONENT.DEV_MODE = true
+	print("GLOBAL.TUNING.QUEST_COMPONENT.DEV_MODE",QUEST_COMPONENT.DEV_MODE)
+	print(GLOBAL.ThePlayer)
+	print(GLOBAL.TheNet:GetUserID())
+end
+
+QUEST_COMPONENT.LEVELSYSTEM = GetModConfigData("LEVELSYSTEM") ~= nil and GetModConfigData("LEVELSYSTEM") or 1
+QUEST_COMPONENT.LEVELUPRATE = GetModConfigData("LEVELUPRATE") ~= nil and GetModConfigData("LEVELUPRATE") or 1
+
+QUEST_COMPONENT.DEBUG = GetModConfigData("DEBUG") ~= nil and GetModConfigData("DEBUG") or 0
+
+-----------------------------------Language settings-------------------------------
+
 --Get the language config
+local string_util = require("strings/strings_combinator")
 QUEST_COMPONENT.LANGUAGE = GetModConfigData("LANGUAGE",CLIENT_DATA) or "en"
-STRINGS.QUEST_COMPONENT = require("strings/strings_"..GLOBAL.TUNING.QUEST_COMPONENT.LANGUAGE)
+STRINGS.QUEST_COMPONENT = string_util.getLanguageStrings(GLOBAL.TUNING.QUEST_COMPONENT.LANGUAGE)
 local STR_QUEST_COMPONENT = GLOBAL.STRINGS.QUEST_COMPONENT
 
 QUEST_COMPONENT.QUESTS = {}
@@ -25,13 +64,7 @@ end
 
 -----------------------------------Functions for getting the correct strings without crashing------------------
 
-local en_strings = require("strings/strings_en")
-local de_strings = require("strings/strings_de")
-local fr_strings = require("strings/strings_fr")
-local es_strings = require("strings/strings_es")
-local ch_strings = require("strings/strings_ch")
-
-local _strings = {en_strings,de_strings,fr_strings,es_strings,ch_strings}
+local _strings = string_util.getAllStrings()
 
 local function FormatString(str,...)
 	if ... then
@@ -79,47 +112,11 @@ function GLOBAL.GetKillString(victim,amount)
 end
 
 function GLOBAL.ChangeQuestTuning(quest,fn)
-	local tab = fn()
+	local tab = fn(quest)
 	for k,v in pairs(tab) do
 		quest[k] = v
 	end
 end
-
------------------------------------------------Different config options---------------------------------------------------------------
-
-QUEST_COMPONENT.REQUEST_QUEST = GetModConfigData("REQUEST_QUEST") ~= nil and GetModConfigData("REQUEST_QUEST") or 0.01
-QUEST_COMPONENT.CUSTOM_QUESTS = GetModConfigData("CUSTOM_QUESTS") ~= nil and GetModConfigData("CUSTOM_QUESTS") or 1
-QUEST_COMPONENT.HOTKEY_QUESTLOG = GetModConfigData("HOTKEY_QUESTLOG",CLIENT_DATA) ~= nil and GetModConfigData("HOTKEY_QUESTLOG",CLIENT_DATA) or 1
-QUEST_COMPONENT.MANAGE_CUSTOM_QUESTS = GetModConfigData("MANAGE_CUSTOM_QUESTS") ~= nil and GetModConfigData("MANAGE_CUSTOM_QUESTS") or 1
-QUEST_COMPONENT.BOSS_DIFFICULTY = GetModConfigData("BOSS_DIFFICULTY") ~= nil and GetModConfigData("BOSS_DIFFICULTY") or 1
-QUEST_COMPONENT.LEVEL_RATE = GetModConfigData("LEVEL_RATE") ~= nil and GetModConfigData("LEVEL_RATE") or 1
-QUEST_COMPONENT.BUTTON = GetModConfigData("BUTTON",CLIENT_DATA) ~= nil and GetModConfigData("BUTTON",CLIENT_DATA) or 2
-QUEST_COMPONENT.COLORBLINDNESS = GetModConfigData("COLORBLINDNESS",CLIENT_DATA) ~= nil and GetModConfigData("COLORBLINDNESS",CLIENT_DATA) or 0
-QUEST_COMPONENT.RESET_QUESTS = GetModConfigData("RESET_QUESTS") ~= nil and GetModConfigData("RESET_QUESTS") or 0
-QUEST_COMPONENT.PROB_CHAR_QUEST = GetModConfigData("PROB_CHAR_QUEST") ~= nil and GetModConfigData("PROB_CHAR_QUEST") or 0.1
-QUEST_COMPONENT.GIVE_CREATOR_QUEST = GetModConfigData("GIVE_CREATOR_QUEST") ~= nil and GetModConfigData("GIVE_CREATOR_QUEST") or 0
-QUEST_COMPONENT.BOSSFIGHTS = GetModConfigData("BOSSFIGHTS") ~= nil and GetModConfigData("BOSSFIGHTS") or true
-QUEST_COMPONENT.FRIENDLY_KILLS = GetModConfigData("FRIENDLY_KILLS") ~= nil and GetModConfigData("FRIENDLY_KILLS") or true
-QUEST_COMPONENT.REWARDS_AMOUNT = GetModConfigData("REWARDS_AMOUNT") or 1
-QUEST_COMPONENT.RANK = GetModConfigData("RANK") or false
-QUEST_COMPONENT.MAX_AMOUNT_GODLY_ITEMS = GetModConfigData("MAX_AMOUNT_GODLY_ITEMS") or 1
-QUEST_COMPONENT.BASE_QUEST_SLOTS = GetModConfigData("BASE_QUEST_SLOTS") or 10
-QUEST_COMPONENT.KEEP_LEVELS = GetModConfigData("KEEP_LEVELS") or 0
-
-if QUEST_COMPONENT.RANK == true then
-	QUEST_COMPONENT.RANK = 0
-end
-if not MODROOT:find("workshop-") then
-	QUEST_COMPONENT.DEV_MODE = true
-	print("GLOBAL.TUNING.QUEST_COMPONENT.DEV_MODE",QUEST_COMPONENT.DEV_MODE)
-	print(GLOBAL.ThePlayer)
-	print(GLOBAL.TheNet:GetUserID())
-end
-
-QUEST_COMPONENT.LEVELSYSTEM = GetModConfigData("LEVELSYSTEM") ~= nil and GetModConfigData("LEVELSYSTEM") or 1
-QUEST_COMPONENT.LEVELUPRATE = GetModConfigData("LEVELUPRATE") ~= nil and GetModConfigData("LEVELUPRATE") or 1
-
-QUEST_COMPONENT.DEBUG = GetModConfigData("DEBUG") ~= nil and GetModConfigData("DEBUG") or 0
 
 ----------------------------------------Initialize quests---------------------------------------------------
 

@@ -475,7 +475,7 @@ return {
 
 			NAME = "A Cute Companion",
 			DESCRIPTION = "I love Chester, like I really really really LOVE him!\nI want him to have a friend to play with.\nI heard that the underground has a creature similar to him.\nPlease go and find him for Chester and me!",
-			COUNTER = STRINGS.NAMES.HUTCH_FISHBOWL,
+			--COUNTER = STRINGS.NAMES.HUTCH_FISHBOWL,
 			HOVER = "Hold Hutch's Fishbowl",
 
 		},
@@ -903,7 +903,8 @@ return {
 			NAME = "Friends in the Shadow Realm",
 			DESCRIPTION = "You muzzt go further than ever before. You redouble your effortz in zhadow rezearch. You have not yet underztood what it meanz to become one with the shadowz! Make sure that all playerz in their environment also participate in the zhadow research! Open your eyez all at the same time to take a look into the deepezt abyzzez! We expect nothing lezz than your bezt!\n\n ~ The QueZzt Agenzy ~",
 			COUNTER = "Seconds",
-			HOVER = TUNING.QUEST_COMPONENT.GLOBAL_REWARDS and "All playerz need to have a sanity value of under 10 for 66 zecondz" or "Ztay at a sanity value of under 10 for 366 zecondz",
+			HOVER = "All playerz need to have a sanity value of under 10 for 66 zecondz",
+			HOVER1 = "Ztay at a sanity value of under 10 for 366 zecondz",
 
 		},
 
