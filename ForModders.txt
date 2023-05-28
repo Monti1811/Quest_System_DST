@@ -256,7 +256,7 @@ GLOBAL.AddCustomFunctionRewards(rewards)
 		name = "short_name_for_function",
 	}
 
-	GLOBAL.AddCustomRewards(rewards)
+	GLOBAL.AddCustomFunctionRewards(rewards)
 
 
 GLOBAL.SetBossFightRewards(difficulty,rewards,overwrite)

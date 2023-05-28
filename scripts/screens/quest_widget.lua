@@ -443,7 +443,7 @@ local Quest_Widget = Class(Screen, function(self, inst)
   self.bg_points:SetScale(0.6)
 
   self.points = self.uibottom:AddChild(Text(NEWFONT_OUTLINE, 30, nil))
-  self.points:SetString(STRINGS_QL.POINTS..": "..tostring(math.floor(inst.replica.quest_component._points:value() or 0)).."/"..tostring((inst.replica.quest_component._level:value() * 25 + 100) * TUNING.QUEST_COMPONENT.LEVEL_RATE  or 100))
+  self.points:SetAutoSizingString(STRINGS_QL.POINTS..": "..tostring(math.floor(inst.replica.quest_component._points:value() or 0)).."/"..tostring((inst.replica.quest_component._level:value() * 25 + 100) * TUNING.QUEST_COMPONENT.LEVEL_RATE  or 100), 180)
   self.points:SetPosition(250, -200, 0)
   self.progressbar = self.uibottom:AddChild(UIAnim())
   self.progressbar:GetAnimState():SetBank("player_progressbar_small")
@@ -602,7 +602,8 @@ local Quest_Widget = Class(Screen, function(self, inst)
     self.total_points_image:SetScale(1.5,1)
 
     self.total_points_text = self.statpage:AddChild(Text(UIFONT, 35, STRINGS_QL.TOTAL_POINTS..":"))
-    self.total_points_text:SetPosition(248, -200)
+    self.total_points_text:SetPosition(218, -200)
+    self.total_points_text:SetAutoSizingString(STRINGS_QL.TOTAL_POINTS..":",170)
 
     self.total_points_text2 = self.statpage:AddChild(Text(UIFONT, 35,tostring(math.floor(CalculatePoints(inst.replica.quest_component._level:value(),inst.replica.quest_component._points:value())) or 0)))
     self.total_points_text2:SetPosition(350, -200)
