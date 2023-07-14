@@ -1293,7 +1293,7 @@ local quests = {
 	scale = {1},
 	custom_vars_fn = function(inst,amount,quest_name)
 		local max_scale = inst.components.quest_component and inst.components.quest_component.scaled_quests[quest_name] and inst.components.quest_component.scaled_quests[quest_name] + 1 or 1
-		local scale = math.random(1,max_scale)
+		local scale = math.random(math.max(max_scale-1, 1), max_scale)
 		return {scale = scale}
 	end,
 	variable_fn = function(inst,quest,data)
@@ -1626,7 +1626,7 @@ local quests = {
 	custom_vars_fn = function(inst,amount,quest_name)
 		devprint("custom_vars scaled quests")
 		local max_scale = inst.components.quest_component and inst.components.quest_component.scaled_quests[quest_name] and inst.components.quest_component.scaled_quests[quest_name] + 1 or 1
-		local scale = math.random(1,max_scale)
+		local scale = math.random(math.max(max_scale-1, 1), max_scale)
 		return {scale = scale}
 	end,
 	variable_fn = function(inst,quest,data)
@@ -1673,7 +1673,7 @@ local quests = {
 	scale = {1},
 	custom_vars_fn = function(inst,amount,quest_name)
 		local max_scale = inst.components.quest_component and inst.components.quest_component.scaled_quests[quest_name] and inst.components.quest_component.scaled_quests[quest_name] + 1 or 1
-		local scale = math.random(1,max_scale)
+		local scale = math.random(math.max(max_scale-1, 1), max_scale)
 		return {scale = scale}
 	end,
 	variable_fn = function(inst,quest,data)
@@ -1719,7 +1719,7 @@ local quests = {
 	scale = {1},
 	custom_vars_fn = function(inst,amount,quest_name)
 		local max_scale = inst.components.quest_component and inst.components.quest_component.scaled_quests[quest_name] and inst.components.quest_component.scaled_quests[quest_name] + 1 or 1
-		local scale = math.random(1,max_scale)
+		local scale = math.random(math.max(max_scale-1, 1), max_scale)
 		return {scale = scale}
 	end,
 	variable_fn = function(inst,quest,data)
@@ -1765,7 +1765,7 @@ local quests = {
 	scale = {1},
 	custom_vars_fn = function(inst,amount,quest_name)
 		local max_scale = inst.components.quest_component and inst.components.quest_component.scaled_quests[quest_name] and inst.components.quest_component.scaled_quests[quest_name] + 1 or 1
-		local scale = math.random(1,max_scale)
+		local scale = math.random(math.max(max_scale-1, 1), max_scale)
 		return {scale = scale}
 	end,
 	variable_fn = function(inst,quest,data)
@@ -1822,7 +1822,7 @@ local quests = {
 	scale = {1},
 	custom_vars_fn = function(inst,amount,quest_name)
 		local max_scale = inst.components.quest_component and inst.components.quest_component.scaled_quests[quest_name] and inst.components.quest_component.scaled_quests[quest_name] + 1 or 1
-		local scale = math.random(1,max_scale)
+		local scale = math.random(math.max(max_scale-1, 1), max_scale)
 		return {scale = scale}
 	end,
 	variable_fn = function(inst,quest,data)
@@ -2199,7 +2199,7 @@ local quests = {
 	},
 	custom_vars_fn = function(inst,amount,quest_name)
 		local max_scale = inst.components.quest_component and inst.components.quest_component.scaled_quests[quest_name] and inst.components.quest_component.scaled_quests[quest_name] + 1 or 1
-		local scale = math.random(1,max_scale)
+		local scale = math.random(math.max(max_scale-1, 1), max_scale)
 		return {scale = scale}
 	end,
 	variable_fn = function(inst,quest,data)
