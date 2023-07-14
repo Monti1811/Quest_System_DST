@@ -449,10 +449,10 @@ local function RemoveValues(player,quest_name)
 	quest_component.quest_data[quest_name] = nil
 end
 
-local function MakeScalable(inst,amount,quest_name)
+local function MakeScalable(inst, amount, quest_name, getScaleFn)
 	local quest_component = inst.components.quest_component
 	local max_scale = quest_component and quest_component.scaled_quests[quest_name] and quest_component.scaled_quests[quest_name] + 1 or 1
-	local scale = math.random(1,max_scale)
+	local scale = getScaleFn and getScaleFn(max_scale) or math.random(1,max_scale)
 	return {scale = scale}
 end
 
