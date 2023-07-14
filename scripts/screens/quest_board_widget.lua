@@ -379,8 +379,10 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
     self.__show_quest2.victim:EnableWordWrap(true)
     self.__show_quest2.victim:EnableWhitespaceWrap(true)
 
-    local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml") or "images/avatars.xml"
-    self.__show_quest2.image = self.show_quest:AddChild(Image(target_atlas, quest.tex or "avatar_unknown.tex"))
+    local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml")
+    target_atlas = target_atlas ~= nil and softresolvefilepath(target_atlas) ~= nil and target_atlas or "images/avatars.xml"
+    local target_tex = target_atlas ~= "images/avatars.xml" and quest.tex or "avatar_unknown.tex"
+    self.__show_quest2.image = self.show_quest:AddChild(Image(target_atlas, target_tex))
     self.__show_quest2.image:SetPosition(progress_x, progress_y + 10)
     if quest.start_fn and type(quest.start_fn) == "string" and string.find(quest.start_fn,"start_fn_") then
         local fn = string.gsub(quest.start_fn,"start_fn_","")
@@ -586,8 +588,10 @@ function Quest_Board_Widget:ShowCustomQuests()
 
         bg.title = bg:AddChild(Text(UIFONT, 30,quest.name)) 
         bg.title:SetPosition(-138, 39)
-        local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or "images/avatars.xml"
-        bg.victim = bg:AddChild(Image(target_atlas, quest.tex or "avatar_unknown.tex"))
+        local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas
+        target_atlas = target_atlas ~= nil and softresolvefilepath(target_atlas) ~= nil and target_atlas or "images/avatars.xml"
+        local target_tex = target_atlas ~= "images/avatars.xml" and quest.tex or "avatar_unknown.tex"
+        bg.victim = bg:AddChild(Image(softresolvefilepath(target_atlas), target_tex))
         bg.victim:SetPosition(50, 10)
         if quest.start_fn and type(quest.start_fn) == "string" and string.find(quest.start_fn,"start_fn_") then
             local fn = string.gsub(quest.start_fn,"start_fn_","")

@@ -197,8 +197,10 @@ local function createQuestCard(self,quest, x, y, scale, num)
     self["quest_"..num].victim:EnableWordWrap(true)
     self["quest_"..num].victim:EnableWhitespaceWrap(true)
 
-    local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml") or "images/avatars.xml"
-    self["quest_"..num].image = self["quest__"..num]:AddChild(Image(target_atlas, quest.tex or "avatar_unknown.tex"))
+    local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml")
+    target_atlas = target_atlas ~= nil and softresolvefilepath(target_atlas) ~= nil and target_atlas or "images/avatars.xml"
+    local target_tex = target_atlas ~= "images/avatars.xml" and quest.tex or "avatar_unknown.tex"
+    self["quest_"..num].image = self["quest__"..num]:AddChild(Image(target_atlas, target_tex))
     self["quest_"..num].image:SetPosition(x, y - 80)
     self["quest_"..num].image:MoveToFront()
     if quest.start_fn and type(quest.start_fn) == "string" and string.find(quest.start_fn,"start_fn_") then
