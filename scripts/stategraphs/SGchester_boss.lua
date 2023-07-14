@@ -356,7 +356,7 @@ local states=
             inst.sg.statemem.last_pos = inst.sg.statemem.start_pos
             inst.sg.statemem.speed = math.clamp(_dist2dsq(inst.sg.statemem.start_pos,inst.sg.statemem.target_pos) / 10,7,30)
             inst.components.timer:StartTimer("slamdown", SLAMDOWN_TIMER)
-            devprint("slamdown_pre",inst.sg.statemem.speed,_dist2dsq(inst.sg.statemem.start_pos,inst.sg.statemem.target_pos))
+            --devprint("slamdown_pre",inst.sg.statemem.speed,_dist2dsq(inst.sg.statemem.start_pos,inst.sg.statemem.target_pos))
         end,
 
         timeline=
@@ -438,6 +438,7 @@ local states=
                     sinkhole.components.timer:StopTimer("nextrepair")
                     sinkhole:PushEvent("timerdone", {name = "nextrepair"}) 
                 end)
+                sinkhole.persists = false
             end
         end,
 
