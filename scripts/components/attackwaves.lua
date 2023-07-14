@@ -278,9 +278,14 @@ function AttackWaves:StartAttack(player,attacksize,delta,difficulty,_victim)
 		print("[Attackwaves] Victim or player was nil",player,attacksize,delta,difficulty,_victim)
 		return
 	end
-	devprint("StartAttack",player,attacksize,delta,difficulty)
+	devprint("StartAttack",player,attacksize,delta,difficulty, _victim)
 	local pos = Vector3(player.Transform:GetWorldPosition())
-	local new_pos = FindWalkableOffset(pos,math.random()*PI*2,20,8,true,false)
+	local new_pos = FindWalkableOffset(pos,math.random()*PI*2,math.random(16,22),500,true,false)
+	if new_pos == nil then
+		self.inst:DoTaskInTime(0.5, function()
+			self:StartAttack(player,attacksize,delta,difficulty,_victim)
+		end)
+	end
 	local prefab = _victim or GetRandomItemWithIndex(self.victims)
 	local victim = SpawnPrefab(prefab)
 	if victim == nil then
