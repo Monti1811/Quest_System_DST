@@ -83,11 +83,12 @@ if QUEST_COMPONENT.BUTTON == 1 or QUEST_COMPONENT.BUTTON == 2 then
 end
 
 if QUEST_COMPONENT.BUTTON == 3 then
+	local sizes = {[6] = 180, [7] = 210, [8] = 240, [9] = 270}
 	local Button_QuestLog = require "widgets/button_questlog"
 	AddClassPostConstruct("screens/redux/pausescreen",function(self)
 		self.Button_QuestLog = self.proot:AddChild(Button_QuestLog(self.owner,true))
 		local items = self.menu and self.menu:GetNumberOfItems() or 7
-		local y = items == 6 and 180 or 210
+		local y = sizes[items]
 		self.Button_QuestLog:SetPosition(100,y)
 		self.Button_QuestLog:SetHoverText(STR_QUEST_COMPONENT.QUEST_LOG.BUTTON)
 	end)
