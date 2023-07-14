@@ -126,9 +126,11 @@ end
 function Quest_Component:MarkQuestAsFinished(name)
 	devprint("Quest_Component:MarkQuestAsFinished",name)
 	devdumptable(self._quests)
-	if self._quests[name] == nil then return end
-	self._quests[name].completed = true
-	name = QUESTS[name] and QUESTS[name].name or name
+	local quest = self._quests[name]
+	if quest == nil then return end
+	quest.completed = true
+	name = quest.overridename or quest.name
+	name = GetQuestString(name,"NAME") ~= "" and GetQuestString(name,"NAME",unpack(quest.scale)) or quest.name or "No Name"
 	Networking_Announcement(name..": "..STRINGS.QUEST_COMPONENT.QUEST_LOG.SUCCESS)
 end
 
