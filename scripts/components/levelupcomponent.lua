@@ -136,7 +136,7 @@ function LevelUpComponent:OnLevelUp(level)
 	for k,v in pairs(self.bonus) do
 		if type(v) == "table" then
 			for kk,vv in pairs(v) do
-				self.bonus[k][kk] = vv - self.leveluprate[k][kk] * level
+				self.bonus[k][kk] = vv + self.leveluprate[k][kk] * level
 			end
 			self.inst.q_system[k]:set(self.bonus[k]["ACTIONS.CHOP"])
 		else
