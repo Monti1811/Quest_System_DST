@@ -872,20 +872,21 @@ local custom_functions = {
 
 	["harvest x veggies y times"] = function(player,amount,veggie,quest_name)
 		local harvested = GetCurrentAmount(player,quest_name)
-		local function OnHarvestedPlants(_,veg)
+		local function OnHarvestedPlants(farmplant, data)
+			local veg = data.loot and data.loot[1]
 			if veg then
 				if veggie == nil or veg.prefab == veggie then
 					harvested = harvested + 1
 					player:PushEvent("quest_update",{quest = quest_name,amount = 1})
 					if harvested >= amount then
-						player:RemoveEventCallback("harvested_veg",OnHarvestedPlants)
+						player:RemoveEventCallback("picksomething",OnHarvestedPlants)
 					end
 				end
 			end
 		end
-		player:ListenForEvent("harvested_veg",OnHarvestedPlants)
+		player:ListenForEvent("picksomething",OnHarvestedPlants)
 		local function OnForfeitedQuest(_player)
-			_player:RemoveEventCallback("harvested_veg",OnHarvestedPlants)
+			_player:RemoveEventCallback("picksomething",OnHarvestedPlants)
 		end
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
@@ -893,7 +894,8 @@ local custom_functions = {
 	["harvest x oversized y times with a weight of z"] = function(player,amount,veggie,size,quest_name)
 		local harvested = GetCurrentAmount(player,quest_name)
 		size = size or 0
-		local function OnHarvestedOversized(_,veg)
+		local function OnHarvestedOversized(farmplant, data)
+			local veg = data.loot and data.loot[1]
 			if veg then
 				if veggie == nil or veg.prefab == veggie then
 					if veg.components.weighable then
@@ -902,16 +904,16 @@ local custom_functions = {
 							harvested = harvested + 1
 							player:PushEvent("quest_update",{quest = quest_name,amount = 1})
 							if harvested >= amount then
-								player:RemoveEventCallback("harvested_veg",OnHarvestedOversized)
+								player:RemoveEventCallback("picksomething",OnHarvestedOversized)
 							end
 						end
 					end
 				end
 			end
 		end
-		player:ListenForEvent("harvested_veg",OnHarvestedOversized)
+		player:ListenForEvent("picksomething",OnHarvestedOversized)
 		local function OnForfeitedQuest(_player)
-			_player:RemoveEventCallback("harvested_veg",OnHarvestedOversized)
+			_player:RemoveEventCallback("picksomething",OnHarvestedOversized)
 		end
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,

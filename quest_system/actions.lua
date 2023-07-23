@@ -96,14 +96,6 @@ local function CheckifVeg(prefab)
 	end
 end
 
-local old_pick = ACTIONS.PICK.fn
-ACTIONS.PICK.fn = function(act,...)
-	if act.target ~= nil and (act.target:HasTag("oversized_veggie") or CheckifVeg(act.target.prefab)) then
-		act.doer:PushEvent("harvested_veg",act.target) --todo: check if this is needed or if the postinitfn is enough
-	end
-	return old_pick(act,...)
-end
-
 --Add an activable action to the glommer statue
 local FIGHT_GLOMMER = AddAction("FIGHT_GLOMMER",STRINGS.QUEST_COMPONENT.ACTIONS.FIGHT_GLOMMER,function(act)
 	if act.target.components.activatable ~= nil and act.target.components.activatable:CanActivate(act.doer) then

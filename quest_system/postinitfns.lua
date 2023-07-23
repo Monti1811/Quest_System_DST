@@ -287,29 +287,6 @@ end
 AddPrefabPostInit("sewing_kit",OnSewn)
 AddPrefabPostInit("sewing_tape",OnSewn)
 
---Add an event that fires if a vegetables is harvested
-local veggies = {}
-for k in pairs(require("prefabs/farm_plant_defs").PLANT_DEFS) do
-    table.insert(veggies,k)
-    table.insert(veggies,k.."_oversized")
-end
-
-local function OnLootDropped(inst)
-    local pos = inst:GetPosition()
-    local player = GLOBAL.FindClosestPlayerInRangeSq(pos.x,pos.y,pos.z,5)
-    if player then
-        player:PushEvent("harvested_veg",inst)
-    end
-end
-
-for _,veg in ipairs(veggies) do
-    AddPrefabPostInit(veg,function(inst)
-        if GLOBAL.TheWorld.ismastersim then
-            inst:ListenForEvent("on_loot_dropped",OnLootDropped)
-        end
-    end)
-end
-
 local function GetSpawnPoint(pt)
     local theta = math.random() * 2 * PI
     local radius = math.random(7,14)
