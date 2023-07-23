@@ -3,7 +3,7 @@ local require = GLOBAL.require
 Assets = {
 	Asset("ANIM", "anim/player_progressbar_small.zip"),
 
-	--Buildings
+	--Buildings and items
 	Asset("ANIM", "anim/lavaarena_portal.zip"),
 	Asset("ANIM", "anim/lavaarena_portal_fx.zip"),
 
@@ -131,6 +131,7 @@ local additional_content = {
 	feast_famine = 1908933602,
 	epic = 1615010027,
 	functional_medal = 1909182187,
+	island_adventures = 1467214795,
 }
 
 for name,num in pairs(additional_content) do

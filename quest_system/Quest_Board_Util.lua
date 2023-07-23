@@ -227,7 +227,7 @@ QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS = {
 				end
 			end
 		end,
-		" x % Chance of Krampus Sack",	--Name that is shown
+		" x % Chance of Krampus Sack",	--Name that is shown, x is amount for the function
 		"krampus_sack.tex", 			--tex
 		"images/inventoryimages1.xml",	--atlas
 	},
@@ -286,7 +286,8 @@ local CUSTOM_QUEST_END_FUNCTIONS = QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS
 for k,v in pairs(temprewards) do
 	for _,vv in ipairs(v) do
 		local name,text,fn,tex = MakeTempRewardData(k,vv)
-		CUSTOM_QUEST_END_FUNCTIONS[":func:"..name] = {fn,text,tex}
+		local atlas = "images/victims.xml"
+		CUSTOM_QUEST_END_FUNCTIONS[":func:"..name] = {fn,text,tex,atlas}
 	end
 end
 --GLOBAL.dumptable(QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS)
