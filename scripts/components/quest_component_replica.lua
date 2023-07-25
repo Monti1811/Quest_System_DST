@@ -130,7 +130,9 @@ function Quest_Component:MarkQuestAsFinished(name)
 	if quest == nil then return end
 	quest.completed = true
 	name = quest.overridename or quest.name
-	name = GetQuestString(name,"NAME") ~= "" and GetQuestString(name,"NAME",unpack(quest.scale)) or quest.name or "No Name"
+	local scale = quest.scale or {}
+	local quest_string = GetQuestString(name,"NAME",unpack(scale))
+	name = quest_string ~= "" and quest_string or quest.name or "No Name"
 	Networking_Announcement(name..": "..STRINGS.QUEST_COMPONENT.QUEST_LOG.SUCCESS)
 end
 
