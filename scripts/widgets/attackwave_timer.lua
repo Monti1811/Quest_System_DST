@@ -13,7 +13,7 @@ local types = {
 }
 
 local AttackWaveTimer = Class(Widget, function(self, owner, time, victim, type, atlas)
-    Widget._ctor(self,"Button_QuestLog")
+    Widget._ctor(self,"AttackWaveTimer")
     devprint("AttackWaveTimer start",time,victim,atlas,type)
     self.owner = owner
     time = time or 1

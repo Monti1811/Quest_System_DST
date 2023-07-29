@@ -1406,8 +1406,10 @@ local custom_functions = {
 			end
 		end
 		player:ListenForEvent("killed",OnKilled)
+		player:ListenForEvent("killedbyfriend", OnKilled)
 		local function OnForfeitedQuest(_player)
 			_player:RemoveEventCallback("killed",OnKilled)
+			_player:RemoveEventCallback("killedbyfriend", OnKilled)
 		end
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,

@@ -1,5 +1,5 @@
 --Rename this file to remove_quests.lua
---to active the removal of the here added quests.
+--to activate the removal of the here added quests.
 
 --Add here the quests you want to remove.
 --You need to add the english(!) name of them in the table

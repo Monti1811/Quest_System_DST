@@ -39,7 +39,7 @@ AttackWaves:
 	round, rounds is the amount of rounds). delta is the time between which the attacking creatures spawn. difficulty is the difficulty of the 
 	attackwave from 1 to 5.
 
-TemporyBonus:
+TemporaryBonus:
 
 	A custom component that adds temporary boni to a character. Can be called with inst.components.temporarybonus:AddBonus(bonus,name,amount,time).
 	bonus is one of the boni found in self.bonusfunctions, name should be the name of the quest or something else if you use it elsewhere.

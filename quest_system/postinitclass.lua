@@ -83,12 +83,12 @@ if QUEST_COMPONENT.BUTTON == 1 or QUEST_COMPONENT.BUTTON == 2 then
 end
 
 if QUEST_COMPONENT.BUTTON == 3 then
-	local sizes = {[6] = 180, [7] = 210, [8] = 240, [9] = 270}
+	-- local sizes = {[6] = 180, [7] = 210, [8] = 240, [9] = 270}
 	local Button_QuestLog = require "widgets/button_questlog"
 	AddClassPostConstruct("screens/redux/pausescreen",function(self)
 		self.Button_QuestLog = self.proot:AddChild(Button_QuestLog(self.owner,true))
 		local items = self.menu and self.menu:GetNumberOfItems() or 7
-		local y = sizes[items]
+		local y = items * 30
 		self.Button_QuestLog:SetPosition(100,y)
 		self.Button_QuestLog:SetHoverText(STR_QUEST_COMPONENT.QUEST_LOG.BUTTON)
 	end)
@@ -132,7 +132,6 @@ local function AddButtonTempBoni(self)
 		self["tempboni"..count]:Hide()
 	end
 	adjustButtons2(self)
-	local screensize = {TheSim:GetScreenSize()}
 	self.owner.HUD.inst:ListenForEvent("refreshhudsize", function() adjustButtons2(self) end)
 end
 
@@ -433,7 +432,7 @@ local function CheckIfItemsPickupable(inst)
 	end
 	local mx, _, mz = inst.Transform:GetWorldPosition()
 	local ents = TheSim:FindEntities(mx, 0, mz, getPickupDistance(inst), {"_inventoryitem"}, NO_PICKUP_TAGS)
-	for i, v in ipairs(ents) do
+	for _, v in ipairs(ents) do
 		if IsCorrectItem(inst, v) then
 			return true
 		end
@@ -447,7 +446,7 @@ local function EatItems(inst)
 	end
 	local mx, _, mz = inst.Transform:GetWorldPosition()
 	local ents = TheSim:FindEntities(mx, 0, mz, getPickupDistance(inst), {"_inventoryitem"}, NO_PICKUP_TAGS)
-	for i, v in ipairs(ents) do
+	for _, v in ipairs(ents) do
 		if IsCorrectItem(inst, v) and v.components.stackable ~= nil then
 			return GLOBAL.BufferedAction(inst, v, GLOBAL.ACTIONS.CHESTER_PICKUP)
 		end

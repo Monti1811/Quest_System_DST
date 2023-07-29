@@ -181,7 +181,9 @@ else
 	end
 	for _,char_quests in pairs(quests_characters) do
 		for _,v in ipairs(char_quests) do
-			AddQuestToTuning(v)
+			if quests_to_remove[v.name] == nil then
+				AddQuestToTuning(v)
+			end
 		end
 	end
 end

@@ -258,11 +258,9 @@ AddPrefabPostInit("winch",function(inst)
         winch.onfullyraisedfn = function(_inst,...)
             if inst.components.inventory ~= nil and inst.components.inventory:GetItemInSlot(1) then
                 local pos = Vector3(inst.Transform:GetWorldPosition())
-                local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 12)
+                local ents = TheSim:FindEntities(pos.x,pos.y,pos.z, 12, {"player"})
                 for _,v in pairs(ents) do
-                    if v:HasTag("player") then
-                        v:PushEvent("raised_salvageable")
-                    end
+                    v:PushEvent("raised_salvageable")
                 end
             end
             return old_onfullyraisedfn(_inst,...)
