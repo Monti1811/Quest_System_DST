@@ -1,7 +1,7 @@
 name = "Quest System [BETA]"
 description = "Introduces a quest system into the game!\n\nOpen your quest log to see which quests you can do.\nBuild the quest board to accept new quests or be lucky enough to find requests in the wild!\n\nLevel up, get stronger and compete against powerful Boss Creatures to receive rewards!"
 author = "Monti"
-version = "1.0.112"
+version = "1.0.113"
 
 forumthread = ""
 
@@ -267,13 +267,12 @@ Title("UI Options",""),
         hover = "Choose if and where you want a button on the screen to open the quest log or not.",
         options = 
         {
-            {description = "Bottom Right ^",data = 1, hover = "Located over the Map Button"},
-            {description = "Bottom Right <",data = 2, hover = "Located left of the Map Button"},
+            {description = "Draggable",data = 1, hover = "Located in the bottom right corner, can be dragged to where you want"},
              {description = "Esc Menu",data = 3, hover = "Located in the Pause/Esc Menu"},
             {description = "Disable", data = 0},
 
         },
-        default = 2,
+        default = 1,
     },
 
     {

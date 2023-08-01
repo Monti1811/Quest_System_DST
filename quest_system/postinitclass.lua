@@ -45,38 +45,28 @@ AddClassPostConstruct("widgets/hoverer",function(hoverer)
 	end
 end)
 
-
+QUEST_COMPONENT.BUTTON = 2
 --Add button to open quest log
 if QUEST_COMPONENT.BUTTON == 1 or QUEST_COMPONENT.BUTTON == 2 then
-	local function adjustButtons(self)
-		local x, y
-		local width, height = TheSim:GetScreenSize()
-		local scale = self.top_root:GetScale()
-		width  = width  / scale.x / 2
-		height = height / scale.y / 2
-		local allign = {}
-		local sized = 10 
-		if QUEST_COMPONENT.BUTTON == 1 then
-			x = width - 29
-			y = -2*height + 102 + sized
-			allign = {-1,1}
-		else
-			x = width - 123 - sized
-			y = -2*height + sized
-			allign = {-1,1}
-		end
-		local buttonOne = self.Button_QuestLog
-		if buttonOne then
-			buttonOne:SetPosition(x + buttonOne.width*allign[1]/2, y + buttonOne.height*allign[2]/2, 0)
-		end
-	end
 
 	local Button_QuestLog = require "widgets/button_questlog"
+	local PersistentData = require("persistentdata")
+	local DataContainer = PersistentData("quest_component")
+	if not GLOBAL.TheNet:IsDedicated() then
+		DataContainer:Load()
+	end
 
 	local function AddButtonQuestLog(self)
-		self.Button_QuestLog = self.top_root:AddChild(Button_QuestLog(self.owner))
-		adjustButtons(self)
-		self.owner.HUD.inst:ListenForEvent("refreshhudsize", function() adjustButtons(self) end)
+		self.Button_QuestLog = self.bottomright_root:AddChild(Button_QuestLog(self.owner))
+		self.Button_QuestLog:SetPosition(-154, 40, 0)
+		local saved_pos = DataContainer:GetValue("questlog_button")
+		if saved_pos then
+			self.Button_QuestLog:SetPosition(saved_pos.x, saved_pos.y, saved_pos.z)
+		end
+		self.Button_QuestLog:SetOnDragFinish(function(oldpos, newpos)
+			DataContainer:SetValue("questlog_button", newpos)
+			DataContainer:Save()
+		end)
 	end
 
 	AddClassPostConstruct("widgets/controls", AddButtonQuestLog)

@@ -1,5 +1,8 @@
 local Widget = require "widgets/widget"
+local Image = require "widgets/image"
 local ImageButton = require "widgets/imagebutton"
+
+--Draggable code is shamelessly stolen from Insight ;)
 
 local Button_QuestLog = Class(ImageButton, function(self, owner,background)
 	--ImageButton._ctor(self,"Button_QuestLog")
@@ -11,12 +14,12 @@ local Button_QuestLog = Class(ImageButton, function(self, owner,background)
 		self:SetDraggable(false)
 		self:SetOnDragFinish(nil)
 	else
-		ImageButton._ctor(self, "images/images_quest_system.xml", "quest_log.tex", nil, nil, nil, nil, {1,1}, {0,0})
+		ImageButton._ctor(self, "images/images_quest_system.xml", "quest_log.tex", nil, "quest_log.tex", nil, nil, {1,1}, {0,0})
 		self:SetImageNormalColour(1, 1, 1, 1)
 		self.move_on_click = false
 		self.drag_tolerance = 4
 		self:SetDraggable(true)
-		self:SetOnDragFinish(nil)
+		--self:SetOnDragFinish(nil)
 	end
 
 	self.owner = owner
@@ -78,7 +81,6 @@ function Button_QuestLog:SetOnDragFinish(fn)
 	self.ondragfinish = fn
 end
 
---- Overwrites the normal SetOnClick because we need to have a separate onclick to stop dragging, and to handle actual clicks.
 function Button_QuestLog:SetOnClick(fn)
 	self.onclick2 = fn
 end
@@ -139,6 +141,8 @@ function Button_QuestLog:BeginDrag()
 	}
 
 	self.image:SetScale(self.normal_scale[1], self.normal_scale[2], self.normal_scale[3])
+	--devprint("Button_QuestLog:BeginDrag", self.image, self.image.shown)
+	--devdumptable(self.drag_state)
 end
 
 function Button_QuestLog:DoDrag()
@@ -183,9 +187,12 @@ function Button_QuestLog:DoDrag()
 
 	self.drag_state.lastx = TheFrontEnd.lastx
 	self.drag_state.lasty = TheFrontEnd.lasty
+	--devprint("Button_QuestLog:DoDrag", self.image, self.image.shown)
+	--devdumptable(self.drag_state)
 end
 
 function Button_QuestLog:EndDrag()
+	--devprint("Button_QuestLog:EndDrag", self.image, self.image.atlas,self.image.texture, self.image.shown)
 	if not self:IsDragging() then
 		devprint('\tnot dragging?')
 		return
