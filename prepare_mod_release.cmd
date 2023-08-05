@@ -1,0 +1,1 @@
+python "C:\Users\Timon\Desktop\Bilder_DST\ModUploader-main\moduploader.py" build "E:\Programme\SteamLibrary\steamapps\common\Don't Starve Together\mods\Quest_System"

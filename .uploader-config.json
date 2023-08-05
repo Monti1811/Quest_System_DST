@@ -1,0 +1,49 @@
+{
+    "publishedFileId": 2597204554,
+    "update_titles": false,
+    "update_description": false,
+    "update_previewFile": false,
+    "update_visibility": false,
+    "title": "Quest System [BETA]",
+    "description": "",
+    "previewFile": "modicon.png",
+    "tags": ["item","interface","tweak","utility"],
+    "visibility": 0,
+    "exclude": [
+        ".git/",
+		".idea/",
+		"venv/",
+        ".uploader-config.json",
+        "scripts/remove_quests.lua",
+        "modicon.png",
+		"modicon.xcf",
+		"todo.txt",
+		"README.md",
+		"release/",
+        "images/**/*.png"
+    ],
+    "git_exclude": false,
+    "change_note": "",
+    "tags可选值": [
+        "character",
+		"item",
+		"pet",
+		"creature",
+		"environment",
+		"interface",
+		"utility",
+		"art",
+		"worldgen",
+		"tweak",
+		"scenario",
+		"language",
+		"other",
+		"tutorial",
+		"server_admin"
+    ],
+    "visibility可选值": [
+        "PUBLIC              = 0",
+        "FRIENDS_ONLY        = 1",
+        "PRIVATE             = 2"
+    ]
+}

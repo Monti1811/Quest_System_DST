@@ -1455,9 +1455,10 @@ local quests = {
 		local attacksize = {5,1}
 		local time_inbetween_spawn = 15
 		local diff = 1
+		local prefab = math.random() < 0.5 and "stalker_minion1" or "stalker_minion2"
 		local function StartWaves(player)
 			if TheWorld and TheWorld.components.attackwaves then
-				TheWorld.components.attackwaves:StartAttack(inst,attacksize,time_inbetween_spawn,diff,math.random() < 0.5 and "stalker_minion1" or "stalker_minion2")
+				TheWorld.components.attackwaves:StartAttack(inst,attacksize,time_inbetween_spawn,diff, prefab)
 			end
 		end
 		inst.attack_wave_task_woven_shadow = inst:DoTaskInTime(time,StartWaves)
@@ -1468,14 +1469,14 @@ local quests = {
 				inst.components.quest_component:RemoveQuest(quest_name)
 				inst:RemoveEventCallback("succesfully_defended",OnWin)
 				inst:RemoveEventCallback("victim_died",OnLose)
-				SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "RemoveTimerFromClient"),inst.userid,inst,"stalker_minion1")
+				SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "RemoveTimerFromClient"),inst.userid,inst,prefab)
 			end
 		end
 		OnWin = function(inst)
 			inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
 			inst:RemoveEventCallback("succesfully_defended",OnWin)
 			inst:RemoveEventCallback("victim_died",OnLose)
-			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "RemoveTimerFromClient"),inst.userid,inst,"stalker_minion1")
+			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "RemoveTimerFromClient"),inst.userid,inst,prefab)
 		end
 
 		inst:ListenForEvent("succesfully_defended",OnWin)
@@ -1487,7 +1488,7 @@ local quests = {
 				inst.attack_wave_task_woven_shadow:Cancel()
 				inst.attack_wave_task_woven_shadow = nil
 			end
-			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "RemoveTimerFromClient"),inst.userid,inst,"stalker_minion1")
+			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "RemoveTimerFromClient"),inst.userid,inst,prefab)
 		end
 		OnForfeit(inst,OnForfeitedQuest,quest_name)
 	end,
