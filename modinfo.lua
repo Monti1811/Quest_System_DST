@@ -1,7 +1,7 @@
 name = "Quest System [BETA]"
 description = "Introduces a quest system into the game!\n\nOpen your quest log to see which quests you can do.\nBuild the quest board to accept new quests or be lucky enough to find requests in the wild!\n\nLevel up, get stronger and compete against powerful Boss Creatures to receive rewards!"
 author = "Monti"
-version = "1.0.113"
+version = "1.0.114"
 
 forumthread = ""
 
@@ -340,6 +340,18 @@ Title("UI Options",""),
             {description="9", data = 57},
         },
         default = 116,
+    },
+
+    {
+        name = "QL_ANIM",
+        label = "Animations",
+        hover = "If enabled, victims will be shown animated in the quest log and quest board. If you experience lag, deactivate it.",
+        options =
+        {
+            {description = "Enabled", data = 1, hover = "Animations will be shown."},
+            {description = "Disabled", data = 0, hover = "Animations will not be shown."},
+        },
+        default = 1,
     },
 
     {

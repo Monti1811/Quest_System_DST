@@ -1057,9 +1057,8 @@ local quests = {
 	rewards = {ruins_bat = 1,rocks = 15,froglegs = 5},
 	points = 750,
 	start_fn = function(inst,amount,quest_name)
-		--TODO not working correctly at the moment
 		local function OnHitMerm(inst,data)
-			devprint("OnHitMerm", inst, data.target, data.target and data.target.prefab)
+			--devprint("OnHitMerm", inst, data.target, data.target and data.target.prefab)
 			if data and data.target and data.target.prefab == "merm" then
 				if inst.net_cameratrigger ~= nil then
 					if inst.camera_task ~= nil then

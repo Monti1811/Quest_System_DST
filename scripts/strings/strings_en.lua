@@ -106,8 +106,11 @@ return {
 		hungerrate = "Hunger Rate for x min",
 		healthrate = "Health every 10 seconds for x min",
 		damage = "Damage Bonus for x min",
+		planardamage = "Planar Damage Bonus for x min",
 		damagereduction = "Damagereduction Bonus for x min",
+		planardefense = "Planar Defense Bonus for x min",
 		range = "Range Bonus for x min",
+		dodge = "Dodge Bonus for x min",
 		winterinsulation = "Winterinsulation Bonus for x min",
 		summerinsulation = "Summerinsulation Bonus for x min",
 		worker = "Working Bonus for x min",
@@ -274,8 +277,11 @@ return {
 		HUNGERRATE = "% Hungerrate",
 		HEALTHRATE = " Health each 10 seconds",
 		DAMAGE = " Damage",
+		PLANARDAMAGE = " Planar Damage",
 		DAMAGEREDUCTION = "% Damage Reduction",
+		PLANARDEFENSE = " Planar Defense",
 		RANGE = " Range",
+		DODGE = " Every %s seconds dodge",
 		WINTERINSULATION = " Winter Insulation",
 		SUMMERINSULATION = " Summer Insulation",
 		WORKER = "% Working Effectiveness",
@@ -1133,6 +1139,32 @@ return {
 
 		},
 
+		["The Gravedigger"] = {
+
+			NAME = "The Gravedigger",
+			DESCRIPTION = "In the eerie silence of the graveyard, you will delve into the unknown as you dig up %s graves. As the earth gives way to your shovel, you may uncover forgotten relics, lost keepsakes, or perhaps even ancient curses. Each grave holds its own tale, and your curiosity will guide you to unravel their enigmatic pasts.",
+			COUNTER = "Graves",
+			HOVER = "Dig up %s graves",
+
+		},
+
+		["I've got 99 problems but starving ain't one!"] = {
+
+			NAME = "I've got 99 problems but starving ain't one!",
+			DESCRIPTION = "Even though the probability in this world to starve is quite high, I have heard that some of their inhabitants are quite wealthy in regards to food. Show me that there exists such persons by eating %s calories worth of food without starving even once!",
+			COUNTER = "Calories",
+			HOVER = "Eat %s calories of food",
+
+		},
+
+		["The Untouchable"] = {
+
+			NAME = "The Untouchable",
+			DESCRIPTION = "Can you be the Untouchable? The Untouchable is an entity who is so strong, that it can't be touched by anything! Show me if you are worthy of this title by not being affected by any damage for %s seconds!",
+			COUNTER = "Seconds",
+			HOVER = "Stay undamaged for %s seconds",
+
+		},
 
 
 

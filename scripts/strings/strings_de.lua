@@ -95,6 +95,9 @@ return {
 		nightvision = "Nachtsicht für x min",
 		speed = "Geschwindigkeitsbonus für x min",
 		escapedeath = "Mal dem Tod entrinnen für x min",
+		planardamage = "Planarer Schadensbonus für x Minuten",
+		planardefense = "Planarer Verteidigungsbonus für x Minuten",
+		dodge = "Ausweichbonus für x min",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "Missionsbrett",
@@ -199,6 +202,9 @@ return {
 		NIGHTVISION = "Nachtsicht",
 		SPEED = " % Geschwindigkeit",
 		ESCAPEDEATH = " Male dem Tod entrinnen",
+		PLANARDAMAGE = " Planarer Schaden",
+		PLANARDEFENSE = " Planare Verteidigung",
+		DODGE = "Alle %s Sekunden Ausweichen",
 	},
 	LOADING_TIPS = {
 		request = "Anfragen können von getöteten Kreaturen fallen gelassen werden. Du kannst auch ihre Herstellung in den Konfigurationsoptionen aktivieren!",
@@ -722,7 +728,7 @@ return {
 			HOVER = "Schütze die Staubmotte 5 Wellen lang vor den laichenden Kreaturen",
 		},
 		["The Sleeping Beauty"] = {
-			NAME = "Die schlafende Schöhnheit",
+			NAME = "Die schlafende Schönheit",
 			DESCRIPTION = "Zeit für den Schönheitsschlaf! Bei all der zu erledigenden Arbeit passiert es schnell, dass man sich überanstrengt. Achte auf dich und gönne dir und deinem Körper eine Verschnaufpause!",
 			COUNTER = "Sekunden geschlafen",
 			HOVER = "Schlafe %s Sekunden in einem Zelt o.ä.",
@@ -770,6 +776,24 @@ return {
 			DESCRIPTION = "Die meisten meiner Freunde wollen nichts mit mir zu tun haben, nur weil ich manchmal ein paar Dinge anzünden will. \nSie verstehen nicht, wie schön ein Feuer wirklich ist... \n Zeig mir, dass wir Freunde sein können, indem du 10 Dinge in Brand steckst!",
 			COUNTER = "Ausgelöste Brände",
 			HOVER = "10 Dinge mit einem Feuerzeug anzünden",
+		},
+		["The Gravedigger"] = {
+			NAME = "Der Totengräber",
+			DESCRIPTION = "In der unheimlichen Stille des Friedhofs tauchen Sie in das Unbekannte ein, wenn Sie %s Gräber ausheben. Wenn die Erde Ihrer Schaufel nachgibt, entdecken Sie vielleicht vergessene Reliquien, verlorene Andenken oder vielleicht sogar uralte Flüche. Jedes Grab birgt seine eigene Geschichte, und Ihre Neugier wird Sie dazu bringen, ihre rätselhafte Vergangenheit zu enträtseln.",
+			COUNTER = "Gräber",
+			HOVER = "%s-Gräber ausheben",
+		},
+		["I've got 99 problems but starving ain't one!"] = {
+			NAME = "Ich habe 99 Probleme, aber hungern ist keines davon!",
+			DESCRIPTION = "Obwohl die Wahrscheinlichkeit in dieser Welt zu verhungern recht hoch ist, habe ich gehört, dass einige ihrer Bewohner in Bezug auf Lebensmittel recht wohlhabend sind. Zeigen Sie mir, dass es solche Menschen gibt, die prozentuale Kalorienmengen essen, ohne auch nur einmal zu verhungern!",
+			COUNTER = "Kalorien",
+			HOVER = "Essen Sie %s Kalorien an Nahrung",
+		},
+		["The Untouchable"] = {
+			NAME = "Der Unberührbare",
+			DESCRIPTION = "Kannst du der Unberührbare sein? Der Unberührbare ist ein Wesen, das so stark ist, dass es von nichts berührt werden kann! Zeig mir, ob du dieses Titels würdig bist, indem du %s Sekunden lang von keinem Schaden betroffen bist!",
+			COUNTER = "Sekunden",
+			HOVER = "Bleibt für %s Sekunden unbeschädigt",
 		},
 	},
 	QUEST_FUNCTIONS = {

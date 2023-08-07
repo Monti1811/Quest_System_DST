@@ -95,6 +95,9 @@ return {
 		nightvision = "Vista nocturna para x min",
 		speed = "Bono de velocidad para x min",
 		escapedeath = "veces escapando de la Muerte durante x min",
+		planardamage = "Bonificación de daño planar durante x min",
+		planardefense = "Bonificación de defensa planar durante x min",
+		dodge = "Bonificación de esquiva durante x min",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "Tablero de misión",
@@ -199,6 +202,9 @@ return {
 		NIGHTVISION = "Visión nocturna",
 		SPEED = " % Velocidad",
 		ESCAPEDEATH = " Tiempos de escapar de la muerte",
+		PLANARDAMAGE = " Daños planares",
+		PLANARDEFENSE = " Defensa planar",
+		DODGE = " Cada %s segundos esquiva",
 	},
 	LOADING_TIPS = {
 		request = "Las peticiones pueden caer de criaturas muertas. También puedes habilitar su elaboración en las opciones de configuración!",
@@ -772,6 +778,24 @@ return {
 			DESCRIPTION = "La mayoría de mis amigos no quieren tener nada que ver conmigo, sólo porque a veces quiero prender fuego a algunas cosas. \nNo entienden lo hermoso que es el fuego... \n¡Demuéstrame que podemos ser amigos prendiendo fuego a 10 cosas!",
 			COUNTER = "Incendios iniciados",
 			HOVER = "Prende fuego a 10 cosas con un mechero",
+		},
+		["The Gravedigger"] = {
+			NAME = "El sepulturero",
+			DESCRIPTION = "En el inquietante silencio del cementerio, te adentrarás en lo desconocido mientras desentierras %s tumbas. Cuando la tierra ceda a tu pala, puede que descubras reliquias olvidadas, recuerdos perdidos o incluso antiguas maldiciones. Cada tumba encierra su propia historia, y tu curiosidad te guiará para desentrañar sus enigmáticos pasados.",
+			COUNTER = "Graves",
+			HOVER = "Desenterrar %s tumbas",
+		},
+		["I've got 99 problems but starving ain't one!"] = {
+			NAME = "¡Tengo 99 problemas, pero morir de hambre no es uno de ellos!",
+			DESCRIPTION = "Aunque la probabilidad en este mundo de morir de hambre es bastante alta, he oído que algunos de sus habitantes son bastante ricos en lo que a comida se refiere. ¡Demuéstrame que existen tales personas comiendo %s calorías de comida sin pasar hambre ni una sola vez!",
+			COUNTER = "Calorías",
+			HOVER = "Comer %s calorías de comida",
+		},
+		["The Untouchable"] = {
+			NAME = "El intocable",
+			DESCRIPTION = "¿Puedes ser el Intocable? El Intocable es una entidad tan fuerte que no puede ser tocada por nada. ¡Demuéstrame si eres digno de este título no siendo afectado por ningún daño durante %s segundos!",
+			COUNTER = "Segundos",
+			HOVER = "Permanecer sin daños durante %s segundos",
 		},
 	},
 	QUEST_FUNCTIONS = {

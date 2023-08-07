@@ -95,6 +95,9 @@ return {
 		nightvision = "夜视 为 x min",
 		speed = "速度奖励 为 x min",
 		escapedeath = "逃脱死亡的次数为 x 分钟",
+		planardamage = "平面伤害奖励 x 分钟",
+		planardefense = "平面防御奖励 x 分钟",
+		dodge = "闪避奖励 x 分钟",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "任务板",
@@ -199,6 +202,9 @@ return {
 		NIGHTVISION = "夜视仪",
 		SPEED = " % 速度",
 		ESCAPEDEATH = " 逃脱死亡的时代",
+		PLANARDAMAGE = "平面损伤",
+		PLANARDEFENSE = "平面防御",
+		DODGE = "每 %s 秒闪避一次",
 	},
 	LOADING_TIPS = {
 		request = "请求可以从被杀的生物中掉落。你也可以在配置选项中启用它们的制作功能！",
@@ -769,6 +775,24 @@ return {
 			COUNTER = "火灾开始",
 			HOVER = "用打火机点燃10件东西",
 			DESCRIPTION = "我的大多数朋友都不想和我有任何关系，只是因为有时我想点燃一些东西。\n他们不明白火有多美......。\n通过点燃10件东西来告诉我我们可以成为朋友!",
+		},
+		["The Gravedigger"] = {
+			NAME = "掘墓人",
+			DESCRIPTION = "在墓地阴森寂静的环境中，您将挖掘出 % 的坟墓，探索未知的世界。当你的铲子铲起泥土时，你可能会发现被遗忘的遗物、遗失的纪念品，甚至是古老的诅咒。每个坟墓都有自己的故事，您的好奇心将引导您揭开它们神秘的过去。",
+			COUNTER = "格雷夫斯",
+			HOVER = "挖掘 %s 座坟墓",
+		},
+		["I've got 99 problems but starving ain't one!"] = {
+			NAME = "我有 99 个问题，但挨饿不是其中之一！",
+			DESCRIPTION = "尽管在这个世界上挨饿的概率相当高，但我听说有些居民在食物方面相当富有。让我看看是否有这样的人，他们吃掉的食物热量占总热量的%，却一次也没有挨饿！",
+			COUNTER = "卡路里",
+			HOVER = "吃掉 %s 卡路里的食物",
+		},
+		["The Untouchable"] = {
+			NAME = "贱民",
+			DESCRIPTION = "你能成为 \"不可触碰者 \"吗？触不可及 \"是一个强大到无法被任何东西触及的实体！只要在 %s 秒内不受任何伤害，就能证明自己是否配得上这个称号！",
+			COUNTER = "秒数",
+			HOVER = "在 %s 秒内保持未损坏状态",
 		},
 	},
 	QUEST_FUNCTIONS = {

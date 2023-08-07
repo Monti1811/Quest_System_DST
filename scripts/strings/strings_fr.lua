@@ -95,6 +95,9 @@ return {
 		nightvision = "Vue de nuit pour x min",
 		speed = "Bonus de vitesse pour x min",
 		escapedeath = "fois échapper la mort pour x min",
+		planardamage = "Bonus de dégâts planaires pendant x min",
+		planardefense = "Bonus de défense planaire pendant x min",
+		dodge = "Bonus d'esquive pendant x min",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "Tableau de quête",
@@ -199,6 +202,9 @@ return {
 		NIGHTVISION = "Vision nocturne",
 		SPEED = " % de Vitesse",
 		ESCAPEDEATH = " fois échapper à la mort",
+		PLANARDAMAGE = " Dommages planaires",
+		PLANARDEFENSE = " Défense planaire",
+		DODGE = "Esquive tous les %s secondes",
 	},
 	LOADING_TIPS = {
 		request = "Les requêtes peuvent tomber des créatures tuées. Vous pouvez également activer leur fabrication dans les options de configuration !",
@@ -773,6 +779,24 @@ return {
 			DESCRIPTION = "La plupart de mes amis ne veulent rien avoir à faire avec moi, juste parce que parfois je veux mettre le feu à certaines choses. \Ils ne comprennent pas à quel point un feu est beau... \NMontre-moi que nous pouvons être amis en mettant le feu à 10 choses !",
 			COUNTER = "Feux allumés",
 			HOVER = "Mettre le feu à 10 objets avec un briquet",
+		},
+		["The Gravedigger"] = {
+			NAME = "Le fossoyeur",
+			DESCRIPTION = "Dans le silence sinistre du cimetière, vous plongerez dans l'inconnu en creusant %s tombes. Au fur et à mesure que la terre cède à votre pelle, vous découvrirez peut-être des reliques oubliées, des souvenirs perdus ou peut-être même d'anciennes malédictions. Chaque tombe a sa propre histoire, et votre curiosité vous guidera pour élucider leur passé énigmatique.",
+			COUNTER = "Graves",
+			HOVER = "Déterrer %s tombes",
+		},
+		["I've got 99 problems but starving ain't one!"] = {
+			NAME = "J'ai 99 problèmes, mais mourir de faim n'en fait pas partie !",
+			DESCRIPTION = "Bien que la probabilité de mourir de faim dans ce monde soit assez élevée, j'ai entendu dire que certains de ses habitants sont très riches en ce qui concerne la nourriture. Montrez-moi qu'il existe de telles personnes en mangeant des % de calories sans mourir de faim une seule fois !",
+			COUNTER = "Calories",
+			HOVER = "Manger %s calories de nourriture",
+		},
+		["The Untouchable"] = {
+			NAME = "L'intouchable",
+			DESCRIPTION = "Pouvez-vous être l'Intouchable ? L'intouchable est une entité si forte qu'elle ne peut être touchée par quoi que ce soit ! Montre-moi si tu es digne de ce titre en ne subissant aucun dégât pendant %s secondes !",
+			COUNTER = "Secondes",
+			HOVER = "Ne subit aucun dommage pendant %s secondes",
 		},
 	},
 	QUEST_FUNCTIONS = {
