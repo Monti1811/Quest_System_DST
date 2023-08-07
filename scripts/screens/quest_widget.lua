@@ -10,6 +10,7 @@ local PlayerBadge = require "widgets/playerbadge"
 local TextButton = require "widgets/textbutton"
 local STRINGS_QL = STRINGS.QUEST_COMPONENT.QUEST_LOG
 local profile_flairs = require "profile_flairs"
+local scrapbookdata = require("screens/redux/scrapbookdata")
 
 
 local colour_difficulty 
@@ -197,11 +198,56 @@ local function createQuestCard(self,quest, x, y, scale, num)
     self["quest_"..num].victim:EnableWordWrap(true)
     self["quest_"..num].victim:EnableWhitespaceWrap(true)
 
-    local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml")
-    target_atlas = target_atlas ~= nil and softresolvefilepath(target_atlas) ~= nil and target_atlas or "images/avatars.xml"
-    local target_tex = target_atlas ~= "images/avatars.xml" and quest.tex or "avatar_unknown.tex"
-    self["quest_"..num].image = self["quest__"..num]:AddChild(Image(target_atlas, target_tex))
-    self["quest_"..num].image:SetPosition(x, y - 80)
+    local target_atlas
+    local target_tex
+    local data_victim = quest.victim ~= "" and quest.victim or quest.anim_prefab
+    local data = data_victim and scrapbookdata[data_victim]
+    if TUNING.QUEST_COMPONENT.QL_ANIM ~= 0 and data and data.anim then
+        self["quest_"..num].image = self["quest__"..num]:AddChild(UIAnim())
+        self["quest_"..num].image:GetAnimState():SetBank(data.bank)
+        self["quest_"..num].image:GetAnimState():SetBuild(data.build)
+        self["quest_"..num].image:GetAnimState():PlayAnimation(data.anim, true)
+        if data.scrapbook_overridebuild then
+            self["quest_"..num].image:GetAnimState():AddOverrideBuild(data.scrapbook_overridebuild)
+        end
+        self["quest_"..num].image:GetAnimState():Hide("snow")
+        if data.scrapbook_hide then
+            for i,hide in ipairs(data.scrapbook_hide) do
+                self["quest_"..num].image:GetAnimState():Hide(hide)
+            end
+        end
+
+        local x1, y1, x2, y2 = self["quest_"..num].image:GetAnimState():GetVisualBB()
+        local ACTUAL_X = 120
+        local ACTUAL_Y = 75
+        local ax,ay = self["quest_"..num].image:GetBoundingBoxSize()
+
+        local SCALE = ACTUAL_X/ax
+
+        if ay*SCALE >= ACTUAL_Y then
+            SCALE = ACTUAL_Y/ay
+            ACTUAL_X = ax*SCALE
+        else
+            ACTUAL_Y = ay*SCALE
+        end
+
+        local offsety = ACTUAL_Y/2 -(y2*SCALE)
+        local offsetx = ACTUAL_X/2 -(x2*SCALE)
+
+        local posx =(offsetx+0) * (data and data.scrapbook_scale or 1)
+        local posy =(-offsety-75) * (data and data.scrapbook_scale or 1)
+
+        devprint("scale image", quest.victim, SCALE, ax, ay, ax * SCALE, ay * SCALE)
+        self["quest_"..num].image:SetScale(SCALE)
+        self["quest_"..num].image:SetPosition(x+ posx,y + posy)
+    else
+        target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml")
+        target_atlas = target_atlas ~= nil and softresolvefilepath(target_atlas) ~= nil and target_atlas or "images/avatars.xml"
+        target_tex = target_atlas ~= "images/avatars.xml" and quest.tex or "avatar_unknown.tex"
+
+        self["quest_"..num].image = self["quest__"..num]:AddChild(Image(target_atlas, target_tex))
+        self["quest_"..num].image:SetPosition(x, y - 80)
+    end
     self["quest_"..num].image:MoveToFront()
     if quest.start_fn and type(quest.start_fn) == "string" and string.find(quest.start_fn,"start_fn_") then
       local fn = string.gsub(quest.start_fn,"start_fn_","")

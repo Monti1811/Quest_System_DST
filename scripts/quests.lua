@@ -165,6 +165,7 @@ local quests = {
 	tex = "celestial.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("The Reckoning of the Gestalt","HOVER",120),
+	anim_prefab = "gestalt_guard",
 	},
 	--4
 	{
@@ -571,6 +572,7 @@ local quests = {
 	tex = "pigking.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("The Legend of the Trade Road","HOVER",20),
+	anim_prefab = "pigking",
 	},
 	--17
 	{
@@ -623,6 +625,7 @@ local quests = {
 	tex = "deerclops.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("Mage of the Manor Baldur","HOVER"),
+	anim_prefab = "deerclops",
 	},
 	--20
 	{
@@ -787,6 +790,7 @@ local quests = {
 	tex = "moonbase.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("The Damned Legacy","HOVER",1),
+	anim_prefab = "moonbase",
 	},
 	--27
 	{
@@ -851,15 +855,15 @@ local quests = {
 	victim = "shark",
 	counter_name = nil,
 	description = GetQuestString("The Sharks Demise","DESCRIPTION"),
-	amount = 2,
-	rewards = {fishmeat = 20,blowdart_yellow = 10},
-	points = 1000,
+	amount = 1,
+	rewards = {fishmeat = 10,blowdart_yellow = 5},
+	points = 800,
 	start_fn = nil,
 	onfinished = nil,
 	difficulty = 4,
 	tex = "shark.tex",
 	atlas = "images/victims.xml",
-	hovertext = GetKillString("shark",2),
+	hovertext = GetKillString("shark",1),
 	},
 	--29
 	{
@@ -1041,6 +1045,7 @@ local quests = {
 	tex = "glommer_lightflower.tex",
 	atlas = "images/glommer_lightflower.xml",
 	hovertext = GetQuestString("Bright Worshipnight","HOVER"),
+	anim_prefab = "glommer_lightflower",
 	},
 	--33
 	{
@@ -1052,7 +1057,9 @@ local quests = {
 	rewards = {ruins_bat = 1,rocks = 15,froglegs = 5},
 	points = 750,
 	start_fn = function(inst,amount,quest_name)
+		--TODO not working correctly at the moment
 		local function OnHitMerm(inst,data)
+			devprint("OnHitMerm", inst, data.target, data.target and data.target.prefab)
 			if data and data.target and data.target.prefab == "merm" then
 				if inst.net_cameratrigger ~= nil then
 					if inst.camera_task ~= nil then
@@ -1440,6 +1447,7 @@ local quests = {
 	tex = "mosquito.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("Off to donate blood","HOVER",20),
+	anim_prefab = "mosquito",
 	},
 	--43
 	{
@@ -1671,6 +1679,7 @@ local quests = {
 	tex = "terrorbeak.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("Survival: Heart attack","HOVER",50),
+	anim_prefab = "terrorbeak",
 	scale = {1},
 	custom_vars_fn = function(inst,amount,quest_name)
 		local max_scale = inst.components.quest_component and inst.components.quest_component.scaled_quests[quest_name] and inst.components.quest_component.scaled_quests[quest_name] + 1 or 1
@@ -1901,6 +1910,7 @@ local quests = {
 	tex = "leif.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("Treebeard's end","HOVER"),
+	anim_prefab = "leif",
 	},
 	--54
 	{
@@ -1985,6 +1995,7 @@ local quests = {
 	tex = "pigman.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("Front Pigs","HOVER",5),
+	anim_prefab = "pigman",
 	},
 	--57
 	{
@@ -2003,6 +2014,7 @@ local quests = {
 	tex = "koalefant_summer.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("Detective Work","HOVER"),
+	anim_prefab = "animal_track",
 	},
 	--58
 	{
@@ -2058,6 +2070,7 @@ local quests = {
 	tex = "twinofterror1.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("Twins Of Destruction","HOVER"),
+	anim_prefab = "twinofterror1",
 	},
 	--59
 	{
@@ -2355,6 +2368,7 @@ local quests = {
 	tex = "tallbird.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("Kingfisher","HOVER",2),
+	anim_prefab = "tallbird",
 	},
 	--69 nice
 	{
@@ -2362,9 +2376,9 @@ local quests = {
 	victim = "",
 	counter_name = GetQuestString("The Mad Hatter","COUNTER"),
 	description = GetQuestString("The Mad Hatter","DESCRIPTION"),
-	amount = 4,
-	rewards = {eyebrellahat = 1},
-	points = 450,
+	amount = 3,
+	rewards = {eyebrellahat = 1, [":func:winterinsulation;120"] = 16, [":func:summerinsulation;120"] = 16,},
+	points = 650,
 	start_fn = function(inst,amount,quest_name)
 		local hats_built = inst.components.quest_component:GetQuestData(quest_name,"hats_built") or {beefalohat = false,featherhat = false,rainhat = false,catcoonhat = false}
 		local function OnBuild(inst,data)
@@ -2389,7 +2403,7 @@ local quests = {
 		OnForfeit(inst,OnForfeitedQuest,quest_name)
 	end,
 	onfinished = nil,
-	difficulty = 3,
+	difficulty = 4,
 	tex = "dress.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("The Mad Hatter","HOVER"),
@@ -2429,6 +2443,7 @@ local quests = {
 	["reward_Transform Chester to_atlas"] = "images/inventoryimages1.xml",
 	unlisted = true, --this is part of a quest line, we don't want it to be gotten otherwise
 	quest_line = true,
+	anim_prefab = "chester",
 	},
 	--71
 	{
@@ -2555,6 +2570,7 @@ local quests = {
 	tex = "pigman.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("Spiderman","HOVER",3),
+	anim_prefab = "pigman",
 	},
 	--75
 	{
@@ -2573,6 +2589,7 @@ local quests = {
 	tex = "bat.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("A Bunnys Job","HOVER",5),
+	anim_prefab = "bat",
 	},
 	--76
 	{
@@ -2608,6 +2625,7 @@ local quests = {
 	tex = "walrus.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("Your Own Fault","HOVER",1),
+	anim_prefab = "walrus",
 	},
 	--77
 	{
@@ -2645,6 +2663,7 @@ local quests = {
 	tex = "pigman.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("Death By Self","HOVER",15),
+	anim_prefab = "pigman",
 	},
 	--78
 	{
@@ -2685,6 +2704,7 @@ local quests = {
 	tex = "pigman.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("The Inner Monster","HOVER",3),
+	anim_prefab = "pigman",
 	},
 	--79
 	{
@@ -2807,6 +2827,7 @@ local quests = {
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("A Useful Companion","HOVER",60),
 	quest_line = true,
+	anim_prefab = "beefalo",
 	},
 	--82
 	{
@@ -2911,6 +2932,7 @@ local quests = {
 	hovertext = GetQuestString("The Shadow Plague","HOVER",30),
 	quest_line = true,
 	unlisted = true,
+	anim_prefab = "terrorbeak",
 	},
 	--85
 	{
@@ -2987,6 +3009,7 @@ local quests = {
 	hovertext = GetQuestString("The Pieces of Downfall","HOVER"),
 	quest_line = true,
 	unlisted = true,
+	anim_prefab = "shadow_rook",
 	},
 	--86
 	{
@@ -3044,6 +3067,7 @@ local quests = {
 	tex = "crawlinghorror.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("The Shadow Slayer","HOVER",10),
+	anim_prefab = "crawlinghorror",
 	},
 	--88
 	{
@@ -3169,6 +3193,7 @@ local quests = {
 	tex = "dustmoth.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("The Tormented Dust Moth","HOVER"),
+	anim_prefab = "dustmoth",
 	},
 	--93
 	{
@@ -3263,6 +3288,7 @@ local quests = {
 	tex = "waterplant.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("The Ocean Chose Me!","HOVER",3),
+	anim_prefab = "waterplant",
 	reward_singingshell_octave3_tex = "singingshell_octave3_3.tex",
 	reward_singingshell_octave3_atlas = "images/inventoryimages2.xml",
 	reward_singingshell_octave4_tex = "singingshell_octave4_3.tex",
@@ -3393,8 +3419,128 @@ local quests = {
 	hovertext = GetQuestString("Kiss The Frog!","HOVER",50),
 	quest_line = true,
 	unlisted = true,
+	anim_prefab = "frog",
 	},
-
+	--98
+	{
+		name = "The Gravedigger",
+		victim = "",
+		counter_name = GetQuestString("The Gravedigger","COUNTER"),
+		description = GetQuestString("The Gravedigger","DESCRIPTION",3),
+		amount = 3,
+		rewards = {shovel_lunarplant = 1,[":func:worker;1.4"] = 16,},
+		points = 550,
+		start_fn = function(inst,amount,quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["do work type z for x amount of y"](inst,ACTIONS.DIG,"mound",amount,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "mound.tex",
+		atlas = nil, --"images/inventoryimages1.xml",
+		hovertext = GetQuestString("The Gravedigger","HOVER",3),
+		quest_line = true,
+		unlisted = true,
+	},
+	--99
+	{
+		name = "I've got 99 problems but starving ain't one!",
+		victim = "",
+		counter_name = GetQuestString("I've got 99 problems but starving ain't one!","COUNTER"),
+		description = GetQuestString("I've got 99 problems but starving ain't one!","DESCRIPTION",3000),
+		amount = 3000,
+		rewards = {armorslurper = 1,[":func:hunger;100"] = 16,[":func:hungerrate;0.7"] = 16,},
+		points = 1000,
+		start_fn = function(inst,amount,quest_name)
+			local calories_eaten = GetCurrentAmount(inst,quest_name)
+			local OnStarve
+			local function Food(_player, data)
+				if data and data.food then
+					local food = data.food
+					local base_mult = _player.components.foodmemory ~= nil and _player.components.foodmemory:GetFoodMultiplier(food.prefab) or 1
+					local stack_mult = _player.components.eater.eatwholestack and food.components.stackable ~= nil and food.components.stackable:StackSize() or 1
+					local calories = food.components.edible:GetHunger(_player) * base_mult * _player.components.eater.hungerabsorption * stack_mult
+					calories_eaten = calories_eaten + calories
+					_player:PushEvent("quest_update",{ quest = quest_name, amount = calories})
+					if calories_eaten >= amount then
+						_player:RemoveEventCallback("oneat",Food)
+						_player:RemoveEventCallback("startstarving", OnStarve)
+					end
+				end
+			end
+			OnStarve = function(inst)
+				inst.components.quest_component:RemoveQuest(quest_name)
+				inst:RemoveEventCallback("oneat",Food)
+				inst:RemoveEventCallback("startstarving", OnStarve)
+			end
+			inst:ListenForEvent("oneat",Food)
+			inst:ListenForEvent("startstarving", OnStarve)
+			local function OnForfeitedQuest(_player)
+				_player:RemoveEventCallback("oneat",Food)
+				_player:RemoveEventCallback("startstarving", OnStarve)
+			end
+			OnForfeit(inst,OnForfeitedQuest,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 4,
+		tex = "meatballs.tex",
+		atlas = nil, --"images/inventoryimages1.xml",
+		hovertext = GetQuestString("I've got 99 problems but starving ain't one!","HOVER",3000),
+		quest_line = true,
+		unlisted = true,
+	},
+	--100
+	{
+		name = "The Untouchable",
+		victim = "",
+		counter_name = GetQuestString("The Untouchable","COUNTER"),
+		description = GetQuestString("The Untouchable","DESCRIPTION",600),
+		amount = 600,
+		rewards = {[":func:dodge;10"] = 20,},
+		points = 600,
+		start_fn = function(inst,amount,quest_name)
+			local current = GetCurrentAmount(inst,quest_name)
+			local OnKilled
+			local OnAttacked
+			local function Stop()
+				inst:RemoveEventCallback("attacked",OnAttacked)
+				inst:RemoveEventCallback("killed",OnKilled)
+				if inst[quest_name.."_task"] ~= nil then
+					inst[quest_name.."_task"]:Cancel()
+					inst[quest_name.."_task"] = nil
+				end
+			end
+			OnAttacked = function(inst, data)
+				if data and data.damageresolved and data.damageresolved > 0 then
+					inst.components.quest_component:RemoveQuest(quest_name)
+					Stop()
+				end
+			end
+			OnKilled = function(inst)
+				inst.components.quest_component:RemoveQuest(quest_name)
+				Stop()
+			end
+			inst:ListenForEvent("attacked",OnAttacked)
+			inst:ListenForEvent("killed",OnKilled)
+			local function OnForfeitedQuest(inst)
+				Stop()
+			end
+			inst[quest_name.."_task"] = inst:DoPeriodicTask(1, function()
+				current = current + 1
+				inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
+				if current >= amount then
+					Stop()
+				end
+			end)
+			OnForfeit(inst,OnForfeitedQuest,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 3,
+		tex = "dodge.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("The Untouchable","HOVER",600),
+		quest_line = true,
+		unlisted = true,
+	},
 
 
 }

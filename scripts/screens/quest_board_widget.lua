@@ -9,6 +9,7 @@ local Screen = require "widgets/screen"
 local Templates_R = require "widgets/redux/templates"
 local ImageButton = require "widgets/imagebutton"
 local ScrollableList = require "widgets/scrollablelist"
+local UIAnim = require "widgets/uianim"
 --local FilterBar = require "widgets/redux/filterbar"
 --local ItemExplorer = require "widgets/redux/itemexplorer"
 local STRINGS_QB = STRINGS.QUEST_COMPONENT.QUEST_BOARD
@@ -16,6 +17,7 @@ local STRINGS_QL = STRINGS.QUEST_COMPONENT.QUEST_LOG
 local QUEST_BOARD = TUNING.QUEST_COMPONENT.QUEST_BOARD
 local QUEST_COMPONENT = TUNING.QUEST_COMPONENT
 local QUESTS = TUNING.QUEST_COMPONENT.QUESTS
+local scrapbookdata = require("screens/redux/scrapbookdata")
 
 
 local profile_flairs = require "profile_flairs"
@@ -379,11 +381,57 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
     self.__show_quest2.victim:EnableWordWrap(true)
     self.__show_quest2.victim:EnableWhitespaceWrap(true)
 
-    local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml")
-    target_atlas = target_atlas ~= nil and softresolvefilepath(target_atlas) ~= nil and target_atlas or "images/avatars.xml"
-    local target_tex = target_atlas ~= "images/avatars.xml" and quest.tex or "avatar_unknown.tex"
-    self.__show_quest2.image = self.show_quest:AddChild(Image(target_atlas, target_tex))
-    self.__show_quest2.image:SetPosition(progress_x, progress_y + 10)
+    local target_atlas
+    local target_tex
+    local data_victim = quest.victim ~= "" and quest.victim or quest.anim_prefab
+    local data = data_victim and scrapbookdata[data_victim]
+    if TUNING.QUEST_COMPONENT.QL_ANIM ~= 0 and data and data.anim then
+        self.__show_quest2.image = self.show_quest:AddChild(UIAnim())
+        self.__show_quest2.image:GetAnimState():SetBank(data.bank)
+        self.__show_quest2.image:GetAnimState():SetBuild(data.build)
+        self.__show_quest2.image:GetAnimState():PlayAnimation(data.anim, true)
+        if data.scrapbook_overridebuild then
+            self.__show_quest2.image:GetAnimState():AddOverrideBuild(data.scrapbook_overridebuild)
+        end
+        self.__show_quest2.image:GetAnimState():Hide("snow")
+        if data.scrapbook_hide then
+            for i,hide in ipairs(data.scrapbook_hide) do
+                self.__show_quest2.image:GetAnimState():Hide(hide)
+            end
+        end
+
+        local x1, y1, x2, y2 = self.__show_quest2.image:GetAnimState():GetVisualBB()
+        local ACTUAL_X = 115
+        local ACTUAL_Y = 130
+        local ax,ay = self.__show_quest2.image:GetBoundingBoxSize()
+
+        local SCALE = ACTUAL_X/ax
+
+        if ay*SCALE >= ACTUAL_Y then
+            SCALE = ACTUAL_Y/ay
+            ACTUAL_X = ax*SCALE
+        else
+            ACTUAL_Y = ay*SCALE
+        end
+
+        local offsety = ACTUAL_Y/2 -(y2*SCALE)
+        local offsetx = ACTUAL_X/2 -(x2*SCALE)
+
+        local posx =(offsetx+0) * (data and data.scrapbook_scale or 1)
+        local posy =(-offsety+15) * (data and data.scrapbook_scale or 1)
+
+        devprint("scale image", quest.victim, SCALE, ax, ay, ax * SCALE, ay * SCALE)
+        self.__show_quest2.image:SetScale(SCALE)
+        self.__show_quest2.image:SetPosition(progress_x + posx, progress_y + posy)
+    else
+
+        target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml")
+        target_atlas = target_atlas ~= nil and softresolvefilepath(target_atlas) ~= nil and target_atlas or "images/avatars.xml"
+        target_tex = target_atlas ~= "images/avatars.xml" and quest.tex or "avatar_unknown.tex"
+        self.__show_quest2.image = self.show_quest:AddChild(Image(target_atlas, target_tex))
+        self.__show_quest2.image:SetPosition(progress_x, progress_y + 10)
+    end
+
     if quest.start_fn and type(quest.start_fn) == "string" and string.find(quest.start_fn,"start_fn_") then
         local fn = string.gsub(quest.start_fn,"start_fn_","")
         local text = QUEST_BOARD.PREFABS_MOBS[fn] and QUEST_BOARD.PREFABS_MOBS[fn].text
