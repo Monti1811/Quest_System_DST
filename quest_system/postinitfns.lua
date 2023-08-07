@@ -3,7 +3,6 @@ local net_float = GLOBAL.net_float
 local net_bool = GLOBAL.net_bool
 local net_string = GLOBAL.net_string
 local QUEST_COMPONENT = GLOBAL.TUNING.QUEST_COMPONENT
-local TheCamera = GLOBAL.TheCamera
 local unpack = GLOBAL.unpack
 local SpawnPrefab = GLOBAL.SpawnPrefab
 local Vector3 = GLOBAL.Vector3
@@ -40,8 +39,8 @@ AddPlayerPostInit(function(inst)
     inst.net_cameratrigger = net_bool(inst.GUID,"net_cameratrigger","net_cameratriggerdirty")
     inst.net_cameratrigger:set(false)
     inst:ListenForEvent("net_cameratriggerdirty",function()
-        if TheCamera then
-            TheCamera.turned = inst.net_cameratrigger:value()
+        if GLOBAL.TheCamera and GLOBAL.ThePlayer == inst then
+            GLOBAL.TheCamera.turned = inst.net_cameratrigger:value()
         end
     end)
 
