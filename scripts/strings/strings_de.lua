@@ -97,7 +97,7 @@ return {
 		escapedeath = "Mal dem Tod entrinnen für x min",
 		planardamage = "Planarer Schadensbonus für x Minuten",
 		planardefense = "Planarer Verteidigungsbonus für x Minuten",
-		dodge = "Ausweichbonus für x min",
+		dodge = "Abklingzeit Ausweichen-Bonus für x min",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "Missionsbrett",

@@ -97,7 +97,7 @@ return {
 		escapedeath = "Время побега Смерть за x мин",
 		planardamage = "Бонус к планарному урону на x мин",
 		planardefense = "Бонус к плановой защите на x мин",
-		dodge = "Бонус к уклонению на x мин",
+		dodge = "бонус к уклонению на х мин",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "Квестовая доска",

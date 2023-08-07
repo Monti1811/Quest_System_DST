@@ -3434,11 +3434,9 @@ local quests = {
 		end,
 		onfinished = nil,
 		difficulty = 2,
-		tex = "mound.tex",
-		atlas = nil, --"images/inventoryimages1.xml",
+		tex = "shovel.tex",
+		atlas = "images/inventoryimages2.xml",
 		hovertext = GetQuestString("The Gravedigger","HOVER",3),
-		quest_line = true,
-		unlisted = true,
 	},
 	--99
 	{
@@ -3484,16 +3482,14 @@ local quests = {
 		tex = "meatballs.tex",
 		atlas = nil, --"images/inventoryimages1.xml",
 		hovertext = GetQuestString("I've got 99 problems but starving ain't one!","HOVER",3000),
-		quest_line = true,
-		unlisted = true,
 	},
 	--100
 	{
 		name = "The Untouchable",
 		victim = "",
 		counter_name = GetQuestString("The Untouchable","COUNTER"),
-		description = GetQuestString("The Untouchable","DESCRIPTION",600),
-		amount = 600,
+		description = GetQuestString("The Untouchable","DESCRIPTION",900),
+		amount = 900,
 		rewards = {[":func:dodge;10"] = 20,},
 		points = 600,
 		start_fn = function(inst,amount,quest_name)
@@ -3510,13 +3506,11 @@ local quests = {
 			end
 			OnAttacked = function(inst, data)
 				if data and data.damageresolved and data.damageresolved > 0 then
-					inst.components.quest_component:RemoveQuest(quest_name)
-					Stop()
+					inst:PushEvent("quest_update",{quest = quest_name,reset = true})
 				end
 			end
 			OnKilled = function(inst)
-				inst.components.quest_component:RemoveQuest(quest_name)
-				Stop()
+				inst:PushEvent("quest_update",{quest = quest_name,reset = true})
 			end
 			inst:ListenForEvent("attacked",OnAttacked)
 			inst:ListenForEvent("killed",OnKilled)
@@ -3524,10 +3518,12 @@ local quests = {
 				Stop()
 			end
 			inst[quest_name.."_task"] = inst:DoPeriodicTask(1, function()
-				current = current + 1
-				inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
-				if current >= amount then
-					Stop()
+				if not inst:HasTag("playerghost") then
+					current = current + 1
+					inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
+					if current >= amount then
+						Stop()
+					end
 				end
 			end)
 			OnForfeit(inst,OnForfeitedQuest,quest_name)
@@ -3536,9 +3532,7 @@ local quests = {
 		difficulty = 3,
 		tex = "dodge.tex",
 		atlas = "images/victims.xml",
-		hovertext = GetQuestString("The Untouchable","HOVER",600),
-		quest_line = true,
-		unlisted = true,
+		hovertext = GetQuestString("The Untouchable","HOVER",900),
 	},
 
 

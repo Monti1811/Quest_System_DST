@@ -235,11 +235,12 @@ QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS = {
 }
 
 local text_table_boni = {
-	sanity = function(amount) amount = amount return "+"..amount.."/min " end,
+	sanity = function(amount) return "+"..amount.."/min " end,
 	nightvision = function(_) return "" end,
 	damagereduction = function(amount) amount = (1-amount) * 100;return "+"..amount.."% " end,
 	hungerrate = function(amount) amount = amount * 100;return amount.."% " end,
-	escapedeath = function(amount) return amount.." " end
+	escapedeath = function(amount) return amount.." " end,
+	dodge = function(amount) return amount.."s " end,
 }
 
 local function MakeTempRewardData(bonus,amount)

@@ -97,7 +97,7 @@ return {
 		escapedeath = "逃脱死亡的次数为 x 分钟",
 		planardamage = "平面伤害奖励 x 分钟",
 		planardefense = "平面防御奖励 x 分钟",
-		dodge = "闪避奖励 x 分钟",
+		dodge = "闪避奖励冷却 x 分钟",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "任务板",

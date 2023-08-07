@@ -110,7 +110,7 @@ return {
 		damagereduction = "Damagereduction Bonus for x min",
 		planardefense = "Planar Defense Bonus for x min",
 		range = "Range Bonus for x min",
-		dodge = "Dodge Bonus for x min",
+		dodge = "cooldown Dodge Bonus for x min",
 		winterinsulation = "Winterinsulation Bonus for x min",
 		summerinsulation = "Summerinsulation Bonus for x min",
 		worker = "Working Bonus for x min",

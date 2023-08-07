@@ -832,12 +832,15 @@ function Quest_Widget:ShowDescription(tab,_num)
     self.__show_rewards:SetScale(1.4,1.2)
 
     self._show_rewards = self.show_rewards:AddChild(Text(NEWFONT_OUTLINE, 45,nil,UICOLOURS.BLACK))
-    self._show_rewards:SetString(GetQuestString(tab.overridename or tab.name,"NAME") ~= "" and GetQuestString(tab.overridename or tab.name,"NAME",unpack(tab.scale)) or tab.name)
+    local scale = tab.scale or {}
+    local name = GetQuestString(tab.overridename or tab.name,"NAME",unpack(scale))
+    --self._show_rewards:SetString(name ~= "" and name or tab.name)
     self._show_rewards:SetPosition(0, 165)
     self._show_rewards:SetScale(1,1)
     self._show_rewards:SetRegionSize(500, 50)
     self._show_rewards:EnableWordWrap(true)
     self._show_rewards:EnableWhitespaceWrap(true)
+    self._show_rewards:SetAutoSizingString(name ~= "" and name or tab.name, 500)
 
     self._show_rewards_divider = self.show_rewards:AddChild(Image("images/quagmire_recipebook.xml","quagmire_recipe_line_long.tex"))
     self._show_rewards_divider:SetPosition(0, 140)

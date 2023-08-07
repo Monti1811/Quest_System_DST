@@ -97,7 +97,7 @@ return {
 		escapedeath = "fois échapper la mort pour x min",
 		planardamage = "Bonus de dégâts planaires pendant x min",
 		planardefense = "Bonus de défense planaire pendant x min",
-		dodge = "Bonus d'esquive pendant x min",
+		dodge = "temps de recharge bonus d'esquive pendant x min",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "Tableau de quête",

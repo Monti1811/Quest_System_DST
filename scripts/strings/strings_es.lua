@@ -97,7 +97,7 @@ return {
 		escapedeath = "veces escapando de la Muerte durante x min",
 		planardamage = "Bonificación de daño planar durante x min",
 		planardefense = "Bonificación de defensa planar durante x min",
-		dodge = "Bonificación de esquiva durante x min",
+		dodge = "Enfriamiento de la bonificación de esquiva durante x min",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "Tablero de misión",
