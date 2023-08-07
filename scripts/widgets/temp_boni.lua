@@ -68,15 +68,33 @@ local string = {
 		return str,arrow
 	end,
 
+	planardamage = function(amount)
+		local str = "+"..amount..STRINGS_TB.PLANARDAMAGE
+		local arrow = amount < 2.1 and 0 or amount < 5.1 and 1 or amount < 10.1 and 2 or 3
+		return str,arrow
+	end,
+
 	damagereduction = function(amount)
 		local str = ((1-amount)*100)..STRINGS_TB.DAMAGEREDUCTION
 		local arrow = amount > 0.89 and 0 or amount > 0.79 and 1 or amount > 0.69 and 2 or 3
 		return str,arrow
 	end,
 
+	planardamage = function(amount)
+		local str = "+"..amount..STRINGS_TB.PLANARDEFENSE
+		local arrow = amount < 2.1 and 0 or amount < 5.1 and 1 or amount < 10.1 and 2 or 3
+		return str,arrow
+	end,
+
 	range = function(amount)
 		local str = "+"..amount..STRINGS_TB.RANGE
 		local arrow = amount < 0.51 and 0 or amount < 1.1 and 1 or amount < 1.51 and 2 or 3
+		return str,arrow
+	end,
+
+	dodge = function(amount)
+		local str = "+"..amount..STRINGS_TB.DODGE
+		local arrow = amount < 5.1 and 3 or amount < 10.1 and 2 or amount < 20.1 and 1 or 0
 		return str,arrow
 	end,
 

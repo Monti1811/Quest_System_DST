@@ -271,8 +271,11 @@ local temprewards = {
 	hungerrate = {0.9,0.8,0.7,0.6},
 	healthrate = {1,2,5,10,},
 	damage = {2,5,10,25,},
+	planardamage = {2,5,10,25,},
 	damagereduction = {0.9,0.8,0.7,0.6},
+	planardefense = {2,5,10,25,},
 	range = {0.5,1,1.5,2},
+	dodge = {30,20,10,5},
 	winterinsulation = {40,80,120,160},
 	summerinsulation = {40,80,120,160},
 	worker = {1.2,1.4,1.6,2,},
@@ -651,10 +654,12 @@ local custom_functions = {
 		local trades = GetCurrentAmount(player,quest_name)
 		local pigking = TheSim:FindFirstEntityWithTag("king")
 		if not pigking then
+			print("pigking could not be found")
 			return
 		end
 		trade_item = type(trade_item) == "string" and {trade_item} or trade_item
 		local function OnTrade(_,data)
+			devprint("OnTrade", player,amount,trade_item,quest_name,data.item)
 			if data then
 				if data.giver == player then
 					if trade_item == nil then
@@ -914,6 +919,26 @@ local custom_functions = {
 		player:ListenForEvent("picksomething",OnHarvestedOversized)
 		local function OnForfeitedQuest(_player)
 			_player:RemoveEventCallback("picksomething",OnHarvestedOversized)
+		end
+		OnForfeit(player,OnForfeitedQuest,quest_name)
+	end,
+
+	["plant veggie y x times"] = function(player,amount,veggie,quest_name)
+		local planted = GetCurrentAmount(player,quest_name)
+		local function OnItemPlanted(src, data)
+			if not data then
+				--shouldn't happen
+			elseif data.doer == player then
+				planted = planted + 1
+				player:PushEvent("quest_update",{quest = quest_name,amount = 1})
+				if planted >= amount then
+					player:RemoveEventCallback("itemplanted",OnItemPlanted)
+				end
+			end
+		end
+		player:ListenForEvent("itemplanted", OnItemPlanted, TheWorld)
+		local function OnForfeitedQuest(_player)
+			_player:RemoveEventCallback("itemplanted", OnItemPlanted, TheWorld)
 		end
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,

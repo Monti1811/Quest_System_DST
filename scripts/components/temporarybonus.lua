@@ -81,6 +81,17 @@ local function AddDamage(inst,amount)
 	end
 end
 
+local function AddPlanarDamage(inst,amount,name)
+	local planardamage = inst.components.planardamage
+	if planardamage then
+		if amount < 0 then
+			planardamage:RemoveBonus(inst,name)
+		else
+			planardamage:AddBonus(inst,amount,name)
+		end
+	end
+end
+
 local function AddDamageReduction(inst,amount,name)
 	local combat = inst.components.combat
 	if combat then
@@ -89,6 +100,17 @@ local function AddDamageReduction(inst,amount,name)
 		else
 			combat.externaldamagetakenmultipliers:SetModifier(inst,amount,name)
 		end		
+	end
+end
+
+local function AddPlanarDefense(inst,amount,name)
+	local planardefense = inst.components.planardefense
+	if planardefense then
+		if amount < 0 then
+			planardefense:RemoveBonus(inst,name)
+		else
+			planardefense:AddBonus(inst,amount,name)
+		end
 	end
 end
 
@@ -102,6 +124,33 @@ local function AddRange(inst,amount)
 	end
 end
 
+local function AddDodge(inst,amount)
+	local attackdodger = inst.components.attackdodger
+	if attackdodger then
+		if amount < 0 then
+			if inst.prefab == "woodie" and inst:IsWeregoose() and inst.components.skilltreeupdater:IsActivated("woodie_curse_goose_3") then
+				if inst.components.attackdodger == nil then
+					inst:AddComponent("attackdodger")
+				end
+				inst.components.attackdodger:SetCooldownTime(TUNING.SKILLS.WOODIE.GOOSE_DODGE_COOLDOWN_TIME)
+				inst.components.attackdodger:SetOnDodgeFn(inst.OnDodgeAttack)
+			else
+				inst:RemoveComponent("attackdodger")
+			end
+		else
+			if inst.components.attackdodger == nil then
+				inst:AddComponent("attackdodger")
+			end
+			inst.components.attackdodger:SetCooldownTime(amount)
+			inst.components.attackdodger:SetOnDodgeFn(function()
+				local fx = SpawnPrefab("weregoose_transform_fx")
+				fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+				fx.Transform:SetScale(1.3, 1.3, 1.3)
+			end)
+		end
+		--TODO: if woodie changes wereness during bonus, it will dissappear
+	end
+end
 
 local function AddWinterInsulation(inst,amount)
 	local temperature = inst.components.temperature
@@ -243,8 +292,11 @@ local TemporaryBonus = Class(function(self, inst)
     	healthrate = AddHealthRate,
 
     	damage = AddDamage,
+		planardamage = AddPlanarDamage,
     	damagereduction = AddDamageReduction,
+		planardefense = AddPlanarDefense,
     	range = AddRange,
+		dodge = AddDodge,
 
    		winterinsulation = AddWinterInsulation,
     	summerinsulation = AddSummerInsulation,
