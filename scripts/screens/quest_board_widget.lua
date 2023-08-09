@@ -402,8 +402,8 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
         end
 
         local x1, y1, x2, y2 = creature:GetAnimState():GetVisualBB()
-        local ACTUAL_X = 120
-        local ACTUAL_Y = 75
+        local ACTUAL_X = 115
+        local ACTUAL_Y = 130
         local ax,ay = creature:GetBoundingBoxSize()
 
         local SCALE = ACTUAL_X/ax
@@ -432,11 +432,11 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
         local offsetx = ACTUAL_X/2 -(x2*SCALE)
 
         local posx =(offsetx+0) * (data and data.scrapbook_scale or 1)
-        local posy =(-offsety-75) * (data and data.scrapbook_scale or 1)
+        local posy =(-offsety+15) * (data and data.scrapbook_scale or 1)
 
         devprint("scale image", quest.victim, SCALE, ax, ay, ax * SCALE, ay * SCALE)
         creature:SetScale(SCALE)
-        creature:SetPosition(x+ posx,y + posy)
+        creature:SetPosition(progress_x+ posx,progress_y + posy)
     else
 
         target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml")
