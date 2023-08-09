@@ -564,14 +564,26 @@ local custom_functions = {
 
 	["do work type z for x amount of y"] = function(player,worktype,workable,how_many,quest_name)
 		local amount = GetCurrentAmount(player,quest_name)
-		local function ListenForEventFinishedWork(_player, data)
-			if data.target and (workable == nil or data.target.prefab == workable) then
-				local action = data.target.components.workable and data.target.components.workable.action
-				if worktype == nil or action == worktype then
-					amount = amount + 1
-					_player:PushEvent("quest_update",{ quest = quest_name, amount = 1})
-					if amount >= how_many then
-						_player:RemoveEventCallback("working",ListenForEventFinishedWork)
+		workable = type(workable) == "string" and {workable} or workable
+		local ListenForEventFinishedWork
+		local function UpdateQuest()
+			amount = amount + 1
+			player:PushEvent("quest_update",{ quest = quest_name, amount = 1})
+			if amount >= how_many then
+				player:RemoveEventCallback("working",ListenForEventFinishedWork)
+			end
+		end
+		ListenForEventFinishedWork = function(_, data)
+			local action = data.target.components.workable and data.target.components.workable.action
+			if worktype == nil or action == worktype then
+				if workable == nil then
+					UpdateQuest()
+				elseif data.target then
+					for _, prefab in ipairs(workable) do
+						if data.target.prefab == prefab then
+							UpdateQuest()
+							break
+						end
 					end
 				end
 			end
@@ -585,13 +597,25 @@ local custom_functions = {
 
 	["finish work type z for x amount of y"] = function(player,worktype,workable,how_many,quest_name)
 		local amount = GetCurrentAmount(player,quest_name)
-		local function ListenForEventFinishedWork(_player, data)
-			if data and data.target and (workable == nil or data.target.prefab == workable) then
-				if worktype == nil or (data.action and data.action == worktype) then
-					amount = amount + 1
-					_player:PushEvent("quest_update",{ quest = quest_name, amount = 1})
-					if amount >= how_many then
-						_player:RemoveEventCallback("finishedwork",ListenForEventFinishedWork)
+		local ListenForEventFinishedWork
+		local function UpdateQuest()
+			amount = amount + 1
+			player:PushEvent("quest_update",{ quest = quest_name, amount = 1})
+			if amount >= how_many then
+				player:RemoveEventCallback("working",ListenForEventFinishedWork)
+			end
+		end
+		ListenForEventFinishedWork = function(_, data)
+			local action = data.action
+			if worktype == nil or action == worktype then
+				if workable == nil then
+					UpdateQuest()
+				elseif data.target then
+					for _, prefab in ipairs(workable) do
+						if data.target.prefab == prefab then
+							UpdateQuest()
+							break
+						end
 					end
 				end
 			end
@@ -854,18 +878,31 @@ local custom_functions = {
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
 
-	["craft x y times"] = function(player,amount,item,tab,quest_name)
+	["craft x y times"] = function(player,amount,items,tab,quest_name)
 		local built = GetCurrentAmount(player,quest_name)
-		local function OnBuild(inst,data)
-			if data then 
-				if data.item and (item == nil or data.item.prefab == item) then
-					if data.recipe and (tab == nil or (CRAFTING_FILTERS[tab] and CRAFTING_FILTERS[tab].default_sort_values[data.recipe.name])) then
-						built = built + 1
-						player:PushEvent("quest_update",{quest = quest_name,amount = 1})
-						if built >= amount then
-							inst:RemoveEventCallback("builditem",OnBuild)
+		items = type(items) == "string" and {items} or items
+		local OnBuild
+		local function UpdateQuest()
+			built = built + 1
+			player:PushEvent("quest_update",{quest = quest_name,amount = 1})
+			if built >= amount then
+				player:RemoveEventCallback("builditem",OnBuild)
+			end
+		end
+		OnBuild = function(_,data)
+			if data then
+				if data.recipe and (tab == nil or (CRAFTING_FILTERS[tab] and CRAFTING_FILTERS[tab].default_sort_values[data.recipe.name])) then
+					if items == nil then
+						UpdateQuest()
+					elseif data.item then
+						for _, prefab in ipairs(items) do
+							if data.item.prefab == prefab then
+								UpdateQuest()
+								break
+							end
 						end
 					end
+
 				end
 			end
 		end
@@ -1119,10 +1156,17 @@ local custom_functions = {
 			if data then
 				if data.amount > 0 then
 					if item == nil or data.cause == item then
-						current_amount = current_amount + data.amount
-						player:PushEvent("quest_update",{quest = quest_name,amount = data.amount})
-						if current_amount >= amount then
-							player:RemoveEventCallback("healthdelta",OnHealthDelta)
+						local health = player.components.health
+						local old_health = data.oldpercent * health.maxhealth
+						local new_health = data.newpercent * health.maxhealth
+						local change = new_health - old_health
+						if change > 0 then
+							current_amount = current_amount + new_health - old_health
+							player:PushEvent("quest_update",{quest = quest_name,amount = change})
+							if current_amount >= amount then
+								player:RemoveEventCallback("healthdelta",OnHealthDelta)
+							end
+
 						end
 					end
 				end
@@ -1158,17 +1202,19 @@ local custom_functions = {
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
 
-	["deal x amount of damage"] = function(player,amount,weapon,quest_name)
+	["deal x amount of damage"] = function(player,amount,weapon,quest_name,target)
 		local current_amount = GetCurrentAmount(player,quest_name)
 		local function OnDamageDone(_,data)
 			amount = amount or 1
 			if data then
 				if data.damageresolved > 0 then
 					if weapon == nil or data.weapon and data.weapon.prefab == weapon then
-						current_amount = current_amount + data.damageresolved
-						player:PushEvent("quest_update",{quest = quest_name,amount = data.damageresolved})
-						if current_amount >= amount then
-							player:RemoveEventCallback("onhitother",OnDamageDone)
+						if target == nil or data.target and data.target.prefab == target then
+							current_amount = current_amount + data.damageresolved
+							player:PushEvent("quest_update",{quest = quest_name,amount = data.damageresolved})
+							if current_amount >= amount then
+								player:RemoveEventCallback("onhitother",OnDamageDone)
+							end
 						end
 					end
 				end
@@ -1187,7 +1233,7 @@ local custom_functions = {
 		local function OnDamageDone(inst,data)
 			if data then
 				if data.damageresolved > 0 then
-					if weapon == nil or data.weapon == weapon then
+					if weapon == nil or data.weapon and data.weapon.prefab == weapon then
 						local current_time2 = GetTime()
 						damages[current_time2] = data.damageresolved
 						for k,v in pairs(damages) do
@@ -1212,6 +1258,30 @@ local custom_functions = {
 		player:ListenForEvent("onhitother",OnDamageDone)
 		local function OnForfeitedQuest(_player)
 			_player:RemoveEventCallback("onhitother",OnDamageDone)
+		end
+		OnForfeit(player,OnForfeitedQuest,quest_name)
+	end,
+
+	["defend x amount of damage"] = function(player,amount,quest_name)
+		local current_amount = GetCurrentAmount(player,quest_name)
+		local function OnDamageDefended(_,data)
+			amount = amount or 1
+			if data then
+				if not data.redirected and data.original_damage > 0 then
+					if data.original_damage > data.damageresolved then
+						local defended = data.original_damage - data.damageresolved
+						current_amount = current_amount + defended
+						player:PushEvent("quest_update",{quest = quest_name,amount = defended})
+						if current_amount >= amount then
+							player:RemoveEventCallback("attacked",OnDamageDefended)
+						end
+					end
+				end
+			end
+		end
+		player:ListenForEvent("attacked",OnDamageDefended)
+		local function OnForfeitedQuest(_player)
+			_player:RemoveEventCallback("attacked",OnDamageDefended)
 		end
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
@@ -1353,17 +1423,21 @@ local custom_functions = {
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
 
-	["do x y times in z days"] = function(player,amount,min,quest_name)
+	["do x y times in z days"] = function(player,amount,min,start_event,quest_name)
 		min = min or 8
 		local quest_component = player.components.quest_component
 		local fn_name = "time_up"..quest_name
 		local seconds = min * 60
 		local time = GetValues(player,quest_name,"time")
 		local initial_time = GetTime()
+		local has_started = false
+		local StartTime
 		local function OnPlayerLeft()
-			local exit_time = GetTime()
-			time = time + (exit_time - initial_time)
-			quest_component:SetQuestData(quest_name,"time",time)
+			if has_started then
+				local exit_time = GetTime()
+				time = time + (exit_time - initial_time)
+				quest_component:SetQuestData(quest_name,"time",time)
+			end
 		end
 		TheWorld:ListenForEvent("ms_playerdespawn",OnPlayerLeft)
 		TheWorld:ListenForEvent("ms_save",OnPlayerLeft)
@@ -1374,23 +1448,38 @@ local custom_functions = {
 				quest_component:RemoveQuest(quest_name)
 				RemoveValues(player,quest_name)
 			end
+			TheWorld:RemoveEventCallback("ms_playerdespawn",OnPlayerLeft)
+			TheWorld:RemoveEventCallback("ms_save",OnPlayerLeft)
+			TheWorld:RemoveEventCallback("master_autosaverupdate",OnPlayerLeft)
 		end
 		local function SayRemainingTime(_,remaining_time)
 			OnPlayerLeft()
 			if player.components.talker then
 				local minutes = math.floor(remaining_time/60)
-				local sec = math.fmod(remaining_time,60)
+				local sec = math.floor(math.fmod(remaining_time,60))
 				local time = (minutes == 0 and "0" or minutes)..":"..(sec < 10 and "0"..sec or sec)
 				player.components.talker:Say(string.format("I have only %s minutes left to finish the quest %s!",tostring(time),quest_name))
 			end
 		end
-		local times_to_speak = {0.25, 0.5, 0.75, 0.875, 0.95}
-		for _,v in ipairs(times_to_speak) do
-			if seconds*v - time >= 0 then
-				player[quest_name..v] = player:DoTaskInTime((seconds*v - time),SayRemainingTime,seconds*(1-v))
+		local times_to_speak = {0.25, 0.5, 0.75, 0.875, 0.95, 0.99}
+		StartTime = function()
+			has_started = true
+			for _,v in ipairs(times_to_speak) do
+				if seconds*v - time >= 0 then
+					player[quest_name..v] = player:DoTaskInTime((seconds*v - time),SayRemainingTime,seconds*(1-v))
+				end
+			end
+			SayRemainingTime(nil, seconds - time)
+			player[fn_name] = player:DoTaskInTime((seconds-time),TimeUp)
+			if start_event then
+				player:RemoveEventCallback(start_event, StartTime)
 			end
 		end
-		player[fn_name] = player:DoTaskInTime((seconds-time),TimeUp)
+		if time == 0 and start_event then
+			player:ListenForEvent(start_event, StartTime)
+		else
+			StartTime()
+		end
 		local function KillTasks(_,name)
 			if name == quest_name then
 				for _,v in ipairs(times_to_speak) do
@@ -1409,7 +1498,6 @@ local custom_functions = {
 			TheWorld:RemoveEventCallback("ms_playerdespawn",OnPlayerLeft)
 			TheWorld:RemoveEventCallback("ms_save",OnPlayerLeft)
 			TheWorld:RemoveEventCallback("master_autosaverupdate",OnPlayerLeft)
-			_player:RemoveEventCallback("finished_quest",KillTasks)
 			if _player[fn_name] ~= nil then
 				_player[fn_name]:Cancel()
 				_player[fn_name] = nil
@@ -1418,15 +1506,17 @@ local custom_functions = {
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
 
-	["kill x y times"] = function(player,amount,victim,quest_name)
+	["kill x y times"] = function(player,amount,victim,quest_name,check)
 		local current = GetCurrentAmount(player,quest_name)
 		local function OnKilled(_,data)
 			if data and data.victim then
 				if victim == nil or data.victim.prefab == victim then
-					player:PushEvent("quest_update",{quest = quest_name,amount = 1})
-					current = current + 1
-					if current >= amount then
-						player:RemoveEventCallback("killed",OnKilled)
+					if check == nil or check(data.victim) then
+						player:PushEvent("quest_update",{quest = quest_name,amount = 1})
+						current = current + 1
+						if current >= amount then
+							player:RemoveEventCallback("killed",OnKilled)
+						end
 					end
 				end
 			end
@@ -1443,9 +1533,10 @@ local custom_functions = {
 	["die x times from y by z"] = function(player,amount,cause,afflicter,quest_name)
 		local current = GetCurrentAmount(player,quest_name)
 		local function OnDied(_,data)
+			devprint("OnDied", data.cause, data.afflicter)
 			if data then
 				if cause == nil or data.cause == cause then
-					if afflicter == nil or data.afflicter == afflicter then
+					if afflicter == nil or data.afflicter and data.afflicter.prefab == afflicter then
 						player:PushEvent("quest_update",{quest = quest_name,amount = 1})
 						current = current + 1
 						if current >= amount then
@@ -1589,7 +1680,7 @@ local custom_functions = {
 		local function CheckBool(_player)
 			if bool == nil or bool(_player,amount,quest_name) then
 				current = current + 1
-				_player:PushEvent("quest_update",{ quest = quest_name, amount = 1})
+				_player:PushEvent("quest_update",{ quest = quest_name, amount = time_between_check})
 				if current >= amount then
 					if _player[fn_name] ~= nil then
 						_player[fn_name]:Cancel()
@@ -2177,7 +2268,7 @@ local FunctionsForCustomQuests = {
 	{
 		"Chop down x Trees",
 		function(player,amount,quest_name)
-			custom_functions["do work type z for x amount of y"](player,ACTIONS.CHOP,nil,amount,quest_name)
+			custom_functions["finish work type z for x amount of y"](player,ACTIONS.CHOP,nil,amount,quest_name)
 		end,
 		"Trees",
 		"axe.tex",
@@ -2186,7 +2277,7 @@ local FunctionsForCustomQuests = {
 	{
 		"Chop down x Totally Normal Trees",
 		function(player,amount,quest_name)
-			custom_functions["do work type z for x amount of y"](player,ACTIONS.CHOP,"livingtree",amount,quest_name)
+			custom_functions["finish work type z for x amount of y"](player,ACTIONS.CHOP,"livingtree",amount,quest_name)
 		end,
 		"Totally Normal Trees",
 		"axe.tex",
@@ -2195,7 +2286,7 @@ local FunctionsForCustomQuests = {
 	{
 		"Chop down x Lune Trees",
 		function(player,amount,quest_name)
-			custom_functions["do work type z for x amount of y"](player,ACTIONS.CHOP,"moon_tree_tall",amount,quest_name)
+			custom_functions["finish work type z for x amount of y"](player,ACTIONS.CHOP,"moon_tree_tall",amount,quest_name)
 		end,
 		"Lune Trees",
 		"axe.tex",
@@ -2204,7 +2295,7 @@ local FunctionsForCustomQuests = {
 	{
 		"Chop down x Above-Average Tree Trunks",
 		function(player,amount,quest_name)
-			custom_functions["do work type z for x amount of y"](player,ACTIONS.CHOP,"oceantree_pillar",amount,quest_name)
+			custom_functions["finish work type z for x amount of y"](player,ACTIONS.CHOP,"oceantree_pillar",amount,quest_name)
 		end,
 		"Above-Average Tree Trunks",
 		"axe.tex",
@@ -2215,7 +2306,7 @@ local FunctionsForCustomQuests = {
 	{
 		"Mine x Boulders",
 		function(player,amount,quest_name)
-			custom_functions["do work type z for x amount of y"](player,ACTIONS.MINE,nil,amount,quest_name)
+			custom_functions["finish work type z for x amount of y"](player,ACTIONS.MINE,nil,amount,quest_name)
 		end,
 		"Boulders",
 		"pickaxe.tex",
@@ -2224,7 +2315,7 @@ local FunctionsForCustomQuests = {
 	{
 		"Mine x Gold Veins",
 		function(player,amount,quest_name)
-			custom_functions["do work type z for x amount of y"](player,ACTIONS.MINE,"rock2",amount,quest_name)
+			custom_functions["finish work type z for x amount of y"](player,ACTIONS.MINE,"rock2",amount,quest_name)
 		end,
 		"Gold Veins",
 		"pickaxe.tex",
@@ -2233,7 +2324,7 @@ local FunctionsForCustomQuests = {
 	{
 		"Mine x Meteors",
 		function(player,amount,quest_name)
-			custom_functions["do work type z for x amount of y"](player,ACTIONS.MINE,"rock_moon",amount,quest_name)
+			custom_functions["finish work type z for x amount of y"](player,ACTIONS.MINE,"rock_moon",amount,quest_name)
 		end,
 		"Meteors",
 		"pickaxe.tex",
@@ -2244,7 +2335,7 @@ local FunctionsForCustomQuests = {
 	{
 		"Dig up x Times",
 		function(player,amount,quest_name)
-			custom_functions["do work type z for x amount of y"](player,ACTIONS.DIG,nil,amount,quest_name)
+			custom_functions["finish work type z for x amount of y"](player,ACTIONS.DIG,nil,amount,quest_name)
 		end,
 		"Digs",
 		"shovel.tex",
@@ -2253,7 +2344,7 @@ local FunctionsForCustomQuests = {
 	{
 		"Dig up x Graves",
 		function(player,amount,quest_name)
-			custom_functions["do work type z for x amount of y"](player,ACTIONS.DIG,"mound",amount,quest_name)
+			custom_functions["finish work type z for x amount of y"](player,ACTIONS.DIG,"mound",amount,quest_name)
 		end,
 		"Graves",
 		"shovel.tex",
@@ -2262,7 +2353,7 @@ local FunctionsForCustomQuests = {
 	{
 		"Dig up x Grass Tufts",
 		function(player,amount,quest_name)
-			custom_functions["do work type z for x amount of y"](player,ACTIONS.DIG,"grass",amount,quest_name)
+			custom_functions["finish work type z for x amount of y"](player,ACTIONS.DIG,"grass",amount,quest_name)
 		end,
 		"Grass Tufts",
 		"shovel.tex",
@@ -2837,16 +2928,16 @@ local FunctionsForCustomQuests = {
 		"Kill x Spiders in one day",
 		function(player,amount,quest_name)
 			custom_functions["kill x y times"](player,amount,"spider",quest_name)
-			custom_functions["do x y times in z days"](player,amount,8,quest_name)
+			custom_functions["do x y times in z days"](player,amount,8,nil,quest_name)
 		end,
 		"Spiders",
 		"spider.tex",
 	},
 	{
-		"Kill x Pig Mans in 8 minutes",
+		"Kill x Pig Mans in 16 minutes",
 		function(player,amount,quest_name)
 			custom_functions["kill x y times"](player,amount,"pigman",quest_name)
-			custom_functions["do x y times in z days"](player,amount,16,quest_name)
+			custom_functions["do x y times in z days"](player,amount,16,nil,quest_name)
 		end,
 		"Pigman",
 		"pigman.tex",
@@ -2855,7 +2946,7 @@ local FunctionsForCustomQuests = {
 		"Kill x Bunnyman in 16 minutes",
 		function(player,amount,quest_name)
 			custom_functions["kill x y times"](player,amount,"manrabbit",quest_name)
-			custom_functions["do x y times in z days"](player,amount,16,quest_name)
+			custom_functions["do x y times in z days"](player,amount,16,nil,quest_name)
 		end,
 		"Bunnyman",
 		"manrabbit.tex",
@@ -2864,7 +2955,7 @@ local FunctionsForCustomQuests = {
 		"Kill x Red Birds in 8 minutes",
 		function(player,amount,quest_name)
 			custom_functions["kill x y times"](player,amount,"robin",quest_name)
-			custom_functions["do x y times in z days"](player,amount,8,quest_name)
+			custom_functions["do x y times in z days"](player,amount,8,nil,quest_name)
 		end,
 		"Red Bird",
 		"robin.tex",
@@ -2873,7 +2964,7 @@ local FunctionsForCustomQuests = {
 		"Catch x Fish in 16 minutes",
 		function(player,amount,quest_name)
 			custom_functions["catch x amount of y fish"](player,amount,nil,quest_name)
-			custom_functions["do x y times in z days"](player,amount,16,quest_name)
+			custom_functions["do x y times in z days"](player,amount,16,nil,quest_name)
 		end,
 		"Fishes",
 		"fishing.tex",
@@ -2881,8 +2972,8 @@ local FunctionsForCustomQuests = {
 	{
 		"Chop down x trees in 8 minutes",
 		function(player,amount,quest_name)
-			custom_functions["do work type z for x amount of y"](player,ACTIONS.CHOP,nil,amount,quest_name)
-			custom_functions["do x y times in z days"](player,amount,8,quest_name)
+			custom_functions["finish work type z for x amount of y"](player,ACTIONS.CHOP,nil,amount,quest_name)
+			custom_functions["do x y times in z days"](player,amount,8,nil,quest_name)
 		end,
 		"Trees",
 		"axe.tex",
@@ -2891,8 +2982,8 @@ local FunctionsForCustomQuests = {
 	{
 		"Dig up x times in 8 minutes",
 		function(player,amount,quest_name)
-			custom_functions["do work type z for x amount of y"](player,ACTIONS.DIG,nil,amount,quest_name)
-			custom_functions["do x y times in z days"](player,amount,8,quest_name)
+			custom_functions["finish work type z for x amount of y"](player,ACTIONS.DIG,nil,amount,quest_name)
+			custom_functions["do x y times in z days"](player,amount,8,nil,quest_name)
 		end,
 		"Digs",
 		"shovel.tex",
@@ -2901,8 +2992,8 @@ local FunctionsForCustomQuests = {
 	{
 		"Mine x Boulders in 8 minutes",
 		function(player,amount,quest_name)
-			custom_functions["do work type z for x amount of y"](player,ACTIONS.DIG,nil,amount,quest_name)
-			custom_functions["do x y times in z days"](player,amount,8,quest_name)
+			custom_functions["finish work type z for x amount of y"](player,ACTIONS.MINE,nil,amount,quest_name)
+			custom_functions["do x y times in z days"](player,amount,8,nil,quest_name)
 		end,
 		"Boulders",
 		"pickaxe.tex",

@@ -387,25 +387,27 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
     local data = data_victim and scrapbookdata[data_victim]
     if TUNING.QUEST_COMPONENT.QL_ANIM ~= 0 and data and data.anim then
         self.__show_quest2.image = self.show_quest:AddChild(UIAnim())
-        self.__show_quest2.image:GetAnimState():SetBank(data.bank)
-        self.__show_quest2.image:GetAnimState():SetBuild(data.build)
-        self.__show_quest2.image:GetAnimState():PlayAnimation(data.anim, true)
+        local creature = self.__show_quest2.image
+        creature:GetAnimState():SetBank(data.bank)
+        creature:GetAnimState():SetBuild(data.build)
+        creature:GetAnimState():PlayAnimation(data.anim, true)
         if data.scrapbook_overridebuild then
-            self.__show_quest2.image:GetAnimState():AddOverrideBuild(data.scrapbook_overridebuild)
+            creature:GetAnimState():AddOverrideBuild(data.scrapbook_overridebuild)
         end
-        self.__show_quest2.image:GetAnimState():Hide("snow")
+        creature:GetAnimState():Hide("snow")
         if data.scrapbook_hide then
             for i,hide in ipairs(data.scrapbook_hide) do
-                self.__show_quest2.image:GetAnimState():Hide(hide)
+                creature:GetAnimState():Hide(hide)
             end
         end
 
-        local x1, y1, x2, y2 = self.__show_quest2.image:GetAnimState():GetVisualBB()
-        local ACTUAL_X = 115
-        local ACTUAL_Y = 130
-        local ax,ay = self.__show_quest2.image:GetBoundingBoxSize()
+        local x1, y1, x2, y2 = creature:GetAnimState():GetVisualBB()
+        local ACTUAL_X = 120
+        local ACTUAL_Y = 75
+        local ax,ay = creature:GetBoundingBoxSize()
 
         local SCALE = ACTUAL_X/ax
+        SCALE = SCALE*(data.scrapbook_scale or 1)
 
         if ay*SCALE >= ACTUAL_Y then
             SCALE = ACTUAL_Y/ay
@@ -414,21 +416,34 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
             ACTUAL_Y = ay*SCALE
         end
 
+        --creature:SetClickable(false)
+
+        if data and data.overridesymbol then
+            if type(data.overridesymbol[1]) ~= "table" then
+                creature:GetAnimState():OverrideSymbol(data.overridesymbol[1], data.overridesymbol[2], data.overridesymbol[3])
+            else
+                for i,set in ipairs( data.overridesymbol ) do
+                    creature:GetAnimState():OverrideSymbol(set[1], set[2], set[3])
+                end
+            end
+        end
+
         local offsety = ACTUAL_Y/2 -(y2*SCALE)
         local offsetx = ACTUAL_X/2 -(x2*SCALE)
 
         local posx =(offsetx+0) * (data and data.scrapbook_scale or 1)
-        local posy =(-offsety+15) * (data and data.scrapbook_scale or 1)
+        local posy =(-offsety-75) * (data and data.scrapbook_scale or 1)
 
         devprint("scale image", quest.victim, SCALE, ax, ay, ax * SCALE, ay * SCALE)
-        self.__show_quest2.image:SetScale(SCALE)
-        self.__show_quest2.image:SetPosition(progress_x + posx, progress_y + posy)
+        creature:SetScale(SCALE)
+        creature:SetPosition(x+ posx,y + posy)
     else
 
         target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml")
         target_atlas = target_atlas ~= nil and softresolvefilepath(target_atlas) ~= nil and target_atlas or "images/avatars.xml"
         target_tex = target_atlas ~= "images/avatars.xml" and quest.tex or "avatar_unknown.tex"
         self.__show_quest2.image = self.show_quest:AddChild(Image(target_atlas, target_tex))
+        self.__show_quest2.image:ScaleToSize(64,64)
         self.__show_quest2.image:SetPosition(progress_x, progress_y + 10)
     end
 

@@ -35,6 +35,13 @@ local function GetSpawnPoint(pt,radius)
     return offset ~= nil and (pt + offset) or pt
 end
 
+local function StopTask(entity, task)
+	if entity[task] ~= nil then
+		entity[task]:Cancel()
+		entity[task] = nil
+	end
+end
+
 local function OnForfeit(inst,fn,quest_name)
 	local OnFinishedQuest = function()  end
 	local function OnForfeitedQuest(inst,name)
@@ -2485,24 +2492,15 @@ local quests = {
 				inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
 			end
 			if amount >= amount then
-				if inst.sanity_check_task ~= nil then
-					inst.sanity_check_task:Cancel()
-					inst.sanity_check_task = nil
-				end
+				StopTask(inst, "sanity_check_task")
 			else
 				inst:DoTaskInTime(1,CheckSanity)
 			end
 		end
-		if inst.sanity_check_task ~= nil then
-			inst.sanity_check_task:Cancel()
-			inst.sanity_check_task = nil
-		end
+		StopTask(inst, "sanity_check_task")
 		inst.sanity_check_task = inst:DoTaskInTime(1,CheckSanity)
 		local function OnForfeitedQuest(inst)
-			if inst.sanity_check_task ~= nil then
-				inst.sanity_check_task:Cancel()
-				inst.sanity_check_task = nil
-			end
+			StopTask(inst, "sanity_check_task")
 		end
 		OnForfeit(inst,OnForfeitedQuest,quest_name)
 	end,
@@ -2788,20 +2786,17 @@ local quests = {
 	start_fn = function(inst,amount,quest_name)
 		TheWorld.components.quest_loadpostpass.quest_lines[quest_name] = true
 		local current = GetCurrentAmount(inst,quest_name)
-		local function StopTask(inst)
-			if inst.check_riding_task ~= nil then
-				inst.check_riding_task:Cancel()
-				inst.check_riding_task = nil
-			end
+		local function StopTaskInner(inst)
+			StopTask(inst, "check_riding_task")
 		end
 		local function OnMounted(inst,data)
-			StopTask(inst)
+			StopTaskInner(inst)
 			inst.check_riding_task = inst:DoPeriodicTask(1,function()
 				inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
 				current = current + 1
 				if current >= amount then
 					inst:RemoveEventCallback("mounted",OnMounted)
-					inst:RemoveEventCallback("dismounted",StopTask)
+					inst:RemoveEventCallback("dismounted",StopTaskInner)
 				end
 			end)
 		end
@@ -2809,10 +2804,10 @@ local quests = {
 			OnMounted(inst)
 		end
 		inst:ListenForEvent("mounted",OnMounted)
-		inst:ListenForEvent("dismounted",StopTask)
+		inst:ListenForEvent("dismounted",StopTaskInner)
 		local function OnForfeitedQuest(inst)
 			inst:RemoveEventCallback("mounted",OnMounted)
-			inst:RemoveEventCallback("dismounted",StopTask)
+			inst:RemoveEventCallback("dismounted",StopTaskInner)
 		end
 		OnForfeit(inst,OnForfeitedQuest,quest_name)
 	end,
@@ -2900,12 +2895,10 @@ local quests = {
 	rewards = {leafymeatsouffle = 5,[":func:sanityaura;10"] = 16,[":func:healthrate;2"] = 16,},
 	points = 875,
 	start_fn = function(inst,amount,quest_name)
-		--TODO: check perhaps only for tag shadowcreature
 		local current = GetCurrentAmount(inst,quest_name)
-		local shadows = {crawlinghorror = true,crawlingnightmare = true,terrorbeak = true,nightmarebeak = true,oceanhorror = true,}
 		local function OnKilled(inst,data)
-			if data and data.victim and data.victim.prefab then
-				if shadows[data.victim.prefab] then
+			if data and data.victim then
+				if (data.victim:HasTag("shadowcreature") or data.victim:HasTag("nightmarecreature")) then
 					inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
 					current = current + 1
 					if current >= amount then
@@ -3212,16 +3205,10 @@ local quests = {
 				inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
 				if current >= amount then
 					inst:RemoveEventCallback("startsleeping",OnSleep)
-					if inst.quest_name then 
-						inst.quest_name:Cancel()
-						inst.quest_name = nil
-					end
+					StopTask(inst, quest_name)
 				end
 			else
-				if inst.quest_name then 
-					inst.quest_name:Cancel()
-					inst.quest_name = nil
-				end
+				StopTask(inst, quest_name)
 			end
 		end
 		OnSleep = function(inst,bed)
@@ -3232,10 +3219,7 @@ local quests = {
 		inst:ListenForEvent("startsleeping", OnSleep)
 		local function OnForfeitedQuest(inst)
 			inst:RemoveEventCallback("startsleeping",OnSleep)
-			if inst.quest_name then 
-				inst.quest_name:Cancel()
-				inst.quest_name = nil
-			end
+			StopTask(inst, quest_name)
 		end
 		OnForfeit(inst,OnForfeitedQuest,quest_name)
 	end,
@@ -3499,10 +3483,7 @@ local quests = {
 			local function Stop()
 				inst:RemoveEventCallback("attacked",OnAttacked)
 				inst:RemoveEventCallback("killed",OnKilled)
-				if inst[quest_name.."_task"] ~= nil then
-					inst[quest_name.."_task"]:Cancel()
-					inst[quest_name.."_task"] = nil
-				end
+				StopTask(inst, quest_name.."_task")
 			end
 			OnAttacked = function(inst, data)
 				if data and data.damageresolved and data.damageresolved > 0 then
@@ -3534,8 +3515,464 @@ local quests = {
 		atlas = "images/victims.xml",
 		hovertext = GetQuestString("The Untouchable","HOVER",900),
 	},
-
-
+	--101
+	{
+		name = "The Hunted Glommer",
+		victim = "",
+		counter_name = GetQuestString("The Hunted Glommer","COUNTER"),
+		description = GetQuestString("The Hunted Glommer","DESCRIPTION"),
+		amount = 1,
+		rewards = {nightmarefuel = 20,cutstone = 5,},
+		points = 550,
+		start_fn = function(player,amount,quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["protect x from y creatures z times"](player,amount,5,3,10,2,"glommer",quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "glommer.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("The Hunted Glommer","HOVER"),
+		anim_prefab  = "glommer"
+	},
+	--102
+	{
+		name = "The Stray Hutch",
+		victim = "",
+		counter_name = GetQuestString("The Stray Hutch","COUNTER"),
+		description = GetQuestString("The Stray Hutch","DESCRIPTION"),
+		amount = 1,
+		rewards = {horrorfuel = 5,rope = 9,},
+		points = 550,
+		start_fn = function(player,amount,quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["protect x from y creatures z times"](player,amount,7,3,10,3,"hutch",quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "hutch.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("The Stray Hutch","HOVER"),
+		--anim_prefab = "hutch", --TODO: hutch is not being shown in the quest panels
+	},
+	--103
+	{
+		name = "The Healer",
+		victim = "",
+		counter_name = GetQuestString("The Healer","COUNTER"),
+		description = GetQuestString("The Healer","DESCRIPTION",100),
+		amount = 150,
+		rewards = {reviver = 1, healingsalve = 2},
+		points = 250,
+		start_fn = function(inst,amount,quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["heal x amount of life with y"](inst,amount,nil,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "healingsalve.tex",
+		atlas = "images/inventoryimages1.xml",
+		hovertext = GetQuestString("The Healer","HOVER",100),
+	},
+	--104
+	{
+		name = "The Attacker",
+		victim = "",
+		counter_name = GetQuestString("The Attacker","COUNTER"),
+		description = GetQuestString("The Attacker","DESCRIPTION",1800),
+		amount = 1800,
+		rewards = {voidcloth_scythe = 1, [":func:planardamage;10"] = 8},
+		points = 125,
+		start_fn = function(inst,amount,quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["deal x amount of damage in time y with weapon z"](inst,amount,nil,30,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 3,
+		tex = "damage.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("The Attacker","HOVER",1800),
+	},
+	--105
+	{
+		name = "The Defender",
+		victim = "",
+		counter_name = GetQuestString("The Defender","COUNTER"),
+		description = GetQuestString("The Defender","DESCRIPTION",1200),
+		amount = 1200,
+		rewards = {armor_voidcloth = 1, [":func:planardefense;10"] = 8},
+		points = 125,
+		start_fn = function(inst,amount,quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["defend x amount of damage"](inst,amount,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 3,
+		tex = "damagereduction.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("The Defender","HOVER",1200),
+	},
+	--106
+	{
+		name = "Axe-swinging Competition",
+		victim = "",
+		counter_name = GetQuestString("Axe-swinging Competition","COUNTER"),
+		description = GetQuestString("Axe-swinging Competition","DESCRIPTION",20),
+		amount = 20,
+		rewards = {moonglassaxe = 1, [":func:worker;1.6"] = 24},
+		points = 250,
+		start_fn = function(inst,amount,quest_name)
+			local chopped = GetCurrentAmount(inst,quest_name)
+			local function ListenForEventFinishedWork(_player, data)
+				local action = data.action
+				--devprint("ListenForEventFinishedWork chop", _player, data.target, action, action and action.id)
+				if action == ACTIONS.CHOP then
+					if chopped == 0 then
+						inst:PushEvent(quest_name)
+					end
+					chopped = chopped + 1
+					_player:PushEvent("quest_update",{ quest = quest_name, amount = 1})
+					if chopped >= amount then
+						_player:RemoveEventCallback("finishedwork",ListenForEventFinishedWork)
+					end
+				end
+			end
+			inst:ListenForEvent("finishedwork",ListenForEventFinishedWork)
+			local function OnForfeitedQuest(_player)
+				_player:RemoveEventCallback("finishedwork",ListenForEventFinishedWork)
+			end
+			OnForfeit(inst,OnForfeitedQuest,quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["do x y times in z days"](inst,amount,3,quest_name,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "axe.tex",
+		atlas = nil,--"images/inventoryimages1.xml",
+		hovertext = GetQuestString("Axe-swinging Competition","HOVER",20),
+	},
+	--107
+	{
+		name = "Pickaxe-swinging Competition",
+		victim = "",
+		counter_name = GetQuestString("Pickaxe-swinging Competition","COUNTER"),
+		description = GetQuestString("Pickaxe-swinging Competition","DESCRIPTION",10),
+		amount = 10,
+		rewards = {pickaxe_lunarplant = 1, [":func:worker;1.6"] = 24},
+		points = 250,
+		start_fn = function(inst,amount,quest_name)
+			local chopped = GetCurrentAmount(inst,quest_name)
+			local function ListenForEventFinishedWork(_player, data)
+				local action = data.action
+				--devprint("ListenForEventFinishedWork mine", _player, data.target, action, action and action.id)
+				if action == ACTIONS.MINE then
+					if chopped == 0 then
+						inst:PushEvent(quest_name)
+					end
+					chopped = chopped + 1
+					_player:PushEvent("quest_update",{ quest = quest_name, amount = 1})
+					if chopped >= amount then
+						_player:RemoveEventCallback("finishedwork",ListenForEventFinishedWork)
+					end
+				end
+			end
+			inst:ListenForEvent("finishedwork",ListenForEventFinishedWork)
+			local function OnForfeitedQuest(_player)
+				_player:RemoveEventCallback("finishedwork",ListenForEventFinishedWork)
+			end
+			OnForfeit(inst,OnForfeitedQuest,quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["do x y times in z days"](inst,amount,3,quest_name,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "pickaxe.tex",
+		atlas = nil,--"images/inventoryimages1.xml",
+		hovertext = GetQuestString("Pickaxe-swinging Competition","HOVER",10),
+	},
+	--108
+	{
+		name = "Shovel-digging Competition",
+		victim = "",
+		counter_name = GetQuestString("Shovel-digging Competition","COUNTER"),
+		description = GetQuestString("Shovel-digging Competition","DESCRIPTION",15),
+		amount = 15,
+		rewards = {shovel_lunarplant = 1, [":func:worker;1.6"] = 24},
+		points = 250,
+		start_fn = function(inst,amount,quest_name)
+			local chopped = GetCurrentAmount(inst,quest_name)
+			local function ListenForEventFinishedWork(_player, data)
+				local action = data.action
+				--devprint("ListenForEventFinishedWork shovel", _player, data.target, action, action and action.id)
+				if action == ACTIONS.DIG then
+					if chopped == 0 then
+						inst:PushEvent(quest_name)
+					end
+					chopped = chopped + 1
+					_player:PushEvent("quest_update",{ quest = quest_name, amount = 1})
+					if chopped >= amount then
+						_player:RemoveEventCallback("finishedwork",ListenForEventFinishedWork)
+					end
+				end
+			end
+			inst:ListenForEvent("finishedwork",ListenForEventFinishedWork)
+			local function OnForfeitedQuest(_player)
+				_player:RemoveEventCallback("finishedwork",ListenForEventFinishedWork)
+			end
+			OnForfeit(inst,OnForfeitedQuest,quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["do x y times in z days"](inst,amount,3,quest_name,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "shovel.tex",
+		atlas = nil,--"images/inventoryimages1.xml",
+		hovertext = GetQuestString("Shovel-digging Competition","HOVER",15),
+	},
+	--109
+	{
+		name = "The Fatal Rose",
+		victim = "",
+		counter_name = GetQuestString("The Fatal Rose","COUNTER"),
+		description = GetQuestString("The Fatal Rose","DESCRIPTION"),
+		amount = 1,
+		rewards = {[":func:escapedeath;1"] = 1, [":func:health;50"] = 24, lifeinjector = 5},
+		points = 1000,
+		start_fn = function(inst,amount,quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["die x times from y by z"](inst,amount,"flower",nil,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 4,
+		tex = "petals.tex",
+		atlas = nil,--"images/inventoryimages1.xml",
+		hovertext = GetQuestString("The Fatal Rose","HOVER"),
+	},
+	--110
+	{
+		name = "The Bird Predator",
+		victim = "",
+		counter_name = GetQuestString("The Bird Predator","COUNTER"),
+		description = GetQuestString("The Bird Predator","DESCRIPTION",10),
+		amount = 10,
+		rewards = {[":func:range;0.5"] = 16, featherhat = 1, trailmix = 3},
+		points = 1000,
+		start_fn = function(inst,amount,quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst,amount,"robin",quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["do x y times in z days"](inst,amount,8,nil,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "robin.tex",
+		atlas = nil,--"images/inventoryimages1.xml",
+		hovertext = GetQuestString("The Bird Predator","HOVER",10),
+	},
+	--111
+	{
+		name = "A Werepigs Worst Nightmare",
+		victim = "daywalker",
+		description = GetQuestString("A Werepigs Worst Nightmare","DESCRIPTION",10),
+		amount = 1,
+		rewards = {[":func:planardamage;25"] = 16, horrorfuel = 5, dreadstone = 10},
+		points = 1750,
+		start_fn = function(inst,amount,quest_name)
+			local function OnAttackDaywalker(inst, data)
+				if data and data.target and data.target.prefab == "daywalker" then
+					if data.target.defeated then
+						inst:PushEvent("quest_update",{ quest = quest_name, amount = 1, friendly_goal = true,})
+						inst:RemoveEventCallback("onattackother",OnAttackDaywalker)
+					end
+				end
+			end
+			inst:ListenForEvent("onattackother", OnAttackDaywalker)
+			local function OnForfeitedQuest(_player)
+				_player:RemoveEventCallback("onattackother",OnAttackDaywalker)
+			end
+			OnForfeit(inst,OnForfeitedQuest,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 5,
+		tex = "daywalker.tex",
+		atlas = nil,--"images/inventoryimages1.xml",
+		hovertext = GetKillString("daywalker", 1),
+		anim_prefab = "daywalker",
+	},
+	--112
+	{
+		name = "The Nightmare Trio",
+		victim = "",
+		counter_name = GetQuestString("The Nightmare Trio","COUNTER"),
+		description = GetQuestString("The Nightmare Trio","DESCRIPTION"),
+		amount = 3,
+		rewards = {[":func:planardefense;25"] = 8, voidcloth_scythe = 1, voidcloth_umbrella = 1},
+		points = 1200,
+		start_fn = function(inst,amount,quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst,1,"shadowthrall_wings",quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst,1,"shadowthrall_horns",quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst,1,"shadowthrall_hands",quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 4,
+		tex = "icon_shadowaligned.tex",
+		atlas = "images/scrapbook_icons1.xml",
+		hovertext = GetQuestString("The Nightmare Trio", "HOVER"),
+	},
+	--113
+	{
+		name = "The Acid Bath",
+		victim = "",
+		counter_name = GetQuestString("The Acid Bath","COUNTER"),
+		description = GetQuestString("The Acid Bath","DESCRIPTION",300),
+		amount = 300,
+		rewards = {[":func:planardefense;25"] = 8, voidcloth_scythe = 1, voidcloth_umbrella = 1},
+		points = 1200,
+		start_fn = function(inst,amount,quest_name)
+			local bathed = GetCurrentAmount(inst,quest_name)
+			local function OnAcidRain(inst, isacidrain)
+				StopTask(inst, quest_name.."_task")
+				if isacidrain then
+					inst[quest_name.."_task"] = inst:DoPeriodicTask(1, function()
+						if not inst.components.inventory:EquipHasTag("acidrainimmune") then
+							inst:PushEvent("quest_update",{ quest = quest_name, amount = 1,})
+							if bathed >= amount then
+								inst:StopWatchingWorldState("isacidraining",OnAcidRain)
+								StopTask(inst, quest_name.."_task")
+							end
+						end
+					end)
+				end
+			end
+			inst:WatchWorldState("isacidraining", OnAcidRain)
+			OnAcidRain(inst, TheWorld.state.isacidraining)
+			local function OnForfeitedQuest(_player)
+				_player:StopWatchingWorldState("isacidraining",OnAcidRain)
+				StopTask(inst, quest_name.."_task")
+			end
+			OnForfeit(inst,OnForfeitedQuest,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 3,
+		tex = "shadowrift_portal.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("The Acid Bath", "HOVER", 300),
+		--anim_prefab = "shadowrift_portal",
+	},
+	--114
+	{
+		name = "A Great Ryft",
+		victim = "",
+		counter_name = GetQuestString("A Great Ryft","COUNTER"),
+		description = GetQuestString("A Great Ryft","DESCRIPTION",10),
+		amount = 10,
+		rewards = {[":func:dodge;20"] = 8, bomb_lunarplant = 3},
+		points = 300,
+		start_fn = function(inst,amount,quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["finish work type z for x amount of y"](inst,ACTIONS.MINE,{"lunarrift_crystal_big", "lunarrift_crystal_small"},amount,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "purebrilliance.tex",
+		atlas = nil, --"images/inventoryimages1.xml",
+		hovertext = GetQuestString("A Great Ryft", "HOVER", 10),
+	},
+	--115
+	{
+		name = "A Grazers Nightmare",
+		victim = "",
+		counter_name = GetQuestString("A Grazers Nightmare","COUNTER"),
+		description = GetQuestString("A Grazers Nightmare","DESCRIPTION",1000),
+		amount = 1000,
+		rewards = {[":func:planardamage;10"] = 8, lunarplant_kit = 1, bomb_lunarplant = 1},
+		points = 300,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["deal x amount of damage"](inst,amount,nil,quest_name,"lunar_grazer")
+		end,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "lunar_grazer.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("A Grazers Nightmare", "HOVER", 1000),
+		anim_prefab = "lunar_grazer",
+	},
+	--116
+	{
+		name = "Closest To Oneself",
+		victim = "",
+		counter_name = GetQuestString("Closest To Oneself","COUNTER"),
+		description = GetQuestString("Closest To Oneself","DESCRIPTION",10),
+		amount = 10,
+		rewards = {[":func:speed;1.1"] = 8, sewing_kit = 1, carnival_vest_c = 1},
+		points = 250,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["craft x y times"](inst,amount,nil,"CHARACTER",quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "tools.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("Closest To Oneself", "HOVER", 10),
+	},
+	--117
+	{
+		name = "Kill The Lord",
+		victim = "lordfruitfly",
+		counter_name = GetQuestString("Kill The Lord","COUNTER"),
+		description = GetQuestString("Kill The Lord","DESCRIPTION"),
+		amount = 1,
+		rewards = {garlic_seeds = 5, pepper_seeds = 5, onion_seeds = 5, soil_amender_fermented = 1},
+		points = 500,
+		start_fn = nil,
+		onfinished = nil,
+		difficulty = 3,
+		tex = "lordfruitfly.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetKillString("lordfruitfly", 1),
+	},
+	--118
+	{
+		name = "Kill The Innocent",
+		victim = "",
+		counter_name = GetQuestString("Kill The Innocent", "COUNTER"),
+		description = GetQuestString("Kill The Innocent", "DESCRIPTION", 3),
+		amount = 3,
+		rewards = {oceanfishingbobber_goose = 1, staff_tornado = 1, turkeydinner = 3},
+		points = 500,
+		start_fn = function(inst, amount, quest_name)
+			local function CheckIfInnocent(target)
+				return not target.mother_dead
+			end
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst,amount,"mossling",quest_name,CheckIfInnocent)
+		end,
+		onfinished = nil,
+		difficulty = 3,
+		tex = "mossling.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("Kill The Innocent", "HOVER", 3),
+		anim_prefab = "mossling",
+	},
+	--119
+	{
+		name = "Defeating Rocky",
+		victim = "rocky",
+		counter_name = GetQuestString("Defeating Rocky", "COUNTER"),
+		description = GetQuestString("Defeating Rocky", "DESCRIPTION", 1),
+		amount = 1,
+		rewards = {gunpowder = 10, [":func:damage;10"] = 16,},
+		points = 350,
+		start_fn = nil,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "rocky.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetKillString("rocky", 1),
+	},
+	--120
+	{
+		name = "I'm The Pirate Now!",
+		victim = "prime_mate",
+		counter_name = GetQuestString("I'm The Pirate Now!", "COUNTER"),
+		description = GetQuestString("I'm The Pirate Now!", "DESCRIPTION", 1),
+		amount = 1,
+		rewards = {cave_banana = 10, stash_map = 1, dock_kit = 12},
+		points = 350,
+		start_fn = nil,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "prime_mate.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetKillString("prime_mate", 1),
+	},
 }
 
 if TUNING.QUEST_COMPONENT.GLOBAL_REWARDS then

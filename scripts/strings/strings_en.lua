@@ -1160,12 +1160,183 @@ return {
 		["The Untouchable"] = {
 
 			NAME = "The Untouchable",
-			DESCRIPTION = "Can you be the Untouchable? The Untouchable is an entity who is so strong, that it can't be touched by anything! Show me if you are worthy of this title by not being affected by any damage for %s seconds!",
+			DESCRIPTION = "Can you be the Untouchable? The Untouchable is an entity who is so strong, that it can't be touched by anything! Show me if you are worthy of this title by not being affected by any damage for %s seconds at once!",
 			COUNTER = "Seconds",
-			HOVER = "Stay undamaged for %s seconds",
+			HOVER = "Stay undamaged for %s seconds at once",
 
 		},
 
+		["The Hunted Glommer"] = {
+
+			NAME = "The Hunted Glommer",
+			DESCRIPTION = "A poor Glommer is being hunter by some ruthless predators! Help him escape, at least this time!",
+			COUNTER = "Attackwaves",
+			HOVER = "Protect the Glommer! Glommer appears after 2-3 minutes!",
+
+		},
+
+		["The Stray Hutch"] = {
+
+			NAME = "The Stray Hutch",
+			DESCRIPTION = "My hutch has run away! If you find him, please beware him of the dangers that he may face. A lot of creatures seem to want to hurt him as soon as they see him!",
+			COUNTER = "Attackwaves",
+			HOVER = "Protect the Hutch! Hutch appears after 2-3 minutes!",
+
+		},
+
+		["The Healer"] = {
+
+			NAME = "The Healer",
+			DESCRIPTION = "The most important member of a party is the healer. Show me that you are able to provide the healing that is necessary to be worth it to be protected by healing %s health!",
+			COUNTER = "Health healed",
+			HOVER = "Heal %s of your health",
+
+		},
+
+		["The Attacker"] = {
+
+			NAME = "The Attacker",
+			DESCRIPTION = "The most important member of a party is the attacker. Show me that you are able to provide the attacking power that is necessary to be worth it to be defended by dealing %s in 30 seconds!",
+			COUNTER = "Damage dealt",
+			HOVER = "Deal %s damage in a timeframe of 30 seconds",
+
+		},
+
+		["The Defender"] = {
+
+			NAME = "The Defender",
+			DESCRIPTION = "The most important member of a party is the defender. Show me that you are able to provide the defensive power that is necessary to be worth it to be healed!",
+			COUNTER = "Damage stopped",
+			HOVER = "Stop %s damage from hitting you with armor",
+
+		},
+
+		["Axe-swinging Competition"] = {
+
+			NAME = "Axe-swinging Competition",
+			DESCRIPTION = "We are holding an axe-swinging competition. If you think you have it in you, accept this quest! You will need to chop down %s trees in a timeframe of 3 minutes! The competition starts once you chop the first tree!",
+			COUNTER = "Trees chopped",
+			HOVER = "Chop %s trees in 3 minutes",
+
+		},
+
+		["Pickaxe-swinging Competition"] = {
+
+			NAME = "Pickaxe-swinging Competition",
+			DESCRIPTION = "We are holding an pickaxe-swinging competition. If you think you have it in you, accept this quest! You will need to mine %s rocks in a timeframe of 3 minutes! The competition starts once you mine the first rock!",
+			COUNTER = "Rocks mined",
+			HOVER = "Mine %s rocks in 3 minutes",
+
+		},
+
+		["Shovel-digging Competition"] = {
+
+			NAME = "Shovel-digging Competition",
+			DESCRIPTION = "We are holding an shovel-digging competition. If you think you have it in you, accept this quest! You will need to dig up %s things in a timeframe of 3 minutes! The competition starts once you dig the first thing up!",
+			COUNTER = "Things dug up",
+			HOVER = "Dig up %s things in 3 minutes",
+
+		},
+
+		["The Fatal Rose"] = {
+
+			NAME = "The Fatal Rose",
+			DESCRIPTION = "When I was young, I once touched a rose and nearly died from it! But nobody has ever believed me that roses are evil creatures that may even kill you! Help me show them wrong that roses may kill you, if they wish so...",
+			COUNTER = "Death",
+			HOVER = "Die by a rose",
+
+		},
+
+		["The Bird Predator"] = {
+
+			NAME = "The Bird Predator",
+			DESCRIPTION = "Birds are just drones that Charlie has sent to observe us! I want them gone and for this I need a bird predator! Show me your worth by killing %s redbirds in the next 8 minutes!",
+			COUNTER = "Redbirds",
+			HOVER = "Kill %s redbirds in the next 8 minutes",
+
+		},
+
+		["A Werepigs Worst Nightmare"] = {
+
+			NAME = "A Werepigs Worst Nightmare",
+			DESCRIPTION = "There seems to be a werepig in the caves, so big that nobody dares to approach it. But we shouldn't be scared of mere werepigs! That's why I want someone to show this so called \"Nightmare Werepig\" that humans are their worst nightmare!",
+
+		},
+
+		["The Nightmare Trio"] = {
+
+			NAME = "The Nightmare Trio",
+			DESCRIPTION = "We want to mine some dreadstone in the caves but unfortunaly, the Ink Blights don't seem to like that! Help us by defeating them!",
+			COUNTER = "Ink Blights",
+			HOVER = "Kill all 3 Ink Blights",
+
+		},
+
+		["The Acid Bath"] = {
+
+			NAME = "The Acid Bath",
+			DESCRIPTION = "I want to research how much acid a person can withstand. Therefore I am searching for volunteers for this research. We will start with %s seconds in the acid rain in the caves, but do so without protection, otherwise the research will be falsified!",
+			COUNTER = "Seconds",
+			HOVER = "Withstand %s seconds in the acid rain without protection",
+
+		},
+
+		["A Great Ryft"] = {
+
+			NAME = "A Great Ryft",
+			DESCRIPTION = "The newly appeared ryftals seem quite interesting, I want to know what kind of loot they give! I need someone to mine %s of them so that I can see their contents.",
+			COUNTER = "Ryftals mined",
+			HOVER = "Mine %s ryftals",
+
+		},
+
+		["A Grazers Nightmare"] = {
+
+			NAME = "A Grazers Nightmare",
+			DESCRIPTION = "The grazers seem to protect the ryftals, but I really need to investigate them without them disturbing me! Someone help me by dealing %s amount of damage to them!",
+			COUNTER = "Damage dealt",
+			HOVER = "Deal %s damage to grazers",
+
+		},
+
+		["Closest To Oneself"] = {
+
+			NAME = "Closest To Oneself",
+			DESCRIPTION = "Everybody has special talents! I want you to nurture those! Craft %s items that only you can make and I will give you a small reward!",
+			COUNTER = "Character-specific crafts",
+			HOVER = "Craft %s character-specific items",
+
+		},
+
+		["Kill The Lord"] = {
+
+			NAME = "Kill The Lord",
+			DESCRIPTION = "Even though Lord Fruitfly has watched over our village for some time, he started attacking our farmers and cattle recently. Therefore we only have one option, death to the Lord! Unfortunaly we are not strong enough, please help us!",
+
+		},
+
+		["Kill The Innocent"] = {
+
+			NAME = "Kill The Innocent",
+			DESCRIPTION = "Mossling are so innocent when their mother is with them, but they become monsters once she is gone. Unfortunaly their meat doesn't taste as good anymore when they get angry...\nI need someone to kill %s innocent mosslings to enjoy the pleasure of delicious meat!",
+			COUNTER = "Innocent Mosslings",
+			HOVER = "Kill %s mosslings that are not enraged",
+
+		},
+
+		["Defeating Rocky"] = {
+
+			NAME = "Defeating Rocky",
+			DESCRIPTION = "My formerly best friend Rocky, a Rock Lobster, has betrayed me horribly. I want to pay him back by killing one of his brothers. This way he can maybe feel a little of the pain he caused me.",
+
+		},
+
+		["I'm The Pirate Now!"] = {
+
+			NAME = "I'm The Pirate Now!",
+			DESCRIPTION = "Yahaha! Pirates have been roaming the sees more frequently lately. Show them that the roles can quickly change in our favor!",
+
+		},
 
 
 
