@@ -45,7 +45,6 @@ AddClassPostConstruct("widgets/hoverer",function(hoverer)
 	end
 end)
 
-QUEST_COMPONENT.BUTTON = 2
 --Add button to open quest log
 if QUEST_COMPONENT.BUTTON == 1 or QUEST_COMPONENT.BUTTON == 2 then
 
