@@ -98,6 +98,7 @@ return {
 		planardamage = "平面伤害奖励 x 分钟",
 		planardefense = "平面防御奖励 x 分钟",
 		dodge = "闪避奖励冷却 x 分钟",
+		crit = "在 x 分钟内造成 1.5 倍伤害的临界几率",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "任务板",
@@ -205,6 +206,7 @@ return {
 		PLANARDAMAGE = "平面损伤",
 		PLANARDEFENSE = "平面防御",
 		DODGE = "每 %s 秒闪避一次",
+		CRIT = "%造成 1.5 倍伤害的临界几率",
 	},
 	LOADING_TIPS = {
 		request = "请求可以从被杀的生物中掉落。你也可以在配置选项中启用它们的制作功能！",
@@ -905,6 +907,62 @@ return {
 		["I'm The Pirate Now!"] = {
 			NAME = "现在我是海盗",
 			DESCRIPTION = "呀哈哈最近，海盗们在这里游荡的频率越来越高了。让他们看看，角色的转换对我们有利！",
+		},
+		["Cannon Fodder"] = {
+			NAME = "炮灰",
+			DESCRIPTION = "你是炮灰还是想亲自动手？用 %s 大炮证明你不是炮灰！",
+			COUNTER = "部署大炮",
+			HOVER = "部署 %s 大炮",
+		},
+		["Let's Get The Party Started!"] = {
+			NAME = "让派对开始吧",
+			DESCRIPTION = "事实上，自从我来到恒大，已经有一段时间没有参加过真正意义上的派对了。但现在情况有变我需要想和我一起开派对的人，但你们需要自带饮料，至少%。可以是香蕉果汁、蔬菜激酶或冷冻香蕉代基里酒。",
+			COUNTER = "喝过的鸡尾酒",
+			HOVER = "吃 %s 的香蕉果汁、Vegetable Stinger 或冷冻香蕉代基里酒",
+		},
+		["Return To Monke"] = {
+			NAME = "返回蒙克",
+			DESCRIPTION = "现代世界已经容不下我们人类了。因此，我建议我们摒弃人性，回归猴性！想加入我们吗？",
+			COUNTER = "返回蒙克",
+			HOVER = "把自己变成 Wonkey，再回到 monke！",
+		},
+		["The Punching Bag"] = {
+			NAME = "拳击袋",
+			DESCRIPTION = "我认为自己是这个世界上最强壮的人。我是如此强壮，以至于在使用沙袋时能达到 %s 的数值！敢不敢告诉我一个更高的数值？",
+			COUNTER = "拳击袋的最大伤害",
+			HOVER = "一击对拳击袋造成超过 %s 的伤害",
+		},
+		["The Shadowcrafter"] = {
+			NAME = "暗影匠",
+			DESCRIPTION = "阴影工艺很难学习，更难掌握...\n如果你能向我证明你制作了 %s 暗影工艺品 我会奖励你一些黑暗力量",
+			COUNTER = "制作暗影魔法物品",
+			HOVER = "使用暗影魔法基座制作 %s 暗影魔法物品",
+		},
+		["Strong Stomach"] = {
+			NAME = "强壮的胃",
+			DESCRIPTION = "你具备在野外生存的条件吗？必须有一个强壮的胃，因为很多食物在你吃到的时候就会开始腐烂。把吃掉%的腐烂食物看作是对胃的训练。",
+			COUNTER = "腐烂的食物",
+			HOVER = "吃掉 %s 腐烂。别想了，直接吃吧...",
+		},
+		["Dreadful Constructor"] = {
+			NAME = "可怕的构造函数",
+			DESCRIPTION = "最近洞穴似乎有点不稳定，因为发生了很多地震。我们用石头做的支撑柱无法吸收这些冲击，因此我需要一些更坚固的材料，比如恐石柱。请帮助我们，建造 %s 的全畏石柱，这样我们在洞穴中的基地就会安全！",
+			COUNTER = "建造恐惧石柱",
+			HOVER = "建造 %s 个完整的可怕石柱",
+		},
+		["Poor Doggies"] = {
+			NAME = "可怜的狗狗们",
+			DESCRIPTION = "我妈妈说，可怜的狗狗们。我只是说，它们是自找的！这些猎犬寻找人类并攻击他们，你可以说他们可怜！如果你打败了百分之几的猎狗，我就给你一只真正的好狗！",
+			COUNTER = "猎犬被杀",
+			HOVER = "杀死 %s 的猎犬、火猎犬或冰猎犬",
+		},
+		["The Queen Slayer"] = {
+			NAME = "女王杀手",
+			DESCRIPTION = "蜘蛛皇后已经变得太强大了！我需要一个足够强大的人来杀死它们，这样我们的猪村才能继续和平地生活下去！",
+		},
+		["Whac-A-Mole"] = {
+			NAME = "Whac-A-Mole",
+			DESCRIPTION = "我从外面听说过一种叫 \"Whac-A-Mole \"的游戏。我试着玩了一下，但似乎不可能，我总是打不到鼹鼠。那就杀 %s 的鼹鼠来证明这是有可能的！",
 		},
 	},
 	QUEST_FUNCTIONS = {

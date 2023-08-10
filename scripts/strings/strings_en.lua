@@ -111,6 +111,7 @@ return {
 		planardefense = "Planar Defense Bonus for x min",
 		range = "Range Bonus for x min",
 		dodge = "cooldown Dodge Bonus for x min",
+		crit = "Critical chance of doing 1.5x damage for x min",
 		winterinsulation = "Winterinsulation Bonus for x min",
 		summerinsulation = "Summerinsulation Bonus for x min",
 		worker = "Working Bonus for x min",
@@ -282,6 +283,7 @@ return {
 		PLANARDEFENSE = " Planar Defense",
 		RANGE = " Range",
 		DODGE = " Every %s seconds dodge",
+		CRIT = "% Critical chance of doing 1.5x damage",
 		WINTERINSULATION = " Winter Insulation",
 		SUMMERINSULATION = " Summer Insulation",
 		WORKER = "% Working Effectiveness",
@@ -1335,6 +1337,92 @@ return {
 
 			NAME = "I'm The Pirate Now!",
 			DESCRIPTION = "Yahaha! Pirates have been roaming the sees more frequently lately. Show them that the roles can quickly change in our favor!",
+
+		},
+
+		["Cannon Fodder"] = {
+
+			NAME = "Cannon Fodder",
+			DESCRIPTION = "Are you cannon fodder or do you want to take matters into your own hands? Show me that you're no cannon fodder by deploying %s cannons!",
+			COUNTER = "Cannons deployed",
+			HOVER = "Deploy %s cannons",
+
+		},
+
+		["Let's Get The Party Started!"] = {
+
+			NAME = "Let's Get The Party Started!",
+			DESCRIPTION = "It's been some time since I had my last real party, actually since I arrived at the Constant. But this is changing now! I need people who want to party with me, but you need to bring your own beverages, at least %s. It can be either a Banana Juice, a Vegetable Stinger or a Frozen Banana Daiquiri.",
+			COUNTER = "Cocktails drinked",
+			HOVER = "Eat %s of either Banana Juice, Vegetable Stinger or Frozen Banana Daiquiri",
+
+		},
+
+		["Return To Monke"] = {
+
+			NAME = "Return To Monke",
+			DESCRIPTION = "The modern world has no place for us humans anymore. Therefore I propose that we reject humanity and return to monke! Want to join us?",
+			COUNTER = "Returned to Monke",
+			HOVER = "Transform yourself to Wonkey, return to monke!",
+
+		},
+
+		["The Punching Bag"] = {
+
+			NAME = "The Punching Bag",
+			DESCRIPTION = "I consider myself the strongest here is this world. I'm so strong that I was able to reach a value of %s when using the punching bags! I dare you to show me a higher value!",
+			COUNTER = "Max damage to Punching Bag",
+			HOVER = "Do more than %s damage to a Punching Bag in one hit",
+
+		},
+
+		["The Shadowcrafter"] = {
+
+			NAME = "The Shadowcrafter",
+			DESCRIPTION = "The crafts of the shadows are difficult to learn and even more difficult to master... \n If you are able to show me that you crafted %s shadowcraft items, I will reward you with some dark powers!",
+			COUNTER = "Shadowcraft items crafted",
+			HOVER = "Craft %s shadowcraft items with the Shadowcraft Plinth",
+
+		},
+
+		["Strong Stomach"] = {
+
+			NAME = "Strong Stomach",
+			DESCRIPTION = "Do you have what it takes to survive in the wilderness? A necessity is to have a strong stomach, as a lot of food will start to rot when you get to it. See it as training for your stomach to eat %s rot.",
+			COUNTER = "Rot eaten",
+			HOVER = "Eat %s Rot. Don't think about it, just eat it...",
+
+		},
+
+		["Dreadful Constructor"] = {
+
+			NAME = "Dreadful Constructor",
+			DESCRIPTION = "The caves seem a bit unstable lately, as lot of earthquakes have been happening. Our Support Pillar made of stone are not capable of absorbing these shocks, therefore I need some stronger material, like dreadstone. Help us by building %s full dreadstone pillars so that our base in the caves is safe!",
+			COUNTER = "Dreadstone pillars constructed",
+			HOVER = "Construct %s full dreadstone pillars",
+
+		},
+
+		["Poor Doggies"] = {
+
+			NAME = "Poor Doggies",
+			DESCRIPTION = "Poor Doggies, said my mom. I'm just saying, they had it coming! These hounds search for humans and attack them, you can call them poor! If you defeat %s of them, I will give you a real good doggie!",
+			COUNTER = "Hounds killed",
+			HOVER = "Kill %s of either hounds, fire hounds or ice hounds",
+
+		},
+
+		["The Queen Slayer"] = {
+
+			NAME = "The Queen Slayer",
+			DESCRIPTION = "The Spider Queens have gotten to powerful! I need someone strong enough to kill %s of them, so that our pig village can continue to live in peace!",
+
+		},
+
+		["Whac-A-Mole"] = {
+
+			NAME = "Whac-A-Mole",
+			DESCRIPTION = "I have heard of this game called Whac-A-Mole from outside the Constant. I tried to play it but it seems impossible, I'm never able to hit a mole. Show me that it's possible by killing %s moles!",
 
 		},
 

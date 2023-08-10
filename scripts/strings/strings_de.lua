@@ -98,6 +98,7 @@ return {
 		planardamage = "Planarer Schadensbonus für x Minuten",
 		planardefense = "Planarer Verteidigungsbonus für x Minuten",
 		dodge = "Abklingzeit Ausweichen-Bonus für x min",
+		crit = "Kritische Chance 1,5x Schaden für x min zu verursachen",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "Missionsbrett",
@@ -205,6 +206,7 @@ return {
 		PLANARDAMAGE = " Planarer Schaden",
 		PLANARDEFENSE = " Planare Verteidigung",
 		DODGE = "Alle %s Sekunden Ausweichen",
+		CRIT = "% Kritische Chance, 1,5x Schaden zu verursachen",
 	},
 	LOADING_TIPS = {
 		request = "Anfragen können von getöteten Kreaturen fallen gelassen werden. Du kannst auch ihre Herstellung in den Konfigurationsoptionen aktivieren!",
@@ -906,6 +908,62 @@ return {
 		["I'm The Pirate Now!"] = {
 			NAME = "Ich bin jetzt der Pirat!",
 			DESCRIPTION = "Hahaha! In letzter Zeit treiben sich immer häufiger Piraten auf den Meeren herum. Zeigt ihnen, dass sich die Rollen schnell zu unseren Gunsten ändern können!",
+		},
+		["Cannon Fodder"] = {
+			NAME = "Kanonenfutter",
+			DESCRIPTION = "Sind Sie Kanonenfutter oder wollen Sie die Sache selbst in die Hand nehmen? Zeigen Sie mir, dass Sie kein Kanonenfutter sind, indem Sie %s-Kanonen einsetzen!",
+			COUNTER = "Kanonen im Einsatz",
+			HOVER = "Einsatz von %s-Kanonen",
+		},
+		["Let's Get The Party Started!"] = {
+			NAME = "Lasst uns die Party beginnen!",
+			DESCRIPTION = "Es ist schon einige Zeit her, dass ich meine letzte richtige Party gefeiert habe, eigentlich seit ich in der Constant angekommen bin. Aber das ändert sich jetzt! Ich brauche Leute, die mit mir feiern wollen, aber ihr müsst eure eigenen Getränke mitbringen, mindestens %s. Es kann entweder ein Bananensaft, ein Vegetable Stinger oder ein Frozen Banana Daiquiri sein.",
+			COUNTER = "Getrunkene Cocktails",
+			HOVER = "Essen Sie %s von entweder Bananensaft, Gemüsesticks oder gefrorenem Bananen-Daiquiri",
+		},
+		["Return To Monke"] = {
+			NAME = "Rückkehr nach Monke",
+			DESCRIPTION = "Die moderne Welt hat keinen Platz mehr für uns Menschen. Deshalb schlage ich vor, dass wir die Menschheit ablehnen und zum Affen zurückkehren! Willst du dich uns anschließen?",
+			COUNTER = "Zurückgekehrt nach Monke",
+			HOVER = "Verwandle dich in Wonkey und kehre zum Affen zurück!",
+		},
+		["The Punching Bag"] = {
+			NAME = "Der Boxsack",
+			DESCRIPTION = "Ich halte mich für den Stärksten auf dieser Welt. Ich bin so stark, dass ich einen Wert von %s erreichen konnte, als ich die Boxsäcke benutzte! Ich fordere dich auf, mir einen höheren Wert zu zeigen!",
+			COUNTER = "Maximaler Schaden am Boxsack",
+			HOVER = "Füge einem Boxsack mit einem Treffer mehr als %s Schaden zu",
+		},
+		["The Shadowcrafter"] = {
+			NAME = "Der Schattenjäger",
+			DESCRIPTION = "Das Handwerk der Schatten ist schwer zu erlernen und noch schwerer zu beherrschen... \n Wenn Ihr mir nachweisen könnt, dass Ihr %s Gegenstände der Schattenkunst hergestellt habt, werde ich Euch mit einigen dunklen Kräften belohnen!",
+			COUNTER = "Schattenhandwerk Gegenstände hergestellt",
+			HOVER = "Fertige %s Schattenhandwerksgegenstände mit dem Schattenhandwerk-Sockel",
+		},
+		["Strong Stomach"] = {
+			NAME = "Starker Magen",
+			DESCRIPTION = "Haben Sie das Zeug zum Überleben in der Wildnis? Eine Notwendigkeit ist ein starker Magen, da viele Lebensmittel anfangen zu verfaulen, wenn du sie zu dir nimmst. Sieh es als Training für deinen Magen, %s verfaulte Nahrung zu essen.",
+			COUNTER = "Fäulnis gegessen",
+			HOVER = "Essen Sie %s Rot. Denk nicht darüber nach, iss es einfach...",
+		},
+		["Dreadful Constructor"] = {
+			NAME = "Schrecklicher Konstrukteur",
+			DESCRIPTION = "Die Höhlen scheinen in letzter Zeit etwas instabil zu sein, da es viele Erdbeben gegeben hat. Unsere Stützpfeiler aus Stein sind nicht in der Lage, diese Erschütterungen zu absorbieren, deshalb brauche ich ein stärkeres Material, wie Dreadstone. Hilf uns, indem du %s volle Dreadstone-Säulen baust, damit unsere Basis in den Höhlen sicher ist!",
+			COUNTER = "Dreadstone-Säulen errichtet",
+			HOVER = "Errichte %s volle Dreadstone-Säulen",
+		},
+		["Poor Doggies"] = {
+			NAME = "Arme Hündchen",
+			DESCRIPTION = "Arme Hündchen, sagte meine Mutter. Ich sage nur, sie haben es verdient! Diese Hunde suchen Menschen und greifen sie an, man kann sie arm nennen! Wenn du %s von ihnen besiegst, gebe ich dir ein richtig gutes Hündchen!",
+			COUNTER = "Getötete Hunde",
+			HOVER = "Töte %s von entweder Hunden, Feuerhunden oder Eishunden",
+		},
+		["The Queen Slayer"] = {
+			NAME = "Der Königinnenjäger",
+			DESCRIPTION = "Die Spinnenköniginnen sind zu mächtig geworden! Ich brauche jemanden, der stark genug ist, um %s von ihnen zu töten, damit unser Schweinedorf weiterhin in Frieden leben kann!",
+		},
+		["Whac-A-Mole"] = {
+			NAME = "Whac-A-Mole",
+			DESCRIPTION = "Ich habe von diesem Spiel namens Whac-A-Mole von außerhalb der Constant gehört. Ich habe versucht, es zu spielen, aber es scheint unmöglich zu sein, ich schaffe es nie, einen Maulwurf zu treffen. Zeig mir, dass es möglich ist, indem du %s Maulwürfe tötest!",
 		},
 	},
 	QUEST_FUNCTIONS = {

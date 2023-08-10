@@ -420,8 +420,8 @@ local quests = {
 	counter_name = GetQuestString("The Fearful Trial","COUNTER"),
 	description = GetQuestString("The Fearful Trial","DESCRIPTION"),
 	amount = 4,
-	rewards = {orangestaff = 1, ruinshat = 2, armorruins = 2},
-	points = 1000,
+	rewards = {orangestaff = 1, ruinshat = 2, armorruins = 2, [":func:dodge;5"] = 8,},
+	points = 2000,
 	start_fn = function(inst,amount,quest_name)
 		local OnSeasonChange = function() end
 		if inst.components.quest_component.quest_data[quest_name] == nil then
@@ -523,7 +523,7 @@ local quests = {
 		OnForfeit(inst,OnForfeitedQuest,quest_name)
 	end,
 	onfinished = nil,
-	difficulty = 4,
+	difficulty = 5,
 	tex = "fight.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("The Fearful Trial","HOVER"),
@@ -878,7 +878,7 @@ local quests = {
 	victim = "warg",
 	counter_name = nil,
 	description = GetQuestString("The Houndstooth Curse","DESCRIPTION"),
-	amount = 2,
+	amount = 1,
 	rewards = {premiumwateringcan = 1,gears = 5},
 	points = 500,
 	start_fn = nil,
@@ -1669,7 +1669,7 @@ local quests = {
 	rewards = {icecream = 3},
 	points = 125,
 	start_fn = function(inst,amount,quest_name)
-		devprint("Survival: Heart attack start fn",inst,amount,quest_name)
+		--devprint("Survival: Heart attack start fn",inst,amount,quest_name)
 		TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["damage x amount of life with y"](inst,amount,"terrorbeak",quest_name)
 	end,
 	onfinished = function(inst,items,quest_name)
@@ -3798,9 +3798,8 @@ local quests = {
 		rewards = {[":func:planardefense;25"] = 8, voidcloth_scythe = 1, voidcloth_umbrella = 1},
 		points = 1200,
 		start_fn = function(inst,amount,quest_name)
-			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst,1,"shadowthrall_wings",quest_name)
-			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst,1,"shadowthrall_horns",quest_name)
-			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst,1,"shadowthrall_hands",quest_name)
+			local creatures = {shadowthrall_wings = 1, shadowthrall_horns = 1, shadowthrall_hands = 1}
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill different creatures x y times"](inst,3,quest_name,creatures)
 		end,
 		onfinished = nil,
 		difficulty = 4,
@@ -3907,7 +3906,7 @@ local quests = {
 	{
 		name = "Kill The Lord",
 		victim = "lordfruitfly",
-		counter_name = GetQuestString("Kill The Lord","COUNTER"),
+		counter_name = nil,
 		description = GetQuestString("Kill The Lord","DESCRIPTION"),
 		amount = 1,
 		rewards = {garlic_seeds = 5, pepper_seeds = 5, onion_seeds = 5, soil_amender_fermented = 1},
@@ -3945,7 +3944,7 @@ local quests = {
 	{
 		name = "Defeating Rocky",
 		victim = "rocky",
-		counter_name = GetQuestString("Defeating Rocky", "COUNTER"),
+		counter_name = nil,
 		description = GetQuestString("Defeating Rocky", "DESCRIPTION", 1),
 		amount = 1,
 		rewards = {gunpowder = 10, [":func:damage;10"] = 16,},
@@ -3961,7 +3960,7 @@ local quests = {
 	{
 		name = "I'm The Pirate Now!",
 		victim = "prime_mate",
-		counter_name = GetQuestString("I'm The Pirate Now!", "COUNTER"),
+		counter_name = nil,
 		description = GetQuestString("I'm The Pirate Now!", "DESCRIPTION", 1),
 		amount = 1,
 		rewards = {cave_banana = 10, stash_map = 1, dock_kit = 12},
@@ -3972,6 +3971,216 @@ local quests = {
 		tex = "prime_mate.tex",
 		atlas = "images/victims.xml",
 		hovertext = GetKillString("prime_mate", 1),
+	},
+	--121
+	{
+		name = "Cannon Fodder",
+		victim = "",
+		counter_name = GetQuestString("Cannon Fodder", "COUNTER"),
+		description = GetQuestString("Cannon Fodder", "DESCRIPTION", 5),
+		amount = 5,
+		rewards = {polly_rogershat = 1, dock_kit = 12},
+		points = 450,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["deploy x y times"](inst,amount,"boat_cannon_kit",quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 3,
+		tex = "boat_cannon_kit.tex",
+		atlas = nil, --"images/victims.xml",
+		hovertext = GetQuestString("Cannon Fodder", "HOVER", 5),
+	},
+	--122
+	{
+		name = "Let's Get The Party Started!",
+		victim = "",
+		counter_name = GetQuestString("Let's Get The Party Started!", "COUNTER"),
+		description = GetQuestString("Let's Get The Party Started!", "DESCRIPTION", 5),
+		amount = 5,
+		rewards = {[":func:nightvision;1"] = 16, leafymeatburger = 5},
+		points = 400,
+		start_fn = function(inst, amount, quest_name)
+			local cocktails = {"bananajuice", "vegstinger", "frozenbananadaiquiri", }
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["eat x times y"](inst, cocktails, amount, quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 3,
+		tex = "frozenbananadaiquiri.tex",
+		atlas = nil, --"images/victims.xml",
+		hovertext = GetQuestString("Let's Get The Party Started!", "HOVER", 5),
+	},
+	--123
+	{
+		name = "Return To Monke",
+		victim = "",
+		counter_name = GetQuestString("Return To Monke", "COUNTER"),
+		description = GetQuestString("Return To Monke", "DESCRIPTION"),
+		amount = 1,
+		rewards = {[":func:planardamage;10"] = 8, [":func:planardefense;10"] = 8, cave_banana = 10},
+		points = 500,
+		start_fn = function(inst, amount, quest_name)
+			local old_ChangeToMonkey = inst.ChangeToMonkey
+			inst.ChangeToMonkey = function(inst, ...)
+				inst:PushEvent("quest_update",{quest = quest_name, amount = 1})
+				old_ChangeToMonkey(inst, ...)
+			end
+			local function OnForfeitedQuest()
+				inst.ChangeToMonkey = old_ChangeToMonkey
+			end
+			OnForfeit(inst,OnForfeitedQuest,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 3,
+		tex = "wonkey.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("Return To Monke", "HOVER"),
+		--anim_prefab = "wonkey",
+	},
+	--124
+	{
+		name = "The Punching Bag",
+		victim = "",
+		counter_name = GetQuestString("The Punching Bag", "COUNTER"),
+		description = GetQuestString("The Punching Bag", "DESCRIPTION", 50),
+		amount = 50,
+		rewards = {[":func:damage;5"] = 16, },
+		points = 130,
+		start_fn = function(inst, amount, quest_name)
+			local targets = {punchingbag = true, punchingbag_shadow = true, punchingbag_lunar = true}
+			local current_amount = GetCurrentAmount(inst,quest_name)
+			local function OnDamageDone(_,data)
+				amount = amount or 1
+				if data then
+					if data.damageresolved > current_amount then
+							if data.target and targets[data.target.prefab] then
+								current_amount = data.damageresolved
+								inst:PushEvent("quest_update",{quest = quest_name,set_amount = current_amount})
+								if current_amount >= amount then
+									inst:RemoveEventCallback("onhitother",OnDamageDone)
+								end
+							end
+						end
+					end
+			end
+			inst:ListenForEvent("onhitother",OnDamageDone)
+			local function OnForfeitedQuest()
+				inst:RemoveEventCallback("onhitother",OnDamageDone)
+			end
+			OnForfeit(inst,OnForfeitedQuest,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 1,
+		tex = "punchingbag.tex",
+		atlas = nil,
+		hovertext = GetQuestString("The Punching Bag", "HOVER", 50),
+	},
+	--125
+	{
+		name = "The Shadowcrafter",
+		victim = "",
+		counter_name = GetQuestString("The Shadowcrafter", "COUNTER"),
+		description = GetQuestString("The Shadowcrafter", "DESCRIPTION", 10),
+		amount = 10,
+		rewards = {[":func:dodge;10"] = 8, voidcloth = 5, voidcloth_kit = 3},
+		points = 800,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["craft x y times"](inst, amount, nil, nil, quest_name, {"SHADOWFORGING", 2})
+		end,
+		onfinished = nil,
+		difficulty = 4,
+		tex = "station_shadow_forge.tex",
+		atlas = "images/crafting_menu_icons.xml",
+		hovertext = GetQuestString("The Shadowcrafter", "HOVER", 10),
+	},
+	--126
+	{
+		name = "Strong Stomach",
+		victim = "",
+		counter_name = GetQuestString("Strong Stomach", "COUNTER"),
+		description = GetQuestString("Strong Stomach", "DESCRIPTION", 10),
+		amount = 10,
+		rewards = {ipecacsyrup = 3},
+		points = 140,
+		start_fn = function(inst, amount, quest_name)
+			local foods = "spoiled_food"
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["eat x times y"](inst, foods, amount, quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 1,
+		tex = "spoiled_food.tex",
+		atlas = nil,
+		hovertext = GetQuestString("Strong Stomach", "HOVER", 10),
+	},
+	--127
+	{
+		name = "Dreadful Constructor",
+		victim = "",
+		counter_name = GetQuestString("Dreadful Constructor", "COUNTER"),
+		description = GetQuestString("Dreadful Constructor", "DESCRIPTION", 3),
+		amount = 3,
+		rewards = {dreadstone = 40, purebrilliance = 40, [":func:crit;10"] = 16},
+		points = 1200,
+		start_fn = function(inst, amount, quest_name)
+			local constructionsites = "support_pillar_dreadstone_scaffold"
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["construct site x y times"](inst, amount, quest_name, constructionsites)
+		end,
+		onfinished = nil,
+		difficulty = 4,
+		tex = "support_pillar_dreadstone_scaffold.tex",
+		atlas = nil,
+		hovertext = GetQuestString("Dreadful Constructor", "HOVER", 3),
+	},
+	--128
+	{
+		name = "Poor Doggies",
+		victim = "",
+		counter_name = GetQuestString("Poor Doggies", "COUNTER"),
+		description = GetQuestString("Poor Doggies", "DESCRIPTION", 60),
+		amount = 60,
+		rewards = {[":func:healthrate;5"] = 8, eyeturret_item = 1},
+		points = 900,
+		start_fn = function(inst, amount, quest_name)
+			local dogs = {"hound", "firehound", "icehound"}
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst, amount, dogs, quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 4,
+		tex = "hound.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("Poor Doggies", "HOVER", 60),
+		anim_prefab = "hound",
+	},
+	--129
+	{
+		name = "The Queen Slayer",
+		victim = "spiderqueen",
+		counter_name = nil,
+		description = GetQuestString("The Queen Slayer", "DESCRIPTION", 5),
+		amount = 5,
+		rewards = {silk = 20, [":func:nightvision;1"] = 12, fireflies = 3},
+		points = 1200,
+		start_fn = nil,
+		onfinished = nil,
+		difficulty = 4,
+		tex = "spiderqueen.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetKillString("spiderqueen", 5),
+	},
+	--130
+	{
+		name = "Whac-A-Mole",
+		victim = "mole",
+		counter_name = nil,
+		description = GetQuestString("Whac-A-Mole", "DESCRIPTION", 3),
+		amount = 3,
+		rewards = {guacamole = 3, flint = 5, rocks = 5},
+		points = 125,
+		start_fn = nil,
+		onfinished = nil,
+		difficulty = 1,
+		tex = "mole.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetKillString("mole", 3),
 	},
 }
 

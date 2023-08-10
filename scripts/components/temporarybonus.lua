@@ -152,6 +152,39 @@ local function AddDodge(inst,amount)
 	end
 end
 
+local crit_chance = 0
+local crit_boni = {}
+local old_CalcDamage
+
+local function AddCrit(inst, amount, name)
+	amount = amount/100
+	local combat = inst.components.combat
+	if amount < 0 then
+		crit_chance = crit_chance + amount
+		crit_boni[name] = nil
+		if next(crit_boni) == nil then
+			combat.CalcDamage = old_CalcDamage
+		end
+	elseif old_CalcDamage == nil then
+		old_CalcDamage = combat.CalcDamage
+		combat.CalcDamage = function(self, target, weapon, multiplier, ...)
+			local ret = {old_CalcDamage(self, target, weapon, multiplier, ...)}
+			if crit_chance > 0 and math.random() < crit_chance then
+				ret[1] = ret[1] * 1.5
+				if target and target:IsValid() then
+					local target_pos = target:GetPosition()
+					if target_pos then
+						SpawnPrefab("explode_small").Transform:SetPosition(target_pos.x, target_pos.y, target_pos.z)
+					end
+				end
+			end
+			return unpack(ret)
+		end
+	end
+	crit_boni[name] = true
+	crit_chance = crit_chance + amount
+end
+
 local function AddWinterInsulation(inst,amount)
 	local temperature = inst.components.temperature
 	if temperature then
@@ -297,6 +330,7 @@ local TemporaryBonus = Class(function(self, inst)
 		planardefense = AddPlanarDefense,
     	range = AddRange,
 		dodge = AddDodge,
+		crit = AddCrit,
 
    		winterinsulation = AddWinterInsulation,
     	summerinsulation = AddSummerInsulation,

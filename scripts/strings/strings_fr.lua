@@ -98,6 +98,7 @@ return {
 		planardamage = "Bonus de dégâts planaires pendant x min",
 		planardefense = "Bonus de défense planaire pendant x min",
 		dodge = "temps de recharge bonus d'esquive pendant x min",
+		crit = "Chance critique de faire 1,5x les dégâts pendant x min",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "Tableau de quête",
@@ -205,6 +206,7 @@ return {
 		PLANARDAMAGE = " Dommages planaires",
 		PLANARDEFENSE = " Défense planaire",
 		DODGE = "Esquive tous les %s secondes",
+		CRIT = "% de chances critiques d'infliger 1,5 fois les dégâts",
 	},
 	LOADING_TIPS = {
 		request = "Les requêtes peuvent tomber des créatures tuées. Vous pouvez également activer leur fabrication dans les options de configuration !",
@@ -909,6 +911,62 @@ return {
 		["I'm The Pirate Now!"] = {
 			NAME = "C'est moi le pirate maintenant !",
 			DESCRIPTION = "Yahaha ! Les pirates se promènent de plus en plus souvent sur les mers ces derniers temps. Montrons-leur que les rôles peuvent rapidement changer en notre faveur !",
+		},
+		["Cannon Fodder"] = {
+			NAME = "La chair à canon",
+			DESCRIPTION = "Es-tu de la chair à canon ou veux-tu prendre les choses en main ? Montrez-moi que vous n'êtes pas de la chair à canon en déployant %s canons !",
+			COUNTER = "Canons déployés",
+			HOVER = "Déployer %s canons",
+		},
+		["Let's Get The Party Started!"] = {
+			NAME = "Que la fête commence !",
+			DESCRIPTION = "Cela fait un certain temps que je n'ai pas organisé de véritable fête, en fait depuis que je suis arrivée à Constant. Mais ça change maintenant ! J'ai besoin de gens qui veulent faire la fête avec moi, mais vous devez apporter vos propres boissons, au moins %s. Il peut s'agir d'un jus de banane, d'un Vegetable Stinger ou d'un Daiquiri à la banane congelé.",
+			COUNTER = "Cocktails consommés",
+			HOVER = "Mangez %s de jus de banane, de Vegetable Stinger ou de Daiquiri à la banane congelé.",
+		},
+		["Return To Monke"] = {
+			NAME = "Retour à Monke",
+			DESCRIPTION = "Le monde moderne n'a plus de place pour nous, les humains. C'est pourquoi je propose que nous rejetions l'humanité et que nous retournions à l'état de singe ! Vous voulez vous joindre à nous ?",
+			COUNTER = "Retourné à Monke",
+			HOVER = "Transformez-vous en Wonkey, revenez à monke !",
+		},
+		["The Punching Bag"] = {
+			NAME = "Le sac de frappe",
+			DESCRIPTION = "Je me considère comme le plus fort de ce monde. Je suis tellement fort que j'ai pu atteindre une valeur de %s en utilisant les sacs de frappe ! Je vous mets au défi de me montrer une valeur plus élevée !",
+			COUNTER = "Dommages maximaux au sac de frappe",
+			HOVER = "Faire plus de %s de dégâts à un sac de frappe en un seul coup",
+		},
+		["The Shadowcrafter"] = {
+			NAME = "L'artisan de l'ombre",
+			DESCRIPTION = "Les métiers de l'ombre sont difficiles à apprendre et encore plus difficiles à maîtriser... \nSi vous êtes en mesure de me prouver que vous avez fabriqué %s objets de l'ombre, je vous récompenserai en vous offrant des pouvoirs obscurs !",
+			COUNTER = "Objets de Shadowcraft fabriqués",
+			HOVER = "Fabriquer %s objets d'ombrage avec le socle d'ombrage",
+		},
+		["Strong Stomach"] = {
+			NAME = "Un estomac solide",
+			DESCRIPTION = "Avez-vous ce qu'il faut pour survivre dans la nature ? Il est nécessaire d'avoir un estomac solide, car beaucoup de nourriture commence à pourrir lorsque vous vous en occupez. Voyez cela comme un entraînement pour votre estomac à manger des %s pourris.",
+			COUNTER = "Pourriture mangée",
+			HOVER = "Mangez %s Rot. N'y pensez pas, mangez-la...",
+		},
+		["Dreadful Constructor"] = {
+			NAME = "Constructeur redoutable",
+			DESCRIPTION = "Les grottes semblent un peu instables ces derniers temps, car de nombreux tremblements de terre se sont produits. Nos piliers de soutien en pierre ne sont pas capables d'absorber ces chocs, c'est pourquoi j'ai besoin d'un matériau plus solide, comme la dreadstone. Aidez-nous en construisant %s piliers en dreadstone pour que notre base dans les grottes soit en sécurité !",
+			COUNTER = "Construction de piliers de pierre redoutable",
+			HOVER = "Construire %s full dreadstone pillars",
+		},
+		["Poor Doggies"] = {
+			NAME = "Pauvres chiens",
+			DESCRIPTION = "Pauvres chiens, a dit ma mère. Je dis simplement qu'ils l'ont bien cherché ! Ces chiens cherchent des humains et les attaquent, on peut les appeler des pauvres ! Si tu vaincs % d'entre eux, je te donnerai un vrai bon toutou !",
+			COUNTER = "Chiens courants tués",
+			HOVER = "Tuer %s des chiens de chasse, des chiens de feu ou des chiens de glace",
+		},
+		["The Queen Slayer"] = {
+			NAME = "La reine tueuse",
+			DESCRIPTION = "Les Reines des araignées sont devenues trop puissantes ! J'ai besoin de quelqu'un d'assez fort pour tuer % d'entre elles, afin que notre village de cochons puisse continuer à vivre en paix !",
+		},
+		["Whac-A-Mole"] = {
+			NAME = "Whac-A-Mole",
+			DESCRIPTION = "J'ai entendu parler de ce jeu appelé Whac-A-Mole en dehors de Constant. J'ai essayé d'y jouer mais cela semble impossible, je n'arrive jamais à toucher une taupe. Montrez-moi que c'est possible en tuant %s taupes !",
 		},
 	},
 	QUEST_FUNCTIONS = {

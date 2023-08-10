@@ -231,6 +231,14 @@ QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS = {
 		"krampus_sack.tex", 			--tex
 		"images/inventoryimages1.xml",	--atlas
 	},
+	[":func:build_buffer"] = {
+		function(inst,recname)			--function that is run
+			inst.components.builder:BufferBuild(recname)
+		end,
+		"Build x as a buffered build",	--Name that is shown, x is amount for the function
+		"krampus_sack.tex", 			--tex
+		"images/inventoryimages1.xml",	--atlas
+	},
 
 }
 
@@ -241,6 +249,7 @@ local text_table_boni = {
 	hungerrate = function(amount) amount = amount * 100;return amount.."% " end,
 	escapedeath = function(amount) return amount.." " end,
 	dodge = function(amount) return amount.."s " end,
+	crit = function(amount) return amount.."% " end,
 }
 
 local function MakeTempRewardData(bonus,amount)
@@ -277,6 +286,7 @@ local temprewards = {
 	planardefense = {2,5,10,25,},
 	range = {0.5,1,1.5,2},
 	dodge = {30,20,10,5},
+	crit = {1,3,5,10},
 	winterinsulation = {40,80,120,160},
 	summerinsulation = {40,80,120,160},
 	worker = {1.2,1.4,1.6,2,},
@@ -478,12 +488,27 @@ local function GetValues(player,quest_name,value_name)
 	return saved_value or value
 end
 
+local function SetValues(player, quest_name, value_name, value)
+	local quest_component = player.components.quest_component
+	if quest_component == nil then
+		return
+	end
+	quest_component:SetQuestData(quest_name, value_name, value)
+end
+
 local function RemoveValues(player,quest_name)
 	local quest_component = player.components.quest_component
 	if quest_component == nil then
 		return
 	end
 	quest_component.quest_data[quest_name] = nil
+end
+
+local function StopTask(entity, task)
+	if entity[task] ~= nil then
+		entity[task]:Cancel()
+		entity[task] = nil
+	end
 end
 
 local function OnForfeit(inst,fn,quest_name)
@@ -508,14 +533,27 @@ end
 
 local custom_functions = {
 	
-	["eat x times y"] = function(player,food,amount,quest_name)
+	["eat x times y"] = function(player,foods,amount,quest_name)
 		local food_eaten = GetCurrentAmount(player,quest_name)
-		local function Food(_player, data)
-			if data and data.food.prefab == food then
-				food_eaten = food_eaten + 1
-				_player:PushEvent("quest_update",{ quest = quest_name, amount = 1})
-				if food_eaten >= amount then
-					_player:RemoveEventCallback("oneat",Food)
+		foods = type(foods) == "string" and {foods} or foods
+		local Food
+		local function UpdateQuest()
+			food_eaten = food_eaten + 1
+			player:PushEvent("quest_update",{ quest = quest_name, amount = 1})
+			if food_eaten >= amount then
+				player:RemoveEventCallback("oneat",Food)
+			end
+		end
+		Food = function(_, data)
+			if data and data.food then
+				if foods then
+					for _, prefab in ipairs(foods) do
+						if data.food.prefab == prefab then
+							UpdateQuest()
+						end
+					end
+				else
+					UpdateQuest()
 				end
 			end
 		end
@@ -878,7 +916,7 @@ local custom_functions = {
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
 
-	["craft x y times"] = function(player,amount,items,tab,quest_name)
+	["craft x y times"] = function(player,amount,items,tab,quest_name,tech)
 		local built = GetCurrentAmount(player,quest_name)
 		items = type(items) == "string" and {items} or items
 		local OnBuild
@@ -892,17 +930,18 @@ local custom_functions = {
 		OnBuild = function(_,data)
 			if data then
 				if data.recipe and (tab == nil or (CRAFTING_FILTERS[tab] and CRAFTING_FILTERS[tab].default_sort_values[data.recipe.name])) then
-					if items == nil then
-						UpdateQuest()
-					elseif data.item then
-						for _, prefab in ipairs(items) do
-							if data.item.prefab == prefab then
-								UpdateQuest()
-								break
+					if tech == nil or data.recipe.level[tech[1]] >= tech[2] then
+						if items == nil then
+							UpdateQuest()
+						elseif data.item then
+							for _, prefab in ipairs(items) do
+								if data.item.prefab == prefab then
+									UpdateQuest()
+									break
+								end
 							end
 						end
 					end
-
 				end
 			end
 		end
@@ -1506,16 +1545,28 @@ local custom_functions = {
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
 
-	["kill x y times"] = function(player,amount,victim,quest_name,check)
+	["kill x y times"] = function(player,amount,victims,quest_name,check)
 		local current = GetCurrentAmount(player,quest_name)
-		local function OnKilled(_,data)
+		victims = type(victims) == "string" and {victims} or victims
+		local OnKilled
+		local function UpdateQuest()
+			player:PushEvent("quest_update",{quest = quest_name,amount = 1})
+			current = current + 1
+			if current >= amount then
+				player:RemoveEventCallback("killed",OnKilled)
+				player:RemoveEventCallback("killedbyfriend", OnKilled)
+			end
+		end
+		OnKilled = function(_,data)
 			if data and data.victim then
-				if victim == nil or data.victim.prefab == victim then
-					if check == nil or check(data.victim) then
-						player:PushEvent("quest_update",{quest = quest_name,amount = 1})
-						current = current + 1
-						if current >= amount then
-							player:RemoveEventCallback("killed",OnKilled)
+				if check == nil or check(data.victim) then
+					if victims == nil then
+						UpdateQuest()
+					else
+						for _, prefab in ipairs(victims) do
+							if data.victim.prefab == prefab then
+								UpdateQuest()
+							end
 						end
 					end
 				end
@@ -1526,6 +1577,49 @@ local custom_functions = {
 		local function OnForfeitedQuest(_player)
 			_player:RemoveEventCallback("killed",OnKilled)
 			_player:RemoveEventCallback("killedbyfriend", OnKilled)
+		end
+		OnForfeit(player,OnForfeitedQuest,quest_name)
+	end,
+
+	["kill different creatures x y times"] = function(player,amount,quest_name,victims,check)
+		local current = GetCurrentAmount(player,quest_name)
+		local listen_functions = {}
+		local current_kills = {}
+		for prefab, kill_amount in pairs(victims) do
+			current_kills[prefab] = GetValues(player, quest_name, prefab)
+			if current_kills[prefab] < kill_amount then
+				local function OnKilled(_,data)
+					if data and data.victim then
+						if data.victim.prefab == prefab then
+							if check == nil or check(data.victim) then
+								player:PushEvent("quest_update",{quest = quest_name,amount = 1})
+								current_kills[prefab] = current_kills[prefab] + 1
+								SetValues(player, quest_name, prefab, current_kills[prefab])
+								current = current + 1
+								if current_kills[prefab] >= kill_amount then
+									player:RemoveEventCallback("killed",OnKilled)
+									player:RemoveEventCallback("killedbyfriend",OnKilled)
+								end
+								if current >= amount then
+									for _, fn in pairs(listen_functions) do
+										player:RemoveEventCallback("killed", fn)
+										player:RemoveEventCallback("killedbyfriend", fn)
+									end
+								end
+							end
+						end
+					end
+				end
+				player:ListenForEvent("killed",OnKilled)
+				player:ListenForEvent("killedbyfriend", OnKilled)
+				listen_functions[prefab] = OnKilled
+			end
+		end
+		local function OnForfeitedQuest()
+			for _, fn in pairs(listen_functions) do
+				player:RemoveEventCallback("killed", fn)
+				player:RemoveEventCallback("killedbyfriend", fn)
+			end
 		end
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
@@ -1682,25 +1776,77 @@ local custom_functions = {
 				current = current + 1
 				_player:PushEvent("quest_update",{ quest = quest_name, amount = time_between_check})
 				if current >= amount then
-					if _player[fn_name] ~= nil then
-						_player[fn_name]:Cancel()
-						_player[fn_name] = nil
-						return
-					end
+					StopTask(player, fn_name)
+					return
 				end
 			end
 			_player:DoTaskInTime(time_between_check,CheckBool)
 		end
-		if player[fn_name] ~= nil then
-			player[fn_name]:Cancel()
-			player[fn_name] = nil
-		end
+		StopTask(player, fn_name)
 		CheckBool(player)
-		local function OnForfeitedQuest(_player)
-			if _player[fn_name] ~= nil then
-				_player[fn_name]:Cancel()
-				_player[fn_name] = nil
+		local function OnForfeitedQuest()
+			StopTask(player, fn_name)
+		end
+		OnForfeit(player,OnForfeitedQuest,quest_name)
+	end,
+
+	["do x each second for y seconds with event"] = function(player, amount, quest_name, bool, time_between_check, event)
+		local current = GetCurrentAmount(player,quest_name)
+		local fn_name = quest_name.."_task"
+		local function CheckBool(inst, data)
+			StopTask(inst, quest_name.."_task")
+			if bool == nil or bool(player, amount, quest_name, inst, data) then
+				player[quest_name.."_task"] = player:DoPeriodicTask(1, function()
+					current = current + 1
+					player:PushEvent("quest_update",{ quest = quest_name, amount = time_between_check})
+					if current >= amount then
+						StopTask(player, fn_name)
+						player:RemoveEventCallback(event, CheckBool)
+						return
+					end
+				end)
 			end
+			player:DoTaskInTime(time_between_check,CheckBool)
+		end
+		StopTask(player, fn_name)
+		player:ListenForEvent(event, CheckBool)
+		local function OnForfeitedQuest()
+			StopTask(player, fn_name)
+			player:RemoveEventCallback(event, CheckBool)
+		end
+		OnForfeit(player,OnForfeitedQuest,quest_name)
+	end,
+
+	["construct site x y times"] = function(player, amount, quest_name, constructionsites)
+		local current = GetCurrentAmount(player,quest_name)
+		constructionsites = type(constructionsites) == "string" and {constructionsites} or constructionsites
+		local OnFinishConstruction
+		local function UpdateQuest()
+			player:PushEvent("quest_update",{quest = quest_name,amount = 1})
+			current = current + 1
+			if current >= amount then
+				player:RemoveEventCallback("finish_construction", OnFinishConstruction)
+			end
+		end
+		OnFinishConstruction = function(_, data)
+			--devprint("OnFinishConstruction", data.constructionsite, data.constructionsite and data.constructionsite.components.constructionsite:IsComplete())
+			if data.constructionsite and data.constructionsite.components.constructionsite:IsComplete() then
+				if constructionsites == nil then
+					UpdateQuest()
+				else
+					for _, prefab in ipairs(constructionsites) do
+						if data.constructionsite.prefab == prefab then
+							UpdateQuest()
+						end
+					end
+				end
+
+			end
+		end
+
+		player:ListenForEvent("finish_construction", OnFinishConstruction)
+		local function OnForfeitedQuest()
+			player:RemoveEventCallback("finish_construction", OnFinishConstruction)
 		end
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,

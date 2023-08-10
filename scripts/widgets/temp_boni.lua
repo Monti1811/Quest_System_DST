@@ -98,6 +98,12 @@ local string = {
 		return str,arrow
 	end,
 
+	crit = function(amount)
+		local str = amount..STRINGS_TB.DODGE
+		local arrow = amount < 1.1 and 0 or amount < 3.1 and 1 or amount < 5.1 and 2 or 3
+		return str,arrow
+	end,
+
 	winterinsulation = function(amount)
 		local str = "+"..amount..STRINGS_TB.WINTERINSULATION
 		local arrow = amount < 41 and 0 or amount < 81 and 1 or amount < 121 and 2 or 3

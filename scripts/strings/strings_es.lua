@@ -98,6 +98,7 @@ return {
 		planardamage = "Bonificación de daño planar durante x min",
 		planardefense = "Bonificación de defensa planar durante x min",
 		dodge = "Enfriamiento de la bonificación de esquiva durante x min",
+		crit = "Probabilidad crítica de hacer 1,5x de daño durante x min.",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "Tablero de misión",
@@ -205,6 +206,7 @@ return {
 		PLANARDAMAGE = " Daños planares",
 		PLANARDEFENSE = " Defensa planar",
 		DODGE = " Cada %s segundos esquiva",
+		CRIT = "% Probabilidad crítica de hacer 1.5x de daño",
 	},
 	LOADING_TIPS = {
 		request = "Las peticiones pueden caer de criaturas muertas. También puedes habilitar su elaboración en las opciones de configuración!",
@@ -908,6 +910,62 @@ return {
 		["I'm The Pirate Now!"] = {
 			NAME = "¡Ahora soy el pirata!",
 			DESCRIPTION = "Jajaja Últimamente, los piratas recorren las costas con más frecuencia. ¡Demuéstrales que los papeles pueden cambiar rápidamente a nuestro favor!",
+		},
+		["Cannon Fodder"] = {
+			NAME = "Carne de cañón",
+			DESCRIPTION = "¿Eres carne de cañón o quieres tomar cartas en el asunto? ¡Demuéstrame que no eres carne de cañón desplegando %s cañones!",
+			COUNTER = "Cañones desplegados",
+			HOVER = "Desplegar %s cañones",
+		},
+		["Let's Get The Party Started!"] = {
+			NAME = "¡Que empiece la fiesta!",
+			DESCRIPTION = "Ha pasado algún tiempo desde que celebré mi última fiesta de verdad, en realidad desde que llegué a Constant. ¡Pero esto está cambiando ahora! Necesito gente que quiera festejar conmigo, pero tienen que traer sus propias bebidas, al menos %s. Puede ser un Zumo de Plátano, un Aguijón Vegetal o un Daiquiri de Plátano Congelado.",
+			COUNTER = "Cócteles consumidos",
+			HOVER = "Coma %s de zumo de plátano, aguijón de verdura o daiquiri de plátano congelado.",
+		},
+		["Return To Monke"] = {
+			NAME = "Volver a Monke",
+			DESCRIPTION = "El mundo moderno ya no tiene sitio para nosotros, los humanos. Por eso propongo que rechacemos la humanidad y volvamos a ser monos. ¿Quieres unirte a nosotros?",
+			COUNTER = "De vuelta a Monke",
+			HOVER = "Transfórmate en Wonkey, ¡vuelve a ser mono!",
+		},
+		["The Punching Bag"] = {
+			NAME = "El saco de boxeo",
+			DESCRIPTION = "Me considero el más fuerte de este mundo. ¡Soy tan fuerte que fui capaz de alcanzar un valor de %s cuando usaba los sacos de boxeo! ¡Te reto a que me muestres un valor más alto!",
+			COUNTER = "Daño máximo al saco de boxeo",
+			HOVER = "Haz más de %s de daño a un saco de boxeo de un solo golpe",
+		},
+		["The Shadowcrafter"] = {
+			NAME = "El Artesano de las Sombras",
+			DESCRIPTION = "Los oficios de las sombras son difíciles de aprender y aún más difíciles de dominar... \nSi eres capaz de demostrarme que has fabricado %s objetos de artesanía de las sombras, ¡te recompensaré con poderes oscuros!",
+			COUNTER = "Objetos de Shadowcraft fabricados",
+			HOVER = "Crea %s objetos de artesanía de las sombras con el zócalo de artesanía de las sombras",
+		},
+		["Strong Stomach"] = {
+			NAME = "Estómago fuerte",
+			DESCRIPTION = "¿Tienes lo que hay que tener para sobrevivir en la naturaleza? Una necesidad es tener un estómago fuerte, ya que mucha comida empezará a pudrirse cuando llegues a ella. Considéralo como un entrenamiento para tu estómago comer %s podridos.",
+			COUNTER = "Pudrición comido",
+			HOVER = "Come %s Rot. No lo pienses, sólo cómetelo...",
+		},
+		["Dreadful Constructor"] = {
+			NAME = "Constructor temible",
+			DESCRIPTION = "Las cuevas parecen un poco inestables últimamente, ya que se han producido muchos terremotos. Nuestros pilares de apoyo hechos de piedra no son capaces de absorber estas sacudidas, por lo que necesito algún material más fuerte, como dreadstone. ¡Ayúdanos construyendo %s pilares llenos de dreadstone para que nuestra base en las cuevas esté segura!",
+			COUNTER = "Pilares de piedra de terror construidos",
+			HOVER = "Construir %s pilares de dreadstone llenos",
+		},
+		["Poor Doggies"] = {
+			NAME = "Pobres perritos",
+			DESCRIPTION = "Pobres perritos, dijo mi madre. Sólo digo que se lo merecían. Estos sabuesos buscan humanos y los atacan, ¡puedes llamarlos pobres! ¡Si vences a %s de ellos, te daré un perrito realmente bueno!",
+			COUNTER = "Sabuesos muertos",
+			HOVER = "Mata %s de sabuesos, sabuesos de fuego o sabuesos de hielo",
+		},
+		["The Queen Slayer"] = {
+			NAME = "La Reina Cazadora",
+			DESCRIPTION = "¡Las reinas araña se han vuelto demasiado poderosas! Necesito a alguien lo suficientemente fuerte como para matar a %s de ellas, ¡para que nuestra aldea de cerdos pueda seguir viviendo en paz!",
+		},
+		["Whac-A-Mole"] = {
+			NAME = "Whac-A-Mole",
+			DESCRIPTION = "He oído hablar de este juego llamado Whac-A-Mole de fuera de la Constant. He intentado jugarlo pero me parece imposible, nunca soy capaz de acertar a un topo. ¡Demuéstrame que es posible matando %s topos!",
 		},
 	},
 	QUEST_FUNCTIONS = {

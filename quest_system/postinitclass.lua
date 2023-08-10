@@ -354,6 +354,26 @@ end
 
 AddComponentPostInit("oceanfishingrod", OnCatchFish)
 
+local function OnFinishConstruction(self)
+	local old_OnConstruct = self.OnConstruct
+	function self:OnConstruct(doer, items, ...)
+		-- Remove onconstructedfn so that prefab is not replaced
+		local old_onconstructedfn = self.onconstructedfn
+		self.onconstructedfn = nil
+		old_OnConstruct(self, doer, items, ...)
+		if doer then
+			doer:PushEvent("finish_construction", {constructionsite = self.inst})
+		end
+		-- Run onconstructedfn after event is pushed
+		self.onconstructedfn = old_onconstructedfn
+		if self.onconstructedfn ~= nil then
+			self.onconstructedfn(self.inst, doer)
+		end
+	end
+end
+
+AddComponentPostInit("constructionsite", OnFinishConstruction)
+
 --Stop players from attacking the victims in attackwaves
 local function CanBeAttacked(self)
 	local old_CanBeAttacked = self.CanBeAttacked
