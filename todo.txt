@@ -11,5 +11,8 @@
 --Refactor custom quests to json encode				: fixed
 --Mirror of merms also influence other players		: TODO (I think I will leave it as an intented feature)
 --rockavocadofruit.tex wird nicht in questbuch angezeigt: fixed
+--animation have wrong size sometimes (not quite sure when)
+--krampussack.tex cannot be found					: fixed
+
 
 gräber ausheben mission

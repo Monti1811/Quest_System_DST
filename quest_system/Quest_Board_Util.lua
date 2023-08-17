@@ -227,17 +227,22 @@ QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS = {
 				end
 			end
 		end,
-		" x % Chance of Krampus Sack",	--Name that is shown, x is amount for the function
-		"krampus_sack.tex", 			--tex
-		"images/inventoryimages1.xml",	--atlas
+		function(amount) return string.format("%s%% Chance of Krampus Sack", amount or "unknown") end,	--Name that is shown, either a value or a function with the argument of the value
+		"krampus_sack.tex", 				--tex
+		--"images/inventoryimages1.xml",	--atlas
 	},
 	[":func:build_buffer"] = {
 		function(inst,recname)			--function that is run
-			inst.components.builder:BufferBuild(recname)
+			local builder = inst.components.builder
+			if not builder:KnowsRecipe(recname, true) then
+				builder:UnlockRecipe(recname)
+			end
+			builder.buffered_builds[recname] = true
+			inst.replica.builder:SetIsBuildBuffered(recname, true)
 		end,
-		"Build x as a buffered build",	--Name that is shown, x is amount for the function
-		"krampus_sack.tex", 			--tex
-		"images/inventoryimages1.xml",	--atlas
+		function(recname) return string.format("Receive %s as a buffered build", STRINGS.NAMES[string.upper(recname)] or "unknown") end,	--Name that is shown, x is amount for the function
+		function(recname) return recname..".tex" end, 			--tex
+		--"images/inventoryimages1.xml",	--atlas
 	},
 
 }
@@ -253,7 +258,7 @@ local text_table_boni = {
 }
 
 local function MakeTempRewardData(bonus,amount)
-	--print("MakeTempRewardData",bonus,amount)
+	--devprint("MakeTempRewardData",bonus,amount)
 	local fn = function(inst,time,questname)
 		local temporarybonus = inst.components.temporarybonus
 		if temporarybonus then
@@ -286,7 +291,7 @@ local temprewards = {
 	planardefense = {2,5,10,25,},
 	range = {0.5,1,1.5,2},
 	dodge = {30,20,10,5},
-	crit = {1,3,5,10},
+	crit = {5,10,20,40},
 	winterinsulation = {40,80,120,160},
 	summerinsulation = {40,80,120,160},
 	worker = {1.2,1.4,1.6,2,},
@@ -535,7 +540,7 @@ local custom_functions = {
 	
 	["eat x times y"] = function(player,foods,amount,quest_name)
 		local food_eaten = GetCurrentAmount(player,quest_name)
-		foods = type(foods) == "string" and {foods} or foods
+		foods = type(foods) == "string" and {[foods] = true} or foods
 		local Food
 		local function UpdateQuest()
 			food_eaten = food_eaten + 1
@@ -546,13 +551,7 @@ local custom_functions = {
 		end
 		Food = function(_, data)
 			if data and data.food then
-				if foods then
-					for _, prefab in ipairs(foods) do
-						if data.food.prefab == prefab then
-							UpdateQuest()
-						end
-					end
-				else
+				if foods == nil or foods[data.food.prefab] then
 					UpdateQuest()
 				end
 			end
@@ -602,7 +601,7 @@ local custom_functions = {
 
 	["do work type z for x amount of y"] = function(player,worktype,workable,how_many,quest_name)
 		local amount = GetCurrentAmount(player,quest_name)
-		workable = type(workable) == "string" and {workable} or workable
+		workable = type(workable) == "string" and {[workable] = true} or workable
 		local ListenForEventFinishedWork
 		local function UpdateQuest()
 			amount = amount + 1
@@ -614,15 +613,8 @@ local custom_functions = {
 		ListenForEventFinishedWork = function(_, data)
 			local action = data.target.components.workable and data.target.components.workable.action
 			if worktype == nil or action == worktype then
-				if workable == nil then
+				if workable == nil or workable[data.target.prefab] then
 					UpdateQuest()
-				elseif data.target then
-					for _, prefab in ipairs(workable) do
-						if data.target.prefab == prefab then
-							UpdateQuest()
-							break
-						end
-					end
 				end
 			end
 		end
@@ -635,6 +627,7 @@ local custom_functions = {
 
 	["finish work type z for x amount of y"] = function(player,worktype,workable,how_many,quest_name)
 		local amount = GetCurrentAmount(player,quest_name)
+		workable = type(workable) == "string" and {[workable] = true} or workable
 		local ListenForEventFinishedWork
 		local function UpdateQuest()
 			amount = amount + 1
@@ -646,15 +639,8 @@ local custom_functions = {
 		ListenForEventFinishedWork = function(_, data)
 			local action = data.action
 			if worktype == nil or action == worktype then
-				if workable == nil then
+				if workable == nil or workable[data.target.prefab] then
 					UpdateQuest()
-				elseif data.target then
-					for _, prefab in ipairs(workable) do
-						if data.target.prefab == prefab then
-							UpdateQuest()
-							break
-						end
-					end
 				end
 			end
 		end
@@ -931,15 +917,8 @@ local custom_functions = {
 			if data then
 				if data.recipe and (tab == nil or (CRAFTING_FILTERS[tab] and CRAFTING_FILTERS[tab].default_sort_values[data.recipe.name])) then
 					if tech == nil or data.recipe.level[tech[1]] >= tech[2] then
-						if items == nil then
+						if items == nil or items[data.item.prefab] then
 							UpdateQuest()
-						elseif data.item then
-							for _, prefab in ipairs(items) do
-								if data.item.prefab == prefab then
-									UpdateQuest()
-									break
-								end
-							end
 						end
 					end
 				end
@@ -1547,7 +1526,7 @@ local custom_functions = {
 
 	["kill x y times"] = function(player,amount,victims,quest_name,check)
 		local current = GetCurrentAmount(player,quest_name)
-		victims = type(victims) == "string" and {victims} or victims
+		victims = type(victims) == "string" and {[victims] = true} or victims
 		local OnKilled
 		local function UpdateQuest()
 			player:PushEvent("quest_update",{quest = quest_name,amount = 1})
@@ -1560,14 +1539,8 @@ local custom_functions = {
 		OnKilled = function(_,data)
 			if data and data.victim then
 				if check == nil or check(data.victim) then
-					if victims == nil then
+					if victims == nil or victims[data.victim.prefab] then
 						UpdateQuest()
-					else
-						for _, prefab in ipairs(victims) do
-							if data.victim.prefab == prefab then
-								UpdateQuest()
-							end
-						end
 					end
 				end
 			end
@@ -1819,7 +1792,7 @@ local custom_functions = {
 
 	["construct site x y times"] = function(player, amount, quest_name, constructionsites)
 		local current = GetCurrentAmount(player,quest_name)
-		constructionsites = type(constructionsites) == "string" and {constructionsites} or constructionsites
+		constructionsites = type(constructionsites) == "string" and {[constructionsites] = true} or constructionsites
 		local OnFinishConstruction
 		local function UpdateQuest()
 			player:PushEvent("quest_update",{quest = quest_name,amount = 1})
@@ -1831,16 +1804,9 @@ local custom_functions = {
 		OnFinishConstruction = function(_, data)
 			--devprint("OnFinishConstruction", data.constructionsite, data.constructionsite and data.constructionsite.components.constructionsite:IsComplete())
 			if data.constructionsite and data.constructionsite.components.constructionsite:IsComplete() then
-				if constructionsites == nil then
+				if constructionsites == nil or constructionsites[data.constructionsite.prefab] then
 					UpdateQuest()
-				else
-					for _, prefab in ipairs(constructionsites) do
-						if data.constructionsite.prefab == prefab then
-							UpdateQuest()
-						end
-					end
 				end
-
 			end
 		end
 
@@ -3188,7 +3154,7 @@ local FunctionsForCustomQuests = {
 
 local function AddCustomFunctions(tab)
 	for _,v in ipairs(tab) do
-		local new_tab = {text = v[1],data = "start_fn_"..v[1],counter = v[3], fn = v[2],tex = v[4], atlas = v[5]}
+		local new_tab = {text = v[1]--[[function(amount) string.format(v[1], amount) end]] ,data = "start_fn_"..v[1],counter = v[3], fn = v[2],tex = v[4], atlas = v[5]}
 		QUEST_BOARD.PREFABS_MOBS[v[1]] = new_tab
 	end
 	print("[Quest System] Amount of custom goals:",GetTableSize(QUEST_BOARD.PREFABS_MOBS))

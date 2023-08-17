@@ -2101,7 +2101,7 @@ local quests = {
 	counter_name = nil,
 	description = GetQuestString("Ho Ho Ho","DESCRIPTION"),
 	amount = 1,
-	rewards = {giftwrap = 20,[":func:krampus_sack"] = 10,mandrake = 2},
+	rewards = {giftwrap = 20,[":func:krampus_sack"] = 33,mandrake = 2},
 	points = 2000,
 	start_fn = nil,
 	onfinished = nil,
@@ -3478,11 +3478,9 @@ local quests = {
 		points = 600,
 		start_fn = function(inst,amount,quest_name)
 			local current = GetCurrentAmount(inst,quest_name)
-			local OnKilled
 			local OnAttacked
 			local function Stop()
 				inst:RemoveEventCallback("attacked",OnAttacked)
-				inst:RemoveEventCallback("killed",OnKilled)
 				StopTask(inst, quest_name.."_task")
 			end
 			OnAttacked = function(inst, data)
@@ -3490,11 +3488,7 @@ local quests = {
 					inst:PushEvent("quest_update",{quest = quest_name,reset = true})
 				end
 			end
-			OnKilled = function(inst)
-				inst:PushEvent("quest_update",{quest = quest_name,reset = true})
-			end
 			inst:ListenForEvent("attacked",OnAttacked)
-			inst:ListenForEvent("killed",OnKilled)
 			local function OnForfeitedQuest(inst)
 				Stop()
 			end
@@ -3857,7 +3851,8 @@ local quests = {
 		rewards = {[":func:dodge;20"] = 8, bomb_lunarplant = 3},
 		points = 300,
 		start_fn = function(inst,amount,quest_name)
-			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["finish work type z for x amount of y"](inst,ACTIONS.MINE,{"lunarrift_crystal_big", "lunarrift_crystal_small"},amount,quest_name)
+			local workables = {lunarrift_crystal_big = true, lunarrift_crystal_small = true}
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["finish work type z for x amount of y"](inst,ACTIONS.MINE,workables,amount,quest_name)
 		end,
 		onfinished = nil,
 		difficulty = 2,
@@ -4000,7 +3995,7 @@ local quests = {
 		rewards = {[":func:nightvision;1"] = 16, leafymeatburger = 5},
 		points = 400,
 		start_fn = function(inst, amount, quest_name)
-			local cocktails = {"bananajuice", "vegstinger", "frozenbananadaiquiri", }
+			local cocktails = {bananajuice = true, vegstinger = true, frozenbananadaiquiri = true, }
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["eat x times y"](inst, cocktails, amount, quest_name)
 		end,
 		onfinished = nil,
@@ -4118,7 +4113,7 @@ local quests = {
 		counter_name = GetQuestString("Dreadful Constructor", "COUNTER"),
 		description = GetQuestString("Dreadful Constructor", "DESCRIPTION", 3),
 		amount = 3,
-		rewards = {dreadstone = 40, purebrilliance = 40, [":func:crit;10"] = 16},
+		rewards = {dreadstone = 60, purebrilliance = 60, [":func:crit;40"] = 16},
 		points = 1200,
 		start_fn = function(inst, amount, quest_name)
 			local constructionsites = "support_pillar_dreadstone_scaffold"
@@ -4140,7 +4135,7 @@ local quests = {
 		rewards = {[":func:healthrate;5"] = 8, eyeturret_item = 1},
 		points = 900,
 		start_fn = function(inst, amount, quest_name)
-			local dogs = {"hound", "firehound", "icehound"}
+			local dogs = {hound = true, firehound = true, icehound = true, magmahound = true, sporehound = true, lightninghound = true}
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst, amount, dogs, quest_name)
 		end,
 		onfinished = nil,
@@ -4181,6 +4176,29 @@ local quests = {
 		tex = "mole.tex",
 		atlas = "images/victims.xml",
 		hovertext = GetKillString("mole", 3),
+	},
+	--131
+	{
+		name = "Running Like Clockwork",
+		victim = "",
+		counter_name = nil,
+		description = GetQuestString("Running Like Clockwork", "DESCRIPTION", 20),
+		amount = 20,
+		rewards = {thulecite = 10, [":func:build_buffer"] = "dragonflyfurnace",},
+		points = 1000,
+		start_fn = function(inst, amount, quest_name)
+			local clockworks = {knight = true, bishop = true, rook = true, knook = true, bight = true, roship = true, knight_nightmare = true, bishop_nightmare = true, rook_nightmare = true,}
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst, amount, clockworks, quest_name)
+		end,
+		onfinished = function(inst)
+			inst.components.builder:BufferBuild("dragonflyfurnace")
+		end,
+		difficulty = 4,
+		tex = "knight.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("Running Like Clockwork", "HOVER", 20),
+		anim_prefab = "knight",
+		["reward_1 buffered Dragonflyfurnace_tex"] = "dragonflyfurnace.tex",
 	},
 }
 

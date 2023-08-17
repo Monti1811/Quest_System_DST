@@ -522,7 +522,7 @@ function Quest_Board_Widget:ShowRewards(tab)
     local num = 0 
     for k,v in pairs(tab.rewards) do
         num = num + 1
-        local str1 = GetRewardString(k)
+        local str1 = GetRewardString(k, v)
         local rew_num = (type(v) == "string" and v) or (v and tostring(math.ceil(v * TUNING.QUEST_COMPONENT.REWARDS_AMOUNT)) or 0)
         if str1 and string.find(str1," x ") then
             str1 = string.gsub(str1," x "," "..rew_num.." ")
@@ -539,8 +539,8 @@ function Quest_Board_Widget:ShowRewards(tab)
         local x,y = -35 + (num-1)%2 * 70,140 - math.floor((num-1)/2)*70
         invimages["_"..num]:SetPosition(x,y)
         invimages["_"..num]:SetScale(0.8,0.8)
-        local tex = tab["reward_"..k.."_tex"] or (TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k] and TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k][3]) or k..".tex"
-        local atlas = tab["reward_"..k.."_atlas"] or (TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k] and TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k][4]) or GetInventoryItemAtlas(tex,true)
+        local tex = tab["reward_"..k.."_tex"] or (TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k] and FunctionOrValue(TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k][3], v)) or k..".tex"
+        local atlas = tab["reward_"..k.."_atlas"] or (TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k] and FunctionOrValue(TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k][4], v)) or GetInventoryItemAtlas(tex,true)
 
         if atlas then
             invimages[num] = show_rewards:AddChild(Image(atlas,tex))
@@ -685,8 +685,8 @@ function Quest_Board_Widget:ShowCustomQuests()
                 str1 = string.gsub(str1," x "," "..rew_num.." ")
             end
             local str  = str1 or tostring(STRINGS.NAMES[string.upper(prefab)] or prefab or "?")..(tostring(rew_num) ~= "" and ": "..tostring(rew_num) or "")
-            local tex = TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[prefab] and TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[prefab][3] or prefab..".tex"
-            local atlas = TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[prefab] and TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[prefab][4] or GetInventoryItemAtlas(tex,true)
+            local tex = TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[prefab] and FunctionOrValue(TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[prefab][3], amount) or prefab..".tex"
+            local atlas = TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[prefab] and FunctionOrValue(TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[prefab][4], amount) or GetInventoryItemAtlas(tex,true)
             if atlas then
                 reward = bg:AddChild(Image(atlas,tex))
                 local x = 150 + (num%3)*30

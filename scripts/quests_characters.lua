@@ -80,7 +80,8 @@ local quests = {
 			rewards = {},
 			points = 275,
 			start_fn = function(inst,amount,quest_name)
-				TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["craft x y times"](inst,amount,{"redgem", "bluegem", "purplegem"}, "CHARACTER", quest_name)
+				local gems = {redgem = true, bluegem = true, purplegem = true}
+				TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["craft x y times"](inst,amount,gems, "CHARACTER", quest_name)
 			end,
 			onfinished = nil,
 			difficulty = 2,
@@ -98,7 +99,8 @@ local quests = {
 			rewards = {},
 			points = 550,
 			start_fn = function(inst,amount,quest_name)
-				TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["craft x y times"](inst,amount,{"orangegem", "yellowgem"}, "CHARACTER", quest_name)
+				local gems = {orangegem = true, yellowgem = true,}
+				TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["craft x y times"](inst,amount,gems, "CHARACTER", quest_name)
 			end,
 			onfinished = nil,
 			difficulty = 3,
@@ -116,7 +118,8 @@ local quests = {
 			rewards = {},
 			points = 1100,
 			start_fn = function(inst,amount,quest_name)
-				TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["craft x y times"](inst,amount,{"opalpreciousgem", "greengem"}, "CHARACTER", quest_name)
+				local gems = {opalpreciousgem = true, greengem = true,}
+				TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["craft x y times"](inst,amount,gems, "CHARACTER", quest_name)
 			end,
 			onfinished = nil,
 			difficulty = 4,

@@ -62,7 +62,7 @@ if QUEST_COMPONENT.BUTTON == 1 or QUEST_COMPONENT.BUTTON == 2 then
 		if saved_pos then
 			self.Button_QuestLog:SetPosition(saved_pos.x, saved_pos.y, saved_pos.z)
 		end
-		self.Button_QuestLog:SetOnDragFinish(function(oldpos, newpos)
+		self.Button_QuestLog:SetOnDragFinish(function(_, newpos)
 			DataContainer:SetValue("questlog_button", newpos)
 			DataContainer:Save()
 		end)

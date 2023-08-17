@@ -800,9 +800,9 @@ function Quest_Widget:ShowRewards(tab,_num)
     --local _image = string.gsub(k,":func:","")
     --local image = string.split(_image,";")
     --dumptable(image)
-    local tex = tab["reward_"..k.."_tex"] or (TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k] and TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k][3]) or k..".tex"
-    local atlas = tab["reward_"..k.."_atlas"] or (TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k] and TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k][4]) or GetInventoryItemAtlas(tex,true)
-
+    local tex = tab["reward_"..k.."_tex"] or (TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k] and FunctionOrValue(TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k][3], v) or k..".tex")
+    local atlas = tab["reward_"..k.."_atlas"] or (TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k] and FunctionOrValue(TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k][4], v)) or GetInventoryItemAtlas(tex,true)
+    devprint("atlas and tex", tex, atlas, GetInventoryItemAtlas(tex,true))
     if atlas then
       invimages[num] = self.show_rewards:AddChild(Image(atlas,tex))
       invimages[num]:SetPosition(120,160 - num*50)

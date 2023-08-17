@@ -98,11 +98,11 @@ function GLOBAL.GetQuestString(name,str,...)
 end
 
 --Used for the quest board and log. Gives back the string defined in TUNING
-function GLOBAL.GetRewardString(name)
+function GLOBAL.GetRewardString(name, value)
 	if string.find(name,":func:") then
 		local end_fn = QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[name]
 		if end_fn ~= nil then
-			local str = end_fn[2]
+			local str = FunctionOrValue(end_fn[2], value)
 			return str
 		end
 	end

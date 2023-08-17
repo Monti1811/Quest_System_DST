@@ -317,7 +317,7 @@ function Quest_Component:CompleteQuest(name)
 			if string.find(k,":func:") ~= nil then	
 				local func = CUSTOM_QUEST_END_FUNCTIONS[k] and CUSTOM_QUEST_END_FUNCTIONS[k][1]
 				if func then
-					func(self.inst,amount,name)
+					func(self.inst,v,name)
 				end
 			else
 				for _ = 1,amount do

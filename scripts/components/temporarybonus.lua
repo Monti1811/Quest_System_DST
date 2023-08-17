@@ -152,24 +152,31 @@ local function AddDodge(inst,amount)
 	end
 end
 
-local crit_chance = 0
-local crit_boni = {}
-local old_CalcDamage
-
 local function AddCrit(inst, amount, name)
 	amount = amount/100
+	local temporarybonus = inst.components.temporarybonus
 	local combat = inst.components.combat
+	if temporarybonus.crit_boni == nil then
+		temporarybonus.crit_boni = {}
+	end
+	if temporarybonus.crit_chance == nil then
+		temporarybonus.crit_chance = 0
+	end
+	devprint("AddCrit", inst, amount, name, temporarybonus.crit_chance)
 	if amount < 0 then
-		crit_chance = crit_chance + amount
-		crit_boni[name] = nil
-		if next(crit_boni) == nil then
-			combat.CalcDamage = old_CalcDamage
+		devdumptable(temporarybonus.crit_boni)
+		temporarybonus.crit_boni[name] = nil
+		devprint("checking critboni table", next(temporarybonus.crit_boni))
+		if next(temporarybonus.crit_boni) == nil then
+			combat.CalcDamage = temporarybonus.old_CalcDamage
 		end
-	elseif old_CalcDamage == nil then
-		old_CalcDamage = combat.CalcDamage
+	elseif temporarybonus.old_CalcDamage == nil then
+		temporarybonus.old_CalcDamage = combat.CalcDamage
 		combat.CalcDamage = function(self, target, weapon, multiplier, ...)
-			local ret = {old_CalcDamage(self, target, weapon, multiplier, ...)}
-			if crit_chance > 0 and math.random() < crit_chance then
+			local ret = {temporarybonus.old_CalcDamage(self, target, weapon, multiplier, ...)}
+			--devprint("new CalcDamage", crit_chance[inst.userid])
+			if temporarybonus.crit_chance > 0 and math.random() < temporarybonus.crit_chance then
+				--devprint("crit!", target, target and target:IsValid(), target and target:IsValid() and target:GetPosition())
 				ret[1] = ret[1] * 1.5
 				if target and target:IsValid() then
 					local target_pos = target:GetPosition()
@@ -181,8 +188,11 @@ local function AddCrit(inst, amount, name)
 			return unpack(ret)
 		end
 	end
-	crit_boni[name] = true
-	crit_chance = crit_chance + amount
+	if amount > 0 then
+		temporarybonus.crit_boni[name] = true
+	end
+	-- Crit will automatically be reduced as amount will be negative when bonus removed
+	temporarybonus.crit_chance = temporarybonus.crit_chance + amount
 end
 
 local function AddWinterInsulation(inst,amount)
@@ -366,8 +376,9 @@ end
 
 local function FindSmallestBonus(self)
 	local smallest_name, smallest_val = "", 1000000000000
+	local curr_time = GetTime()
 	for name, bonus in pairs(self.current_active_boni) do
-		local time_passed = GetTime() - bonus.starting_time
+		local time_passed = curr_time - bonus.starting_time
 		local time_left = bonus.time - time_passed
 		if time_left < smallest_val then
 			smallest_val = time_left
@@ -379,6 +390,10 @@ end
 
 function TemporaryBonus:AddBonus(bonus,name,amount,time)
 	devprint("TemporaryBonus:AddBonus",bonus,name,amount,time)
+	if time <= 0 then
+		print("TemporaryBonus:AddBonus: Tried to add bonus with negative time", bonus, name, amount, time)
+		return
+	end
 	name = name or ""
 	if self.current_boni >= self.max_boni then
 		print("[TemporaryBonus] Max Amount of Boni was reached! Removing one prior Bonus")
@@ -439,7 +454,7 @@ local function ChangeBoniClient(self,name,num)
 		local tab = self.current_active_boni[self.boni_num[num]]
 		if tab and self.inst.userid then
 			local time_passed = GetTime() - tab.starting_time
-			devprint("changing time passed",time_passed, tab.starting_time, GetTime(),  tab.bonus.."_"..tab.amount, num)
+			devprint("changing time passed",time_passed, tab.starting_time, GetTime(),  tab.time, tab.time - time_passed, tab.bonus.."_"..tab.amount, num)
 			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "AddTempBoniToClient"),self.inst.userid,self.inst,num,tab.bonus.."_"..tab.amount, nil, tab.time - time_passed)
 			ChangeBoniClient(self,nil,num+1)
 		end
