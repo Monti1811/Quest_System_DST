@@ -388,18 +388,17 @@ function AttackWaves:StopAttacks(player,victim)
 	if current_attacking_creatures[victim] == nil then return end
 	for creature in pairs(current_attacking_creatures[victim]) do
 		if creature:IsValid() then
-			--if v.components.health then
-			--v.components.health:Kill()
-			--else
 			creature:Remove()
-			--end
 		end
 	end
 	PurgeSavedValues(self,player,victim)
 end
 
 function AttackWaves:StopAllAttacks(player)
-	local release_spawns = self.release_spawns[player.userid] or {}
+	for _,victim in ipairs(self.players[player.userid]) do
+		self:StopAttacks(player,victim)
+	end
+	--[[local release_spawns = self.release_spawns[player.userid] or {}
 	local current_attacking_creatures = self.current_attacking_creatures[player.userid] or {}
 	for _,victim in ipairs(self.players[player.userid]) do
 		if release_spawns[victim] ~= nil then
@@ -414,18 +413,14 @@ function AttackWaves:StopAllAttacks(player)
 			end
 		end
 	end
-	for _,v in ipairs(current_attacking_creatures) do
+	for _,v in pairs(current_attacking_creatures) do
 		if v == nil then return end
 		for creature in pairs(v) do
 			if creature:IsValid() then
-				--if vv.components.health then
-				--vv.components.health:Kill()
-				--else
 				creature:Remove()
-				--end
 			end
 		end
-	end
+	end]]
 	PurgeSavedValues(self,player)
 end
 
