@@ -73,7 +73,7 @@ local function GetPlayerTable()
     return ClientObjs
 end
 
-local function createEmptyQuestCard(self,tab, x, y, scale, num)
+local function createEmptyQuestCard(self,_--[[tab]], x, y, scale, num)
 
     self["quest_"..num] = self["quest__"..num]:AddChild(Widget("quest_"..num))
     self["quest_"..num].fill = self["quest__"..num]:AddChild(Image("images/fepanel_fills.xml", "panel_fill_tall.tex"))
@@ -203,6 +203,7 @@ local function createQuestCard(self,quest, x, y, scale, num)
     local data_victim = quest.victim ~= "" and quest.victim or quest.anim_prefab
     local data = data_victim and scrapbookdata[data_victim]
     if TUNING.QUEST_COMPONENT.QL_ANIM ~= 0 and data and data.anim then
+        --primeRand(hash((data and data.name or "")..ThePlayer.userid))
         self["quest_"..num].image = self["quest__"..num]:AddChild(UIAnim())
         local creature = self["quest_"..num].image
         creature:GetAnimState():SetBank(data.bank)
@@ -217,7 +218,7 @@ local function createQuestCard(self,quest, x, y, scale, num)
         end
         creature:GetAnimState():Hide("snow")
         if data.scrapbook_hide then
-            for i,hide in ipairs(data.scrapbook_hide) do
+            for _,hide in ipairs(data.scrapbook_hide) do
                 creature:GetAnimState():Hide(hide)
             end
         end
@@ -245,7 +246,7 @@ local function createQuestCard(self,quest, x, y, scale, num)
             if type(data.overridesymbol[1]) ~= "table" then
                 creature:GetAnimState():OverrideSymbol(data.overridesymbol[1], data.overridesymbol[2], data.overridesymbol[3])
             else
-                for i,set in ipairs( data.overridesymbol ) do
+                for _,set in ipairs( data.overridesymbol ) do
                     creature:GetAnimState():OverrideSymbol(set[1], set[2], set[3])
                 end
             end
@@ -584,7 +585,7 @@ local Quest_Widget = Class(Screen, function(self, inst)
   local ClientObjs = GetPlayerTable()
   local ranked_players = {}       
 
-  for k,v in ipairs(ClientObjs) do
+  for _,v in ipairs(ClientObjs) do
     local near_player
     for _,player in ipairs(AllPlayers) do
       if player.userid == v.userid then
@@ -624,7 +625,7 @@ local Quest_Widget = Class(Screen, function(self, inst)
         end
 
         local client 
-        for a,b in ipairs(ClientObjs) do  
+        for _,b in ipairs(ClientObjs) do
           if b.userid == k then    
             client = b                    
             break       
@@ -752,18 +753,7 @@ function Quest_Widget:ShowBonus()
     end)
 end
 
-local function mysplit (inputstr, sep)
-        if sep == nil then
-                sep = "%s"
-        end
-        local t={}
-        for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-                table.insert(t, str)
-        end
-        return t
-end
-
-function Quest_Widget:ShowRewards(tab,_num)
+function Quest_Widget:ShowRewards(tab)
 
   self.show_rewards = self.proot:AddChild(Widget("show_rewards"))
   --self.show_rewards:SetTint(1,1,1,1)
@@ -844,7 +834,7 @@ function Quest_Widget:ShowRewards(tab,_num)
 
 end
 
-function Quest_Widget:ShowDescription(tab,_num)
+function Quest_Widget:ShowDescription(tab)
 
     self.show_rewards = self.proot:AddChild(Widget("show_rewards"))
     self.__show_rewards = self.show_rewards:AddChild(Image("images/quest_log_page.xml","quest_log_page.tex"))
@@ -870,7 +860,7 @@ function Quest_Widget:ShowDescription(tab,_num)
     self._show_rewards2 = self.show_rewards:AddChild(Text(BUTTONFONT, 30,nil,UICOLOURS.BLACK))--(BUTTONFONT, 20,nil,UICOLOURS.BLACK))
     --self._show_rewards2:SetScale(1,1)
     self._show_rewards2:SetMultilineTruncatedString(tab.description,15,400,150,nil,true)
-    local w,h = self._show_rewards2:GetRegionSize()
+    local _,h = self._show_rewards2:GetRegionSize()
     self._show_rewards2:SetPosition(0, 130 - 0.5* h)
 
 
@@ -911,7 +901,7 @@ function Quest_Widget:CreateQuests(inst)
   inst = inst or ThePlayer or self.inst
   if inst.replica.quest_component then
       local count = 0
-      for k,v in pairs(inst.replica.quest_component._quests) do
+      for _,v in pairs(inst.replica.quest_component._quests) do
           count = count + 1
           self["quest__"..count].cards[count] = createQuestCard(self,v, -75 + 180 * ((count-1)%5 + 1 - 2) , 0, 1,count)
           if count >= self.max_amount_of_quests then
@@ -938,7 +928,7 @@ end
 
 
 function Quest_Widget:OnClose()
-  for k,v in pairs(self.tasks) do
+  for _,v in pairs(self.tasks) do
     if v then
       v:Cancel()
     end

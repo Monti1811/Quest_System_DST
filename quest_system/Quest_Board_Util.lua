@@ -1089,12 +1089,12 @@ local custom_functions = {
 			max = max or 200
 			local time = math.random(min,max)
 			local attacksize = {amount,rounds}
-			local function StartWaves(world)
+			local function StartWaves()
 				devprint("starting waves")
-				world.components.attackwaves:StartAttack(player,attacksize,delta,difficulty,creature)
+				GLOBAL.TheWorld.components.attackwaves:StartAttack(player,attacksize,delta,difficulty,creature)
 			end
 			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "AddTimerToClient"),player.userid,player,time,creature)
-			player[fn_name] = TheWorld:DoTaskInTime(time,StartWaves)
+			player[fn_name] = player:DoTaskInTime(time,StartWaves)
 
 			player:ListenForEvent("succesfully_defended",OnWin)
 			player:ListenForEvent("victim_died",OnLose)
