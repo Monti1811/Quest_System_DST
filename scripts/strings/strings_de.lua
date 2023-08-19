@@ -207,6 +207,7 @@ return {
 		PLANARDEFENSE = " Planare Verteidigung",
 		DODGE = "Alle %s Sekunden Ausweichen",
 		CRIT = "% Kritische Chance, 1,5x Schaden zu verursachen",
+		TIME_LEFT = "Verbleibende Zeit:",
 	},
 	LOADING_TIPS = {
 		request = "Anfragen können von getöteten Kreaturen fallen gelassen werden. Du kannst auch ihre Herstellung in den Konfigurationsoptionen aktivieren!",
@@ -965,6 +966,62 @@ return {
 			NAME = "Whac-A-Mole",
 			DESCRIPTION = "Ich habe von diesem Spiel namens Whac-A-Mole von außerhalb der Constant gehört. Ich habe versucht, es zu spielen, aber es scheint unmöglich zu sein, ich schaffe es nie, einen Maulwurf zu treffen. Zeig mir, dass es möglich ist, indem du %s Maulwürfe tötest!",
 		},
+		["Running Like Clockwork"] = {
+			NAME = "Laufen wie ein Uhrwerk",
+			DESCRIPTION = "Es ist mir ein Rätsel, wie diese Uhrwerke immer noch problemlos laufen, obwohl es niemanden gibt, der sie wartet! Du musst %s von ihnen zerstören, damit ich besser verstehen kann, wie sie funktionieren.",
+			COUNTER = "Uhrwerke zerstört",
+			HOVER = "%s Uhrwerke zerstören",
+		},
+		["A Friend of Bunnymans"] = {
+			NAME = "Ein Freund von Bunnymans",
+			DESCRIPTION = "Bunnymans sind wirklich süße Geschöpfe, die auf den ersten Blick etwas unhöflich wirken, aber ein Herz aus Gold haben. Probiere es aus, indem du %s Karotten an Bunnymans fütterst",
+			COUNTER = "Gefütterte Karotten",
+			HOVER = "Füttere %s Karotten an Bunnymans",
+		},
+		Firestarter = {
+			NAME = "Firestarter",
+			DESCRIPTION = "Ich habe einen Prototyp für eine neue Art von Truhe entwickelt, die auch den härtesten Bränden standhalten kann. Aber ich bin noch nicht dazu gekommen, sie auszuprobieren, deshalb brauche ich jemanden, der %s Dinge mit einer Fackel anzündet.",
+			COUNTER = "Beleuchtete Dinge",
+			HOVER = "Zünde %s Dinge mit einer Fackel an",
+		},
+		["Squid Game"] = {
+			NAME = "Tintenfisch-Spiel",
+			DESCRIPTION = "Ich möchte ein Spiel mit dir spielen! Töte %s Tintenfische und ich werde dir etwas geben, das dir helfen wird, sie frisch zu halten!",
+		},
+		["It's Wednesday my Dudes!"] = {
+			NAME = "Es ist Mittwoch, meine Dudes!",
+			DESCRIPTION = "Muss ich noch mehr sagen? Feiern Sie ihn, indem Sie %s Frösche von der Konstante befreien!",
+		},
+		["The Archive Guardian"] = {
+			NAME = "Das Archiv Guardian",
+			DESCRIPTION = "Das Antike Archiv ist voll von Antiken Wächtern und sie lassen mich nicht in Ruhe forschen! Hilf mir, sie mit deinen Angriffen in Schach zu halten, indem du %s Schaden verursachst!",
+			COUNTER = "Schaden",
+			HOVER = "Verursacht %s Schaden an Antiken Wachsoldaten",
+		},
+		["Helmet Compulsory"] = {
+			NAME = "Helmpflicht",
+			DESCRIPTION = "Wir wollen eine neue Leitlinie einführen: Tragen Sie immer einen Helm, wenn Sie unter Tage fahren! Aber die meisten Leute glauben uns nicht, deshalb müssen wir ihnen die Folgen des Nichttragens eines Helms zeigen. Tun Sie dies, indem Sie %s mal von Trümmern eines Erdbebens getroffen werden",
+			COUNTER = "Von Trümmern getroffen",
+			HOVER = "Wird %s mal von Trümmern eines Erdbebens getroffen",
+		},
+		["Good For Your Nerves"] = {
+			NAME = "Gut für Ihre Nerven",
+			DESCRIPTION = "Die meisten Menschen sind heutzutage mehr als gestresst! Nehmen Sie sich einen Moment Zeit, um sich zu entspannen, indem Sie %s beruhigende Tees trinken und Sie werden sehen, wie sehr das hilft...",
+			COUNTER = "Beruhigende Tees getrunken",
+			HOVER = "Trinken Sie %s beruhigende Tees",
+		},
+		Nitroglycerin = {
+			NAME = "Nitroglyzerin",
+			DESCRIPTION = "Ich habe gehört, dass es hier in der Konstante ein Mineral gibt, das so instabil und explosiv wie Nitroglyzerin ist. Es hat etwas mit dem Mondglas zu tun, aber ich brauche eine Menge davon, um die Struktur richtig analysieren zu können, um die instabile Version davon zu replizieren. Hilf mir, indem du %s Mondglas findest!",
+			COUNTER = "Mondglas",
+			HOVER = "Finde %s Mondglas, indem du Felsen abbaust oder ähnliches",
+		},
+		["It's A Trap!"] = {
+			NAME = "Es ist eine Falle!",
+			DESCRIPTION = "Ich möchte die Spinnenkrieger studieren und herausfinden, warum sie so viel stärker und intelligenter sind als ihre Brüder und Schwestern. Ich brauche dich, um %s von ihnen zu fangen!",
+			COUNTER = "Spider Warriors gefangen",
+			HOVER = "Fange %s Spinnenkrieger mit einer Falle",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Bleibe für x Sekunden auf einmal bei über 90% Sanity!",
@@ -1010,5 +1067,7 @@ return {
 		T_DRAGONFLY = "Teleportiere x Libelle weg",
 		T_MOOSE = "Teleportiere x Elch/Gans weg",
 		MOONBASE = "Verteidige x-mal die Mondbasis",
+		BUILD_BUFFER = "Erhalte %s als gepufferten Bau",
+		KRAMPUS_SACK = "%s%% Chance auf Krampussack",
 	},
 }

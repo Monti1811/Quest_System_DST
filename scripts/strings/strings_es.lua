@@ -207,6 +207,7 @@ return {
 		PLANARDEFENSE = " Defensa planar",
 		DODGE = " Cada %s segundos esquiva",
 		CRIT = "% Probabilidad crítica de hacer 1.5x de daño",
+		TIME_LEFT = "Tiempo restante:",
 	},
 	LOADING_TIPS = {
 		request = "Las peticiones pueden caer de criaturas muertas. También puedes habilitar su elaboración en las opciones de configuración!",
@@ -967,6 +968,62 @@ return {
 			NAME = "Whac-A-Mole",
 			DESCRIPTION = "He oído hablar de este juego llamado Whac-A-Mole de fuera de la Constant. He intentado jugarlo pero me parece imposible, nunca soy capaz de acertar a un topo. ¡Demuéstrame que es posible matando %s topos!",
 		},
+		["Running Like Clockwork"] = {
+			NAME = "Funcionar como un reloj",
+			DESCRIPTION = "Estoy perplejo sobre cómo estos mecanismos de relojería siguen funcionando sin problemas a pesar de que no hay nadie que los mantenga. Necesito que destruyas %s de ellos para poder entender mejor cómo funcionan.",
+			COUNTER = "Mecanismos de relojería destruidos",
+			HOVER = "Destruir %s mecanismos de relojería",
+		},
+		["A Friend of Bunnymans"] = {
+			NAME = "Un amigo de Bunnymans",
+			DESCRIPTION = "Los Bunnymans son criaturas realmente dulces que pueden parecer un poco groseras al principio, pero tienen un corazón de oro. Pruébalo dando %s zanahorias a Bunnymans",
+			COUNTER = "Zanahorias alimentadas",
+			HOVER = "Alimenta %s zanahorias a Bunnymans",
+		},
+		Firestarter = {
+			NAME = "Firestarter",
+			DESCRIPTION = "He creado un prototipo de un nuevo tipo de cofre, capaz incluso de resistir los incendios más duros. Pero no he llegado a probarlo, así que necesito a alguien que prenda fuego a %s cosas con una antorcha.",
+			COUNTER = "Cosas iluminadas",
+			HOVER = "Prende fuego a %s cosas con una antorcha",
+		},
+		["Squid Game"] = {
+			NAME = "Juego del calamar",
+			DESCRIPTION = "¡Quiero jugar a un juego contigo! ¡Mata %s calamares y te daré algo que te ayudará a mantenerlos frescos!",
+		},
+		["It's Wednesday my Dudes!"] = {
+			NAME = "¡Es miércoles, amigos!",
+			DESCRIPTION = "¿Necesito decir más? ¡Celébralo liberando %s ranas de la constante!",
+		},
+		["The Archive Guardian"] = {
+			NAME = "Archivo Guardian",
+			DESCRIPTION = "El Archivo Antiguo está lleno de centinelas antiguos y no me dejan investigar en paz. ¡Ayúdame a mantenerlos a raya con tus ataques infligiendo %s de daño!",
+			COUNTER = "Daños",
+			HOVER = "Inflige %s de daño a Centinelas Antiguos",
+		},
+		["Helmet Compulsory"] = {
+			NAME = "Casco obligatorio",
+			DESCRIPTION = "Queremos inculcar una nueva directriz: Lleva siempre el casco cuando circules bajo tierra. Pero la mayoría de la gente no nos cree, así que tenemos que mostrarles los resultados de no llevar casco. Para ello, los escombros de un terremoto te golpearán %s veces.",
+			COUNTER = "Golpeado por escombros",
+			HOVER = "Ser golpeado %s veces por los escombros de un terremoto",
+		},
+		["Good For Your Nerves"] = {
+			NAME = "Bueno para los nervios",
+			DESCRIPTION = "La mayoría de la gente hoy en día está más que estresada. Tómate un momento para relajarte bebiendo %s tés calmantes y verás cuánto te ayudan...",
+			COUNTER = "Tés calmantes bebidos",
+			HOVER = "Beber %s tés calmantes",
+		},
+		Nitroglycerin = {
+			NAME = "Nitroglicerina",
+			DESCRIPTION = "He oído que hay un mineral tan inestable y explosivo como la Nitroglicerina aquí en la Constante. Tiene algo que ver con el Glas Lunar, pero necesito muchos de ellos para poder analizar bien la estructura y replicar la versión inestable del mismo. ¡Ayúdame encontrando %s Moon Glas!",
+			COUNTER = "Luna de cristal",
+			HOVER = "Encuentra %s Glas lunares extrayendo rocas o similares",
+		},
+		["It's A Trap!"] = {
+			NAME = "¡Es una trampa!",
+			DESCRIPTION = "Quiero estudiar a los Guerreros Araña para saber cómo son mucho más fuertes e inteligentes que sus hermanos y hermanas. ¡Necesito que atrapes %s de ellos!",
+			COUNTER = "Guerreros araña capturados",
+			HOVER = "Atrapa %s guerreros araña con una trampa",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Mantente por encima del 90% de cordura durante x segundos a la vez.",
@@ -1012,5 +1069,7 @@ return {
 		T_DRAGONFLY = "Teletransportar x Libélula",
 		T_MOOSE = "Teletransportar x alce/alce lejos",
 		MOONBASE = "Defiende x veces la Base Lunar",
+		BUILD_BUFFER = "Recibir %s como una construcción en buffer",
+		KRAMPUS_SACK = "%s%% Probabilidad de Krampus Sack",
 	},
 }

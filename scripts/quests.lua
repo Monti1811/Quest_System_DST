@@ -2672,29 +2672,17 @@ local quests = {
 	rewards = {moonrocknugget = 5,pig_token = 1,pigskin = 5,},
 	points = 250,
 	start_fn = function(inst,amount,quest_name)
-		local current = GetCurrentAmount(inst,quest_name)
-		local function OnFedCreature(inst,data)
-			if data and data.target and data.food then
-				if data.target.prefab == "pigman" then
-					if data.food.components.edible and data.food.components.edible.foodtype == FOODTYPE.MEAT and data.food.components.edible:GetHealth(data.target) < 0 then
-						data.target:DoTaskInTime(1,function(pig)
-							if pig.components.werebeast and pig.components.werebeast:IsInWereState() then
-								current = current + 1
-								inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
-								if current >= amount then
-									inst:RemoveEventCallback("fed_creature",OnFedCreature)
-								end
-							end
-						end)
-					end
+		local function IsMonsterMeat(player, data)
+			return data.food.components.edible and data.food.components.edible.foodtype == FOODTYPE.MEAT and data.food.components.edible:GetHealth(data.target) < 0
+		end
+		local function OnEatMonsterMeat(player, data, UpdateQuest)
+			data.target:DoTaskInTime(1,function(pig)
+				if pig.components.werebeast and pig.components.werebeast:IsInWereState() then
+					UpdateQuest()
 				end
-			end
+			end)
 		end
-		inst:ListenForEvent("fed_creature",OnFedCreature)
-		local function OnForfeitedQuest(inst)
-			inst:RemoveEventCallback("fed_creature",OnFedCreature)
-		end
-		OnForfeit(inst,OnForfeitedQuest,quest_name)
+		TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["feed x y times"](inst,amount,quest_name,"pigman",nil, IsMonsterMeat, OnEatMonsterMeat)
 	end,
 	onfinished = nil,
 	difficulty = 2,
@@ -2715,8 +2703,8 @@ local quests = {
 	start_fn = function(inst,amount,quest_name)
 		local current_amount = GetCurrentAmount(inst,quest_name)
 		local function OnDamageDone(inst,data)
-			devprint("OnDamageDone", inst)
-			devdumptable(data)
+			--devprint("OnDamageDone", inst)
+			--devdumptable(data)
 			if data then
 				if data.damageresolved > 0 then
 					if data.weapon == nil then
@@ -2751,22 +2739,7 @@ local quests = {
 	rewards = {turkeydinner = 3,[":func:hungerrate;0.8"] = 16,},
 	points = 300,
 	start_fn = function(inst,amount,quest_name)
-		local current = GetCurrentAmount(inst,quest_name)
-		local function OnFedCreature(inst,data)
-			if data and data.target and data.food then
-				if data.target.prefab == "pigman" then
-					if data.food.prefab == "lobsterdinner" then
-						inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
-						inst:RemoveEventCallback("fed_creature",OnFedCreature)
-					end
-				end
-			end
-		end
-		inst:ListenForEvent("fed_creature",OnFedCreature)
-		local function OnForfeitedQuest(inst)
-			inst:RemoveEventCallback("fed_creature",OnFedCreature)
-		end
-		OnForfeit(inst,OnForfeitedQuest,quest_name)
+		TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["feed x y times"](inst,amount,quest_name,"pigman","lobsterdinner")
 	end,
 	onfinished = nil,
 	difficulty = 2,
@@ -3722,7 +3695,7 @@ local quests = {
 		counter_name = GetQuestString("The Fatal Rose","COUNTER"),
 		description = GetQuestString("The Fatal Rose","DESCRIPTION"),
 		amount = 1,
-		rewards = {[":func:escapedeath;1"] = 1, [":func:health;50"] = 24, lifeinjector = 5},
+		rewards = {[":func:escapedeath;1"] = 1, [":func:health;50"] = 30, lifeinjector = 5},
 		points = 1000,
 		start_fn = function(inst,amount,quest_name)
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["die x times from y by z"](inst,amount,"flower",nil,quest_name)
@@ -4181,7 +4154,7 @@ local quests = {
 	{
 		name = "Running Like Clockwork",
 		victim = "",
-		counter_name = nil,
+		counter_name = GetQuestString("Running Like Clockwork", "COUNTER"),
 		description = GetQuestString("Running Like Clockwork", "DESCRIPTION", 20),
 		amount = 20,
 		rewards = {thulecite = 10, [":func:build_buffer"] = "dragonflyfurnace",},
@@ -4190,15 +4163,174 @@ local quests = {
 			local clockworks = {knight = true, bishop = true, rook = true, knook = true, bight = true, roship = true, knight_nightmare = true, bishop_nightmare = true, rook_nightmare = true,}
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst, amount, clockworks, quest_name)
 		end,
-		onfinished = function(inst)
-			inst.components.builder:BufferBuild("dragonflyfurnace")
-		end,
+		onfinished = nil,
 		difficulty = 4,
 		tex = "knight.tex",
 		atlas = "images/victims.xml",
 		hovertext = GetQuestString("Running Like Clockwork", "HOVER", 20),
 		anim_prefab = "knight",
-		["reward_1 buffered Dragonflyfurnace_tex"] = "dragonflyfurnace.tex",
+	},
+	--132
+	{
+		name = "A Friend of Bunnymans",
+		victim = "",
+		counter_name = GetQuestString("A Friend of Bunnymans", "COUNTER"),
+		description = GetQuestString("A Friend of Bunnymans", "DESCRIPTION", 5),
+		amount = 5,
+		rewards = {manrabbit_tail = 2, [":func:build_buffer"] = "rabbithouse",},
+		points = 130,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["feed x y times"](inst,amount,quest_name,"bunnyman","carrot")
+		end,
+		onfinished = nil,
+		difficulty = 1,
+		tex = "bunnyman.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("A Friend of Bunnymans", "HOVER", 5),
+		anim_prefab = "bunnyman",
+	},
+	--133
+	{
+		name = "Firestarter",
+		victim = "",
+		counter_name = GetQuestString("Firestarter", "COUNTER"),
+		description = GetQuestString("Firestarter", "DESCRIPTION", 75),
+		amount = 75,
+		rewards = {[":func:build_buffer"] = "dragonflychest",},
+		points = 900,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_awawQUEST_FUNCTIONS["start fire with x y times"](inst,amount,quest_name, nil, {torch = true})
+		end,
+		onfinished = nil,
+		difficulty = 4,
+		tex = "torch.tex",
+		--atlas = "images/victims.xml",
+		hovertext = GetQuestString("Firestarter", "HOVER", 75),
+		--anim_prefab = "leif",
+	},
+	--134
+	{
+		name = "Squid Game",
+		victim = "squid",
+		counter_name = nil,
+		description = GetQuestString("Squid Game", "DESCRIPTION", 5),
+		amount = 5,
+		rewards = {[":func:build_buffer"] = "saltbox",},
+		points = 220,
+		start_fn = nil,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "squid.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetKillString("squid", 5),
+	},
+	--135
+	{
+		name = "It's Wednesday my Dudes!",
+		victim = "frog",
+		counter_name = nil,
+		description = GetQuestString("It's Wednesday my Dudes!", "DESCRIPTION", 100),
+		amount = 100,
+		rewards = {[":func:build_buffer"] = "mushroom_light", [":func:crit;20"] = 16},
+		points = 1000,
+		start_fn = nil,
+		onfinished = nil,
+		difficulty = 4,
+		tex = "frog.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetKillString("frog", 100),
+	},
+	--136
+	{
+		name = "The Archive Guardian",
+		victim = "",
+		counter_name = GetQuestString("The Archive Guardian", "COUNTER"),
+		description = GetQuestString("The Archive Guardian", "DESCRIPTION", 6000),
+		amount = 6000,
+		rewards = {moonrocknugget = 20, thulecite = 10, [":func:crit;20"] = 16},
+		points = 1000,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["deal x amount of damage"](inst,amount,nil, quest_name, "archive_centipede")
+		end,
+		onfinished = nil,
+		difficulty = 4,
+		tex = "archive_centipede.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("The Archive Guardian", "HOVER", 6000),
+		anim_prefab = "archive_centipede_husk",
+	},
+	--137
+	{
+		name = "Helmet Compulsory",
+		victim = "",
+		counter_name = GetQuestString("Helmet Compulsory", "COUNTER"),
+		description = GetQuestString("Helmet Compulsory", "DESCRIPTION", 3),
+		amount = 3,
+		rewards = {rabbit = 4, carrat = 4, [":func:damagereduction;0.9"] = 16},
+		points = 140,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["get hit by x for y times during earthquakes"](inst, amount, quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 1,
+		tex = "flint.tex",
+		--atlas = "images/victims.xml",
+		hovertext = GetQuestString("Helmet Compulsory", "HOVER", 3),
+	},
+	--138
+	{
+		name = "Good For Your Nerves",
+		victim = "",
+		counter_name = GetQuestString("Good For Your Nerves", "COUNTER"),
+		description = GetQuestString("Good For Your Nerves", "DESCRIPTION", 1),
+		amount = 1,
+		rewards = {leafymeatsouffle = 1, [":func:sanityaura;2"] = 16},
+		points = 125,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["eat x times y"](inst, {sweettea = true}, amount, quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 1,
+		tex = "sweettea.tex",
+		--atlas = "images/victims.xml",
+		hovertext = GetQuestString("Good For Your Nerves", "HOVER", 1),
+	},
+	--139
+	{
+		name = "Nitroglycerin",
+		victim = "",
+		counter_name = GetQuestString("Nitroglycerin", "COUNTER"),
+		description = GetQuestString("Nitroglycerin", "DESCRIPTION", 100),
+		amount = 100,
+		rewards = {moonglass_charged = 5, [":func:range;1"] = 8},
+		points = 500,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["find x amount of y by working"](inst, {moonglass = true}, amount, quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 3,
+		tex = "moonglass.tex",
+		--atlas = "images/victims.xml",
+		hovertext = GetQuestString("Nitroglycerin", "HOVER", 100),
+	},
+	--140
+	{
+		name = "It's A Trap!",
+		victim = "",
+		counter_name = GetQuestString("It's A Trap!", "COUNTER"),
+		description = GetQuestString("It's A Trap!", "DESCRIPTION", 10),
+		amount = 10,
+		rewards = {supertacklecontainer = 1},
+		points = 500,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["capture x y times"](inst, amount,{spider_warrior = true}, quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 3,
+		tex = "spider_warrior.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("It's A Trap!", "HOVER", 10),
+		anim_prefab = "spider_warrior"
 	},
 }
 

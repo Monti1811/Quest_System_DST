@@ -207,6 +207,7 @@ return {
 		PLANARDEFENSE = "平面防御",
 		DODGE = "每 %s 秒闪避一次",
 		CRIT = "%造成 1.5 倍伤害的临界几率",
+		TIME_LEFT = "剩余时间",
 	},
 	LOADING_TIPS = {
 		request = "请求可以从被杀的生物中掉落。你也可以在配置选项中启用它们的制作功能！",
@@ -964,6 +965,62 @@ return {
 			NAME = "Whac-A-Mole",
 			DESCRIPTION = "我从外面听说过一种叫 \"Whac-A-Mole \"的游戏。我试着玩了一下，但似乎不可能，我总是打不到鼹鼠。那就杀 %s 的鼹鼠来证明这是有可能的！",
 		},
+		["Running Like Clockwork"] = {
+			NAME = "像发条一样运转",
+			DESCRIPTION = "我很困惑，为什么这些钟表在无人维护的情况下仍能正常运转？我需要你毁掉 %s 的钟表，这样我才能更好地了解它们是如何运转的。",
+			COUNTER = "钟表厂被毁",
+			HOVER = "摧毁 %s 发条",
+		},
+		["A Friend of Bunnymans"] = {
+			NAME = "兔女郎的朋友",
+			DESCRIPTION = "兔子侠是一种非常可爱的动物，起初看起来有点粗鲁，但却有一颗金子般的心。给兔子侠喂食 %s 胡萝卜，试试看吧",
+			COUNTER = "喂养胡萝卜",
+			HOVER = "将 %s 胡萝卜喂给兔子侠",
+		},
+		Firestarter = {
+			NAME = "点火器",
+			DESCRIPTION = "我设计了一种新型箱子，它甚至可以抵御最严酷的火焰。但我还没来得及测试，因此我需要有人用火把点燃 %s 的树卫。",
+			COUNTER = "灯火通明的护树",
+			HOVER = "用火把点燃 %s 护树人",
+		},
+		["Squid Game"] = {
+			NAME = "乌贼游戏",
+			DESCRIPTION = "我想和你玩一个游戏！杀死 %s 的鱿鱼，我就给你一样东西，帮你保持它们的新鲜度！",
+		},
+		["It's Wednesday my Dudes!"] = {
+			NAME = "今天是星期三，伙计们",
+			DESCRIPTION = "还需要我多说吗？把 %s 的青蛙从一成不变中解放出来，以此来庆祝它！",
+		},
+		["The Archive Guardian"] = {
+			NAME = "档案守护者",
+			DESCRIPTION = "古代档案馆里到处都是古代哨兵，它们真的不让我安心研究！帮我用你的攻击阻止它们，造成 %s 的伤害！",
+			COUNTER = "损坏",
+			HOVER = "对远古哨兵鱼造成 %s 的伤害",
+		},
+		["Helmet Compulsory"] = {
+			NAME = "必须佩戴头盔",
+			DESCRIPTION = "我们要灌输一条新的准则：在地下作业时一定要戴头盔！但大多数人不相信我们，因此我们需要向他们展示不戴头盔的后果。具体做法是：被地震碎片击中 %s 次",
+			COUNTER = "被碎片击中",
+			HOVER = "被地震碎片击中 %s 次",
+		},
+		["Good For Your Nerves"] = {
+			NAME = "有益神经",
+			DESCRIPTION = "如今，大多数人的压力都很大！花点时间喝%的舒缓茶来放松一下，你会发现它有多大的帮助...",
+			COUNTER = "醉人的舒缓茶",
+			HOVER = "饮用 %s 舒缓茶",
+		},
+		Nitroglycerin = {
+			NAME = "硝化甘油",
+			DESCRIPTION = "我听说恒星上有一种像硝化甘油一样不稳定且易爆的矿物。但我需要大量的月光琉璃，才能正确分析其结构，复制出不稳定的月光琉璃。请帮我找到%s月亮格拉斯！",
+			COUNTER = "月亮玻璃",
+			HOVER = "通过开采岩石或类似方法找到 %s 月球格拉斯",
+		},
+		["It's A Trap!"] = {
+			NAME = "这是一个陷阱",
+			DESCRIPTION = "我想研究一下蜘蛛勇士，他们为什么比他们的兄弟姐妹们更强壮、更聪明。我需要你抓住他们的%！",
+			COUNTER = "捕获的蜘蛛勇士",
+			HOVER = "用陷阱捕捉 %s 蜘蛛勇士",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "一次性保持在90%以上的理智状态 x 秒!",
@@ -1009,5 +1066,7 @@ return {
 		T_DRAGONFLY = "传送 x 蜻蜓离开",
 		T_MOOSE = "将麋鹿/鹅传送走",
 		MOONBASE = "保卫 x 倍的月球基地",
+		BUILD_BUFFER = "以缓冲构建方式接收 %s",
+		KRAMPUS_SACK = "%s%%获得 Krampus Sack 的几率",
 	},
 }

@@ -267,6 +267,9 @@ return {
 
 		MOONBASE = "Defend x times the Moon Base",
 
+		BUILD_BUFFER = "Receive %s as a buffered build",
+		KRAMPUS_SACK = "%s%% Chance of Krampus Sack",
+
 	},
 
 	TEMP_BONI = {
@@ -290,7 +293,8 @@ return {
 		SLEEPING = " Health/Sanity per sec Sleeping",
 		NIGHTVISION = "Nightvision",
 		SPEED = " % Speed",
-		ESCAPEDEATH = " Times escaping death"
+		ESCAPEDEATH = " Times escaping death",
+		TIME_LEFT = "Time left: ",
 	},
 
 	LOADING_TIPS = {
@@ -1426,10 +1430,91 @@ return {
 
 		},
 
+		["Running Like Clockwork"] = {
 
+			NAME = "Running Like Clockwork",
+			DESCRIPTION = "I'm puzzled as to how these clockworks are still running without problems even though there is nobody to maintain them! I need you to destroy %s of them so that I can better understand how they function.",
+			COUNTER = "Clockworks destroyed",
+			HOVER = "Destroy %s clockworks",
 
+		},
 
+		["A Friend of Bunnymans"] = {
 
+			NAME = "A Friend of Bunnymans",
+			DESCRIPTION = "Bunnymans are really sweet creatures that may seem a bit rude at first, but have a heart of gold. Try it out by feeding %s carrots to Bunnymans",
+			COUNTER = "Carrots fed",
+			HOVER = "Feed %s carrots to Bunnymans",
+
+		},
+
+		["Firestarter"] = {
+
+			NAME = "Firestarter",
+			DESCRIPTION = "I prototyped a new type of chest, one that can even withstand the harshest fires. But I haven't got around to test it out, therefore I need someone to light %s things on fire with a torch.",
+			COUNTER = "Things lighted",
+			HOVER = "Light %s things on fire with a torch",
+
+		},
+
+		["Squid Game"] = {
+
+			NAME = "Squid Game",
+			DESCRIPTION = "I want to play a game with you! Kill %s squids and I will give you something that will help you keep them fresh!",
+
+		},
+
+		["It's Wednesday my Dudes!"] = {
+
+			NAME = "It's Wednesday my Dudes!",
+			DESCRIPTION = "Do I need to say more? Celebrate it by liberating %s frogs from the constant!",
+
+		},
+
+		["The Archive Guardian"] = {
+
+			NAME = "The Archive Guardian",
+			DESCRIPTION = "The Ancient Archive is full of Ancient Sentrypede and they really won't let me research in peace! Help me by keeping them at bay with your attacks by dealing %s damage!",
+			COUNTER = "Damage",
+			HOVER = "Deal %s damage to Ancient Sentrypedes",
+
+		},
+
+		["Helmet Compulsory"] = {
+
+			NAME = "Helmet Compulsory",
+			DESCRIPTION = "We want to instill a new guideline: Always wear your helmet when underground! But most people don't believe us, therefore we need to show them the results of not wearing your helmet. Do this by getting hit %s times by debris from an earthquake",
+			COUNTER = "Hit by Debris",
+			HOVER = "Get hit %s times by debris from an earthquake",
+
+		},
+
+		["Good For Your Nerves"] = {
+
+			NAME = "Good For Your Nerves",
+			DESCRIPTION = "Most people nowadays are beyond stressed! Take a moment to relax by drinking %s soothing teas and you will see how much it helps...",
+			COUNTER = "Soothing Teas drunk",
+			HOVER = "Drink %s soothing teas",
+
+		},
+
+		["Nitroglycerin"] = {
+
+			NAME = "Nitroglycerin",
+			DESCRIPTION = "I heard that there is a mineral as unstable and explosive as Nitroglycerin here in the Constant. It has something to do with the Moon Glas, but I need a lot of them to be able to analyze the structure properly to replicate the unstable version of it. Help me by finding %s Moon Glas!",
+			COUNTER = "Moon Glas",
+			HOVER = "Find %s Moon Glas by mining rocks or similar",
+
+		},
+
+		["It's A Trap!"] = {
+
+			NAME = "It's A Trap!",
+			DESCRIPTION = "I want to study the Spider Warriors as to how they are so much stronger and intelligent than their brothers and sisters. I need you to catch %s of them!",
+			COUNTER = "Spider Warriors caught",
+			HOVER = "Catch %s Spider warriors with a trap",
+
+		},
 
 
 		

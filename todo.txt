@@ -16,3 +16,5 @@
 
 
 gräber ausheben mission
+
+todo check quests:

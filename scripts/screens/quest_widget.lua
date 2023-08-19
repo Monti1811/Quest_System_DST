@@ -241,7 +241,6 @@ local function createQuestCard(self,quest, x, y, scale, num)
         end
         creature:GetAnimState():PlayAnimation(data.anim, true)
         --creature:SetClickable(false)
-
         if data and data.overridesymbol then
             if type(data.overridesymbol[1]) ~= "table" then
                 creature:GetAnimState():OverrideSymbol(data.overridesymbol[1], data.overridesymbol[2], data.overridesymbol[3])
@@ -261,6 +260,7 @@ local function createQuestCard(self,quest, x, y, scale, num)
         devprint("scale image", quest.victim, SCALE, ax, ay, ax * SCALE, ay * SCALE)
         creature:SetScale(SCALE)
         creature:SetPosition(x+ posx,y + posy)
+        devprint("pos",posx, posy, x+ posx,y + posy)
     else
         target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml")
         target_atlas = target_atlas ~= nil and softresolvefilepath(target_atlas) ~= nil and target_atlas or "images/avatars.xml"

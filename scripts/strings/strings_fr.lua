@@ -207,6 +207,7 @@ return {
 		PLANARDEFENSE = " Défense planaire",
 		DODGE = "Esquive tous les %s secondes",
 		CRIT = "% de chances critiques d'infliger 1,5 fois les dégâts",
+		TIME_LEFT = "Temps restant :",
 	},
 	LOADING_TIPS = {
 		request = "Les requêtes peuvent tomber des créatures tuées. Vous pouvez également activer leur fabrication dans les options de configuration !",
@@ -968,6 +969,62 @@ return {
 			NAME = "Whac-A-Mole",
 			DESCRIPTION = "J'ai entendu parler de ce jeu appelé Whac-A-Mole en dehors de Constant. J'ai essayé d'y jouer mais cela semble impossible, je n'arrive jamais à toucher une taupe. Montrez-moi que c'est possible en tuant %s taupes !",
 		},
+		["Running Like Clockwork"] = {
+			NAME = "Courir comme une horloge",
+			DESCRIPTION = "Je me demande comment ces horloges peuvent encore fonctionner sans problème alors qu'il n'y a personne pour les entretenir ! J'ai besoin que vous en détruisiez %s pour que je puisse mieux comprendre leur fonctionnement.",
+			COUNTER = "Horlogerie détruite",
+			HOVER = "Détruire %s clockworks",
+		},
+		["A Friend of Bunnymans"] = {
+			NAME = "Un ami des Bunnymans",
+			DESCRIPTION = "Les Bunnymans sont des créatures très douces qui peuvent sembler un peu grossières au premier abord, mais qui ont un cœur d'or. Essayez-le en donnant %s carottes à Bunnymans.",
+			COUNTER = "Carottes nourries",
+			HOVER = "Donner %s carottes à Bunnymans",
+		},
+		Firestarter = {
+			NAME = "Déclencheur d'incendie",
+			DESCRIPTION = "J'ai créé un prototype de coffre d'un nouveau genre, capable de résister aux incendies les plus violents. Mais je n'ai pas encore eu le temps de le tester, c'est pourquoi j'ai besoin de quelqu'un pour enflammer %s choses avec une torche.",
+			COUNTER = "Les choses allumées",
+			HOVER = "Mettre le feu à %s choses avec une torche",
+		},
+		["Squid Game"] = {
+			NAME = "Jeu du calmar",
+			DESCRIPTION = "Je veux jouer à un jeu avec toi ! Tue %s de calamars et je te donnerai quelque chose qui t'aidera à les garder frais !",
+		},
+		["It's Wednesday my Dudes!"] = {
+			NAME = "C'est mercredi, mes amis !",
+			DESCRIPTION = "Dois-je en dire plus ? Célébrez-la en libérant %s grenouilles de la constante !",
+		},
+		["The Archive Guardian"] = {
+			NAME = "The Archive Guardian",
+			DESCRIPTION = "Les Archives anciennes sont pleines de Sentinelles anciennes et elles ne veulent vraiment pas me laisser faire mes recherches en paix ! Aide-moi à les tenir à distance avec tes attaques en leur infligeant %s de dégâts !",
+			COUNTER = "Dommages",
+			HOVER = "inflige %s de dégâts aux Sentinelles anciennes",
+		},
+		["Helmet Compulsory"] = {
+			NAME = "Casque obligatoire",
+			DESCRIPTION = "Nous voulons instiller une nouvelle ligne de conduite : Portez toujours votre casque lorsque vous êtes sous terre ! Mais la plupart des gens ne nous croient pas, c'est pourquoi nous devons leur montrer les résultats de l'absence de casque. Pour ce faire, il suffit de se faire frapper %s fois par des débris provenant d'un tremblement de terre.",
+			COUNTER = "Heurtés par des débris",
+			HOVER = "Être touché %s fois par des débris provenant d'un tremblement de terre",
+		},
+		["Good For Your Nerves"] = {
+			NAME = "Bon pour les nerfs",
+			DESCRIPTION = "De nos jours, la plupart des gens sont très stressés ! Prenez le temps de vous détendre en buvant %s thés apaisants et vous verrez à quel point cela vous aidera...",
+			COUNTER = "Tisanes apaisantes ivres",
+			HOVER = "Boire %s thés apaisants",
+		},
+		Nitroglycerin = {
+			NAME = "Nitroglycérine",
+			DESCRIPTION = "J'ai entendu dire qu'il existe un minéral aussi instable et explosif que la nitroglycérine dans le Constant. Cela a un rapport avec le Moon Glas, mais il m'en faut beaucoup pour pouvoir analyser correctement la structure et reproduire la version instable. Aidez-moi à trouver %s Moon Glas !",
+			COUNTER = "Glas lunaire",
+			HOVER = "Trouver %s Moon Glas en minant des roches ou similaires",
+		},
+		["It's A Trap!"] = {
+			NAME = "C'est un piège !",
+			DESCRIPTION = "Je veux étudier les guerriers araignées pour savoir comment ils sont tellement plus forts et intelligents que leurs frères et sœurs. J'ai besoin que tu en attrapes plusieurs !",
+			COUNTER = "Les Spider Warriors capturés",
+			HOVER = "Attraper %s guerriers araignées avec un piège",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Rester à plus de 90 % de santé mentale pendant x secondes en une seule fois !",
@@ -1013,5 +1070,7 @@ return {
 		T_DRAGONFLY = "Téléportation de x libellules",
 		T_MOOSE = "Téléportation de x Moose/Goose",
 		MOONBASE = "Défendre x fois la base lunaire",
+		BUILD_BUFFER = "Recevoir %s comme une construction en mémoire tampon",
+		KRAMPUS_SACK = "%s%% Chance de sac Krampus",
 	},
 }

@@ -1,6 +1,7 @@
 ------------------------------------------------------------------------------------------------
 local QUEST_COMPONENT = GLOBAL.TUNING.QUEST_COMPONENT
 local STR_QUEST_COMPONENT = GLOBAL.STRINGS.QUEST_COMPONENT
+local STR_QF = STR_QUEST_COMPONENT.QUEST_FUNCTIONS
 local QUEST_BOARD = QUEST_COMPONENT.QUEST_BOARD
 local NAMES = GLOBAL.STRINGS.NAMES
 local EQUIPSLOTS = GLOBAL.EQUIPSLOTS
@@ -192,7 +193,7 @@ for _,v in ipairs(prefabs) do
 end
 
 local item_list = {
-	{"random","Random"},"acorn","amulet","anchor_item","antliontrinket","archive_resonator_item","armor_bramble","armordragonfly","armorgrass","armormarble","armorruins","armor_sanity","armorskeleton","armorslurper","armorsnurtleshell","armorwood","ash","atrium_key","axe","backpack","bandage","batbat","bathbomb","bearger_fur","beargervest","bedroll_straw","bedroll_furry","bee","beef_bell","beefalowool","beemine","beeswax","boards","dug_berrybush","birdtrap","blueprint","boatpatch","boneshard","boomerang","brush","bugnet","bullkelp_root","bundlewrap","butter","butterflywings","candybag","cane","charcoal","chester_eyebone","chum","compass","compost","compostwrap","cookbook","coontail","cutgrass","cutstone","driftwood_log","dustmeringue","bird_egg","bird_egg_cooked","rottenegg","eyeturret_item","farm_hoe","farm_plow_item","featherpencil","feather_crow","feather_robin","feather_robin_winter","feather_canary","fireflies","fishingrod","flint","fossil_piece","froglegs","gears","redgem","bluegem","purplegem","greengem","yellowgem","orangegem","glasscutter","glommerflower","glommerfuel","glommerwings","gnarwail_horn","goatmilk","goldnugget","goose_feather","guano","gunpowder","hammer","strawhat","tophat","beefalohat","featherhat","beehat","minerhat","spiderhat","footballhat","earmuffshat","winterhat","bushhat","flowerhat","walrushat","slurtlehat","ruinshat","molehat","wathgrithrhat","walterhat","icehat","rainhat","catcoonhat","watermelonhat","eyebrellahat","red_mushroomhat","blue_mushroomhat","green_mushroomhat","hivehat","deserthat","goggleshat","moonstorm_goggleshat","skeletonhat","kelphat","mermhat","cookiecutterhat","batnosehat","nutrientsgoggleshat","plantregistryhat","balloonhat","alterguardianhat","hawaiianshirt","healingsalve","honey","honeycomb","horn","houndstooth","hutch_fishbowl","icepack","krampus_sack","lavae_egg","lichen","livinglog","log","malbatross_feather","malbatross_feathered_weave","malbatross_beak","mandrake","manrabbit_tail","mapscroll","marble","marblebean","meat","cookedmeat","meat_dried","monstermeat","cookedmonstermeat","monstermeat_dried","smallmeat","cookedsmallmeat","smallmeat_dried","drumstick","drumstick_cooked","batwing","batwing_cooked","plantmeat","plantmeat_cooked","fishmeat_small","fishmeat_small_cooked","fishmeat","fishmeat_cooked","barnacle","barnacle_cooked","batnose","batnose_cooked","messagebottle","messagebottleempty","miniboatlantern","minifan","miniflare","lantern","minisign_item","minotaurhorn","mole","moonbutterflywings","purplemooneye","bluemooneye","redmooneye","orangemooneye","yellowmooneye","greenmooneye","moonglass","moonrocknugget","moon_tree_blossom","mosquitosack","nitre","oar","oceanfish_small_1_inv","oceanfish_small_2_inv","oceanfish_small_3_inv","oceanfish_small_4_inv","oceanfish_small_5_inv","oceanfish_small_6_inv","oceanfish_small_7_inv","oceanfish_small_8_inv","oceanfish_small_9_inv","oceanfish_medium_1_inv","oceanfish_medium_2_inv","oceanfish_medium_3_inv","oceanfish_medium_4_inv","oceanfish_medium_5_inv","oceanfish_medium_6_inv","oceanfish_medium_7_inv","oceanfish_medium_8_inv","oceanfish_medium_9_inv","oceanfishinglure_spoon_red","oceanfishinglure_spoon_green","oceanfishinglure_spoon_blue","oceanfishinglure_spinner_red","oceanfishinglure_spinner_green","oceanfishinglure_spinner_blue","oceanfishinglure_hermit_rain","oceanfishinglure_hermit_snow","oceanfishinglure_hermit_drowsy","oceanfishinglure_hermit_heavy","oceanfishingrod","oceantreenut","panflute","papyrus","petals","petals_evil","phlegm","pickaxe","pig_coin","pig_token", "pigskin","piggyback","pinecone","pitchfork","poop","portableblender_item", "portablecookpot_item","portablespicer_item","portabletent","pumpkin_lantern", "raincoat","razor","redlantern","cutreeds","refined_dust","reflectivevest","reskin_tool","reviver","rock_avocado_fruit","rocks","rope","royal_jelly","seedpouch","seeds","sewing_tape","sewing_kit","shadowheart","shovel","shroom_skin","silk","singingshell_octave3","singingshell_octave4","singingshell_octave5","slingshot", "slurper_pelt","slurtle_shellpieces","slurtleslime","spear","spicepack","spice_garlic","spice_sugar","spice_chili","spice_salt","spidereggsack","spidergland","steelwool","steeringwheel_item","stinger","sweatervest","tallbirdegg","thulecite","thulecite_pieces","thurible","torch","transistor","trap","trap_bramble","trap_starfish","trap_teeth","treegrowthsolution","trunk_summer","trunk_winter","trunk_cooked","twigs","umbrella","cave_banana","corn","pumpkin","eggplant","durian","pomegranate","dragonfruit","berries","berries_juicy","carrot","fig","cactus_meat","watermelon","kelp","tomato","potato","asparagus","milkywhites","onion","garlic","pepper","wateringcan","premiumwateringcan","ruins_bat","hambat","nightstick","nightsword","trident","tentaclespike","spear_wathgrithr","whip","moonglassaxe","multitool_axe_pickaxe","saddlehorn","oar_driftwood","lighter","icestaff","firestaff","staff_tornado","trunkvest_summer","blueamulet","greenamulet","greenstaff","green_mushroomhat","yellowamulet","opalstaff","purpleamulet","onemanband","trunkvest_winter","yellowstaff","telestaff","orangestaff","orangeamulet","eyemaskhat","shieldofterror","stash_map","cursed_monkey_token","monkey_mediumhat","bananajuice",
+	{"random","Random"},"acorn","amulet","anchor_item","antliontrinket","archive_resonator_item","armor_bramble","armordragonfly","armorgrass","armormarble","armorruins","armor_sanity","armorskeleton","armorslurper","armorsnurtleshell","armorwood","ash","atrium_key","axe","backpack","bandage","batbat","bathbomb","bearger_fur","beargervest","bedroll_straw","bedroll_furry","bee","beef_bell","beefalowool","beemine","beeswax","boards","dug_berrybush","birdtrap","blueprint","boatpatch","boneshard","boomerang","brush","bugnet","bullkelp_root","bundlewrap","butter","butterflywings","candybag","cane","charcoal","chester_eyebone","chum","compass","compost","compostwrap","cookbook","coontail","cutgrass","cutstone","driftwood_log","dustmeringue","bird_egg","bird_egg_cooked","rottenegg","eyeturret_item","farm_hoe","farm_plow_item","featherpencil","feather_crow","feather_robin","feather_robin_winter","feather_canary","fireflies","fishingrod","flint","fossil_piece","froglegs","gears","redgem","bluegem","purplegem","greengem","yellowgem","orangegem","glasscutter","glommerflower","glommerfuel","glommerwings","gnarwail_horn","goatmilk","goldnugget","goose_feather","guano","gunpowder","hammer","strawhat","tophat","beefalohat","featherhat","beehat","minerhat","spiderhat","footballhat","earmuffshat","winterhat","bushhat","flowerhat","walrushat","slurtlehat","ruinshat","molehat","wathgrithrhat","walterhat","icehat","rainhat","catcoonhat","watermelonhat","eyebrellahat","red_mushroomhat","blue_mushroomhat","green_mushroomhat","hivehat","deserthat","goggleshat","moonstorm_goggleshat","skeletonhat","kelphat","mermhat","cookiecutterhat","batnosehat","nutrientsgoggleshat","plantregistryhat","balloonhat","alterguardianhat","hawaiianshirt","healingsalve","honey","honeycomb","horn","houndstooth","hutch_fishbowl","icepack","krampus_sack","lavae_egg","lichen","livinglog","log","malbatross_feather","malbatross_feathered_weave","malbatross_beak","mandrake","manrabbit_tail","mapscroll","marble","marblebean","meat","cookedmeat","meat_dried","monstermeat","cookedmonstermeat","monstermeat_dried","smallmeat","cookedsmallmeat","smallmeat_dried","drumstick","drumstick_cooked","batwing","batwing_cooked","plantmeat","plantmeat_cooked","fishmeat_small","fishmeat_small_cooked","fishmeat","fishmeat_cooked","barnacle","barnacle_cooked","batnose","batnose_cooked","messagebottle","messagebottleempty","miniboatlantern","minifan","miniflare","lantern","minisign_item","minotaurhorn","mole","moonbutterflywings","purplemooneye","bluemooneye","redmooneye","orangemooneye","yellowmooneye","greenmooneye","moonglass","moonrocknugget","moon_tree_blossom","mosquitosack","nitre","oar","oceanfish_small_1_inv","oceanfish_small_2_inv","oceanfish_small_3_inv","oceanfish_small_4_inv","oceanfish_small_5_inv","oceanfish_small_6_inv","oceanfish_small_7_inv","oceanfish_small_8_inv","oceanfish_small_9_inv","oceanfish_medium_1_inv","oceanfish_medium_2_inv","oceanfish_medium_3_inv","oceanfish_medium_4_inv","oceanfish_medium_5_inv","oceanfish_medium_6_inv","oceanfish_medium_7_inv","oceanfish_medium_8_inv","oceanfish_medium_9_inv","oceanfishinglure_spoon_red","oceanfishinglure_spoon_green","oceanfishinglure_spoon_blue","oceanfishinglure_spinner_red","oceanfishinglure_spinner_green","oceanfishinglure_spinner_blue","oceanfishinglure_hermit_rain","oceanfishinglure_hermit_snow","oceanfishinglure_hermit_drowsy","oceanfishinglure_hermit_heavy","oceanfishingrod","oceantreenut","panflute","papyrus","petals","petals_evil","phlegm","pickaxe","pig_coin","pig_token", "pigskin","piggyback","pinecone","pitchfork","poop","portableblender_item", "portablecookpot_item","portablespicer_item","portabletent","pumpkin_lantern", "raincoat","razor","redlantern","cutreeds","refined_dust","reflectivevest","reskin_tool","reviver","rock_avocado_fruit","rocks","rope","royal_jelly","seedpouch","seeds","sewing_tape","sewing_kit","shadowheart","shovel","shroom_skin","silk","singingshell_octave3","singingshell_octave4","singingshell_octave5","slingshot", "slurper_pelt","slurtle_shellpieces","slurtleslime","spear","spicepack","spice_garlic","spice_sugar","spice_chili","spice_salt","spidereggsack","spidergland","steelwool","steeringwheel_item","stinger","sweatervest","tallbirdegg","thulecite","thulecite_pieces","thurible","torch","transistor","trap","trap_bramble","trap_starfish","trap_teeth","treegrowthsolution","trunk_summer","trunk_winter","trunk_cooked","twigs","umbrella","cave_banana","corn","pumpkin","eggplant","durian","pomegranate","dragonfruit","berries","berries_juicy","carrot","fig","cactus_meat","watermelon","kelp","tomato","potato","asparagus","milkywhites","onion","garlic","pepper","wateringcan","premiumwateringcan","ruins_bat","hambat","nightstick","nightsword","trident","tentaclespike","spear_wathgrithr","whip","moonglassaxe","multitool_axe_pickaxe","saddlehorn","oar_driftwood","lighter","icestaff","firestaff","staff_tornado","trunkvest_summer","blueamulet","greenamulet","greenstaff","green_mushroomhat","yellowamulet","opalstaff","purpleamulet","onemanband","trunkvest_winter","yellowstaff","telestaff","orangestaff","orangeamulet","eyemaskhat","shieldofterror","stash_map","cursed_monkey_token","monkey_mediumhat","bananajuice","shadow_forge_kit","voidclothhat","armor_voidcloth","voidcloth_umbrella","voidcloth_scythe","armor_lunarplant","lunarplanthat","bomb_lunarplant","staff_lunarplant","sword_lunarplant","pickaxe_lunarplant","shovel_lunarplant","lunar_forge_kit",
 }
 
 for k in pairs(require("preparedfoods")) do
@@ -227,7 +228,7 @@ QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS = {
 				end
 			end
 		end,
-		function(amount) return string.format("%s%% Chance of Krampus Sack", amount or "unknown") end,	--Name that is shown, either a value or a function with the argument of the value
+		function(amount) return string.format(STR_QF.KRAMPUS_SACK, amount or "unknown") end,	--Name that is shown, either a value or a function with the argument of the value
 		"krampus_sack.tex", 				--tex
 		--"images/inventoryimages1.xml",	--atlas
 	},
@@ -240,7 +241,7 @@ QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS = {
 			builder.buffered_builds[recname] = true
 			inst.replica.builder:SetIsBuildBuffered(recname, true)
 		end,
-		function(recname) return string.format("Receive %s as a buffered build", STRINGS.NAMES[string.upper(recname)] or "unknown") end,	--Name that is shown, x is amount for the function
+		function(recname) return string.format(STR_QF.BUILD_BUFFER, STRINGS.NAMES[string.upper(recname)] or "unknown") end,	--Name that is shown, x is amount for the function
 		function(recname) return recname..".tex" end, 			--tex
 		--"images/inventoryimages1.xml",	--atlas
 	},
@@ -651,14 +652,15 @@ local custom_functions = {
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
 
-	["find x amount of y by working"] = function(player,loot,how_many,quest_name)
+	["find x amount of y by working"] = function(player,loots,how_many,quest_name)
 		local amount = GetCurrentAmount(player,quest_name)
 		local targets = {}
+		loots = type(loots) == "string" and {[loots] = true} or loots
 		local ListenForEventWorkable = function() end
 		local function LookForLoot(object,data)
 			targets[object.GUID] = nil
 			if data and data.loot then
-				if data.loot.prefab == loot then
+				if loots == nil or loots[data.loot.prefab] then
 					amount = amount + 1
 					player:PushEvent("quest_update",{quest = quest_name,amount = 1})
 					if amount >= how_many then
@@ -671,7 +673,7 @@ local custom_functions = {
 			if data and data.target and targets[data.target.GUID] == nil then
 				data.target:ListenForEvent("loot_prefab_spawned",LookForLoot)
 				targets[data.target.GUID] = true
-				player:DoTaskInTime(10, function()
+				player:DoTaskInTime(5, function()
 					targets[data.target.GUID] = nil
 				end)
 			end
@@ -703,36 +705,21 @@ local custom_functions = {
 		local trades = GetCurrentAmount(player,quest_name)
 		local pigking = TheSim:FindFirstEntityWithTag("king")
 		if not pigking then
-			print("pigking could not be found")
+			print("pigking could not be found, aborting quest", quest_name)
 			return
 		end
-		trade_item = type(trade_item) == "string" and {trade_item} or trade_item
+		trade_item = type(trade_item) == "string" and {[trade_item] = true} or trade_item
 		local function OnTrade(_,data)
 			devprint("OnTrade", player,amount,trade_item,quest_name,data.item)
 			if data then
 				if data.giver == player then
-					if trade_item == nil then
+					if trade_item == nil or data.item and trade_item[data.item.prefab] then
 						player:PushEvent("quest_update",{quest = quest_name,amount = 1})
 						trades = trades  + 1
 						if trades >= amount then
 							pigking:RemoveEventCallback("quest_update",OnTrade)
 							if callback then
 								callback(player)
-							end
-						end
-					else
-						local item_prefab = data.item and data.item.prefab
-						for _,prefab in ipairs(trade_item) do
-							if prefab == item_prefab then
-								player:PushEvent("quest_update",{quest = quest_name,amount = 1})
-								trades = trades  + 1
-								if trades >= amount then
-									pigking:RemoveEventCallback("quest_update",OnTrade)
-									if callback then
-										callback(player)
-									end
-								end
-								return
 							end
 						end
 					end
@@ -904,7 +891,7 @@ local custom_functions = {
 
 	["craft x y times"] = function(player,amount,items,tab,quest_name,tech)
 		local built = GetCurrentAmount(player,quest_name)
-		items = type(items) == "string" and {items} or items
+		items = type(items) == "string" and {[items] = true} or items
 		local OnBuild
 		local function UpdateQuest()
 			built = built + 1
@@ -1037,13 +1024,14 @@ local custom_functions = {
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
 
-	["capture x y times"] = function(player,amount,creature,quest_name)
+	["capture x y times"] = function(player,amount,creatures,quest_name)
 		local caught = GetCurrentAmount(player,quest_name)
+		creatures = type(creatures) == "string" and {[creatures] = true} or creatures
 		local function OnSomethingTrapped(_,data)
 			if data and data.trap then
 				if data.trap.components.trap ~= nil and data.trap.components.trap.lootprefabs ~= nil then
 					local caught_creature = unpack(data.trap.components.trap.lootprefabs)
-					if creature == nil or caught_creature == creature then
+					if creatures == nil or creatures[caught_creature] then
 						caught = caught + 1
 						player:PushEvent("quest_update",{quest = quest_name,amount = 1})
 						if caught >= amount then
@@ -1222,12 +1210,13 @@ local custom_functions = {
 
 	["deal x amount of damage"] = function(player,amount,weapon,quest_name,target)
 		local current_amount = GetCurrentAmount(player,quest_name)
+		target = type(target) == "string" and {[target] = true} or target
 		local function OnDamageDone(_,data)
 			amount = amount or 1
 			if data then
 				if data.damageresolved > 0 then
 					if weapon == nil or data.weapon and data.weapon.prefab == weapon then
-						if target == nil or data.target and data.target.prefab == target then
+						if target == nil or data.target and target[data.target.prefab] then
 							current_amount = current_amount + data.damageresolved
 							player:PushEvent("quest_update",{quest = quest_name,amount = data.damageresolved})
 							if current_amount >= amount then
@@ -1306,24 +1295,14 @@ local custom_functions = {
 
 	["deploy x y times"] = function(player,amount,item,quest_name)
 		local current = GetCurrentAmount(player,quest_name)
+		item = type(item) == "string" and {[item] = true} or item
 		local function OnDeployed(_,data)
 			if data and data.prefab then
-				if item == nil or (type(item) == "string" and data.prefab == item) then
+				if item == nil or item[data.prefab] then
 					player:PushEvent("quest_update",{quest = quest_name,amount = 1})
 					current = current + 1
 					if current >= amount then
 						player:RemoveEventCallback("deployitem",OnDeployed)
-					end
-				elseif item ~= nil and type(item) == "table" then
-					for _,v in pairs(item) do
-						if v == data.prefab then
-							player:PushEvent("quest_update",{quest = quest_name,amount = 1})
-							current = current + 1
-							if current >= amount then
-								player:RemoveEventCallback("deployitem",OnDeployed)
-							end
-							break
-						end
 					end
 				end
 			end
@@ -1813,6 +1792,103 @@ local custom_functions = {
 		player:ListenForEvent("finish_construction", OnFinishConstruction)
 		local function OnForfeitedQuest()
 			player:RemoveEventCallback("finish_construction", OnFinishConstruction)
+		end
+		OnForfeit(player,OnForfeitedQuest,quest_name)
+	end,
+
+	["feed x y times"] = function(player, amount, quest_name, targets, foods, bool, post_fn)
+		local current = GetCurrentAmount(player,quest_name)
+		targets = type(targets) == "string" and {[targets] = true} or targets
+		foods = type(foods) == "string" and {[foods] = true} or foods
+		local OnFedCreature
+		local function UpdateQuest()
+			player:PushEvent("quest_update",{quest = quest_name,amount = 1})
+			current = current + 1
+			if current >= amount then
+				player:RemoveEventCallback("fed_creature", OnFedCreature)
+			end
+		end
+		OnFedCreature = function(_, data)
+			--devprint("OnFedCreature", data.target, data.food, data.food and foods and foods[data.food.prefab], data.target and targets and targets[data.target.prefab])
+			if data and data.target and data.food then
+				if targets == nil or targets[data.target.prefab] then
+					if foods == nil or foods[data.food.prefab] then
+						if bool == nil or bool(player, data) then
+							if post_fn == nil then
+								UpdateQuest()
+							else
+								post_fn(player, data, UpdateQuest)
+							end
+						end
+					end
+				end
+			end
+		end
+
+		player:ListenForEvent("fed_creature", OnFedCreature)
+		local function OnForfeitedQuest()
+			player:RemoveEventCallback("fed_creature", OnFedCreature)
+		end
+		OnForfeit(player,OnForfeitedQuest,quest_name)
+	end,
+
+	["start fire with x y times"] = function(player, amount, quest_name, targets, tools, bool)
+		local current = GetCurrentAmount(player,quest_name)
+		targets = type(targets) == "string" and {[targets] = true} or targets
+		tools = type(tools) == "string" and {[tools] = true} or tools
+		local OnStartedFire
+		local function UpdateQuest()
+			player:PushEvent("quest_update",{quest = quest_name,amount = 1})
+			current = current + 1
+			if current >= amount then
+				player:RemoveEventCallback("onstartedfire", OnStartedFire)
+			end
+		end
+		OnStartedFire = function(_, data)
+			--devprint("OnStartedFire", data.target)
+			if data and data.target then
+				if targets == nil or targets[data.target.prefab] then
+					local hand = player.components.inventory and player.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+					if tools == nil or tools[hand.prefab] then
+						if bool == nil or bool(player, data) then
+							UpdateQuest()
+						end
+					end
+				end
+			end
+		end
+
+		player:ListenForEvent("onstartedfire", OnStartedFire)
+		local function OnForfeitedQuest()
+			player:RemoveEventCallback("onstartedfire", OnStartedFire)
+		end
+		OnForfeit(player,OnForfeitedQuest,quest_name)
+	end,
+
+	["get hit by x for y times during earthquakes"] = function(player, amount, quest_name, debris, bool)
+		local current = GetCurrentAmount(player,quest_name)
+		debris = type(debris) == "string" and {[debris] = true} or debris
+		local OnHitByDebris
+		local function UpdateQuest()
+			player:PushEvent("quest_update",{quest = quest_name,amount = 1})
+			current = current + 1
+			if current >= amount then
+				player:RemoveEventCallback("attacked", OnHitByDebris)
+			end
+		end
+		OnHitByDebris = function(_, data)
+			if data and data.attacker and data.attacker.shadow ~= nil then
+				if debris == nil or debris[data.attacker.prefab] then
+					if bool == nil or bool(player, data) then
+						UpdateQuest()
+					end
+				end
+			end
+		end
+
+		player:ListenForEvent("attacked", OnHitByDebris)
+		local function OnForfeitedQuest()
+			player:RemoveEventCallback("attacked", OnHitByDebris)
 		end
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,

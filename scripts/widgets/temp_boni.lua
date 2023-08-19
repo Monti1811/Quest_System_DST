@@ -99,7 +99,7 @@ local string = {
 	end,
 
 	crit = function(amount)
-		local str = amount..STRINGS_TB.DODGE
+		local str = amount..STRINGS_TB.CRIT
 		local arrow = amount < 1.1 and 0 or amount < 3.1 and 1 or amount < 5.1 and 2 or 3
 		return str,arrow
 	end,
@@ -128,7 +128,7 @@ local string = {
 		return str,arrow
 	end,
 
-	nightvision = function(amount)
+	nightvision = function()
 		local str = STRINGS_TB.NIGHTVISION
 		local arrow = 0
 		return str,arrow
@@ -191,7 +191,7 @@ function Temp_Boni:SetBoniPicture(boni,time)
 		end
 		devprint("tooltip",tooltip,num)
 		tooltip = tooltip or "Error"
-		self.button:SetTooltip(tooltip.."\nTime left: "..toMin(time))
+		self.button:SetTooltip(tooltip.."\n"..STRINGS_TB.TIME_LEFT..toMin(time))
 		self.time = time or 0
 		if num and num > 0 and str[2] then
 			local tex2 = "arrow_"..(num)..".tex"
@@ -202,7 +202,7 @@ function Temp_Boni:SetBoniPicture(boni,time)
 		end
 		self.task = self.inst:DoSimPeriodicTask(1, function()
 			self.time = self.time - 1
-			self.button:SetTooltip(tooltip.."\nTime left: "..toMin(self.time))
+			self.button:SetTooltip(tooltip.."\n"..STRINGS_TB.TIME_LEFT..toMin(self.time))
 		end)
 	end
 end
