@@ -99,6 +99,7 @@ return {
 		planardefense = "Bonus de défense planaire pendant x min",
 		dodge = "temps de recharge bonus d'esquive pendant x min",
 		crit = "Chance critique de faire 1,5x les dégâts pendant x min",
+		waterproofness = "Bonus d'imperméabilité pour x min",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "Tableau de quête",
@@ -208,6 +209,7 @@ return {
 		DODGE = "Esquive tous les %s secondes",
 		CRIT = "% de chances critiques d'infliger 1,5 fois les dégâts",
 		TIME_LEFT = "Temps restant :",
+		WATERPROOFNESS = "% d'imperméabilité",
 	},
 	LOADING_TIPS = {
 		request = "Les requêtes peuvent tomber des créatures tuées. Vous pouvez également activer leur fabrication dans les options de configuration !",
@@ -1024,6 +1026,34 @@ return {
 			DESCRIPTION = "Je veux étudier les guerriers araignées pour savoir comment ils sont tellement plus forts et intelligents que leurs frères et sœurs. J'ai besoin que tu en attrapes plusieurs !",
 			COUNTER = "Les Spider Warriors capturés",
 			HOVER = "Attraper %s guerriers araignées avec un piège",
+		},
+		["The Monster Breeder"] = {
+			NAME = "L'éleveur de monstres",
+			DESCRIPTION = "Certaines personnes que je connais m'ont dit que les oiseaux pondent maintenant des œufs monstrueux s'ils sont nourris avec de la viande monstrueuse. J'ai vraiment envie de voir quel genre de créature va éclore à partir de ces œufs, j'ai besoin que vous en créiez des % !",
+			COUNTER = "Œufs de monstres",
+			HOVER = "Produire % d'œufs de monstres avec des oiseaux en cage",
+		},
+		["The Ancient Curse"] = {
+			NAME = "L'ancienne malédiction",
+			DESCRIPTION = "Selon une légende, au plus profond des ruines de l'ancienne civilisation, vit l'un des êtres de l'ombre les plus puissants ! J'ai besoin que vous le trouviez et que vous le tuiez, pour me montrer que ce n'est pas qu'une légende !",
+		},
+		["Oh Sweet Summer Child"] = {
+			NAME = "Oh Sweet Summer Child",
+			DESCRIPTION = "Êtes-vous encore coincé avec votre cataplasme au miel ? Ou êtes-vous déjà dans la bande des cool avec votre Sweetflower Wrap ? Allez, faites partie des enfants cool et fabriquez %s Sweetflower Wrap !",
+			COUNTER = "Enveloppe Sweetflower cravatée",
+			HOVER = "Artisanat %s Sweetflower Wrap",
+		},
+		["It's Raining!"] = {
+			NAME = "Il pleut !",
+			DESCRIPTION = "Il pleut ! C'est du moins ce que j'aurais voulu vous dire, mais malheureusement, la dernière pluie est tombée il y a longtemps. J'ai besoin que quelqu'un invoque la pluie pour nous, car c'est la seule possibilité qu'il nous reste pour que nos récoltes ne se flétrissent pas... J'ai besoin que vous l'invoquiez au moins %s fois !",
+			COUNTER = "Pluie invoquée",
+			HOVER = "Invoquer la pluie avec une Conque noyée %s fois",
+		},
+		["The Uncompromising Experience"] = {
+			NAME = "L'expérience sans compromis",
+			DESCRIPTION = "Êtes-vous aussi résistant que vous le pensez ? Montrez-moi votre valeur en survivant à %s jours d'affilée dans le Constant sans mourir !",
+			COUNTER = "Jours de survie",
+			HOVER = "Survivre à %s jours en une seule fois",
 		},
 	},
 	QUEST_FUNCTIONS = {

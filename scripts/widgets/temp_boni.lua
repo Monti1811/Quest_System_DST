@@ -116,6 +116,12 @@ local string = {
 		return str,arrow
 	end,
 
+	waterproofness = function(amount)
+		local str = amount..STRINGS_TB.WATERPROOFNESS
+		local arrow = amount < 40.1 and 0 or amount < 60.1 and 1 or amount < 80.1 and 2 or 3
+		return str,arrow
+	end,
+
 	worker = function(amount)
 		local str = "+"..((amount-1)*100)..STRINGS_TB.WORKER
 		local arrow = amount < 1.21 and 0 or amount < 1.41 and 1 or amount < 1.61 and 2 or 3

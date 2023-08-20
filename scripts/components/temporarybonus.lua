@@ -211,6 +211,18 @@ local function AddSummerInsulation(inst,amount)
 	end
 end
 
+local function AddWaterproofness(inst, amount, name)
+	amount = amount/100
+	local moisture = inst.components.moisture
+	if moisture then
+		if amount < 0 then
+			moisture.waterproofnessmodifiers:RemoveModifier(inst,name)
+		else
+			moisture.waterproofnessmodifiers:SetModifier(inst,amount,name)
+		end
+	end
+end
+
 local actions = {
 	ACTIONS.CHOP,
 	ACTIONS.MINE,
@@ -344,6 +356,7 @@ local TemporaryBonus = Class(function(self, inst)
 
    		winterinsulation = AddWinterInsulation,
     	summerinsulation = AddSummerInsulation,
+		waterproofness = AddWaterproofness,
 
     	worker = AddWorkingBonus,
 

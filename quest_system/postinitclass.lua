@@ -353,6 +353,19 @@ end
 
 AddComponentPostInit("oceanfishingrod", OnCatchFish)
 
+local function OnCastSpell(self)
+	local old_CastSpell = self.CastSpell
+	function self:CastSpell(target, pos, doer, ...)
+		local ret = old_CastSpell(self, target, pos, doer, ...)
+		if doer and self.spell then
+			doer:PushEvent("cast_spell", { target = target, pos = pos, spellcaster = self.inst })
+		end
+		return ret
+	end
+end
+
+AddComponentPostInit("spellcaster", OnCastSpell)
+
 local function OnFinishConstruction(self)
 	local old_OnConstruct = self.OnConstruct
 	function self:OnConstruct(doer, items, ...)

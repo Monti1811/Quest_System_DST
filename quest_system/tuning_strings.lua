@@ -3,7 +3,6 @@ local STRINGS = GLOBAL.STRINGS
 local NAMES = STRINGS.NAMES
 local TUNING = GLOBAL.TUNING
 local GetTableSize = GLOBAL.GetTableSize
-local TheWorld = GLOBAL.TheWorld
 
 TUNING.QUEST_COMPONENT = {}
 

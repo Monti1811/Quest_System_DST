@@ -114,6 +114,7 @@ return {
 		crit = "Critical chance of doing 1.5x damage for x min",
 		winterinsulation = "Winterinsulation Bonus for x min",
 		summerinsulation = "Summerinsulation Bonus for x min",
+		waterproofness = "Waterproofness Bonus for x min",
 		worker = "Working Bonus for x min",
 		sleeping = "Sleeping Bonus for x min",
 		nightvision = "Nightvision for x min",
@@ -287,6 +288,7 @@ return {
 		RANGE = " Range",
 		DODGE = " Every %s seconds dodge",
 		CRIT = "% Critical chance of doing 1.5x damage",
+		WATERPROOFNESS = "% Waterproofness",
 		WINTERINSULATION = " Winter Insulation",
 		SUMMERINSULATION = " Summer Insulation",
 		WORKER = "% Working Effectiveness",
@@ -1559,6 +1561,49 @@ return {
 
 			NAME = "The Mad Adventurer",
 			DESCRIPTION = "One of the forests in these langs has been under control of some giant spider for a long time.\nWe want to cultivate this land and for this we need this spider gone!\nKill it and we will reward you!",
+
+		},
+
+		["The Monster Breeder"] = {
+
+			NAME = "The Monster Breeder",
+			DESCRIPTION = "Some people I know told me that birds now lay monster eggs if they are fed monster meat. I really want to see what kind of creature will hatch from those, I will need you to create %s of them!",
+			COUNTER = "Monster Eggs",
+			HOVER = "Produce %s monster eggs with birds in a cage",
+
+		},
+
+		["The Ancient Curse"] = {
+
+			NAME = "The Ancient Curse",
+			DESCRIPTION = "According to a legend, deep in the ruins of the ancient civilization, one of the most powerful shadow beings is living! I need you to find it and kill it, show me that it isn't only a legend!",
+
+		},
+
+		["Oh Sweet Summer Child"] = {
+
+			NAME = "Oh Sweet Summer Child",
+			DESCRIPTION = "Are you still stuck with your Honey Poultice? Or are you already in the cool gang with your Sweetflower Wrap? Come on, be part of the cool kids and craft %s Sweetflower Wrap!",
+			COUNTER = "Sweetflower Wrap crafted",
+			HOVER = "Craft %s Sweetflower Wrap",
+
+		},
+
+		["It's Raining!"] = {
+
+			NAME = "It's Raining!",
+			DESCRIPTION = "It's raining! At least that is what I would have wanted to tell you, but unfortunately it has been a long time since the last rain. I need someone to summon the rain for us, as this is the only possibility left such that our crops won't wither... I need you to call it at least %s times!",
+			COUNTER = "Rain summoned",
+			HOVER = "Summon the rain with a Drowning Conch %s times",
+
+		},
+
+		["The Uncompromising Experience"] = {
+
+			NAME = "The Uncompromising Experience",
+			DESCRIPTION = "Are you as tough as you think you are? Show me your worth by surviving %s days at once in the Constant without dying!",
+			COUNTER = "Days survived",
+			HOVER = "Survive %s days at once",
 
 		},
 

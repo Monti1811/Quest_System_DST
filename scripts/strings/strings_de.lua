@@ -99,6 +99,7 @@ return {
 		planardefense = "Planarer Verteidigungsbonus für x Minuten",
 		dodge = "Abklingzeit Ausweichen-Bonus für x min",
 		crit = "Kritische Chance 1,5x Schaden für x min zu verursachen",
+		waterproofness = "Wasserdichtigkeitsbonus für x min",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "Missionsbrett",
@@ -208,6 +209,7 @@ return {
 		DODGE = "Alle %s Sekunden Ausweichen",
 		CRIT = "% Kritische Chance, 1,5x Schaden zu verursachen",
 		TIME_LEFT = "Verbleibende Zeit:",
+		WATERPROOFNESS = "% Wasserdichtigkeit",
 	},
 	LOADING_TIPS = {
 		request = "Anfragen können von getöteten Kreaturen fallen gelassen werden. Du kannst auch ihre Herstellung in den Konfigurationsoptionen aktivieren!",
@@ -1021,6 +1023,34 @@ return {
 			DESCRIPTION = "Ich möchte die Spinnenkrieger studieren und herausfinden, warum sie so viel stärker und intelligenter sind als ihre Brüder und Schwestern. Ich brauche dich, um %s von ihnen zu fangen!",
 			COUNTER = "Spider Warriors gefangen",
 			HOVER = "Fange %s Spinnenkrieger mit einer Falle",
+		},
+		["The Monster Breeder"] = {
+			NAME = "Der Monsterzüchter",
+			DESCRIPTION = "Einige Leute, die ich kenne, haben mir erzählt, dass Vögel jetzt Monstereier legen, wenn sie mit Monsterfleisch gefüttert werden. Ich möchte wirklich sehen, welche Art von Kreatur daraus schlüpft. Ich brauche dich, um %s von ihnen zu schaffen!",
+			COUNTER = "Monster-Eier",
+			HOVER = "Produzieren Sie %s Monstereier mit Vögeln in einem Käfig",
+		},
+		["The Ancient Curse"] = {
+			NAME = "Der uralte Fluch",
+			DESCRIPTION = "Eine Legende besagt, dass tief in den Ruinen der alten Zivilisation eines der mächtigsten Schattenwesen lebt! Du musst es finden und töten und mir zeigen, dass es nicht nur eine Legende ist!",
+		},
+		["Oh Sweet Summer Child"] = {
+			NAME = "Oh süßes Sommerkind",
+			DESCRIPTION = "Stecken Sie noch in Ihrem Honigwickel fest? Oder gehörst du schon zur coolen Gang mit deinem Sweetflower Wrap? Komm schon, sei Teil der coolen Kids und bastle %s Sweetflower Wrap!",
+			COUNTER = "Sweetflower Wrap handgefertigt",
+			HOVER = "Craft %s Sweetflower Wrap",
+		},
+		["It's Raining!"] = {
+			NAME = "Es regnet!",
+			DESCRIPTION = "Es regnet! Zumindest wollte ich euch das sagen, aber leider ist der letzte Regen schon lange her. Ich brauche jemanden, der den Regen für uns herbeiruft, denn das ist die einzige Möglichkeit, die uns bleibt, damit unsere Ernte nicht verdorrt... Du musst ihn mindestens %s Mal herbeirufen!",
+			COUNTER = "Regen herbeigerufen",
+			HOVER = "Beschwöre den Regen mit einer Ertrinkenden Muschel %s mal",
+		},
+		["The Uncompromising Experience"] = {
+			NAME = "Die kompromisslose Erfahrung",
+			DESCRIPTION = "Bist du so zäh, wie du glaubst, dass du es bist? Zeig mir deinen Wert, indem du %s Tage am Stück in der Constant überlebst, ohne zu sterben!",
+			COUNTER = "Überlebte Tage",
+			HOVER = "Überlebe %s Tage auf einmal",
 		},
 	},
 	QUEST_FUNCTIONS = {

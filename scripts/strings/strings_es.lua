@@ -99,6 +99,7 @@ return {
 		planardefense = "Bonificación de defensa planar durante x min",
 		dodge = "Enfriamiento de la bonificación de esquiva durante x min",
 		crit = "Probabilidad crítica de hacer 1,5x de daño durante x min.",
+		waterproofness = "Bonificación de estanqueidad durante x min",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "Tablero de misión",
@@ -208,6 +209,7 @@ return {
 		DODGE = " Cada %s segundos esquiva",
 		CRIT = "% Probabilidad crítica de hacer 1.5x de daño",
 		TIME_LEFT = "Tiempo restante:",
+		WATERPROOFNESS = "% Impermeabilidad",
 	},
 	LOADING_TIPS = {
 		request = "Las peticiones pueden caer de criaturas muertas. También puedes habilitar su elaboración en las opciones de configuración!",
@@ -1023,6 +1025,34 @@ return {
 			DESCRIPTION = "Quiero estudiar a los Guerreros Araña para saber cómo son mucho más fuertes e inteligentes que sus hermanos y hermanas. ¡Necesito que atrapes %s de ellos!",
 			COUNTER = "Guerreros araña capturados",
 			HOVER = "Atrapa %s guerreros araña con una trampa",
+		},
+		["The Monster Breeder"] = {
+			NAME = "El criador de monstruos",
+			DESCRIPTION = "Unos conocidos me han dicho que ahora los pájaros ponen huevos monstruosos si se les alimenta con carne monstruosa. Tengo muchas ganas de ver qué tipo de criatura saldrá de ellos, ¡necesitaré que crees %s de ellos!",
+			COUNTER = "Huevos monstruosos",
+			HOVER = "Producir %s de huevos monstruosos con aves en una jaula",
+		},
+		["The Ancient Curse"] = {
+			NAME = "La antigua maldición",
+			DESCRIPTION = "Según una leyenda, en lo más profundo de las ruinas de la antigua civilización, ¡vive uno de los seres de las sombras más poderosos! Necesito que lo encuentres y lo mates, ¡demuéstrame que no es sólo una leyenda!",
+		},
+		["Oh Sweet Summer Child"] = {
+			NAME = "Oh Sweet Summer Child",
+			DESCRIPTION = "¿Sigues con tu Cataplasma de Miel? ¿O ya formas parte de la pandilla guay con tu Envoltura de Flores Dulces? Vamos, ¡sé parte de los chicos guays y haz %s Sweetflower Wrap!",
+			COUNTER = "Sweetflower Wrap hecho a mano",
+			HOVER = "Craft %s Sweetflower Wrap",
+		},
+		["It's Raining!"] = {
+			NAME = "¡Está lloviendo!",
+			DESCRIPTION = "¡Está lloviendo! Al menos eso es lo que hubiera querido deciros, pero desgraciadamente ha pasado mucho tiempo desde la última lluvia. Necesito que alguien invoque la lluvia para nosotros, ya que es la única posibilidad que nos queda para que nuestros cultivos no se marchiten... ¡Necesito que la invoques al menos %s veces!",
+			COUNTER = "Lluvia convocada",
+			HOVER = "Invoca la lluvia con una caracola ahogadora %s veces",
+		},
+		["The Uncompromising Experience"] = {
+			NAME = "La experiencia sin concesiones",
+			DESCRIPTION = "¿Eres tan duro como crees? ¡Demuéstrame tu valía sobreviviendo %s días seguidos en el Constant sin morir!",
+			COUNTER = "Días de supervivencia",
+			HOVER = "Sobrevivir %s días a la vez",
 		},
 	},
 	QUEST_FUNCTIONS = {

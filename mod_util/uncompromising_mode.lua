@@ -1,4 +1,6 @@
 local name = GLOBAL.KnownModIndex:GetModActualName("󰀕 Uncompromising Mode")
+local GetQuestString = GLOBAL.GetQuestString
+local CUSTOM_QUEST_FUNCTIONS = GLOBAL.TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS
 
 local goals = {}
 
@@ -182,35 +184,133 @@ AddSimPostInit(function()
 	local quests = {
 		--1
 		{
-		name = "The Dangerous Widow",
-		victim = "hoodedwidow",
-		counter_name = nil,
-		description = GLOBAL.GetQuestString("The Dangerous Widow","DESCRIPTION"),
-		amount = 1,
-		rewards = {[":func:health;50"] = 16,[":func:damage;10"] = 16,giant_blueberry = 10},
-		points = 2000,
-		start_fn = nil,
-		onfinished = nil,
-		difficulty = 5,
-		tex = "hoodedwidow.tex",
-		atlas = "images/victims_uncompromising_mode.xml",
-		hovertext = GetKillString("hoodedwidow",1),
+			name = "The Dangerous Widow",
+			victim = "hoodedwidow",
+			counter_name = nil,
+			description = GetQuestString("The Dangerous Widow","DESCRIPTION"),
+			amount = 1,
+			rewards = {[":func:health;50"] = 16,[":func:damage;10"] = 16,giant_blueberry = 10},
+			points = 2000,
+			start_fn = nil,
+			onfinished = nil,
+			difficulty = 5,
+			tex = "hoodedwidow.tex",
+			atlas = "images/victims_uncompromising_mode.xml",
+			hovertext = GetKillString("hoodedwidow",1),
 		},
 		--2
 		{
-		name = "The Mad Adventurer",
-		victim = "creepingfear",
-		counter_name = nil,
-		description = GLOBAL.GetQuestString("The Mad Adventurer","DESCRIPTION"),
-		amount = 1,
-		rewards = {[":func:sanityaura;25"] = 16,icecream = 3,purplesteamedhams = 3},
-		points = 700,
-		start_fn = nil,
-		onfinished = nil,
-		difficulty = 3,
-		tex = "creepingfear.tex",
-		atlas = "images/victims_uncompromising_mode.xml",
-		hovertext = GetKillString("creepingfear",1),
+			name = "The Mad Adventurer",
+			victim = "creepingfear",
+			counter_name = nil,
+			description = GetQuestString("The Mad Adventurer","DESCRIPTION"),
+			amount = 1,
+			rewards = {[":func:sanityaura;25"] = 16,icecream = 3,purplesteamedhams = 3},
+			points = 700,
+			start_fn = nil,
+			onfinished = nil,
+			difficulty = 3,
+			tex = "creepingfear.tex",
+			atlas = "images/victims_uncompromising_mode.xml",
+			hovertext = GetKillString("creepingfear",1),
+		},
+		--3
+		{
+			name = "The Monster Breeder",
+			victim = "",
+			counter_name = GetQuestString("The Monster Breeder", "COUNTER"),
+			description = GetQuestString("The Monster Breeder", "DESCRIPTION", 15),
+			amount = 15,
+			rewards = {[":func:planardamage;5"] = 16,blueberrypancakes = 1,},
+			points = 250,
+			start_fn = function(inst, amount, quest_name)
+				local function IsMonsterMeat(_, data)
+					return data.food:HasTag("monstermeat")
+				end
+				CUSTOM_QUEST_FUNCTIONS["feed x y times"](inst, amount, quest_name, "birdcage", nil, IsMonsterMeat)
+			end,
+			onfinished = nil,
+			difficulty = 2,
+			tex = "um_monsteregg.tex",
+			--atlas = "images/victims_uncompromising_mode.xml",
+			hovertext = GetQuestString("The Monster Breeder", "HOVER", 15),
+		},
+		--4
+		{
+			name = "The Ancient Curse",
+			victim = "ancient_trepidation",
+			counter_name = nil,
+			description = GetQuestString("The Ancient Curse","DESCRIPTION"),
+			amount = 1,
+			rewards = {[":func:crit;20"] = 16,shadow_crown = 1,skullflask = 2},
+			points = 1200,
+			start_fn = nil,
+			onfinished = nil,
+			difficulty = 4,
+			tex = "ancient_trepidation.tex",
+			atlas = "images/victims_uncompromising_mode.xml",
+			hovertext = GetKillString("ancient_trepidation",1),
+		},
+		--5
+		{
+			name = "Oh Sweet Summer Child",
+			victim = "",
+			counter_name = GetQuestString("Oh Sweet Summer Child", "COUNTER"),
+			description = GetQuestString("Oh Sweet Summer Child", "DESCRIPTION", 1),
+			amount = 1,
+			rewards = {[":func:planardefense;5"] = 16,um_bear_trap_equippable_gold = 1,},
+			points = 125,
+			start_fn = function(inst, amount, quest_name)
+				CUSTOM_QUEST_FUNCTIONS["craft x y times"](inst, amount, {floral_bandage = true}, nil, quest_name)
+			end,
+			onfinished = nil,
+			difficulty = 1,
+			tex = "floral_bandage.tex",
+			--atlas = "images/victims_uncompromising_mode.xml",
+			hovertext = GetQuestString("Oh Sweet Summer Child", "HOVER", 1),
+		},
+		--6
+		{
+			name = "It's Raining!",
+			victim = "",
+			counter_name = GetQuestString("It's Raining!", "COUNTER"),
+			description = GetQuestString("It's Raining!", "DESCRIPTION", 2),
+			amount = 2,
+			rewards = {[":func:build_buffer"] = "air_conditioner", [":func:waterproofness;100"] = 16,},
+			points = 900,
+			start_fn = function(inst, amount, quest_name)
+				local function IsRaining(_, _, UpdateQuest)
+					inst:DoTaskInTime(1, function()
+						if TheWorld.state.precipitation ~= "none" then
+							UpdateQuest()
+						end
+					end)
+				end
+				CUSTOM_QUEST_FUNCTIONS["cast spell x y times"](inst, amount, quest_name, {rain_horn = true}, nil, nil, IsRaining)
+			end,
+			onfinished = nil,
+			difficulty = 4,
+			tex = "rain_horn.tex",
+			--atlas = "images/victims_uncompromising_mode.xml",
+			hovertext = GetQuestString("It's Raining!", "HOVER", 2),
+		},
+		--7
+		{
+			name = "The Uncompromising Experience",
+			victim = "",
+			counter_name = GetQuestString("The Uncompromising Experience", "COUNTER"),
+			description = GetQuestString("The Uncompromising Experience", "DESCRIPTION", 20),
+			amount = 20,
+			rewards = {snowgoggles = 1, plaguemask = 1, [":func:escapedeath;1"] = 16,},
+			points = 600,
+			start_fn = function(inst, amount, quest_name)
+				CUSTOM_QUEST_FUNCTIONS["survive x days"](inst, amount, quest_name, true)
+			end,
+			onfinished = nil,
+			difficulty = 3,
+			tex = "resurrectionstatue.tex",
+			--atlas = "images/victims.xml",
+			hovertext = GetQuestString("The Uncompromising Experience", "HOVER", 20),
 		},
 	}
 	if not GLOBAL.GetModConfigData("harder_shadows",name) then

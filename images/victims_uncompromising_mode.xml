@@ -1,30 +1,31 @@
 <Atlas><Texture filename="victims_uncompromising_mode.tex" />
     <Elements>
-        <Element name="aphid.tex" u1="0.0009765625" u2="0.12402344" v1="0.75195312" v2="0.99804688"/>
-        <Element name="bight.tex" u1="0.12597656" u2="0.24902344" v1="0.75195312" v2="0.99804688"/>
-        <Element name="birchling.tex" u1="0.25097656" u2="0.37402344" v1="0.75195312" v2="0.99804688"/>
-        <Element name="bushcrab.tex" u1="0.37597656" u2="0.49902344" v1="0.75195312" v2="0.99804688"/>
-        <Element name="chimp.tex" u1="0.50097656" u2="0.62402344" v1="0.75195312" v2="0.99804688"/>
-        <Element name="creepingfear.tex" u1="0.62597656" u2="0.74902344" v1="0.75195312" v2="0.99804688"/>
-        <Element name="fruitbat.tex" u1="0.75097656" u2="0.87402344" v1="0.75195312" v2="0.99804688"/>
-        <Element name="hoodedwidow.tex" u1="0.87597656" u2="0.99902344" v1="0.75195312" v2="0.99804688"/>
-        <Element name="knook.tex" u1="0.0009765625" u2="0.12402344" v1="0.50195312" v2="0.74804688"/>
-        <Element name="lightninghound.tex" u1="0.12597656" u2="0.24902344" v1="0.50195312" v2="0.74804688"/>
-        <Element name="lureplague_rat.tex" u1="0.25097656" u2="0.37402344" v1="0.50195312" v2="0.74804688"/>
-        <Element name="magmahound.tex" u1="0.37597656" u2="0.49902344" v1="0.50195312" v2="0.74804688"/>
-        <Element name="mock_dragonfly.tex" u1="0.50097656" u2="0.62402344" v1="0.50195312" v2="0.74804688"/>
-        <Element name="mothermoose.tex" u1="0.62597656" u2="0.74902344" v1="0.50195312" v2="0.74804688"/>
-        <Element name="mothermossling.tex" u1="0.75097656" u2="0.87402344" v1="0.50195312" v2="0.74804688"/>
-        <Element name="pollenmites.tex" u1="0.87597656" u2="0.99902344" v1="0.50195312" v2="0.74804688"/>
-        <Element name="rneskeleton.tex" u1="0.0009765625" u2="0.12402344" v1="0.25195312" v2="0.49804688"/>
-        <Element name="roship.tex" u1="0.12597656" u2="0.24902344" v1="0.25195312" v2="0.49804688"/>
-        <Element name="scorpion.tex" u1="0.25097656" u2="0.37402344" v1="0.25195312" v2="0.49804688"/>
-        <Element name="shockworm.tex" u1="0.37597656" u2="0.49902344" v1="0.25195312" v2="0.49804688"/>
-        <Element name="snapdragon.tex" u1="0.50097656" u2="0.62402344" v1="0.25195312" v2="0.49804688"/>
-        <Element name="snowmong.tex" u1="0.62597656" u2="0.74902344" v1="0.25195312" v2="0.49804688"/>
-        <Element name="stumpling.tex" u1="0.75097656" u2="0.87402344" v1="0.25195312" v2="0.49804688"/>
-        <Element name="toadling.tex" u1="0.87597656" u2="0.99902344" v1="0.25195312" v2="0.49804688"/>
-        <Element name="uncompromising_rat.tex" u1="0.0009765625" u2="0.12402344" v1="0.001953125" v2="0.24804688"/>
-        <Element name="vampirebat.tex" u1="0.12597656" u2="0.24902344" v1="0.001953125" v2="0.24804688"/>
+        <Element name="ancient_trepidation.tex" u1="0.0009765625" u2="0.12402344" v1="0.75195312" v2="0.99804688"/>
+        <Element name="aphid.tex" u1="0.12597656" u2="0.24902344" v1="0.75195312" v2="0.99804688"/>
+        <Element name="bight.tex" u1="0.25097656" u2="0.37402344" v1="0.75195312" v2="0.99804688"/>
+        <Element name="birchling.tex" u1="0.37597656" u2="0.49902344" v1="0.75195312" v2="0.99804688"/>
+        <Element name="bushcrab.tex" u1="0.50097656" u2="0.62402344" v1="0.75195312" v2="0.99804688"/>
+        <Element name="chimp.tex" u1="0.62597656" u2="0.74902344" v1="0.75195312" v2="0.99804688"/>
+        <Element name="creepingfear.tex" u1="0.75097656" u2="0.87402344" v1="0.75195312" v2="0.99804688"/>
+        <Element name="fruitbat.tex" u1="0.87597656" u2="0.99902344" v1="0.75195312" v2="0.99804688"/>
+        <Element name="hoodedwidow.tex" u1="0.0009765625" u2="0.12402344" v1="0.50195312" v2="0.74804688"/>
+        <Element name="knook.tex" u1="0.12597656" u2="0.24902344" v1="0.50195312" v2="0.74804688"/>
+        <Element name="lightninghound.tex" u1="0.25097656" u2="0.37402344" v1="0.50195312" v2="0.74804688"/>
+        <Element name="lureplague_rat.tex" u1="0.37597656" u2="0.49902344" v1="0.50195312" v2="0.74804688"/>
+        <Element name="magmahound.tex" u1="0.50097656" u2="0.62402344" v1="0.50195312" v2="0.74804688"/>
+        <Element name="mock_dragonfly.tex" u1="0.62597656" u2="0.74902344" v1="0.50195312" v2="0.74804688"/>
+        <Element name="mothermoose.tex" u1="0.75097656" u2="0.87402344" v1="0.50195312" v2="0.74804688"/>
+        <Element name="mothermossling.tex" u1="0.87597656" u2="0.99902344" v1="0.50195312" v2="0.74804688"/>
+        <Element name="pollenmites.tex" u1="0.0009765625" u2="0.12402344" v1="0.25195312" v2="0.49804688"/>
+        <Element name="rneskeleton.tex" u1="0.12597656" u2="0.24902344" v1="0.25195312" v2="0.49804688"/>
+        <Element name="roship.tex" u1="0.25097656" u2="0.37402344" v1="0.25195312" v2="0.49804688"/>
+        <Element name="scorpion.tex" u1="0.37597656" u2="0.49902344" v1="0.25195312" v2="0.49804688"/>
+        <Element name="shockworm.tex" u1="0.50097656" u2="0.62402344" v1="0.25195312" v2="0.49804688"/>
+        <Element name="snapdragon.tex" u1="0.62597656" u2="0.74902344" v1="0.25195312" v2="0.49804688"/>
+        <Element name="snowmong.tex" u1="0.75097656" u2="0.87402344" v1="0.25195312" v2="0.49804688"/>
+        <Element name="stumpling.tex" u1="0.87597656" u2="0.99902344" v1="0.25195312" v2="0.49804688"/>
+        <Element name="toadling.tex" u1="0.0009765625" u2="0.12402344" v1="0.001953125" v2="0.24804688"/>
+        <Element name="uncompromising_rat.tex" u1="0.12597656" u2="0.24902344" v1="0.001953125" v2="0.24804688"/>
+        <Element name="vampirebat.tex" u1="0.25097656" u2="0.37402344" v1="0.001953125" v2="0.24804688"/>
     </Elements>
 </Atlas>

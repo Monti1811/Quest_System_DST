@@ -99,6 +99,7 @@ return {
 		planardefense = "平面防御奖励 x 分钟",
 		dodge = "闪避奖励冷却 x 分钟",
 		crit = "在 x 分钟内造成 1.5 倍伤害的临界几率",
+		waterproofness = "防水奖励 x 分钟",
 	},
 	QUEST_BOARD = {
 		QUEST_BOARD = "任务板",
@@ -208,6 +209,7 @@ return {
 		DODGE = "每 %s 秒闪避一次",
 		CRIT = "%造成 1.5 倍伤害的临界几率",
 		TIME_LEFT = "剩余时间",
+		WATERPROOFNESS = "% 防水性",
 	},
 	LOADING_TIPS = {
 		request = "请求可以从被杀的生物中掉落。你也可以在配置选项中启用它们的制作功能！",
@@ -1020,6 +1022,34 @@ return {
 			DESCRIPTION = "我想研究一下蜘蛛勇士，他们为什么比他们的兄弟姐妹们更强壮、更聪明。我需要你抓住他们的%！",
 			COUNTER = "捕获的蜘蛛勇士",
 			HOVER = "用陷阱捕捉 %s 蜘蛛勇士",
+		},
+		["The Monster Breeder"] = {
+			NAME = "怪物饲养员",
+			DESCRIPTION = "我认识的一些人告诉我，如果给鸟儿喂食怪兽肉，它们现在会产下怪兽蛋。我很想看看这些蛋会孵出什么样的生物，我需要你创造出 % 的蛋！",
+			COUNTER = "怪物彩蛋",
+			HOVER = "用笼子里的鸟生产 %s 的怪兽蛋",
+		},
+		["The Ancient Curse"] = {
+			NAME = "古老的诅咒",
+			DESCRIPTION = "根据传说，在古代文明废墟的深处，生活着一个最强大的影子生物！我需要你找到它并杀死它，让我知道这不仅仅是个传说！",
+		},
+		["Oh Sweet Summer Child"] = {
+			NAME = "哦，甜美的夏日之子",
+			DESCRIPTION = "您还在坚持使用蜂蜜药膏吗？或者你已经用甜花裹布加入了 \"酷 \"的行列？来吧，成为酷孩子中的一员，制作 %s 甜花敷料！",
+			COUNTER = "甜花包裹工艺品",
+			HOVER = "工艺品 %s 甜花包",
+		},
+		["It's Raining!"] = {
+			NAME = "下雨了",
+			DESCRIPTION = "下雨了！至少我是这么想告诉你们的，但不幸的是，上次下雨已经是很久以前的事了。我需要有人为我们召唤雨水，因为这是唯一的可能，我们的庄稼才不会枯萎......我需要你至少召唤 %s 次！",
+			COUNTER = "召唤雨",
+			HOVER = "用淹没的海螺召唤雨 %s 次",
+		},
+		["The Uncompromising Experience"] = {
+			NAME = "毫不妥协的体验",
+			DESCRIPTION = "你有自己认为的那么坚强吗？在恒星中一次存活 %s 天而不死，证明你的价值！",
+			COUNTER = "存活天数",
+			HOVER = "一次存活 %s 天",
 		},
 	},
 	QUEST_FUNCTIONS = {

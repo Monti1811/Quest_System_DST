@@ -256,6 +256,7 @@ local text_table_boni = {
 	escapedeath = function(amount) return amount.." " end,
 	dodge = function(amount) return amount.."s " end,
 	crit = function(amount) return amount.."% " end,
+	waterproofness = function(amount) return amount.."% " end,
 }
 
 local function MakeTempRewardData(bonus,amount)
@@ -295,6 +296,7 @@ local temprewards = {
 	crit = {5,10,20,40},
 	winterinsulation = {40,80,120,160},
 	summerinsulation = {40,80,120,160},
+	waterproofness = {40,60,80,100},
 	worker = {1.2,1.4,1.6,2,},
 	sleeping = {0.2,0.4,0.6,1,},
 	nightvision = {1},
@@ -1212,7 +1214,6 @@ local custom_functions = {
 		local current_amount = GetCurrentAmount(player,quest_name)
 		target = type(target) == "string" and {[target] = true} or target
 		local function OnDamageDone(_,data)
-			amount = amount or 1
 			if data then
 				if data.damageresolved > 0 then
 					if weapon == nil or data.weapon and data.weapon.prefab == weapon then
@@ -1272,7 +1273,6 @@ local custom_functions = {
 	["defend x amount of damage"] = function(player,amount,quest_name)
 		local current_amount = GetCurrentAmount(player,quest_name)
 		local function OnDamageDefended(_,data)
-			amount = amount or 1
 			if data then
 				if not data.redirected and data.original_damage > 0 then
 					if data.original_damage > data.damageresolved then
@@ -1289,6 +1289,40 @@ local custom_functions = {
 		player:ListenForEvent("attacked",OnDamageDefended)
 		local function OnForfeitedQuest(_player)
 			_player:RemoveEventCallback("attacked",OnDamageDefended)
+		end
+		OnForfeit(player,OnForfeitedQuest,quest_name)
+	end,
+
+	["cast spell x y times"] = function(player, amount, quest_name, spellcasters, targets, bool, post_fn)
+		local current_amount = GetCurrentAmount(player,quest_name)
+		spellcasters = type(spellcasters) == "string" and {[spellcasters] = true} or spellcasters
+		targets = type(targets) == "string" and {[targets] = true} or targets
+		local OnCastSpell
+		local function UpdateQuest()
+			current_amount = current_amount + 1
+			player:PushEvent("quest_update",{quest = quest_name, amount = 1})
+			if current_amount >= amount then
+				player:RemoveEventCallback("cast_spell",OnCastSpell)
+			end
+		end
+		OnCastSpell = function(_,data)
+			if data then
+				if spellcasters == nil or data.spellcaster and spellcasters[data.spellcaster.prefab] then
+					if targets == nil or data.target and targets[data.target.prefab] then
+						if bool == nil or bool(player, data) then
+							if post_fn == nil then
+								UpdateQuest()
+							else
+								post_fn(player, data, UpdateQuest)
+							end
+						end
+					end
+				end
+			end
+		end
+		player:ListenForEvent("cast_spell",OnCastSpell)
+		local function OnForfeitedQuest(_player)
+			_player:RemoveEventCallback("cast_spell",OnCastSpell)
 		end
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
@@ -1595,6 +1629,33 @@ local custom_functions = {
 		player:ListenForEvent("death",OnDied)
 		local function OnForfeitedQuest(_player)
 			_player:RemoveEventCallback("death",OnDied)
+		end
+		OnForfeit(player,OnForfeitedQuest,quest_name)
+	end,
+
+	["survive x days"] = function(player, amount, quest_name, at_once)
+		local current = GetCurrentAmount(player,quest_name)
+		local OnDied = function() end
+		local function OnNewDay(_, isday)
+			if isday then
+				player:PushEvent("quest_update",{quest = quest_name, amount = 1})
+				current = current + 1
+				if current >= amount then
+					player:RemoveEventCallback("death", OnDied)
+					player:StopWatchingWorldState("isday", OnNewDay)
+				end
+			end
+		end
+		if at_once then
+			OnDied = function()
+				player:PushEvent("quest_update",{quest = quest_name, reset = true})
+			end
+		end
+		player:WatchWorldState("isday", OnNewDay)
+		player:ListenForEvent("death",OnDied)
+		local function OnForfeitedQuest()
+			player:RemoveEventCallback("death", OnDied)
+			player:StopWatchingWorldState("isday", OnNewDay)
 		end
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
