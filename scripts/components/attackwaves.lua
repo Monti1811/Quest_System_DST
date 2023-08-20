@@ -22,7 +22,7 @@ local function MakeTables(self,userid,victim)
 		end
 		self[tab][userid][victim] = {}
 	end
-	local tables2 = {"talk_task","DoAttackWave_task","attack_rounds","players","attack_num","release_spawns","difficulty",}
+	local tables2 = {"talk_task","DoAttackWave_task","attack_rounds","players","attack_num","release_spawns","difficulty","current_victims"}
 	for _,tab in ipairs(tables2) do
 		if self[tab][userid] == nil then
 			self[tab][userid] = {}
@@ -146,15 +146,9 @@ local AttackWaves = Class(function(self,inst)
 
 	self._onplayerleft = function(_,player)
 		if player == nil then return end
-		devprint("ms_playerleft",self.current_victims[player.userid])
+		devprint("ms_playerleft",player, self.current_victims[player.userid])
+		devdumptable(self.current_victims)
 		if self.players[player.userid] ~= nil then
-			if self.current_victims[player.userid] ~= nil then
-				for _,v in ipairs(self.players[player.userid]) do
-					if self.current_victims[player.userid][v] then
-						self.current_victims[player.userid][v]:Remove()
-					end
-				end
-			end
 			self:StopAllAttacks(player)
 		end
 	end
@@ -295,7 +289,7 @@ function AttackWaves:StartAttack(player,attacksize,delta,difficulty,_victim)
 	MakeTables(self,player.userid,_victim)
 	difficulty = difficulty or 1 --difficulty is 1 to 5
 	self.difficulty[player.userid][_victim] = difficulty
-	self.current_victims[player.userid] = victim
+	self.current_victims[player.userid][prefab] = victim
 	local health = victim.components.health
 	if health then
 		health.maxhealth = 200 + 200 * (difficulty-1)
@@ -340,8 +334,8 @@ function AttackWaves:DoAttackWave(player,target,attacksize,delta)
 		if next(current_attacking_creatures[target.prefab]) == nil then
 			player:PushEvent("succesfully_defended")
 			player.components.talker:Say(STRINGS_AW.MISSION_SUCCESS)
-			SpawnPrefab("shadow_puff_large_front").Transform:SetPosition(self.current_victims[player.userid]:GetPosition():Get())
-			self.current_victims[player.userid]:Remove()
+			SpawnPrefab("shadow_puff_large_front").Transform:SetPosition(target:GetPosition():Get())
+			target:Remove()
 			PurgeSavedValues(self,player,target.prefab)
 			return
 		else
@@ -373,6 +367,13 @@ function AttackWaves:StopAttacks(player,victim)
 	local release_spawns = self.release_spawns[player.userid]
 	local current_attacking_creatures = self.current_attacking_creatures[player.userid]
 	devprint("AttackWaves:StopAttacks",player,victim,release_spawns[victim])
+
+	local victim_ent = self.current_victims[player.userid][victim]
+	if victim_ent and victim_ent:IsValid() then
+		victim_ent:Remove()
+		self.current_victims[player.userid][victim] = nil
+	end
+
 	if release_spawns[victim] ~= nil then
 		release_spawns[victim]:Cancel()
 		release_spawns[victim] = nil
@@ -391,6 +392,7 @@ function AttackWaves:StopAttacks(player,victim)
 			creature:Remove()
 		end
 	end
+
 	PurgeSavedValues(self,player,victim)
 end
 
@@ -421,7 +423,7 @@ function AttackWaves:StopAllAttacks(player)
 			end
 		end
 	end]]
-	PurgeSavedValues(self,player)
+	--PurgeSavedValues(self,player)
 end
 
 
