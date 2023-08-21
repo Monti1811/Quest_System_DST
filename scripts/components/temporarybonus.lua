@@ -124,19 +124,38 @@ local function AddRange(inst,amount)
 	end
 end
 
+local cooldowntime = TUNING.SKILLS.WOODIE.GOOSE_DODGE_COOLDOWN_TIME - math.floor(math.max(0,(25 - amount) / 5)) -- Something between 0 and 5, as cooldowntime is 5
+
+--TODO: Test if woodie works correctly
 local function AddDodge(inst,amount)
+	local function OnWerePlayer()
+		inst:DoTaskInTime(3, function()
+			if inst.components.attackdodger == nil then
+				inst:AddComponent("attackdodger")
+			end
+			if inst:IsWeregoose() and inst.components.skilltreeupdater:IsActivated("woodie_curse_goose_3") then
+				inst.components.attackdodger:SetCooldownTime(cooldowntime)
+			else
+				inst.components.attackdodger:SetCooldownTime(amount)
+				inst.components.attackdodger:SetOnDodgeFn(inst.OnDodgeAttack)
+			end
+		end)
+	end
 	local attackdodger = inst.components.attackdodger
 	if attackdodger then
 		if amount < 0 then
-			if inst.prefab == "woodie" and inst:IsWeregoose() and inst.components.skilltreeupdater:IsActivated("woodie_curse_goose_3") then
-				if inst.components.attackdodger == nil then
-					inst:AddComponent("attackdodger")
+			if inst.prefab == "woodie" then
+				inst:RemoveEventCallback("transform_wereplayer", OnWerePlayer)
+				if inst:IsWeregoose() and inst.components.skilltreeupdater:IsActivated("woodie_curse_goose_3") then
+					if inst.components.attackdodger == nil then
+						inst:AddComponent("attackdodger")
+					end
+					inst.components.attackdodger:SetCooldownTime(TUNING.SKILLS.WOODIE.GOOSE_DODGE_COOLDOWN_TIME)
+					inst.components.attackdodger:SetOnDodgeFn(inst.OnDodgeAttack)
+					return
 				end
-				inst.components.attackdodger:SetCooldownTime(TUNING.SKILLS.WOODIE.GOOSE_DODGE_COOLDOWN_TIME)
-				inst.components.attackdodger:SetOnDodgeFn(inst.OnDodgeAttack)
-			else
-				inst:RemoveComponent("attackdodger")
 			end
+			inst:RemoveComponent("attackdodger")
 		else
 			if inst.components.attackdodger == nil then
 				inst:AddComponent("attackdodger")
@@ -147,8 +166,13 @@ local function AddDodge(inst,amount)
 				fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
 				fx.Transform:SetScale(1.3, 1.3, 1.3)
 			end)
+			if inst.prefab == "woodie" then
+				if inst:IsWeregoose() and inst.components.skilltreeupdater:IsActivated("woodie_curse_goose_3") then
+					inst.components.attackdodger:SetCooldownTime(cooldowntime)
+				end
+				inst:ListenForEvent("transform_wereplayer", OnWerePlayer)
+			end
 		end
-		--TODO: if woodie changes wereness during bonus, it will dissappear
 	end
 end
 
