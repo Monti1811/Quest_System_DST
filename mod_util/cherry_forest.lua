@@ -20,6 +20,7 @@ local prefabs = {
 	"chaffinch",
 	"cherry_beequeen",
 	"cherry_beeguard",
+	"cherry_watcher",
 	--"squittle", --WIP
 }
 
@@ -61,6 +62,10 @@ local bosses = {
 
 	},
 
+	MEDIUM = {
+		{name = "cherry_watcher", health = 3500, damage = 150, scale = 1.6},
+	},
+
 	DIFFICULT = {
 
 		{name = "cherry_beequeen", health = 6000, damage = 200, scale = 1.7, fn = cherry_beequeen},
@@ -74,7 +79,7 @@ for diff,boss in pairs(bosses) do
 	end
 end
 
-local item_list = {"armorcherry","cherry","cherry_double","cherry_beesmoker","cherry_beesmokerfuel","cherry_boomerang","blowdart_cherryroyal","blowdart_cherryrandom","cherry_butterfly","cherry_dragonfly","cherry_fireflies","cherry_honey","cherry_nesthat","cherry_watcherlantern","cherryamulet","cherryaxe","cherrygem","cheerfulgem","cherryhat","cherrymooneye","cherrystaff","feather_catbird","feather_chaffinch","cherryupgrade_friendpit_item",}
+local item_list = {"armor_cherry","cherry","cherry_double","cherry_beesmoker","cherry_beesmokerfuel","cherry_boomerang","blowdart_cherryroyal","blowdart_cherryrandom","cherry_butterfly","cherry_dragonfly","cherry_fireflies","cherry_honey","cherry_nesthat","cherry_watcherlantern","cherryamulet","cherryaxe","cherrygem","cheerfulgem","cherryhat","cherrymooneye","cherrystaff","feather_catbird","feather_chaffinch","cherryupgrade_friendpit_item","cherryvest","cherryscepter","cherry_pacifier"}
 
 
 AddSimPostInit(function()
@@ -96,4 +101,10 @@ AddSimPostInit(function()
 		table.insert(item_list,k)
 	end
 	GLOBAL.AddCustomRewards(item_list)
+
+	local quests = {
+
+	}
+
+	--GLOBAL.AddQuests(quests)
 end)

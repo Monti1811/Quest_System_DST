@@ -160,6 +160,7 @@ local function RemoveQuest(tab,quest_name)
 	for k,v in ipairs(tab) do
 		if v.name == quest_name then
 			table.remove(tab,k)
+			break
 		end
 	end
 end

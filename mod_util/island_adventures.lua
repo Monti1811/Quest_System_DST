@@ -99,17 +99,14 @@ local item_list = {"antivenom","blubber","bioluminescence","boat_lantern","boat_
 
 
 local function RemoveQuest(tab,quest_name)
-    devprint("RemoveQuest",tab,quest_name)
     for k,v in ipairs(tab) do
         if v.name == quest_name then
             table.remove(tab,k)
+            break
         end
     end
 end
 
-local function GetKillString(victim,amount)
-    return GLOBAL.STRINGS.QUEST_COMPONENT.QUEST_LOG.KILL.." "..(amount or 1).." "..(GLOBAL.STRINGS.NAMES[string.upper(victim)] or "Error")
-end
 
 AddSimPostInit(function()
     for _, v in ipairs(prefabs) do
@@ -121,14 +118,31 @@ AddSimPostInit(function()
             table.insert(goals,goal)
         end
     end
-    GLOBAL.AddCustomGoals(goals,"IslandAdventures")
+    AddCustomGoals(goals,"IslandAdventures")
     for k in pairs(GLOBAL.IA_PREPAREDFOODS) do
         table.insert(item_list,k)
     end
 
-    GLOBAL.AddCustomRewards(item_list)
+    AddCustomRewards(item_list)
 
-    local quests = {}
+    local quests = {
+        --1
+        {
+            name = "Sharknado",
+            victim = "tigershark",
+            counter_name = nil,
+            description = GetQuestString("Sharknado","DESCRIPTION"),
+            amount = 1,
+            rewards = {[":func:planardamage;10"] = 16,armorobsidian = 1,magic_seal = 1},
+            points = 2000,
+            start_fn = nil,
+            onfinished = nil,
+            difficulty = 5,
+            tex = "tigershark.tex",
+            atlas = "images/victims_island_adventures.xml",
+            hovertext = GetKillString("tigershark",1),
+        },
+    }
 
     AddQuests(quests)
 end)

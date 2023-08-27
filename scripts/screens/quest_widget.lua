@@ -329,13 +329,15 @@ local Quest_Widget = Class(Screen, function(self, inst)
 
   self.max_amount_of_quests = self.ownerofscreen.replica.quest_component and self.ownerofscreen.replica.quest_component._max_amount_of_quests:value() or 10
 
-  self.black = self:AddChild(Image("images/global.xml", "square.tex"))
-  self.black:SetVRegPoint(ANCHOR_MIDDLE)
-  self.black:SetHRegPoint(ANCHOR_MIDDLE)
-  self.black:SetVAnchor(ANCHOR_MIDDLE)
-  self.black:SetHAnchor(ANCHOR_MIDDLE)
-  self.black:SetScaleMode(SCALEMODE_FILLSCREEN)
-  self.black:SetTint(0, 0, 0, .5)
+  self.black = self:AddChild(ImageButton("images/global.xml", "square.tex"))
+  self.black.image:SetVRegPoint(ANCHOR_MIDDLE)
+  self.black.image:SetHRegPoint(ANCHOR_MIDDLE)
+  self.black.image:SetVAnchor(ANCHOR_MIDDLE)
+  self.black.image:SetHAnchor(ANCHOR_MIDDLE)
+  self.black.image:SetScaleMode(SCALEMODE_FILLSCREEN)
+  self.black.image:SetTint(0, 0, 0, .5)
+  self.black:SetOnClick(function() TheFrontEnd:PopScreen() end)
+  self.black:SetHelpTextMessage("")
 
   self.proot = self:AddChild(Widget("ROOT"))
   self.proot:SetVAnchor(ANCHOR_MIDDLE)

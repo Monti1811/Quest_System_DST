@@ -124,10 +124,10 @@ local function AddRange(inst,amount)
 	end
 end
 
-local cooldowntime = TUNING.SKILLS.WOODIE.GOOSE_DODGE_COOLDOWN_TIME - math.floor(math.max(0,(25 - amount) / 5)) -- Something between 0 and 5, as cooldowntime is 5
 
 --TODO: Test if woodie works correctly
 local function AddDodge(inst,amount)
+	local cooldowntime = TUNING.SKILLS.WOODIE.GOOSE_DODGE_COOLDOWN_TIME - math.floor(math.max(0,(25 - amount) / 5)) -- Something between 0 and 5, as cooldowntime is 5
 	local function OnWerePlayer()
 		inst:DoTaskInTime(3, function()
 			if inst.components.attackdodger == nil then
