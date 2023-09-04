@@ -1,6 +1,7 @@
+GLOBAL.SetQuestSystemEnv()
+
 local name = GLOBAL.KnownModIndex:GetModActualName("󰀕 Uncompromising Mode")
-local GetQuestString = GLOBAL.GetQuestString
-local CUSTOM_QUEST_FUNCTIONS = GLOBAL.TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS
+local custom_functions = GLOBAL.TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS
 
 local goals = {}
 
@@ -80,7 +81,7 @@ end
 
 for diff,boss in pairs(bosses) do
 	for _,data in ipairs(boss) do
-		GLOBAL.AddBosses(data,diff)
+		AddBosses(data,diff)
 	end
 end
 
@@ -165,10 +166,6 @@ local function RemoveQuest(tab,quest_name)
 	end
 end
 
-local function GetKillString(victim,amount)
-	return GLOBAL.STRINGS.QUEST_COMPONENT.QUEST_LOG.KILL.." "..(amount or 1).." "..(GLOBAL.STRINGS.NAMES[string.upper(victim)] or "Error")
-end
-
 AddSimPostInit(function()
 	for k,v in ipairs(prefabs) do
 		if type(v) == "table" then
@@ -179,8 +176,8 @@ AddSimPostInit(function()
 			table.insert(goals,goal)
 		end
 	end
-	GLOBAL.AddCustomGoals(goals,"UncompromisingMode")
-	GLOBAL.AddCustomRewards(item_list)
+	AddCustomGoals(goals,"UncompromisingMode")
+	AddCustomRewards(item_list)
 	
 	local quests = {
 		--1
@@ -228,7 +225,7 @@ AddSimPostInit(function()
 				local function IsMonsterMeat(_, data)
 					return data.food:HasTag("monstermeat")
 				end
-				CUSTOM_QUEST_FUNCTIONS["feed x y times"](inst, amount, quest_name, "birdcage", nil, IsMonsterMeat)
+				custom_functions["feed x y times"](inst, amount, quest_name, "birdcage", nil, IsMonsterMeat)
 			end,
 			onfinished = nil,
 			difficulty = 2,
@@ -262,7 +259,7 @@ AddSimPostInit(function()
 			rewards = {[":func:planardefense;5"] = 16,um_bear_trap_equippable_gold = 1,},
 			points = 125,
 			start_fn = function(inst, amount, quest_name)
-				CUSTOM_QUEST_FUNCTIONS["craft x y times"](inst, amount, {floral_bandage = true}, nil, quest_name)
+				custom_functions["craft x y times"](inst, amount, {floral_bandage = true}, nil, quest_name)
 			end,
 			onfinished = nil,
 			difficulty = 1,
@@ -287,7 +284,7 @@ AddSimPostInit(function()
 						end
 					end)
 				end
-				CUSTOM_QUEST_FUNCTIONS["cast spell x y times"](inst, amount, quest_name, {rain_horn = true}, nil, nil, IsRaining)
+				custom_functions["cast spell x y times"](inst, amount, quest_name, {rain_horn = true}, nil, nil, IsRaining)
 			end,
 			onfinished = nil,
 			difficulty = 4,
@@ -305,7 +302,7 @@ AddSimPostInit(function()
 			rewards = {snowgoggles = 1, plaguemask = 1, [":func:escapedeath;1"] = 16,},
 			points = 600,
 			start_fn = function(inst, amount, quest_name)
-				CUSTOM_QUEST_FUNCTIONS["survive x days"](inst, amount, quest_name, true)
+				custom_functions["survive x days"](inst, amount, quest_name, true)
 			end,
 			onfinished = nil,
 			difficulty = 3,
@@ -318,5 +315,6 @@ AddSimPostInit(function()
 		RemoveQuest(quests,"The Mad Adventurer")
 	end
 
-	GLOBAL.AddQuests(quests)
+	AddQuests(quests, "Uncompromising Mode")
+	RegisterQuestModIcon("Uncompromising Mode", "images/UM_TT.xml", "UM_TT.tex")
 end)

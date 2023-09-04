@@ -1,3 +1,5 @@
+GLOBAL.SetQuestSystemEnv()
+
 local goals = {}
 
 local function AddPrefabToGoals(prefab,atlas,tex,name)
@@ -75,7 +77,7 @@ local bosses = {
 
 for diff,boss in pairs(bosses) do
 	for _,data in ipairs(boss) do
-		GLOBAL.AddBosses(data,diff)
+		AddBosses(data,diff)
 	end
 end
 
@@ -83,7 +85,7 @@ local item_list = {"armor_cherry","cherry","cherry_double","cherry_beesmoker","c
 
 
 AddSimPostInit(function()
-	for k,v in ipairs(prefabs) do
+	for _,v in ipairs(prefabs) do
 		if type(v) == "table" then
 			local goal = AddPrefabToGoals(v.prefab,v.atlas,v.tex,v.name)
 			table.insert(goals,goal)
@@ -92,19 +94,53 @@ AddSimPostInit(function()
 			table.insert(goals,goal)
 		end
 	end
-	GLOBAL.AddCustomGoals(goals,"Cherry Forest")
-	for k,v in pairs(require("cherry_preparedfoods")) do
+	AddCustomGoals(goals,"Cherry Forest")
+	for k in pairs(require("cherry_preparedfoods")) do
 		table.insert(item_list,k)
 	end
 
-	for k,v in pairs(require("cherry_preparedfoods_warly")) do
+	for k in pairs(require("cherry_preparedfoods_warly")) do
 		table.insert(item_list,k)
 	end
-	GLOBAL.AddCustomRewards(item_list)
+	AddCustomRewards(item_list)
 
 	local quests = {
-
+		--1
+		{
+			name = "Watch This!",
+			victim = "cherry_watcher",
+			counter_name = nil,
+			description = GetQuestString("Watch This!","DESCRIPTION"),
+			amount = 1,
+			rewards = {[":func:planardamage;10"] = 16,armor_cherry = 1},
+			points = 500,
+			start_fn = nil,
+			onfinished = nil,
+			difficulty = 3,
+			tex = "cherry_watcher.tex",
+			atlas = "images/victims_cherry_forest.xml",
+			hovertext = GetKillString("cherry_watcher",1),
+		},
+		--2
+		{
+			name = "Mutated Queen",
+			victim = "cherry_beequeen",
+			counter_name = nil,
+			description = GetQuestString("Mutated Queen","DESCRIPTION"),
+			amount = 1,
+			rewards = {[":func:planardamage;10"] = 16,armor_cherry = 1},
+			points = 2500,
+			start_fn = nil,
+			onfinished = nil,
+			difficulty = 5,
+			tex = "cherry_beequeen.tex",
+			atlas = "images/victims_cherry_forest.xml",
+			hovertext = GetKillString("cherry_beequeen",1),
+		},
 	}
 
-	--GLOBAL.AddQuests(quests)
+	AddQuests(quests, "Cherry Forest")
+
+	RegisterQuestModIcon("Cherry Forest", "images/cherryimages.xml", "cherryling.tex")
+
 end)

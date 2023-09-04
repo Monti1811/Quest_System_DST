@@ -272,16 +272,22 @@ function GLOBAL.ImportOwnQuests(name,on_start)
 	end	
 end
 
-function GLOBAL.AddQuests(table)
+function GLOBAL.AddQuests(table, modname)
 	print("[Quest System] Adding quests!")
 	if table and type(table) == "table" then
 		for _,v in pairs(table) do
+			v.modname = modname
 			LoadQuest(v.name,v)
 		end
 	else
 		print("[Quest System] AddQuests: Wrong arguments passed, quests needs to be a table that can be sorted by pairs!")
 		print(table)
 	end
+end
+
+function GLOBAL.RegisterQuestModIcon(modname, atlas, tex)
+	devprint("RegisterQuestModIcon", modname, atlas, tex)
+	QUEST_COMPONENT.MOD_ICONS[modname] = {atlas = atlas, tex = tex}
 end
 
 function GLOBAL.SetLevelRewards(tab,level)
@@ -500,6 +506,7 @@ function GLOBAL.SetQuestSystemEnv(env)
 	env.ExportOwnQuests = GLOBAL.ExportOwnQuests
 	env.ImportOwnQuests = GLOBAL.ImportOwnQuests
 	env.AddQuests = GLOBAL.AddQuests
+	env.RegisterQuestModIcon = GLOBAL.RegisterQuestModIcon
 	env.SetLevelRewards = GLOBAL.SetLevelRewards
 	env.AddBosses = GLOBAL.AddBosses
 	env.SetBossFightRewards = GLOBAL.SetBossFightRewards
