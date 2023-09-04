@@ -249,20 +249,24 @@ function Quest_Component:AddQuest(name,debug)
 	devdumptable(new_quest)
 	self.quests[name] = new_quest
 	if quest.start_fn and QUEST_COMPONENT.DEBUG ~= 1 then
-		if type(quest.start_fn) == "string" then
-			local fn = string.gsub(quest.start_fn,"start_fn_","")
-			local T_fn = QUEST_BOARD.PREFABS_MOBS[fn]
-			devprint(fn, T_fn)
-			if T_fn ~= nil then
-				T_fn.fn(self.inst,new_quest.amount,new_quest.name)
+		--Delay it by a frame so that quests that are directly completed are still
+		--shown correctly completed on the client
+		self.inst:DoTaskInTime(0, function()
+			if type(quest.start_fn) == "string" then
+				local fn = string.gsub(quest.start_fn,"start_fn_","")
+				local T_fn = QUEST_BOARD.PREFABS_MOBS[fn]
+				devprint(fn, T_fn)
+				if T_fn ~= nil then
+					T_fn.fn(self.inst,new_quest.amount,new_quest.name)
+				else
+					print("[Quest System] Something broke, the start_fn doesn't exist anymore. Did you disable a mod that added more options to quest making?",name,quest.start_fn)
+				end
+			elseif type(quest.start_fn) == "function" then
+				quest.start_fn(self.inst,new_quest.amount,new_quest.name)
 			else
-				print("[Quest System] Something broke, the start_fn doesn't exist anymore. Did you disable a mod that added more options to quest making?",name,quest.start_fn)
+				print("[Quest System] Something broke, the start_fn is not the correct type anymore. start_fn:",quest.start_fn)
 			end
-		elseif type(quest.start_fn) == "function" then
-			quest.start_fn(self.inst,new_quest.amount,new_quest.name)
-		else
-			print("[Quest System] Something broke, the start_fn is not the correct type anymore. start_fn:",quest.start_fn)
-		end
+		end)
 	end
 	devprint("name of quest",new_quest.name)
 	local data = json.encode({name = name, custom_vars = new_quest.custom_vars})

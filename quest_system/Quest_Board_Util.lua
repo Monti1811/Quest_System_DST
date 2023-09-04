@@ -602,7 +602,7 @@ local custom_functions = {
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
 
-	["do work type z for x amount of y"] = function(player,worktype,workable,how_many,quest_name)
+	["do work type z for x amount of y"] = function(player,worktype,workable,how_many,quest_name, bool)
 		local amount = GetCurrentAmount(player,quest_name)
 		workable = type(workable) == "string" and {[workable] = true} or workable
 		local ListenForEventFinishedWork
@@ -617,7 +617,9 @@ local custom_functions = {
 			local action = data.target.components.workable and data.target.components.workable.action
 			if worktype == nil or action == worktype then
 				if workable == nil or workable[data.target.prefab] then
-					UpdateQuest()
+					if bool == nil or bool(data.target) then
+						UpdateQuest()
+					end
 				end
 			end
 		end

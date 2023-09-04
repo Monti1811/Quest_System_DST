@@ -1055,6 +1055,26 @@ return {
 			COUNTER = "Überlebte Tage",
 			HOVER = "Überlebe %s Tage auf einmal",
 		},
+		["Watch This!"] = {
+			NAME = "Achtung!",
+			DESCRIPTION = "Ich habe vielleicht ein paar Edelsteine im Kirschenwald gestohlen, und jetzt greifen mich die Wächter an, sobald sie mich sehen! Aber ich möchte wirklich herumwandern, also töte bitte einen von ihnen!",
+		},
+		["Mutated Queen"] = {
+			NAME = "Mutierte Königin",
+			DESCRIPTION = "Die Bienenkönigin hat ihren Verstand verloren! Es scheint, als hätte der Kirschenwald eine Mutation hervorgebracht, die sie giftig und tödlich macht! Ich brauche jemanden, der mir hilft, sie loszuwerden!",
+		},
+		["A Reputable Person"] = {
+			NAME = "Eine seriöse Person",
+			DESCRIPTION = "Der Kirschenwald und seine Bewohner beobachten dich immer... Mach einen falschen Schritt und dein Ansehen wird sinken! Zeigen Sie mir, dass Sie Ihr Ansehen auf die erforderliche Zahl steigern können!",
+			COUNTER = "Reputation",
+			HOVER = "Reichweite %s Ruf des Waldes",
+		},
+		["It's Bugging Me!"] = {
+			NAME = "Das nervt mich!",
+			DESCRIPTION = "Es ärgert mich, dass ich im Kirschenwald keinen einzigen Käfer fangen kann! Jedes Mal, wenn ich glaube, einen gefangen zu haben, rennt oder fliegt er schon wieder weg... Wenn ihr mir helfen könnt, ein paar Käfer zu fangen, wäre ich euch sehr dankbar!",
+			COUNTER = "Gefangene Wanzen",
+			HOVER = "Fangen Sie %s Käfer mit einem Netz",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Bleibe für x Sekunden auf einmal bei über 90% Sanity!",

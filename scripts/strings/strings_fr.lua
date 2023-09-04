@@ -1058,6 +1058,26 @@ return {
 			COUNTER = "Jours de survie",
 			HOVER = "Survivre à %s jours en une seule fois",
 		},
+		["Watch This!"] = {
+			NAME = "Regardez ça !",
+			DESCRIPTION = "J'ai peut-être volé des pierres précieuses dans la Forêt des cerises et voilà que les Veilleurs m'attaquent à vue ! Mais j'ai vraiment envie de me promener, alors s'il vous plaît, tuez l'un d'entre eux !",
+		},
+		["Mutated Queen"] = {
+			NAME = "Reine mutante",
+			DESCRIPTION = "La reine des abeilles a perdu la tête ! On dirait que la Forêt des cerises a provoqué une mutation qui l'a rendue vénéneuse et mortelle ! J'ai besoin de quelqu'un pour m'aider à me débarrasser d'elle !",
+		},
+		["A Reputable Person"] = {
+			NAME = "Une personne de bonne réputation",
+			DESCRIPTION = "La Forêt des Cerisiers et ses habitants vous observent en permanence... Faites un faux pas et votre réputation diminuera ! Montrez-moi que vous pouvez augmenter votre réputation jusqu'au nombre nécessaire !",
+			COUNTER = "Réputation",
+			HOVER = "Reach %s Réputation de la forêt",
+		},
+		["It's Bugging Me!"] = {
+			NAME = "Ça m'énerve !",
+			DESCRIPTION = "Cela m'énerve de ne pouvoir attraper aucun insecte dans la Forêt des cerises ! Chaque fois que je pense en avoir attrapé un, il s'enfuit ou s'envole... Si vous pouviez m'aider à attraper quelques insectes, je vous en serais très reconnaissant !",
+			COUNTER = "Insectes capturés",
+			HOVER = "Attraper %s insectes avec un filet",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Rester à plus de 90 % de santé mentale pendant x secondes en une seule fois !",

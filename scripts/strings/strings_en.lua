@@ -1610,5 +1610,37 @@ return {
 
 		},
 
+		--Cherry Forest Strings
+
+		["Watch This!"] = {
+
+			NAME = "Watch This!",
+			DESCRIPTION = "I may have stolen some gems in the Cherry Forest and now the Watchers attack me on sight! But I really want to wander around, so please kill one of them!",
+
+		},
+
+		["Mutated Queen"] = {
+
+			NAME = "Mutated Queen",
+			DESCRIPTION = "The Bee Queen has lost her mind! It seems like the Cherry Forest brought out some mutation that made poisonous and deadly! I need someone to help me get rid of her!",
+
+		},
+
+		["A Reputable Person"] = {
+
+			NAME = "A Reputable Person",
+			DESCRIPTION = "The Cherry Forest and its residents are always watching you... Make a wrong step and your reputation will decrease! Show me that you can increase your reputation to the needed number!",
+			COUNTER = "Reputation",
+			HOVER = "Reach %s Forest Reputation",
+		},
+
+		["It's Bugging Me!"] = {
+
+			NAME = "It's Bugging Me!",
+			DESCRIPTION = "It's bugging me that I can't seem to catch any bug in the Cherry Forest! Each time I think I caught one, it's already running or flying away... If you can help me to catch some bugs I would be very grateful!",
+			COUNTER = "Bugs caught",
+			HOVER = "Catch %s bugs with a net",
+		},
+
 	},
 }

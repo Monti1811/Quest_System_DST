@@ -1057,6 +1057,26 @@ return {
 			COUNTER = "Días de supervivencia",
 			HOVER = "Sobrevivir %s días a la vez",
 		},
+		["Watch This!"] = {
+			NAME = "¡Mira esto!",
+			DESCRIPTION = "He robado algunas gemas en el Bosque de los Cerezos y ahora los Vigilantes me atacan nada más verme. Pero tengo muchas ganas de pasear, ¡así que por favor mata a uno de ellos!",
+		},
+		["Mutated Queen"] = {
+			NAME = "Reina mutante",
+			DESCRIPTION = "¡La Reina Abeja ha perdido la cabeza! ¡Parece que el Bosque de los Cerezos ha provocado una mutación que la ha vuelto venenosa y mortal! ¡Necesito que alguien me ayude a deshacerme de ella!",
+		},
+		["A Reputable Person"] = {
+			NAME = "Una persona reputada",
+			DESCRIPTION = "El Bosque de los Cerezos y sus habitantes siempre te vigilan... ¡Da un paso en falso y tu reputación disminuirá! ¡Demuéstrame que puedes aumentar tu reputación hasta el número necesario!",
+			COUNTER = "Reputación",
+			HOVER = "Alcance %s Reputación forestal",
+		},
+		["It's Bugging Me!"] = {
+			NAME = "Me está molestando",
+			DESCRIPTION = "Me molesta no poder atrapar ningún bicho en el bosque de cerezos. Cada vez que creo que he cazado uno, ya está huyendo o volando... Si puedes ayudarme a atrapar algún bicho, ¡te lo agradecería mucho!",
+			COUNTER = "Insectos capturados",
+			HOVER = "Atrapar %s bichos con una red",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Mantente por encima del 90% de cordura durante x segundos a la vez.",
