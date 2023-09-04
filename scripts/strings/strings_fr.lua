@@ -824,7 +824,7 @@ return {
 		["The Attacker"] = {
 			NAME = "L'attaquant",
 			COUNTER = "Dommages infligés",
-			HOVER = "inflige %s de dégâts dans un délai de 30 secondes",
+			HOVER = "Inflige %s de dégâts dans un délai de 30 secondes",
 			DESCRIPTION = "Le membre le plus important d'un groupe est l'attaquant. Montrez-moi que vous êtes capable de fournir la puissance d'attaque nécessaire pour valoir la peine d'être défendu en infligeant des % en 30 secondes !",
 		},
 		["The Defender"] = {
@@ -889,7 +889,7 @@ return {
 			NAME = "Le cauchemar des brouteurs",
 			DESCRIPTION = "Les brouteurs semblent protéger les ryftals, mais j'ai vraiment besoin de les étudier sans qu'ils me dérangent ! Que quelqu'un m'aide en leur infligeant %s de dégâts !",
 			COUNTER = "Dommages infligés",
-			HOVER = "inflige %s de dégâts aux brouteurs",
+			HOVER = "Inflige %s de dégâts aux brouteurs",
 		},
 		["Closest To Oneself"] = {
 			NAME = "Au plus près de soi",
@@ -1001,7 +1001,7 @@ return {
 			NAME = "The Archive Guardian",
 			DESCRIPTION = "Les Archives anciennes sont pleines de Sentinelles anciennes et elles ne veulent vraiment pas me laisser faire mes recherches en paix ! Aide-moi à les tenir à distance avec tes attaques en leur infligeant %s de dégâts !",
 			COUNTER = "Dommages",
-			HOVER = "inflige %s de dégâts aux Sentinelles anciennes",
+			HOVER = "Inflige %s de dégâts aux Sentinelles anciennes",
 		},
 		["Helmet Compulsory"] = {
 			NAME = "Casque obligatoire",
@@ -1029,9 +1029,9 @@ return {
 		},
 		["The Monster Breeder"] = {
 			NAME = "L'éleveur de monstres",
-			DESCRIPTION = "Certaines personnes que je connais m'ont dit que les oiseaux pondent maintenant des œufs monstrueux s'ils sont nourris avec de la viande monstrueuse. J'ai vraiment envie de voir quel genre de créature va éclore à partir de ces œufs, j'ai besoin que vous en créiez des % !",
+			DESCRIPTION = "Certaines personnes que je connais m'ont dit que les oiseaux pondent maintenant des œufs monstrueux s'ils sont nourris avec de la viande monstrueuse. J'ai vraiment envie de voir quel genre de créature va éclore à partir de ces œufs, j'ai besoin que vous en créiez %s !",
 			COUNTER = "Œufs de monstres",
-			HOVER = "Produire % d'œufs de monstres avec des oiseaux en cage",
+			HOVER = "Produire %s d'œufs de monstres avec des oiseaux en cage",
 		},
 		["The Ancient Curse"] = {
 			NAME = "L'ancienne malédiction",
