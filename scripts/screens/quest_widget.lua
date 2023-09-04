@@ -121,6 +121,26 @@ local function createQuestCard(self,quest, x, y, scale, num)
       self["quest_"..num].quest_line2:SetHoverText(STRINGS_QL.QUEST_LINE)
     end
 
+    if quest.modname then
+        local mod_picture = TUNING.QUEST_COMPONENT.MOD_ICONS[quest.modname]
+        if mod_picture then
+
+            self["quest_"..num].quest_mod_picture = self["quest__"..num]:AddChild(Image(mod_picture.atlas, mod_picture.tex))
+            self["quest_"..num].quest_mod_picture:SetPosition(x-75, y+185)
+            --self["quest_"..num].quest_mod_picture:SetTint(1,1,1,0.3)
+            self["quest_"..num].quest_mod_picture:ScaleToSize(20, 20)
+            self["quest_"..num].quest_mod_picture:SetHoverText(quest.modname)
+
+            --For entire background
+            --[[self["quest_"..num].quest_mod_picture = self["quest__"..num]:AddChild(Image(mod_picture.atlas, mod_picture.tex))
+            self["quest_"..num].quest_mod_picture:SetPosition(x+0.5, y+125)
+            self["quest_"..num].quest_mod_picture:SetTint(1,1,1,0.3)
+            self["quest_"..num].quest_mod_picture:ScaleToSize(173, 147)
+            self["quest_"..num].quest_mod_picture:SetHoverText(quest.modname)]]
+
+        end
+    end
+
     self["quest_"..num].difficulty = {}
     local difficulty = quest.difficulty and quest.difficulty < 6 and quest.difficulty > 0 and quest.difficulty or 1
     for count = 1,difficulty do
@@ -223,15 +243,14 @@ local function createQuestCard(self,quest, x, y, scale, num)
             end
         end
 
-        local x1, y1, x2, y2 = creature:GetAnimState():GetVisualBB()
-        devprint("VisualBB", x1, y1, x2, y2)
         local ACTUAL_X = 120
         local ACTUAL_Y = 75
         local ax,ay = creature:GetBoundingBoxSize()
         devprint("BoundingBoxSize", ax,ay)
 
         local SCALE = ACTUAL_X/ax
-        SCALE = SCALE*(data.scrapbook_scale or 1)
+        local has_custom_values = TUNING.QUEST_COMPONENT.CUSTOM_SCALES[data.prefab]
+        local has_custom_scale = has_custom_values and has_custom_values.scale
 
         if ay*SCALE >= ACTUAL_Y then
             SCALE = ACTUAL_Y/ay
@@ -239,6 +258,8 @@ local function createQuestCard(self,quest, x, y, scale, num)
         else
             ACTUAL_Y = ay*SCALE
         end
+        SCALE = SCALE * (has_custom_scale or data.scrapbook_scale or 1)
+        devprint("custom scales", data.prefab, has_custom_scale, SCALE, data.scrapbook_scale)
         creature:GetAnimState():PlayAnimation(data.anim, true)
         --creature:SetClickable(false)
         if data and data.overridesymbol then
@@ -251,16 +272,26 @@ local function createQuestCard(self,quest, x, y, scale, num)
             end
         end
 
-        local offsety = ACTUAL_Y/2 -(y2*SCALE)
-        local offsetx = ACTUAL_X/2 -(x2*SCALE)
+        local extraoffsetx = (has_custom_values and has_custom_values.x) or (data and data.animoffsetx and data.animoffsetx) or 0
+        local extraoffsety = (has_custom_values and has_custom_values.y) or (data and data.animoffsety and data.animoffsety) or 0
 
-        local posx =(offsetx+0) * (data and data.scrapbook_scale or 1)
-        local posy =(-offsety-75) * (data and data.scrapbook_scale or 1)
+        --local posx = (offsetx+0+extraoffsetx) * (data.scrapbook_scale or has_custom_scale or 1)
+        --local posy = (-offsety-75+extraoffsety) * (data.scrapbook_scale or has_custom_scale or 1)
 
         devprint("scale image", quest.victim, SCALE, ax, ay, ax * SCALE, ay * SCALE)
         creature:SetScale(SCALE)
+        ax,ay = creature:GetBoundingBoxSize()
+        local x1, y1, x2, y2 = creature:GetAnimState():GetVisualBB()
+        devprint("VisualBB", x1, y1, x2, y2)
+        local posx = 0 + (x1+x2) * SCALE/2 + extraoffsetx * SCALE --+ ax/2
+        local posy = -75 + (y1+y2)* SCALE/2 + extraoffsety * SCALE  --+ ay/2
+
         creature:SetPosition(x+ posx,y + posy)
+
+        --creature:SetFacing(FACING_DOWN)
+        devprint("scaled boundingbox", creature:GetBoundingBoxSize())
         devprint("pos",posx, posy, x+ posx,y + posy)
+
     else
         target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml")
         target_atlas = target_atlas ~= nil and softresolvefilepath(target_atlas) ~= nil and target_atlas or "images/avatars.xml"

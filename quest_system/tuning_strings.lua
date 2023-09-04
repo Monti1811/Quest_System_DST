@@ -199,6 +199,22 @@ QUEST_COMPONENT.OWN_QUESTS2 = {}
 
 QUEST_COMPONENT.CAN_CREATE_CUSTOM_QUESTS = {}
 
+-- Icons to see which quest is from which mod
+QUEST_COMPONENT.MOD_ICONS = {}
+
+-- Custom scales for creatures that are shown in the quest log and quest board
+QUEST_COMPONENT.CUSTOM_SCALES = {}
+QUEST_COMPONENT.CUSTOM_SCALES.cherry_watcher = {scale = 1.6,x = 25, y = 0}
+QUEST_COMPONENT.CUSTOM_SCALES.hutch = {scale = 3,x = -120, y = -100}
+QUEST_COMPONENT.CUSTOM_SCALES.lunar_grazer = {scale = 1,x = 0, y = -200}
+QUEST_COMPONENT.CUSTOM_SCALES.lightflier = {scale = 1,x = -35, y = 0}
+QUEST_COMPONENT.CUSTOM_SCALES.daywalker = {scale = 1,x = -100, y = 0}
+QUEST_COMPONENT.CUSTOM_SCALES.minotaur = {scale = 1,x = -100, y = 0}
+QUEST_COMPONENT.CUSTOM_SCALES.mosquito = {scale = 1,x = 50, y = 0}
+QUEST_COMPONENT.CUSTOM_SCALES.tentacle = {scale = 1,x = 50, y = -75}
+QUEST_COMPONENT.CUSTOM_SCALES.walrus = {scale = 1,x = -50, y = 0}
+QUEST_COMPONENT.CUSTOM_SCALES.bat = {scale = 0.9,x = 80, y = -20}
+
 ---------------------------------------------------------------------------------------------------------------
 
 QUEST_COMPONENT.CalculatePoints = function(level,points)

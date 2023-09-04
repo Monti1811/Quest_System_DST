@@ -318,6 +318,19 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
     self.__show_quest_divider:SetPosition(0, 225)
     self.__show_quest_divider:SetScale(0.5,1)
 
+    if quest.modname then
+        local mod_picture = TUNING.QUEST_COMPONENT.MOD_ICONS[quest.modname]
+        if mod_picture then
+            devprint("adding mod picture", mod_picture.atlas, mod_picture.tex)
+            self.quest_mod_picture = self.show_quest:AddChild(Image(mod_picture.atlas, mod_picture.tex))
+            self.quest_mod_picture:SetPosition(-300, 290)
+            --self["quest_"..num].quest_mod_picture:SetTint(1,1,1,0.3)
+            self.quest_mod_picture:ScaleToSize(50, 50)
+            self.quest_mod_picture:SetHoverText(quest.modname)
+
+        end
+    end
+
     if quest.quest_line then
       self.quest_line = self.show_quest:AddChild(Image("images/hud.xml","tab_researchable_off.tex"))
       self.quest_line:SetPosition(-310,225)
@@ -390,7 +403,11 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
         local creature = self.__show_quest2.image
         creature:GetAnimState():SetBank(data.bank)
         creature:GetAnimState():SetBuild(data.build)
-        creature:GetAnimState():PlayAnimation(data.anim, true)
+        if data.scrapbook_setanim then
+            creature:GetAnimState():SetPercent(data.anim,data.scrapbook_setanim)
+        else
+            creature:GetAnimState():SetPercent(data.anim,rand())
+        end
         if data.scrapbook_overridebuild then
             creature:GetAnimState():AddOverrideBuild(data.scrapbook_overridebuild)
         end
@@ -401,14 +418,15 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
             end
         end
 
-        local x1, y1, x2, y2 = creature:GetAnimState():GetVisualBB()
         local ACTUAL_X = 115
         local ACTUAL_Y = 130
         local ax,ay = creature:GetBoundingBoxSize()
-
+        devprint("BoundingBoxSize", ax,ay)
+        local has_custom_values = TUNING.QUEST_COMPONENT.CUSTOM_SCALES[data.prefab]
+        local has_custom_scale = has_custom_values and has_custom_values.scale
         local SCALE = ACTUAL_X/ax
-        SCALE = SCALE*(data.scrapbook_scale or 1)
 
+        devprint("x and y * SCALE", ax*SCALE, ay*SCALE)
         if ay*SCALE >= ACTUAL_Y then
             SCALE = ACTUAL_Y/ay
             ACTUAL_X = ax*SCALE
@@ -416,8 +434,14 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
             ACTUAL_Y = ay*SCALE
         end
 
+        devprint("actual x and y", ACTUAL_X, ACTUAL_Y)
+
+        SCALE = SCALE * (has_custom_scale or data.scrapbook_scale or 1)
+        devprint("custom scales", data.prefab, has_custom_scale, SCALE, data.scrapbook_scale)
+
         --creature:SetClickable(false)
 
+        creature:GetAnimState():PlayAnimation(data.anim, true)
         if data and data.overridesymbol then
             if type(data.overridesymbol[1]) ~= "table" then
                 creature:GetAnimState():OverrideSymbol(data.overridesymbol[1], data.overridesymbol[2], data.overridesymbol[3])
@@ -428,14 +452,21 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
             end
         end
 
-        local offsety = ACTUAL_Y/2 -(y2*SCALE)
-        local offsetx = ACTUAL_X/2 -(x2*SCALE)
+        local extraoffsetx = (has_custom_values and has_custom_values.x) or (data and data.animoffsetx and data.animoffsetx) or 0
+        local extraoffsety = (has_custom_values and has_custom_values.y) or (data and data.animoffsety and data.animoffsety) or 0
 
-        local posx =(offsetx+0) * (data and data.scrapbook_scale or 1)
-        local posy =(-offsety+15) * (data and data.scrapbook_scale or 1)
+        --local posx = (offsetx+0+extraoffsetx) * (data.scrapbook_scale or has_custom_scale or 1)
+        --local posy = (-offsety-75+extraoffsety) * (data.scrapbook_scale or has_custom_scale or 1)
 
         devprint("scale image", quest.victim, SCALE, ax, ay, ax * SCALE, ay * SCALE)
         creature:SetScale(SCALE)
+        ax,ay = creature:GetBoundingBoxSize()
+        local x1, y1, x2, y2 = creature:GetAnimState():GetVisualBB()
+        devprint("VisualBB", x1, y1, x2, y2)
+        local posx = 0 + (x1+x2) * SCALE/2 + extraoffsetx * SCALE --+ ax/2
+        local posy = 15 + (y1+y2)* SCALE/2 + extraoffsety * SCALE  --+ ay/2
+        devprint("pos", posx, posy)
+
         creature:SetPosition(progress_x+ posx,progress_y + posy)
     else
 
