@@ -3,7 +3,6 @@ local DecodeAndUnzipString = GLOBAL.DecodeAndUnzipString
 local ZipAndEncodeStringBuffer = GLOBAL.ZipAndEncodeStringBuffer
 local QUEST_COMPONENT = GLOBAL.TUNING.QUEST_COMPONENT
 local SpawnPrefab = GLOBAL.SpawnPrefab
-local TheWorld = GLOBAL.TheWorld
 local AllPlayers = GLOBAL.AllPlayers
 
 ---------------------------RPC----------------------------
@@ -222,8 +221,8 @@ AddShardModRPCHandler("Quest_System_RPC", "RemoveQuestShard", RemoveQuestShard)
 
 local function ChangeBlackGlommerFuelCounter(shard_id)
 	devprint("ChangeBlackGlommerFuelCounter",shard_id)
-	if TheWorld.blackglommerfuelgerat ~= nil then
-		local inst = TheWorld.blackglommerfuelgerat
+	if GLOBAL.TheWorld.blackglommerfuelgerat ~= nil then
+		local inst = GLOBAL.TheWorld.blackglommerfuelgerat
 		inst.amount_blackglommerfuel = inst.amount_blackglommerfuel - 1
 		inst:PushEvent("blackglommerfuel_used") 
 	end

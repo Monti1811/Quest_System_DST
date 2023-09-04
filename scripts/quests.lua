@@ -561,6 +561,7 @@ local quests = {
 	tex = "health.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("The Corrupt Darkness","HOVER",10),
+	anim_prefab = "charlie_npc",
 	},
 	--16
 	{
@@ -797,7 +798,7 @@ local quests = {
 	tex = "moonbase.tex",
 	atlas = "images/victims.xml",
 	hovertext = GetQuestString("The Damned Legacy","HOVER",1),
-	anim_prefab = "moonbase",
+	--anim_prefab = "moonbase",
 	},
 	--27
 	{
@@ -3458,6 +3459,7 @@ local quests = {
 			end
 			OnAttacked = function(inst, data)
 				if data and data.damageresolved and data.damageresolved > 0 then
+					current = 0
 					inst:PushEvent("quest_update",{quest = quest_name,reset = true})
 				end
 			end
@@ -3518,7 +3520,7 @@ local quests = {
 		tex = "hutch.tex",
 		atlas = "images/victims.xml",
 		hovertext = GetQuestString("The Stray Hutch","HOVER"),
-		--anim_prefab = "hutch", --TODO: hutch is not being shown in the quest panels
+		anim_prefab = "hutch",
 	},
 	--103
 	{
@@ -4300,8 +4302,8 @@ local quests = {
 		name = "Nitroglycerin",
 		victim = "",
 		counter_name = GetQuestString("Nitroglycerin", "COUNTER"),
-		description = GetQuestString("Nitroglycerin", "DESCRIPTION", 100),
-		amount = 100,
+		description = GetQuestString("Nitroglycerin", "DESCRIPTION", 50),
+		amount = 50,
 		rewards = {moonglass_charged = 5, [":func:range;1"] = 8},
 		points = 500,
 		start_fn = function(inst, amount, quest_name)
@@ -4311,7 +4313,7 @@ local quests = {
 		difficulty = 3,
 		tex = "moonglass.tex",
 		--atlas = "images/victims.xml",
-		hovertext = GetQuestString("Nitroglycerin", "HOVER", 100),
+		hovertext = GetQuestString("Nitroglycerin", "HOVER", 50),
 	},
 	--140
 	{
