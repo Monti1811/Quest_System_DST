@@ -192,7 +192,7 @@ local function create_chester()
     inst:AddComponent("combat")
     inst.components.combat.hiteffectsymbol = "chester_body"
     inst.components.combat:SetDefaultDamage(TUNING.DEERCLOPS_DAMAGE * 0.1)
-    inst.components.combat.externaldamagetakenmultipliers:SetModifier(inst,0.1,"chester_panzer")
+    --inst.components.combat.externaldamagetakenmultipliers:SetModifier(inst,0.1,"chester_panzer")
     inst.components.combat.playerdamagepercent = TUNING.DEERCLOPS_DAMAGE_PLAYER_PERCENT
     inst.components.combat:SetRange(2)
     inst.components.combat:SetAttackPeriod(2)
@@ -219,6 +219,7 @@ local function create_chester()
     inst.components.health:SetMaxHealth(666)
     inst.components.health:StartRegen(6.6, 10)
     inst.components.health.fire_damage_scale = 0 -- Take no damage from fire
+    inst.components.health:SetAbsorptionAmount(0.9)
 
     inst:AddComponent("inspectable")
 

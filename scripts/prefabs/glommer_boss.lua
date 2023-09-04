@@ -231,7 +231,8 @@ local function fn_big()
 
     inst.components.combat:SetAreaDamage(TUNING.DEERCLOPS_AOE_RANGE, TUNING.DEERCLOPS_AOE_SCALE)
     inst.components.combat.areahitcheck = CheckIfValidTarget
-    inst.components.combat.externaldamagetakenmultipliers:SetModifier(inst,0.1,"glommer_panzer")
+    inst.components.health:SetAbsorptionAmount(0.9)
+    --inst.components.combat.externaldamagetakenmultipliers:SetModifier(inst,0.1,"glommer_panzer")
 
     inst.components.lootdropper:SetLoot({"glommerfuel"})
     inst:AddComponent("timer")
@@ -301,7 +302,7 @@ local function itemfn()
     inst.AnimState:SetBuild("glommerfuelmachine_item")
     inst.AnimState:PlayAnimation("idle")
 
-    inst:AddTag("eyeturret")
+    inst:AddTag("glommerfuelmachine")
     inst:AddTag("godly_item")
 
     inst:SetPrefabNameOverride("glommerfuelmachine")
