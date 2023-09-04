@@ -66,6 +66,9 @@ return {
 		MISSION_FAILED = "Mission échouée...",
 		MISSION_SUCCESS = "Mission accomplie!",
 		MISSION_OBJECTIVE = "Je dois protéger %s!",
+		TIME_LEFT = "Temps restant jusqu'à l'arrivée de %s: %i",
+		ENEMIES_LEFT = "Cette vague contient %s ennemis que vous devez vaincre",
+		WAVE = "Vague %s\n%s/%s ennemis",
 	},
 	ACTIONS = {
 		FIGHT_GLOMMER = "Être un ami?!",
@@ -393,7 +396,7 @@ return {
 		["A Crappy Day"] = {
 			NAME = "Une journée de merde",
 			DESCRIPTION = "J'ai eu une journée de merde aujourd'hui, je veux que quelqu'un se sente aussi mal ! \nS'il vous plaît, aidez-moi à finir cette merde !",
-			COUNTER = "%s Fois se faire chier",
+			COUNTER = "Fois se faire chier",
 			HOVER = "Se faire toucher %s fois par une crotte lancée",
 		},
 		["Revenge of the crapped victim"] = {

@@ -125,7 +125,7 @@ local function AddRange(inst,amount)
 end
 
 
---TODO: Test if woodie works correctly
+--TODO: Test if woodie works correctly and for multiple dodge buffs active
 local function AddDodge(inst,amount)
 	local cooldowntime = TUNING.SKILLS.WOODIE.GOOSE_DODGE_COOLDOWN_TIME - math.floor(math.max(0,(25 - amount) / 5)) -- Something between 0 and 5, as cooldowntime is 5
 	local function OnWerePlayer()

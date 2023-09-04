@@ -66,6 +66,9 @@ return {
 		MISSION_FAILED = "任务失败...",
 		MISSION_SUCCESS = "任务完成！",
 		MISSION_OBJECTIVE = "我需要保护 %s！",
+		TIME_LEFT = "%s 到达前的时间： %i",
+		ENEMIES_LEFT = "这一波有 %s 的敌人，您必须打败他们",
+		WAVE = "波%s\n%s/%s 敌人",
 	},
 	ACTIONS = {
 		FIGHT_GLOMMER = "做个朋友？!",

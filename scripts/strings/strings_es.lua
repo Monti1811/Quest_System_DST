@@ -66,6 +66,9 @@ return {
 		MISSION_FAILED = "Misión fallida...",
 		MISSION_SUCCESS = "¡Misión cumplida!",
 		MISSION_OBJECTIVE = "¡Necesito proteger a %s!",
+		TIME_LEFT = "Tiempo hasta la llegada de %s: %i",
+		ENEMIES_LEFT = "Esta ola contiene %s enemigos que debes derrotar",
+		WAVE = "Oleada %s\n%s/%s enemigos",
 	},
 	ACTIONS = {
 		FIGHT_GLOMMER = "¿Ser un amigo?",

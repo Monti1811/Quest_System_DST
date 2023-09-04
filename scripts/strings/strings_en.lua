@@ -75,6 +75,9 @@ return {
 		MISSION_FAILED = "Mission failed...",
 		MISSION_SUCCESS = "Mission accomplished!",
 		MISSION_OBJECTIVE = "I need to protect %s!",
+		TIME_LEFT = "Time till %s arrives: %i",
+		ENEMIES_LEFT = "This wave contains %s enemies that you must defeat",
+		WAVE = "Wave %s\n%s/%s enemies",
 
 	},
 

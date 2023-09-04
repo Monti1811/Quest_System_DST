@@ -422,7 +422,7 @@ local function ChangeEnemiesDefeated(inst,victim)
 			local self = inst.HUD.controls["attackwavetimer"..victim]
 			if self then
 				self.counter = self.counter + 1
-				self.wave:SetString(string.format("Wave %s\n%s/%s enemies ",self.wave_num, self.counter, self.victims_num))
+				self.wave:SetString(string.format( STRINGS.QUEST_COMPONENT.ATTACKWAVES.WAVE,self.wave_num, self.counter, self.victims_num))
 			end
 		end
 	end
