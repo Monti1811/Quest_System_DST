@@ -13,7 +13,7 @@
 --rockavocadofruit.tex wird nicht in questbuch angezeigt: fixed
 --animation have wrong size sometimes (not quite sure when)
 --krampussack.tex cannot be found					: fixed
-
+-- deutsche übersetzung dodge is komisch
 
 gräber ausheben mission
 

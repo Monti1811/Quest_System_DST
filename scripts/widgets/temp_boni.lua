@@ -93,7 +93,7 @@ local string = {
 	end,
 
 	dodge = function(amount)
-		local str = "+"..amount..STRINGS_TB.DODGE
+		local str = string.format(STRINGS_TB.DODGE, amount)
 		local arrow = amount < 5.1 and 3 or amount < 10.1 and 2 or amount < 20.1 and 1 or 0
 		return str,arrow
 	end,
