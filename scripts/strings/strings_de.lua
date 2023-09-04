@@ -1075,6 +1075,12 @@ return {
 			COUNTER = "Gefangene Wanzen",
 			HOVER = "Fangen Sie %s Käfer mit einem Netz",
 		},
+		["The Pacifier"] = {
+			NAME = "Der Pacifier",
+			DESCRIPTION = "Die Welt, wie wir sie kennen, befindet sich ständig im Krieg. Ich kann das nicht mehr ertragen! Ich habe gehört, dass man irgendwie ein Gerät bauen kann, das die Kreaturen beruhigt. Das könnte ein Weg sein, Frieden in diese Welt zu bringen!",
+			COUNTER = "Pacifier gebaut",
+			HOVER = "%s Pacifier bauen",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Bleibe für x Sekunden auf einmal bei über 90% Sanity!",

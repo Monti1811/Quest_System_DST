@@ -1074,6 +1074,12 @@ return {
 			COUNTER = "捕捉到的虫子",
 			HOVER = "用网捕捉 %s 虫子",
 		},
+		["The Pacifier"] = {
+			NAME = "奶嘴",
+			DESCRIPTION = "我们所知道的世界总是在战争中。我再也无法忍受了我听说有一种装置可以安抚生物这也许是给世界带来和平的一种方法！",
+			COUNTER = "奶嘴",
+			HOVER = "建立 %s 个奶嘴",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "一次性保持在90%以上的理智状态 x 秒!",

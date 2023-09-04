@@ -1077,6 +1077,12 @@ return {
 			COUNTER = "Insectos capturados",
 			HOVER = "Atrapar %s bichos con una red",
 		},
+		["The Pacifier"] = {
+			NAME = "El chupete",
+			DESCRIPTION = "El mundo tal y como lo conocemos está siempre en guerra. ¡Ya no lo soporto más! He oído que, de alguna manera, se puede construir un dispositivo que pacifique a las criaturas. ¡Puede ser una forma de traer la paz a este mundo!",
+			COUNTER = "Chupetes construidos",
+			HOVER = "Construir %s chupetes",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Mantente por encima del 90% de cordura durante x segundos a la vez.",

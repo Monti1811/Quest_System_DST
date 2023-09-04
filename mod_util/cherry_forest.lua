@@ -167,7 +167,7 @@ AddSimPostInit(function()
 			difficulty = 1,
 			tex = "cherryrepcoin_percent.tex",
 			atlas = "images/bugregistry.xml",
-			hovertext = GetQuestString("HOVER", "A Reputable Person", 20),
+			hovertext = GetQuestString("A Reputable Person","HOVER", 20),
 			scale = {1},
 			custom_vars_fn = function(inst,amount,quest_name)
 				local max_scale = inst.components.quest_component and inst.components.quest_component.scaled_quests[quest_name] and inst.components.quest_component.scaled_quests[quest_name] + 1 or 1
@@ -210,7 +210,7 @@ AddSimPostInit(function()
 			difficulty = 2,
 			tex = "cherrybug_goldbeetle.tex",
 			atlas = "images/cherryimages.xml",
-			hovertext = GetQuestString("HOVER", "It's Bugging Me!", 5),
+			hovertext = GetQuestString("It's Bugging Me!", "HOVER", 5),
 		},
 		--5
 		{
@@ -222,13 +222,13 @@ AddSimPostInit(function()
 			rewards = {[":func:damagereduction;0.7"] = 16,cheerfulgem = 3},
 			points = 900,
 			start_fn = function(inst, amount, quest_name)
-				custom_functions["craft x y times"](inst, amount, {cherry_pacifier = true}, nil, quest_name)
+				custom_functions["build x y times"](inst, amount, "cherry_pacifier", quest_name)
 			end,
 			onfinished = nil,
 			difficulty = 4,
 			tex = "cherry_pacifier.tex",
-			--atlas = "images/cherryimages.xml",
-			hovertext = GetQuestString("HOVER", "The Pacifier", 2),
+			atlas = "images/cherryimages.xml",
+			hovertext = GetQuestString("The Pacifier", "HOVER", 2),
 		},
 	}
 

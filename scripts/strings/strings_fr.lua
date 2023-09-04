@@ -1078,6 +1078,12 @@ return {
 			COUNTER = "Insectes capturés",
 			HOVER = "Attraper %s insectes avec un filet",
 		},
+		["The Pacifier"] = {
+			NAME = "Le Pacifier",
+			DESCRIPTION = "Le monde tel que nous le connaissons est toujours en guerre. Je n'en peux plus ! J'ai entendu dire que l'on pouvait fabriquer un appareil qui apaise les créatures. C'est peut-être un moyen de ramener la paix dans ce monde !",
+			COUNTER = "Pacifier construites",
+			HOVER = "Construire %s Pacifier",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Rester à plus de 90 % de santé mentale pendant x secondes en une seule fois !",

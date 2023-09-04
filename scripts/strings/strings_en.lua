@@ -1642,5 +1642,12 @@ return {
 			HOVER = "Catch %s bugs with a net",
 		},
 
+		["The Pacifier"] = {
+			NAME = "The Pacifier",
+			DESCRIPTION = "The world as we know it is always at war. I can't stand it anymore! I heard that somehow, a device can be built that pacifies creatures. This may be a way to bring peace to this world!",
+			COUNTER = "Pacifiers built",
+			HOVER = "Build %s pacifiers",
+		}
+
 	},
 }

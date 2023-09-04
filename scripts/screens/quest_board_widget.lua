@@ -1494,7 +1494,7 @@ function Quest_Board_Widget:AddQuestVerify()
 end
 
 function Quest_Board_Widget:OnClose()
-    print("Quest_Board_Widget:OnClose()")
+    devprint("Quest_Board_Widget:OnClose()")
 	  for _,v in pairs(self.tasks) do
 		  if v then
 			   v:Cancel()
