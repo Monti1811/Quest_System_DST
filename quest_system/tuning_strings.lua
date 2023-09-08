@@ -75,6 +75,19 @@ local function FormatString(str,...)
 	end
 end
 
+if QUEST_COMPONENT.DEBUG then
+	function GLOBAL.debug_strings()
+		for key, lang_strings in ipairs(string_util.getAllStrings()) do
+			STR_QUEST_COMPONENT = lang_strings
+			package.loaded["quests"] = nil
+			devprint(key)
+			local quests = require("quests")
+			devprint(quests[110].description)
+		end
+		STR_QUEST_COMPONENT = string_util.getLanguageStrings(GLOBAL.TUNING.QUEST_COMPONENT.LANGUAGE)
+	end
+end
+
 --Used for my quests to give back a str from the wanted category. If it doesn't exist in one language,
 --search for the same one in another language, otherwise give back an empty string.
 function GLOBAL.GetQuestString(name,str,...)

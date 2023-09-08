@@ -20,7 +20,8 @@
 		"todo.txt",
 		"README.md",
 		"release/",
-        "images/**/*.png"
+        "images/**/*.png",
+        "translate_all.cmd"
     ],
     "git_exclude": false,
     "change_note": "",

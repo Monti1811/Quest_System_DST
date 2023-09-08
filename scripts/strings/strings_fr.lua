@@ -796,7 +796,7 @@ return {
 		},
 		["I've got 99 problems but starving ain't one!"] = {
 			NAME = "J'ai 99 problèmes, mais mourir de faim n'en fait pas partie !",
-			DESCRIPTION = "Bien que la probabilité de mourir de faim dans ce monde soit assez élevée, j'ai entendu dire que certains de ses habitants sont très riches en ce qui concerne la nourriture. Montrez-moi qu'il existe de telles personnes en mangeant des % de calories sans mourir de faim une seule fois !",
+			DESCRIPTION = "Bien que la probabilité de mourir de faim dans ce monde soit assez élevée, j'ai entendu dire que certains de ses habitants sont très riches en ce qui concerne la nourriture. Montrez-moi qu'il existe de telles personnes en mangeant des %s de calories sans mourir de faim une seule fois !",
 			COUNTER = "Calories",
 			HOVER = "Manger %s calories de nourriture",
 		},
@@ -820,15 +820,15 @@ return {
 		},
 		["The Healer"] = {
 			NAME = "Le guérisseur",
-			DESCRIPTION = "Le membre le plus important d'un groupe est le soigneur. Montrez-moi que vous êtes capable de prodiguer les soins nécessaires pour que cela vaille la peine d'être protégé en soignant les % de santé !",
+			DESCRIPTION = "Le membre le plus important d'un groupe est le soigneur. Montrez-moi que vous êtes capable de prodiguer les soins nécessaires pour que cela vaille la peine d'être protégé en soignant les %s de santé !",
 			COUNTER = "Santé guérie",
-			HOVER = "Soigne % de votre santé",
+			HOVER = "Soigne %s de votre santé",
 		},
 		["The Attacker"] = {
 			NAME = "L'attaquant",
 			COUNTER = "Dommages infligés",
 			HOVER = "Inflige %s de dégâts dans un délai de 30 secondes",
-			DESCRIPTION = "Le membre le plus important d'un groupe est l'attaquant. Montrez-moi que vous êtes capable de fournir la puissance d'attaque nécessaire pour valoir la peine d'être défendu en infligeant des % en 30 secondes !",
+			DESCRIPTION = "Le membre le plus important d'un groupe est l'attaquant. Montrez-moi que vous êtes capable de fournir la puissance d'attaque nécessaire pour valoir la peine d'être défendu en infligeant des %s en 30 secondes !",
 		},
 		["The Defender"] = {
 			NAME = "Le défenseur",
@@ -862,7 +862,7 @@ return {
 		},
 		["The Bird Predator"] = {
 			NAME = "Le prédateur d'oiseaux",
-			DESCRIPTION = "Les oiseaux ne sont que des drones que Charlie a envoyés pour nous observer ! Je veux qu'ils disparaissent et pour cela, j'ai besoin d'un prédateur d'oiseaux ! Montre-moi ce que tu vaux en tuant % d'oiseaux rouges dans les 8 prochaines minutes !",
+			DESCRIPTION = "Les oiseaux ne sont que des drones que Charlie a envoyés pour nous observer ! Je veux qu'ils disparaissent et pour cela, j'ai besoin d'un prédateur d'oiseaux ! Montre-moi ce que tu vaux en tuant %s d'oiseaux rouges dans les 8 prochaines minutes !",
 			COUNTER = "Redbirds",
 			HOVER = "Tuer %s redbirds dans les 8 prochaines minutes",
 		},
@@ -906,7 +906,7 @@ return {
 		},
 		["Kill The Innocent"] = {
 			NAME = "Tuer les innocents",
-			DESCRIPTION = "Les mousses sont si innocents lorsque leur mère est avec eux, mais ils deviennent des monstres une fois qu'elle est partie. Malheureusement, leur viande n'a plus le même goût lorsqu'ils se mettent en colère... J'ai besoin de quelqu'un pour tuer % d'innocents mosslings afin de profiter du plaisir d'une viande délicieuse !",
+			DESCRIPTION = "Les mousses sont si innocents lorsque leur mère est avec eux, mais ils deviennent des monstres une fois qu'elle est partie. Malheureusement, leur viande n'a plus le même goût lorsqu'ils se mettent en colère... J'ai besoin de quelqu'un pour tuer %s d'innocents mosslings afin de profiter du plaisir d'une viande délicieuse !",
 			COUNTER = "Mousses innocentes",
 			HOVER = "Tuer %s mosslings qui ne sont pas enragés",
 		},
@@ -962,13 +962,13 @@ return {
 		},
 		["Poor Doggies"] = {
 			NAME = "Pauvres chiens",
-			DESCRIPTION = "Pauvres chiens, a dit ma mère. Je dis simplement qu'ils l'ont bien cherché ! Ces chiens cherchent des humains et les attaquent, on peut les appeler des pauvres ! Si tu vaincs % d'entre eux, je te donnerai un vrai bon toutou !",
+			DESCRIPTION = "Pauvres chiens, a dit ma mère. Je dis simplement qu'ils l'ont bien cherché ! Ces chiens cherchent des humains et les attaquent, on peut les appeler des pauvres ! Si tu vaincs %s d'entre eux, je te donnerai un vrai bon toutou !",
 			COUNTER = "Chiens courants tués",
 			HOVER = "Tuer %s des chiens de chasse, des chiens de feu ou des chiens de glace",
 		},
 		["The Queen Slayer"] = {
 			NAME = "La reine tueuse",
-			DESCRIPTION = "Les Reines des araignées sont devenues trop puissantes ! J'ai besoin de quelqu'un d'assez fort pour tuer % d'entre elles, afin que notre village de cochons puisse continuer à vivre en paix !",
+			DESCRIPTION = "Les Reines des araignées sont devenues trop puissantes ! J'ai besoin de quelqu'un d'assez fort pour tuer %s d'entre elles, afin que notre village de cochons puisse continuer à vivre en paix !",
 		},
 		["Whac-A-Mole"] = {
 			NAME = "Whac-A-Mole",
