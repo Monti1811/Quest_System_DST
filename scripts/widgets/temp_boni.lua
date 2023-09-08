@@ -80,7 +80,7 @@ local string = {
 		return str,arrow
 	end,
 
-	planardamage = function(amount)
+	planardefense = function(amount)
 		local str = "+"..amount..STRINGS_TB.PLANARDEFENSE
 		local arrow = amount < 2.1 and 0 or amount < 5.1 and 1 or amount < 10.1 and 2 or 3
 		return str,arrow

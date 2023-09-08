@@ -1,3 +1,5 @@
+bug fixes:
+
 --scaling quests                                    : fixed
 --wanda gains 1 age which is 2.5 hp from leveling   : fixed
 --nightfisher fishes are counted even if not night  : probably fixed
@@ -17,6 +19,7 @@
 --remove victim = "" for most quests, replace with victim = nil
 
 
-gräber ausheben mission
+todos:
+--gräber ausheben mission							: done
 
 todo check quests:
