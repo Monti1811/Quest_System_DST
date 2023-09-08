@@ -129,6 +129,12 @@ local function fn()
     inst.components.equippable:SetOnEquip(OnEquip)
     inst.components.equippable:SetOnUnequip(OnUnequip)
 
+	local planardefense = inst:AddComponent("planardefense")
+	planardefense:SetBaseDefense(10)
+
+	local damagetyperesist = inst:AddComponent("damagetyperesist")
+	damagetyperesist:AddResist("shadow_aligned", inst, 1.3)
+
 	inst:AddComponent("fueled")
 	inst.components.fueled.fueltype = FUELTYPE.NIGHTMARE
 	inst.components.fueled:InitializeFuelLevel(2000)
@@ -253,6 +259,12 @@ local function fn2()
     inst.components.equippable.equipslot = EQUIPSLOTS.BODY
 	inst.components.equippable:SetOnEquip(OnEquip)
     inst.components.equippable:SetOnUnequip(OnUnequip)
+
+	local planardefense = inst:AddComponent("planardefense")
+	planardefense:SetBaseDefense(10)
+
+	local damagetyperesist = inst:AddComponent("damagetyperesist")
+	damagetyperesist:AddResist("shadow_aligned", inst, 1.3)
 	
 	inst:AddComponent("fueled")
 	inst.components.fueled:InitializeFuelLevel(2000)
@@ -283,19 +295,12 @@ local function OnUnequip(inst, owner)
 	owner.AnimState:Show("ARM_normal") 
 end
 
-local lunar_targets = {spider_moon = true,fruitdragon = true,mutatedhound = true,mutated_penguin = true,mushgnome = true,lightflier = true,carrat = true,molebat = true,
-	alterguardian_phase1 = true,alterguardian_phase2 = true,alterguardian_phase3 = true,dustmoth = true,archive_centipede = true, }
-
-local function Damage(inst,attacker,target)
-	if target and target.prefab and lunar_targets[target.prefab] then
-		return 85
-	else 
-		return 55
-	end
-end
 
 local function OnAttack(inst,attacker,target)
-	local delta = target and target.prefab and lunar_targets[target.prefab] and 5 or 10
+	local delta = target and target:HasTag("lunar_aligned") and 5 or 10
+	if attacker:HasTag("shadow_aligned") then
+		delta = delta /2.5
+	end
 	inst.components.fueled:DoDelta(-delta)
 end
 
@@ -357,8 +362,14 @@ local function fn3()
     inst.components.equippable:SetOnUnequip(OnUnequip)
 
 	inst:AddComponent("weapon")
-	inst.components.weapon:SetDamage(Damage)
+	inst.components.weapon:SetDamage(45)
 	inst.components.weapon:SetOnAttack(OnAttack)
+
+	local planardamage = inst:AddComponent("planardamage")
+	planardamage:SetBaseDamage(15)
+
+	local damagetypebonus = inst:AddComponent("damagetypebonus")
+	damagetypebonus:AddBonus("lunar_aligned", inst, 1.3333)
 
 	inst:AddComponent("fueled")
 	inst.components.fueled:InitializeFuelLevel(2000)

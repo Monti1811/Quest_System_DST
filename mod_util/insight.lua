@@ -37,7 +37,7 @@ local function AddPrefabDescriptors()
             end
         }
     end
-    prefab_descriptors["shadow_lance"] = {
+    --[[prefab_descriptors["shadow_lance"] = {
         Describe = function(inst, context)
             local description
             description = string.format(context.lstr.weapon_damage,context.lstr.weapon_damage_type.normal, "85").." against Lunar targets"
@@ -47,7 +47,7 @@ local function AddPrefabDescriptors()
                 description = description
             }
         end
-    }
+    }]]
     prefab_descriptors["frogking_scepter"] = {
         Describe = function(inst, context)
             local description
@@ -108,6 +108,7 @@ local function AddPrefabDescriptors()
 
             if respawn_time then
                 description = _G.subfmt(context.lstr.spawner.next, { child_name="glommerfuel", respawn_time=context.time:SimpleProcess(respawn_time) })
+                description = description.."\nGlommer's Goop left: "..(inst.slime_left or 0)
             else
                 alt_description = string.format(context.lstr.spawner.child, "glommerfuel")
             end
