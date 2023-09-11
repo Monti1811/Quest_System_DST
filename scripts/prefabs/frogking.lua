@@ -847,26 +847,6 @@ local function OnUnequip(inst, owner)
     owner.AnimState:Show("ARM_normal")
 end
 
-local insects = {
-    butterfly = true,
-    antlion = true,
-    glommer = true,
-    mosquito = true,
-    bee = true,
-    killerbee = true,
-    beeguard = true,
-    dragonfly = true,
-    lordfruitfly = true,
-    fruitfly = true,
-}
-
-local function DamageFn(inst,attacker,target)
-    if target and target.prefab and insects[target.prefab] ~= nil then
-        return 90
-    end
-    return 45
-end
-
 local function OnAttack(inst)
     inst.components.fueled:DoDelta(-1)
 end
@@ -906,8 +886,11 @@ local function scepter()
     inst.components.spellcaster.canuseonpoint_water = true
     
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(DamageFn)
+    inst.components.weapon:SetDamage(45)
     inst.components.weapon:SetOnAttack(OnAttack)
+
+    local damagetypebonus = inst:AddComponent("damagetypebonus")
+    damagetypebonus:AddBonus("insect", inst, 2)
       
     inst:AddComponent("inspectable")
       

@@ -47,7 +47,7 @@ local function AddPrefabDescriptors()
                 description = description
             }
         end
-    }]]
+    }
     prefab_descriptors["frogking_scepter"] = {
         Describe = function(inst, context)
             local description
@@ -58,7 +58,7 @@ local function AddPrefabDescriptors()
                 description = description
             }
         end
-    }
+    }]]
     prefab_descriptors["frogking_p_crown"] = {
         Describe = function(inst, context)
             local description
