@@ -1637,6 +1637,7 @@ local custom_functions = {
 
 	["survive x days"] = function(player, amount, quest_name, at_once)
 		local current = GetCurrentAmount(player,quest_name)
+		local var_name = GLOBAL.TheWorld:HasTag("cave") and "iscaveday" or "isday"
 		local OnDied = function() end
 		local function OnNewDay(_, isday)
 			if isday then
@@ -1644,7 +1645,7 @@ local custom_functions = {
 				current = current + 1
 				if current >= amount then
 					player:RemoveEventCallback("death", OnDied)
-					player:StopWatchingWorldState("isday", OnNewDay)
+					player:StopWatchingWorldState(var_name, OnNewDay)
 				end
 			end
 		end
@@ -1653,11 +1654,11 @@ local custom_functions = {
 				player:PushEvent("quest_update",{quest = quest_name, reset = true})
 			end
 		end
-		player:WatchWorldState("isday", OnNewDay)
+		player:WatchWorldState(var_name, OnNewDay)
 		player:ListenForEvent("death",OnDied)
 		local function OnForfeitedQuest()
 			player:RemoveEventCallback("death", OnDied)
-			player:StopWatchingWorldState("isday", OnNewDay)
+			player:StopWatchingWorldState(var_name, OnNewDay)
 		end
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
