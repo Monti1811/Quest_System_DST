@@ -836,16 +836,30 @@ local function SummonFrogRain(inst)
     end)
 end
 
+
 local function OnEquip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_object", "frogking_scepter", "swap_object")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
+
+    if not inst.is_already_equipped then
+        inst.onwork = function()
+            inst.components.fueled:DoDelta(-0.5)
+        end
+
+        inst:ListenForEvent("working", inst.onwork, owner)
+        inst.is_already_equipped = true
+    end
 end
   
 local function OnUnequip(inst, owner)
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
+
+    inst:RemoveEventCallback("working", inst.onwork, owner)
+    inst.is_already_equipped = nil
 end
+
 
 local function OnAttack(inst)
     inst.components.fueled:DoDelta(-1)

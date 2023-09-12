@@ -42,12 +42,14 @@ local function AddPrefabDescriptors()
 
     local AddDescriptorPostDescribe = insight_env.AddDescriptorPostDescribe
     local PrefabHasIcon = insight_env.PrefabHasIcon
-    local no_show_prefabs = {shadow_crest = true, shadow_mitre = true, shadow_lance = true}
+    local no_show_prefabs = {shadow_crest = true, shadow_mitre = true, shadow_lance = true, frogking_scepter = true}
     if AddDescriptorPostDescribe then
         AddDescriptorPostDescribe("Quest System", "fueled", function(self, context, datas)
             if self.inst and no_show_prefabs[self.inst.prefab] then
-                datas[1].description = nil
-                datas[1].alt_description = nil
+                local str = string.format(context.lstr.fueled.time_verbose, context.lstr.fuel.types[self.fueltype] or "Froglegs", "", "")
+                str = string.sub(str, 1, -4)
+                datas[1].description = str
+                datas[1].alt_description = str
             end
         end)
     end
@@ -79,17 +81,40 @@ local function AddPrefabDescriptors()
             }
         end
     }
-    --[[prefab_descriptors["frogking_scepter"] = {
+    prefab_descriptors["frogking_scepter"] = {
         Describe = function(inst, context)
-            local description
-            description = string.format(context.lstr.weapon_damage,context.lstr.weapon_damage_type.normal, "90").." against insects"
+            local description, alt_description
+
+            local self = inst.components.fueled
+            local action_id = GLOBAL.ACTIONS.ATTACK.id
+            local hammer_action_id = GLOBAL.ACTIONS.HAMMER.id
+            local amount = self.maxfuel
+            local attack_wear_multiplier = self.inst.components.weapon.attackwearmultipliers and self.inst.components.weapon.attackwearmultipliers:Get() or 1
+            local uses = math.ceil(self.currentfuel / attack_wear_multiplier)
+            local max_uses = math.ceil(amount / attack_wear_multiplier)
+
+            if context.usingIcons and GLOBAL.rawget(context.lstr.actions, action_id) and PrefabHasIcon(context.lstr.actions[action_id]) then
+                description = string.format(context.lstr.action_uses, context.lstr.actions[action_id], uses)..","..string.format(context.lstr.action_uses, context.lstr.actions[hammer_action_id], uses*2)
+                alt_description = string.format(context.lstr.action_uses_verbose, context.lstr.actions[action_id], uses, max_uses)..","..string.format(context.lstr.action_uses_verbose, context.lstr.actions[hammer_action_id], uses*2, max_uses*2)
+            else
+                description = string.format(context.lstr.lang.action_uses, context.lstr.lang.actions[action_id] or ("<string=ACTIONS." .. action_id .. ">"), uses)..","..string.format(context.lstr.lang.action_uses, context.lstr.lang.actions[hammer_action_id] or ("<string=ACTIONS." .. hammer_action_id .. ">"), uses*2)
+                alt_description = string.format(context.lstr.lang.action_uses_verbose, context.lstr.lang.actions[action_id] or ("<string=ACTIONS." .. action_id .. ">"), uses, max_uses)..","..string.format(context.lstr.lang.action_uses_verbose, context.lstr.lang.actions[hammer_action_id] or ("<string=ACTIONS." .. hammer_action_id .. ">"), uses*2, max_uses*2)
+            end
+
+            local action = GLOBAL.ACTIONS.HAMMER
+            local workmultiplier = context.player.components.workmultiplier
+            local effectiveness = (inst.components.tool.actions[action] or 1) * (workmultiplier ~= nil and workmultiplier:GetMultiplier(action) or 1)
+            local efficiency = { string.format(context.lstr.action_efficiency, GLOBAL.STRINGS.ACTIONS.HAMMER .. "*", insight_env.Round(effectiveness * 100, 0)) }
+            local tool_description = string.format(context.lstr.tool_efficiency, table.concat(efficiency, "<color=#aaaaee>,</color> "))
+            --description = description.."\n"..tool_description
 
             return {
-                priority = 48.9,
-                description = description
+                priority = 10,
+                description = description,
+                alt_description = alt_description
             }
         end
-    }]]
+    }
     prefab_descriptors["frogking_p_crown"] = {
         Describe = function(inst, context)
             local description
