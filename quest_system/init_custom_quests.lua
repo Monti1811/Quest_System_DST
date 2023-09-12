@@ -458,7 +458,7 @@ end
 local function MakeScalable(inst, amount, quest_name, getScaleFn)
 	local quest_component = inst.components.quest_component
 	local max_scale = quest_component and quest_component.scaled_quests[quest_name] and quest_component.scaled_quests[quest_name] + 1 or 1
-	local scale = getScaleFn and getScaleFn(max_scale) or math.random(1,max_scale)
+	local scale = getScaleFn and getScaleFn(max_scale) or math.random(math.max(max_scale-1, 1),max_scale)
 	return {scale = scale}
 end
 

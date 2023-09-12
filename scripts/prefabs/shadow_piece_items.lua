@@ -133,7 +133,7 @@ local function fn()
 	planardefense:SetBaseDefense(10)
 
 	local damagetyperesist = inst:AddComponent("damagetyperesist")
-	damagetyperesist:AddResist("shadow_aligned", inst, 1.3)
+	damagetyperesist:AddResist("shadow_aligned", inst, 0.666)
 
 	inst:AddComponent("fueled")
 	inst.components.fueled.fueltype = FUELTYPE.NIGHTMARE
@@ -264,7 +264,7 @@ local function fn2()
 	planardefense:SetBaseDefense(10)
 
 	local damagetyperesist = inst:AddComponent("damagetyperesist")
-	damagetyperesist:AddResist("shadow_aligned", inst, 1.3)
+	damagetyperesist:AddResist("shadow_aligned", inst, 0.666)
 	
 	inst:AddComponent("fueled")
 	inst.components.fueled:InitializeFuelLevel(2000)
@@ -299,7 +299,7 @@ end
 local function OnAttack(inst,attacker,target)
 	local delta = target and target:HasTag("lunar_aligned") and 5 or 10
 	if attacker:HasTag("shadow_aligned") then
-		delta = delta /2.5
+		delta = delta / 2.5
 	end
 	inst.components.fueled:DoDelta(-delta)
 end
@@ -369,7 +369,7 @@ local function fn3()
 	planardamage:SetBaseDamage(15)
 
 	local damagetypebonus = inst:AddComponent("damagetypebonus")
-	damagetypebonus:AddBonus("lunar_aligned", inst, 1.3333)
+	damagetypebonus:AddBonus("lunar_aligned", inst, 1.5)
 
 	inst:AddComponent("fueled")
 	inst.components.fueled:InitializeFuelLevel(2000)

@@ -1,5 +1,5 @@
 local _G = GLOBAL
-local fuel_armor_items = {"shadow_crest", "shadow_mitre"} --, "shadow_lance"
+local fuel_armor_items = {shadow_crest = 3, shadow_mitre = 2} --, "shadow_lance"
 
 local pickup_levels = {
     [1] = 0,
@@ -25,30 +25,61 @@ end
 local function AddPrefabDescriptors()
     if not _G.rawget(_G, "Insight") then return end
     local prefab_descriptors = _G.Insight.prefab_descriptors
-    for _, item in ipairs(fuel_armor_items) do
+    local insight_env = _G.Insight.env
+    for item, mult in pairs(fuel_armor_items) do
         prefab_descriptors[item] = {
             Describe = function(inst, context)
-                local description
-                description = string.format(context.lstr.protection, "90")
+                local durabilityValue = insight_env.Round(inst.components.fueled.currentfuel/mult, 0)
+                local description = string.format(context.lstr.protection, "90").."\n"..string.format(context.lstr.durability, durabilityValue, insight_env.Round(inst.components.fueled.maxfuel/mult, 0))
+
                 return {
-                    priority = 1.1,
+                    priority = 1,
                     description = description
                 }
             end
         }
     end
-    --[[prefab_descriptors["shadow_lance"] = {
+
+    local AddDescriptorPostDescribe = insight_env.AddDescriptorPostDescribe
+    local PrefabHasIcon = insight_env.PrefabHasIcon
+    local no_show_prefabs = {shadow_crest = true, shadow_mitre = true, shadow_lance = true}
+    if AddDescriptorPostDescribe then
+        AddDescriptorPostDescribe("Quest System", "fueled", function(self, context, datas)
+            if self.inst and no_show_prefabs[self.inst.prefab] then
+                datas[1].description = nil
+                datas[1].alt_description = nil
+            end
+        end)
+    end
+    prefab_descriptors["shadow_lance"] = {
         Describe = function(inst, context)
-            local description
-            description = string.format(context.lstr.weapon_damage,context.lstr.weapon_damage_type.normal, "85").." against Lunar targets"
+            local description, alt_description
+
+            local self = inst.components.fueled
+            local action_id = GLOBAL.ACTIONS.ATTACK.id
+            local amount = self.maxfuel
+            local attack_wear_multiplier = self.inst.components.weapon.attackwearmultipliers and self.inst.components.weapon.attackwearmultipliers:Get() or 1
+            local mult = context.player and context.player:HasTag("shadow_aligned") and 2.5 or 1
+            mult = 1/10 * mult / attack_wear_multiplier
+            local uses = math.ceil(self.currentfuel * mult)
+            local max_uses = math.ceil(amount * mult)
+
+            if context.usingIcons and GLOBAL.rawget(context.lstr.actions, action_id) and PrefabHasIcon(context.lstr.actions[action_id]) then
+                description = string.format(context.lstr.action_uses, context.lstr.actions[action_id], uses)
+                alt_description = string.format(context.lstr.action_uses_verbose, context.lstr.actions[action_id], uses, max_uses)
+            else
+                description = string.format(context.lstr.lang.action_uses, context.lstr.lang.actions[action_id] or ("<string=ACTIONS." .. action_id .. ">"), uses)
+                alt_description = string.format(context.lstr.lang.action_uses_verbose, context.lstr.lang.actions[action_id] or ("<string=ACTIONS." .. action_id .. ">"), uses, max_uses)
+            end
 
             return {
-                priority = 48.9,
-                description = description
+                priority = 10,
+                description = description,
+                alt_description = alt_description
             }
         end
     }
-    prefab_descriptors["frogking_scepter"] = {
+    --[[prefab_descriptors["frogking_scepter"] = {
         Describe = function(inst, context)
             local description
             description = string.format(context.lstr.weapon_damage,context.lstr.weapon_damage_type.normal, "90").." against insects"
