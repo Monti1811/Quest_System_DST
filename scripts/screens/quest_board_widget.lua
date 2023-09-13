@@ -227,6 +227,7 @@ local Quest_Board_Widget = Class(Screen, function(self, owner)
     self.list_root:SetScaleMode(SCALEMODE_PROPORTIONAL)
     --self.list_root:SetPosition(210, -35)
 
+    SetAutopaused(true)
 
 end)
 
@@ -378,21 +379,13 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
     self.__show_quest2.progress_title:EnableWordWrap(true)
     self.__show_quest2.progress_title:EnableWhitespaceWrap(true)
 
-    self.__show_quest2.progress = self.show_quest:AddChild(Text(BUTTONFONT, 25,nil,UICOLOURS.BLACK))
-    self.__show_quest2.progress:SetPosition(progress_x, progress_y + 125)
-    self.__show_quest2.progress:SetString(tostring(quest.amount))
-    self.__show_quest2.progress:SetScale(1)
-    self.__show_quest2.progress:SetRegionSize(100, 350)
-    self.__show_quest2.progress:EnableWordWrap(true)
-    self.__show_quest2.progress:EnableWhitespaceWrap(true)
+    local counter_string = quest.amount.."\n"..(quest.victim and STRINGS.NAMES[string.upper(quest.victim)] or quest.counter_name or "Not Defined")
 
     self.__show_quest2.victim = self.show_quest:AddChild(Text(BUTTONFONT, 25,nil,UICOLOURS.BLACK))
-    self.__show_quest2.victim:SetPosition(progress_x, progress_y + 90)
-    self.__show_quest2.victim:SetString(quest.victim and STRINGS.NAMES[string.upper(quest.victim)] or quest.counter_name or "Not Defined")
-    self.__show_quest2.victim:SetScale(1)
-    self.__show_quest2.victim:SetRegionSize(125, 350)
-    self.__show_quest2.victim:EnableWordWrap(true)
-    self.__show_quest2.victim:EnableWhitespaceWrap(true)
+    self.__show_quest2.victim:SetPosition(progress_x, progress_y + 110)
+    --Text:SetMultilineTruncatedString(str, maxlines, maxwidth, maxcharsperline, ellipses, shrink_to_fit, min_shrink_font_size, linebreak_string)
+    self.__show_quest2.victim:SetVAlign(ANCHOR_TOP)
+    self.__show_quest2.victim:SetMultilineTruncatedString(counter_string, 4, 125, 100, nil, true, 12)
 
     local target_atlas
     local target_tex
@@ -437,8 +430,9 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
         devprint("actual x and y", ACTUAL_X, ACTUAL_Y)
 
         SCALE = SCALE * (has_custom_scale or data.scrapbook_scale or 1)
-        devprint("custom scales", data.prefab, has_custom_scale, SCALE, data.scrapbook_scale)
-
+        local screen_w,screen_h = TheSim:GetScreenSize()
+        devprint("custom scales", data.prefab, has_custom_scale, SCALE, data.scrapbook_scale, screen_w, screen_h, screen_h/880)
+        SCALE = SCALE * screen_h/880
         --creature:SetClickable(false)
 
         creature:GetAnimState():PlayAnimation(data.anim, true)
@@ -1195,8 +1189,10 @@ function Quest_Board_Widget:CreateNewQuest()
         local spinner_bg = self.root4:AddChild(Image("images/global_redux.xml", "spinner_background_normal.tex"))
         spinner_bg:SetSize(330, 40)
         spinner_bg:SetPosition(190, 230-k*35, 0)
-        self["spinner_rewards_"..k] = self.root4:AddChild(Templates_R.LabelSpinner(v[1],v[2],nil,nil,nil,nil,nil,nil,nil))
+        self["spinner_rewards_"..k] = self.root4:AddChild(Templates_R.LabelSpinner(v[1],v[2],150,nil,nil,nil,nil,nil,30))
         self["spinner_rewards_"..k]:SetPosition(170, 230-k*35, 0)
+        self["spinner_rewards_"..k].label:SetAutoSizingString(v[1],160)
+        self["spinner_rewards_"..k].label:SetPosition((-305/2)+(150/2)+30,0)
         self["spinner_rewards_"..k].spinner:SetSelected(1)
         if self.new_custom_quest[v[1]] then
             self["spinner_rewards_"..k].spinner:SetSelected(self.new_custom_quest[v[1]])
@@ -1215,7 +1211,9 @@ function Quest_Board_Widget:CreateNewQuest()
     self["spinner_6"] = self.root4:AddChild(Templates_R.LabelTextbox(STRINGS_QB.AMOUNT_OF_KILLS,"1",150,150,30,30,nil,nil,nil))
     self["spinner_6"]:SetPosition(-165, 230-6*35, 0)
     self["spinner_6"].label:SetAutoSizingString(STRINGS_QB.AMOUNT_OF_KILLS,150)
-    self["spinner_6"].label:Nudge(Vector3(45,0,0))
+    self["spinner_6"].label:SetPosition((-330/2)+(150/2),0)
+    --self["spinner_6"].label:Nudge(Vector3(45,0,0))
+    --self["spinner_6"].label:SetHAlign(ANCHOR_MIDDLE)
     self["spinner_6"].textbox:SetTextLengthLimit(6)
     self["spinner_6"].textbox:SetCharacterFilter("1234567890")
     if self.new_custom_quest[STRINGS_QB.AMOUNT_OF_KILLS] then
@@ -1518,6 +1516,11 @@ function Quest_Board_Widget:OnControl(control, down)
     	self:OnClose()
     	return true
   	end
+end
+
+function Quest_Board_Widget:OnDestroy()
+    SetAutopaused(false)
+    self._base.OnDestroy(self)
 end
 
 

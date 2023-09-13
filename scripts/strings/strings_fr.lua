@@ -1015,7 +1015,7 @@ return {
 		["Good For Your Nerves"] = {
 			NAME = "Bon pour les nerfs",
 			DESCRIPTION = "De nos jours, la plupart des gens sont très stressés ! Prenez le temps de vous détendre en buvant %s thés apaisants et vous verrez à quel point cela vous aidera...",
-			COUNTER = "Tisanes apaisantes ivres",
+			COUNTER = "Thés apaisantes ivres",
 			HOVER = "Boire %s thés apaisants",
 		},
 		Nitroglycerin = {

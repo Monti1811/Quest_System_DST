@@ -259,7 +259,9 @@ local function createQuestCard(self,quest, x, y, scale, num)
             ACTUAL_Y = ay*SCALE
         end
         SCALE = SCALE * (has_custom_scale or data.scrapbook_scale or 1)
-        devprint("custom scales", data.prefab, has_custom_scale, SCALE, data.scrapbook_scale)
+        local w,h = TheSim:GetScreenSize()
+        devprint("custom scales", data.prefab, has_custom_scale, SCALE, data.scrapbook_scale, w, h, h/880)
+        SCALE = SCALE * h/880
         creature:GetAnimState():PlayAnimation(data.anim, true)
         --creature:SetClickable(false)
         if data and data.overridesymbol then
@@ -743,6 +745,8 @@ local Quest_Widget = Class(Screen, function(self, inst)
     end
   end)
 
+    SetAutopaused(true)
+
 end)
 
 local boni = {  healthbonus = {-20,150,100},
@@ -988,6 +992,11 @@ function Quest_Widget:OnControl(control, down)
     self:OnClose()
     return true
   end
+end
+
+function Quest_Widget:OnDestroy()
+    SetAutopaused(false)
+    self._base.OnDestroy(self)
 end
 
 return Quest_Widget
