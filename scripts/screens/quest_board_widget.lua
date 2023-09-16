@@ -385,7 +385,7 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
     self.__show_quest2.victim:SetPosition(progress_x, progress_y + 110)
     --Text:SetMultilineTruncatedString(str, maxlines, maxwidth, maxcharsperline, ellipses, shrink_to_fit, min_shrink_font_size, linebreak_string)
     self.__show_quest2.victim:SetVAlign(ANCHOR_TOP)
-    self.__show_quest2.victim:SetMultilineTruncatedString(counter_string, 4, 125, 100, nil, true, 12)
+    self.__show_quest2.victim:SetMultilineTruncatedString(counter_string, 4, 120, 100, nil, true, 12)
 
     local target_atlas
     local target_tex
@@ -552,7 +552,7 @@ function Quest_Board_Widget:ShowRewards(tab)
         if str1 and string.find(str1," x ") then
             str1 = string.gsub(str1," x "," "..rew_num.." ")
         end
-        local str  = str1 or tostring(STRINGS.NAMES[string.upper(k)] or k or "?")..(tostring(rew_num) ~= "" and ": "..tostring(rew_num) or "")
+        local str  = str1 or tostring(STRINGS.NAMES[string.upper(k)] or (TUNING.QUEST_COMPONENT.QUESTS[tab.name] and TUNING.QUEST_COMPONENT.QUESTS[tab.name][k.."_str"]) or k or "?")..(tostring(rew_num) ~= "" and ": "..tostring(rew_num) or "")
 
         --[[invimages["text"..num] = show_rewards:AddChild(Text(BUTTONFONT, 25,nil,UICOLOURS.BLACK))
         invimages["text"..num]:SetAutoSizingString(str,200)
@@ -866,9 +866,9 @@ function Quest_Board_Widget:CheckLevelRewards()
 
             local level_desc = "level_desc"..k
             self.root3.profileflairs[level_desc] = self.root3:AddChild(Text(NEWFONT_OUTLINE, 20))
-            self.root3.profileflairs[level_desc]:SetString(STRINGS_QB.LEVEL.." "..k)
+            self.root3.profileflairs[level_desc]:SetAutoSizingString(STRINGS_QB.LEVEL.." "..k, 68)
             self.root3.profileflairs[level_desc]:SetPosition(posx, posy-35)
-            self.root3.profileflairs[level_desc]:SetScale(1,1)
+            --self.root3.profileflairs[level_desc]:SetScale(1,1)
         end
     end
 

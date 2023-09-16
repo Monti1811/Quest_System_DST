@@ -4201,7 +4201,7 @@ local quests = {
 		rewards = {[":func:build_buffer"] = "dragonflychest",},
 		points = 900,
 		start_fn = function(inst, amount, quest_name)
-			TUNING.QUEST_COMPONENT.CUSTOM_awawQUEST_FUNCTIONS["start fire with x y times"](inst,amount,quest_name, nil, {torch = true})
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["start fire with x y times"](inst,amount,quest_name, nil, {torch = true})
 		end,
 		onfinished = nil,
 		difficulty = 4,

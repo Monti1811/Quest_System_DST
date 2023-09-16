@@ -1,5 +1,3 @@
-local name = GLOBAL.KnownModIndex:GetModActualName(" Tropical Experience Return of Them")
-local language = GLOBAL.GetModConfigData("set_idioma",name)
 
 local goals = {}
 

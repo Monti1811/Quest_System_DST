@@ -1,6 +1,7 @@
 GLOBAL.SetQuestSystemEnv()
 
-local name = GLOBAL.KnownModIndex:GetModActualName("󰀕 Uncompromising Mode")
+local fancyname = GLOBAL.KnownModIndex:GetModFancyName("workshop-2039181790")
+local name = GLOBAL.KnownModIndex:GetModActualName(fancyname)
 local custom_functions = GLOBAL.TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS
 
 local goals = {}

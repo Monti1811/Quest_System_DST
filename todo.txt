@@ -13,13 +13,17 @@ bug fixes:
 --Refactor custom quests to json encode				: fixed
 --Mirror of merms also influence other players		: TODO (I think I will leave it as an intented feature)
 --rockavocadofruit.tex wird nicht in questbuch angezeigt: fixed
---animation have wrong size sometimes (not quite sure when)
+--animation have wrong size sometimes 				: fixed
 --krampussack.tex cannot be found					: fixed
 -- deutsche übersetzung dodge is komisch			: fixed
---remove victim = "" for most quests, replace with victim = nil
+
 
 
 todos:
 --gräber ausheben mission							: done
+--remove victim = "" for most quests, replace with victim = nil
+
+quest_ideas:
+-- stehlen von eier von großen vögeln
 
 todo check quests:
