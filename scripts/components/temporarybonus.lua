@@ -28,17 +28,11 @@ end
 
 local function AddSanityAura(inst,amount)
 	if inst.components.sanity then
+		local externalmodifiers = inst.components.sanity.externalmodifiers
 		if amount < 0 then
-			if inst.temp_sanityaura ~= nil then
-				inst.temp_sanityaura:Cancel()
-				inst.temp_sanityaura = nil
-			end
+			externalmodifiers:RemoveModifier(inst,"temp_sanityaura")
 		else
-			inst.temp_sanityaura = inst:DoPeriodicTask(0.5,function()
-				if inst.components.sanity then
-					inst.components.sanity:DoDelta(amount/60)
-				end
-			end)
+			externalmodifiers:SetModifier(inst,amount/60,"temp_sanityaura")
 		end
 	end
 end
@@ -73,11 +67,14 @@ local function AddHealthRate(inst,amount,name)
 	end
 end
 
-local function AddDamage(inst,amount)
+local function AddDamage(inst,amount,name)
 	local combat = inst.components.combat
 	if combat then
-		local old_damage = combat.defaultdamage
-		combat:SetDefaultDamage(old_damage + amount)
+		if amount < 0 then
+			combat.externaldamageadditives:RemoveModifier(inst,name)
+		else
+			combat.externaldamageadditives:SetModifier(inst,amount,name)
+		end
 	end
 end
 

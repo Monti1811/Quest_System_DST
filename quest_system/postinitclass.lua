@@ -386,6 +386,19 @@ end
 
 AddComponentPostInit("constructionsite", OnFinishConstruction)
 
+local SourceModifierList = require("util/sourcemodifierlist")
+local function DamageAdditive(self)
+	self.externaldamageadditives = SourceModifierList(self.inst, 0, SourceModifierList.additive)
+	local old_CalcDamage = self.CalcDamage
+	function self:CalcDamage(doer, items, ...)
+		local ret = {old_CalcDamage(self, doer, items, ...)}
+		ret[1] = ret[1] + self.externaldamageadditives:Get()
+		return unpack(ret)
+	end
+end
+
+AddComponentPostInit("combat", DamageAdditive)
+
 --Stop players from attacking the victims in attackwaves
 local function CanBeAttacked(self)
 	local old_CanBeAttacked = self.CanBeAttacked
