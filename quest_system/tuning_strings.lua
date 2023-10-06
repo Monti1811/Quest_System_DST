@@ -392,7 +392,13 @@ QUEST_COMPONENT.BOSSES = {
 		{name = "beequeen", 		health = 6000, damage = 200, scale = 1.6,	fn = beequeen},
 
 	},
-} 
+}
+
+if CurrentRelease.GreaterOrEqualTo("R31_LUNAR_MUTANTS") then
+	table.insert(QUEST_COMPONENT.BOSSES.DIFFICULT,{name = "mutateddeerclops", health = 10000, damage = 200, scale = 2.1})
+	table.insert(QUEST_COMPONENT.BOSSES.DIFFICULT,{name = "mutatedwarg", health = 10000, damage = 200, scale = 2.1})
+	table.insert(QUEST_COMPONENT.BOSSES.DIFFICULT,{name = "mutatedbearger", health = 10000, damage = 200, scale = 2.1})
+end
 
 -------------------------------------Bossfight rewards---------------------------------------------
 

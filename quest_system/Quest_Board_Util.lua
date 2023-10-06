@@ -237,6 +237,7 @@ end
 
 
 local function MakeFuncRewardData(name,func)
+	name = FunctionOrValue(name)
 	return {text = name,data = func}
 end
 
@@ -245,10 +246,11 @@ end
 QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS = {
 	--[[
 	[":func:name"] = {
-		function(inst,amount),
-		function(amount) or value,
-		function(amount) or value,
-		function(amount) or value
+		function(inst,amount), 		-- function that is run as a reward
+		function(amount) or value,	-- text that is shown
+		function(amount) or value,	-- tex path
+		function(amount) or value,	-- atlas path
+		bool, 						-- remove from rewards for custom quests
 	},
 	]]
 	--[":func:test"] = {function(inst) print("test") end,"Test x Function","tex.tex","atlas.xml"},
@@ -263,7 +265,8 @@ QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS = {
 		end,
 		function(amount) return string.format(STR_QF.KRAMPUS_SACK, amount or "unknown") end,	--Name that is shown, either a value or a function with the argument of the value
 		"krampus_sack.tex", 				--tex
-		--"images/inventoryimages1.xml",	--atlas
+		nil, --"images/inventoryimages1.xml",	--atlas
+		true,								--remove from rewards for custom quests
 	},
 	[":func:build_buffer"] = {
 		function(inst,recname)			--function that is run
@@ -276,7 +279,8 @@ QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS = {
 		end,
 		function(recname) return string.format(STR_QF.BUILD_BUFFER, STRINGS.NAMES[string.upper(recname)] or "unknown") end,	--Name that is shown, x is amount for the function
 		function(recname) return recname..".tex" end, 			--tex
-		--"images/inventoryimages1.xml",	--atlas
+		nil, --"images/inventoryimages1.xml",	--atlas
+		true,								--remove from rewards for custom quests
 	},
 
 }
@@ -348,8 +352,10 @@ end
 --GLOBAL.dumptable(QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS)
 
 for k,v in pairs(CUSTOM_QUEST_END_FUNCTIONS) do
-	local tab = MakeFuncRewardData(v[2],k)
-	table.insert(QUEST_BOARD.PREFABS_ITEMS,tab)
+	if v[5] ~= true then
+		local tab = MakeFuncRewardData(v[2],k)
+		table.insert(QUEST_BOARD.PREFABS_ITEMS,tab)
+	end
 end
 
 local LevelRewardData = {
