@@ -1083,6 +1083,36 @@ return {
 			COUNTER = "Chupetes construidos",
 			HOVER = "Construir %s chupetes",
 		},
+		["Mischievous Thief"] = {
+			NAME = "Ladrón travieso",
+			DESCRIPTION = "He oído hablar de un ladrón que ha estado robando en Tallbirds. Quiero conocer a esta persona, pero necesito saber si es de fiar. ¡Demuéstrame que lo eres robando %s huevos de Tallbird!",
+			COUNTER = "Robo de huevos de Tallbird",
+			HOVER = "Robar %s huevos de Tallbird",
+		},
+		["People Pleaser"] = {
+			NAME = "Complacer a la gente",
+			DESCRIPTION = "Quiero hacer feliz a la gente. Pero para poder hacerlo, ¡necesito que más personas tengan pensamientos positivos! ¡Sé una de esas personas y muéstrame lo feliz que eres!",
+			COUNTER = "Aura de cordura",
+			HOVER = "Tener un Aura de Cordura de %s/min",
+		},
+		["The Hunt For Mutants"] = {
+			NAME = "A la caza de mutantes",
+			DESCRIPTION = "He oído hablar de mutantes gigantes que han estado aterrorizando a los pigmanos alrededor de las grietas lunares. Quiero darles caza, pero no soy lo bastante fuerte. ¡Ayúdame matando %s de ellos!",
+			COUNTER = "Gigantes mutados muertos",
+			HOVER = "Mata a %s gigantes mutantes (Deerclops de cristal, Bearger blindado o Varg poseído).",
+		},
+		["Praise The Pigking"] = {
+			NAME = "Elogios al Pigking",
+			DESCRIPTION = "¡El Rey Cerdo es la persona más generosa de Constant! Nos da mucho oro, ¡pero tenemos que alabarle por ello! ¡Demuéstrame que eres digno de su oro dándole tantos objetos que te dará %s de oro!",
+			COUNTER = "Oro",
+			HOVER = "Recibir %s oro del Pigking",
+		},
+		["Training Makes Perfect"] = {
+			NAME = "La formación hace al maestro",
+			DESCRIPTION = "Me estoy haciendo viejo y ya no necesito mi Howlitzer. Quiero dárselo a alguien que lo merezca. Demuéstrame tus habilidades a distancia infligiendo %s de daño con cerbatanas.",
+			COUNTER = "Daños",
+			HOVER = "Inflige %s de daño con cerbatanas",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Mantente por encima del 90% de cordura durante x segundos a la vez.",
@@ -1128,7 +1158,7 @@ return {
 		T_DRAGONFLY = "Teletransportar x Libélula",
 		T_MOOSE = "Teletransportar x alce/alce lejos",
 		MOONBASE = "Defiende x veces la Base Lunar",
-		BUILD_BUFFER = "Recibir %s como una construcción en buffer",
+		BUILD_BUFFER = "Recibir %s como construcción en buffer",
 		KRAMPUS_SACK = "%s%% Probabilidad de Krampus Sack",
 	},
 }

@@ -1084,6 +1084,36 @@ return {
 			COUNTER = "Pacifier construites",
 			HOVER = "Construire %s Pacifier",
 		},
+		["Mischievous Thief"] = {
+			NAME = "Voleur espiègle",
+			DESCRIPTION = "J'ai entendu parler d'un voleur qui s'en prend aux Tallbirds. Je veux rencontrer cette personne, mais je dois m'assurer qu'elle est digne de confiance. Montre-moi que tu l'es en volant %s œufs d'oiseaux-talons !",
+			COUNTER = "Vol d'œufs de merle de roche",
+			HOVER = "Voler %s d'œufs d'oiseaux-taureaux",
+		},
+		["People Pleaser"] = {
+			NAME = "Plaisir des gens",
+			DESCRIPTION = "Je veux rendre les gens heureux ! Mais pour y parvenir, j'ai besoin que davantage de personnes aient des pensées positives ! Sois l'une de ces personnes et montre-moi à quel point tu es heureux !",
+			COUNTER = "Aura de santé",
+			HOVER = "Avoir une Aura de Sanité de %s/min",
+		},
+		["The Hunt For Mutants"] = {
+			NAME = "La chasse aux mutants",
+			DESCRIPTION = "J'ai entendu parler de mutants géants qui terrorisent les cochons autour des failles lunaires. Je veux les traquer, mais je ne suis pas assez fort. Aide-moi en tuant % d'entre eux !",
+			COUNTER = "Les géants mutants tués",
+			HOVER = "Tuer %s Géants mutants (soit Deerclops de cristal, Bearger blindé ou Varg possédé)",
+		},
+		["Praise The Pigking"] = {
+			NAME = "Éloge du cochon d'Inde",
+			DESCRIPTION = "Le roi des cochons est la personne la plus généreuse de Constant ! Il nous donne beaucoup d'or, mais nous devons le féliciter pour cela ! Montre-moi que tu es digne de son or en lui donnant tant d'objets qu'il te donnera % d'or !",
+			COUNTER = "L'or",
+			HOVER = "Recevoir %s d'or du Pigking",
+		},
+		["Training Makes Perfect"] = {
+			NAME = "L'entraînement rend parfait",
+			DESCRIPTION = "Je vieillis et je n'ai plus besoin de mon Howlitzer. Je veux le donner à quelqu'un qui en est digne. Montrez-moi vos talents de combattant à distance en infligeant %s de dégâts avec des fléchettes !",
+			COUNTER = "Dommages",
+			HOVER = "inflige %s de dégâts avec des fléchettes",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Rester à plus de 90 % de santé mentale pendant x secondes en une seule fois !",
@@ -1129,7 +1159,7 @@ return {
 		T_DRAGONFLY = "Téléportation de x libellules",
 		T_MOOSE = "Téléportation de x Moose/Goose",
 		MOONBASE = "Défendre x fois la base lunaire",
-		BUILD_BUFFER = "Recevoir %s comme une construction en mémoire tampon",
+		BUILD_BUFFER = "Recevoir %s comme construction en mémoire",
 		KRAMPUS_SACK = "%s%% Chance de sac Krampus",
 	},
 }

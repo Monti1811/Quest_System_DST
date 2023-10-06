@@ -536,6 +536,10 @@ local froglegs = {"froglegs","froglegs_cooked"}
 
 for _,prefab in ipairs(froglegs) do
     AddPrefabPostInit(prefab, function(inst)
+        if not TheWorld.ismastersim then
+            return inst
+        end
+
         if not inst.components.fuel then
             inst:AddComponent("fuel")
         end
@@ -544,6 +548,23 @@ for _,prefab in ipairs(froglegs) do
     end)
 end
 
+-- Add mutated tag to mutated enemies
+
+local mutated = {"mutatedhound","mutated_penguin","spider_moon","wobster_moonglass","bird_mutant","bird_mutant_spitter",
+}
+
+if CurrentRelease.GreaterOrEqualTo("R31_LUNAR_MUTANTS") then
+    local added_mutants = {"mutateddeerclops","mutatedwarg","mutatedbearger","lunarfrog",}
+    for _,prefab in ipairs(added_mutants) do
+        table.insert(mutated,prefab)
+    end
+end
+
+for _,prefab in ipairs(mutated) do
+    AddPrefabPostInit(prefab, function(inst)
+        inst:AddTag("mutated")
+    end)
+end
 
 -----------------------------------SimPostInit----------------------------------
 

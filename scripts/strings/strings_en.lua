@@ -1521,6 +1521,51 @@ return {
 
 		},
 
+		["Mischievous Thief"] = {
+
+			NAME = "Mischievous Thief",
+			DESCRIPTION = "I have heard of a thief that has been stealing from Tallbirds. I want to meet this person, but I need to know that they are trustworthy. Show me that you are by stealing %s Tallbird eggs!",
+			COUNTER = "Tallbird eggs stolen",
+			HOVER = "Steal %s Tallbird eggs",
+
+		},
+
+		["People Pleaser"] = {
+
+			NAME = "People Pleaser",
+			DESCRIPTION = "I want to make people happy! But to be able to do this, I need more people to have positive thoughts! Be one of those persons and show me how happy you are!",
+			COUNTER = "Sanity Aura",
+			HOVER = "Have a Sanity Aura of %s/min",
+
+		},
+
+		["The Hunt For Mutants"] = {
+
+			NAME = "The Hunt For Mutants",
+			DESCRIPTION = "I have heard of giant mutants that has been terrorizing pigmans around lunar rifts. I want to hunt them down, but I'm not strong enough. Help me by killing %s of them!",
+			COUNTER = "Mutated Giants killed",
+			HOVER = "Kill %s Mutated Giants (either Crystal Deerclops, Armored Bearger or Possessed Varg)",
+
+		},
+
+		["Praise The Pigking"] = {
+
+			NAME = "Praise The Pigking",
+			DESCRIPTION = "The Pigking is the most generous person in the Constant! He gives us so much gold, but we need to praise him for it! Show me that you are worthy of his gold by giving him so many items that he will give you %s gold!",
+			COUNTER = "Gold",
+			HOVER = "Receive %s gold from the Pigking",
+
+		},
+
+		["Training Makes Perfect"] = {
+
+			NAME = "Training Makes Perfect",
+			DESCRIPTION = "I have been getting old and I don't have a need for my Howlitzer anymore. I want to give it to someone who is worthy of it. Show me your ranged skills by dealing %s damage with blowdarts!",
+			COUNTER = "Damage",
+			HOVER = "Deal %s damage with blowdarts",
+
+		},
+
 
 		
 

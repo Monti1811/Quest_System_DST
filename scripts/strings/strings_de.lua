@@ -1081,6 +1081,36 @@ return {
 			COUNTER = "Pacifier gebaut",
 			HOVER = "%s Pacifier bauen",
 		},
+		["Mischievous Thief"] = {
+			NAME = "Schelmischer Dieb",
+			DESCRIPTION = "Ich habe von einem Dieb gehört, der die Tallbirds bestohlen hat. Ich möchte diese Person treffen, aber ich muss wissen, ob sie vertrauenswürdig ist. Zeig mir, dass du es bist, indem du %s Tallbird-Eier stiehlst!",
+			COUNTER = "Tallbird-Eier gestohlen",
+			HOVER = "Stehlen von %s Tallbird-Eiern",
+		},
+		["People Pleaser"] = {
+			NAME = "Sympathieträger",
+			DESCRIPTION = "Ich möchte die Menschen glücklich machen! Aber um das zu können, brauche ich mehr Menschen, die positive Gedanken haben! Sei einer dieser Menschen und zeige mir, wie glücklich du bist!",
+			COUNTER = "Aura der Sanität",
+			HOVER = "Haben eine Sanity-Aura von %s/min",
+		},
+		["The Hunt For Mutants"] = {
+			NAME = "Die Jagd auf Mutanten",
+			DESCRIPTION = "Ich habe von riesigen Mutanten gehört, die die Schweinehirten in den Mondspalten terrorisieren. Ich möchte sie zur Strecke bringen, aber ich bin nicht stark genug. Hilf mir, indem du %s von ihnen tötest!",
+			COUNTER = "Mutierte Giganten getötet",
+			HOVER = "Töte %s mutierte Riesen (entweder Kristallhirsche, gepanzerte Bearger oder besessene Varg)",
+		},
+		["Praise The Pigking"] = {
+			NAME = "Lob für den Schweinekönig",
+			DESCRIPTION = "Der Schweinekönig ist der großzügigste Mensch in der Konstante! Er gibt uns so viel Gold, aber wir müssen ihn dafür loben! Zeigt mir, dass ihr seines Goldes würdig seid, indem ihr ihm so viele Gegenstände gebt, dass er euch %s Gold geben wird!",
+			COUNTER = "Gold",
+			HOVER = "Erhalten Sie %s Gold vom Pigking",
+		},
+		["Training Makes Perfect"] = {
+			NAME = "Übung macht den Meister",
+			DESCRIPTION = "Ich bin alt geworden und habe keinen Bedarf mehr an meinem Howlitzer. Ich möchte sie an jemanden weitergeben, der ihrer würdig ist. Zeig mir deine Fernkampffähigkeiten, indem du %s Schaden mit Blowdarts verursachst!",
+			COUNTER = "Schaden",
+			HOVER = "Verursache %s Schaden mit Schlagpfeilen",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Bleibe für x Sekunden auf einmal bei über 90% Sanity!",

@@ -1080,6 +1080,36 @@ return {
 			COUNTER = "奶嘴",
 			HOVER = "建立 %s 个奶嘴",
 		},
+		["Mischievous Thief"] = {
+			NAME = "调皮捣蛋的小偷",
+			DESCRIPTION = "我听说有一个小偷一直在偷高脚鸟的东西。我想见见这个人，但我需要知道他是否值得信赖。通过偷窃 %s 的高脚鸟蛋来证明你是可信的！",
+			COUNTER = "高脚鸟蛋被盗",
+			HOVER = "偷窃 %s 高脚鸟蛋",
+		},
+		["People Pleaser"] = {
+			NAME = "人见人爱",
+			DESCRIPTION = "我想让人们快乐！但要做到这一点，我需要更多的人拥有积极的想法！成为这些人中的一员，向我展示你有多快乐！",
+			COUNTER = "理智光环",
+			HOVER = "拥有 %s/min 的理智光环",
+		},
+		["The Hunt For Mutants"] = {
+			NAME = "猎杀变种人",
+			DESCRIPTION = "我听说有巨大的变异体在月球裂口附近恐吓猪人。我想追捕它们，但我不够强大。请帮我杀死 %s 的变异体！",
+			COUNTER = "变异巨人被杀死",
+			HOVER = "杀死 %s 变异巨人（水晶鹿角人、装甲熊怪或附身瓦格人）",
+		},
+		["Praise The Pigking"] = {
+			NAME = "赞美猪王",
+			DESCRIPTION = "猪君是《恒星》中最慷慨的人！他给了我们这么多黄金，但我们需要为此称赞他！给他这么多物品，他就会给你 %s 的黄金，证明你值得他给你黄金！",
+			COUNTER = "金色",
+			HOVER = "从猪王处获得 %s 金子",
+		},
+		["Training Makes Perfect"] = {
+			NAME = "培训成就完美",
+			DESCRIPTION = "我老了，不再需要我的 Howlitzer 了。我想把它送给值得拥有它的人。用吹箭造成 %s 的伤害，向我展示你的远程技能！",
+			COUNTER = "损坏",
+			HOVER = "用吹镖造成 %s 的伤害",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "一次性保持在90%以上的理智状态 x 秒!",

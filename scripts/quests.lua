@@ -3527,7 +3527,7 @@ local quests = {
 		name = "The Healer",
 		victim = "",
 		counter_name = GetQuestString("The Healer","COUNTER"),
-		description = GetQuestString("The Healer","DESCRIPTION",100),
+		description = GetQuestString("The Healer","DESCRIPTION",150),
 		amount = 150,
 		rewards = {reviver = 1, healingsalve = 2},
 		points = 250,
@@ -3538,7 +3538,7 @@ local quests = {
 		difficulty = 2,
 		tex = "healingsalve.tex",
 		atlas = "images/inventoryimages1.xml",
-		hovertext = GetQuestString("The Healer","HOVER",100),
+		hovertext = GetQuestString("The Healer","HOVER",150),
 	},
 	--104
 	{
@@ -4334,7 +4334,146 @@ local quests = {
 		hovertext = GetQuestString("It's A Trap!", "HOVER", 10),
 		anim_prefab = "spider_warrior"
 	},
+	--141
+	{
+		name = "Mischievous Thief",
+		victim = "",
+		counter_name = GetQuestString("Mischievous Thief", "COUNTER"),
+		description = GetQuestString("Mischievous Thief", "DESCRIPTION", 5),
+		amount = 5,
+		rewards = {meat = 10, tallbirdegg_cracked = 1, talleggs = 1},
+		points = 500,
+		start_fn = function(inst, amount, quest_name)
+			local function IsTallbirdEgg(_, data)
+				return data and data.loot and data.loot.prefab == "tallbirdegg" and 1
+			end
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["pick x y times"](inst, amount, quest_name, IsTallbirdEgg)
+		end,
+		onfinished = nil,
+		difficulty = 2,
+		tex = "tallbirdegg.tex",
+		--atlas = "images/victims.xml",
+		hovertext = GetQuestString("Mischievous Thief", "HOVER", 5),
+	},
+	--142
+	{
+		name = "People Pleaser",
+		victim = "",
+		counter_name = GetQuestString("People Pleaser", "COUNTER"),
+		description = GetQuestString("People Pleaser", "DESCRIPTION", 30),
+		amount = 30,
+		rewards = {[":func:sanityaura;10"] = 16, leafymeatsouffle = 3},
+		points = 500,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["have sanityaura of x"](inst, amount, quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 3,
+		tex = "flowerhat.tex",
+		--atlas = "images/victims.xml",
+		hovertext = GetQuestString("People Pleaser", "HOVER", 30),
+	},
+	--143
+	{
+		name = "The Hunt For Mutants",
+		victim = "",
+		counter_name = GetQuestString("The Hunt For Mutants", "COUNTER"),
+		description = GetQuestString("The Hunt For Mutants", "DESCRIPTION", 3),
+		amount = 3,
+		rewards = {security_pulse_cage = 1, wagpunk_bits = 10},
+		points = 1750,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst, amount, nil, quest_name, function(_, victim) return victim:HasTag("mutated") and (victim:HasTag("epic") or victim:HasTag("largecreature")) end)
+		end,
+		onfinished = nil,
+		difficulty = 5,
+		tex = "mutateddeerclops.tex",
+		--atlas = "images/victims.xml",
+		hovertext = GetQuestString("The Hunt For Mutants", "HOVER", 3),
+		anim_prefab = "mutateddeerclops",
+	},
+	--144
+	{
+		name = "Praise The Pigking",
+		victim = "",
+		counter_name = GetQuestString("Praise The Pigking", "COUNTER"),
+		description = GetQuestString("Praise The Pigking", "DESCRIPTION", 250),
+		amount = 250,
+		rewards = {[":func:build_buffer"] = "cotl_tabernacle_level1", turf_cotl_gold = 40, [":func:crit;20"] = 16},
+		points = 1200,
+		start_fn = function(inst, amount, quest_name)
+			local gold = GetCurrentAmount(inst,quest_name)
+			local pigking = TheSim:FindFirstEntityWithTag("king")
+			if not pigking then
+				print("[Quest System] Pigking could not be found, aborting quest", quest_name)
+				return
+			end
+			local function OnTrade(_,data)
+				devprint("OnTrade", inst,amount,quest_name,data.item)
+				if data then
+					if data.giver == inst then
+						local goldvalue = data.item and data.item.components.tradable and data.item.components.tradable.goldvalue
+						if goldvalue then
+							inst:PushEvent("quest_update",{quest = quest_name,amount = goldvalue})
+							gold = gold + goldvalue
+							if gold >= amount then
+								pigking:RemoveEventCallback("trade",OnTrade)
+							end
+						end
+					end
+				end
+			end
+			pigking:ListenForEvent("trade",OnTrade)
+			local function OnForfeitedQuest()
+				if pigking then
+					pigking:RemoveEventCallback("trade",OnTrade)
+				end
+			end
+			OnForfeit(pigking,OnForfeitedQuest,quest_name)
+		end,
+		onfinished = nil,
+		difficulty = 4,
+		tex = "pigking.tex",
+		atlas = "images/victims.xml",
+		hovertext = GetQuestString("Praise The Pigking", "HOVER", 250),
+		anim_prefab = "pigking",
+	},
+	--145
+	{
+		name = "Training Makes Perfect",
+		victim = "",
+		counter_name = GetQuestString("Training Makes Perfect", "COUNTER"),
+		description = GetQuestString("Training Makes Perfect", "DESCRIPTION", 5000),
+		amount = 5000,
+		rewards = {houndstooth_blowpipe = 1},
+		points = 1750,
+		start_fn = function(inst, amount, quest_name)
+			local function IsDart(_, data)
+				return data and data.weapon and data.weapon.prefab:find("blowdart")
+			end
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["deal x amount of damage"](inst, amount, nil, quest_name, nil, IsDart)
+		end,
+		onfinished = nil,
+		difficulty = 4,
+		tex = "blowdart_pipe.tex",
+		--atlas = "images/victims.xml",
+		hovertext = GetQuestString("The Hunt For Mutants", "HOVER", 5000),
+	},
+
 }
+
+
+--Remove quests that are only able to be gotten in the beta
+
+
+if not CurrentRelease.GreaterOrEqualTo("R31_LUNAR_MUTANTS") then
+	local quests_to_remove = {145, 143,}
+	for _, quest_num in ipairs(quests_to_remove) do
+		table.remove(quests, quest_num)
+	end
+end
+
+--Custom changes to specific quests
 
 if TUNING.QUEST_COMPONENT.GLOBAL_REWARDS then
 	quests[52].rewards["Next Night"] = "FullMoon"
