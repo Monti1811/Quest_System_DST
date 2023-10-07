@@ -1,38 +1,39 @@
-local LevelUpComponent = Class(function(self, inst)
-    self.inst = inst
+local workmultiplier_actions = {
+	ACTIONS.CHOP,
+	ACTIONS.DIG,
+	ACTIONS.HAMMER,
+	ACTIONS.MINE,
+}
 
-    self.level = 1
-    self.bonus = {
-    	healthbonus = 0,
-	    sanitybonus = 0,
-	    hungerbonus = 0,
-	    speedbonus = 0,
-	    summerinsulationbonus = 0,
-	    winterinsulationbonus = 0,
-	    workmultiplierbonus = {
-	    	["ACTIONS.CHOP"] = 1,
-	    	["ACTIONS.DIG"]= 1,
-	    	["ACTIONS.HAMMER"] = 1,
-	    	["ACTIONS.MINE"] = 1,
-		},
+local LevelUpComponent = Class(function(self, inst)
+	self.inst = inst
+
+	self.level = 1
+	self.bonus = {
+		healthbonus = 0,
+		sanitybonus = 0,
+		hungerbonus = 0,
+		speedbonus = 0,
+		summerinsulationbonus = 0,
+		winterinsulationbonus = 0,
+		workmultiplierbonus = {},
 
 	}
 
 	self.leveluprate = {
 		healthbonus = 1 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
-	    sanitybonus = 1 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
-	    hungerbonus = 1 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
-	    speedbonus = 0.005 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
-	    summerinsulationbonus = 1 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
-	    winterinsulationbonus = 1 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
-	    workmultiplierbonus = {
-	    	["ACTIONS.CHOP"] = 0.002 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
-	    	["ACTIONS.DIG"] = 0.002 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
-	    	["ACTIONS.HAMMER"] = 0.002 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
-	    	["ACTIONS.MINE"] = 0.002 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
-		},
-
+		sanitybonus = 1 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
+		hungerbonus = 1 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
+		speedbonus = 0.005 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
+		summerinsulationbonus = 1 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
+		winterinsulationbonus = 1 * TUNING.QUEST_COMPONENT.LEVELUPRATE,
+		workmultiplierbonus = {},
 	}
+
+	for _, action in ipairs(workmultiplier_actions) do
+		self.bonus.workmultiplierbonus[action] = 1
+		self.leveluprate.workmultiplierbonus[action] = 0.08 * TUNING.QUEST_COMPONENT.LEVELUPRATE
+	end
 
 	self:Init()
 
@@ -138,7 +139,7 @@ function LevelUpComponent:OnLevelUp(level)
 			for kk,vv in pairs(v) do
 				self.bonus[k][kk] = vv + self.leveluprate[k][kk] * level
 			end
-			self.inst.q_system[k]:set(self.bonus[k]["ACTIONS.CHOP"])
+			self.inst.q_system[k]:set(self.bonus[k][ACTIONS.CHOP])
 		else
 			self.bonus[k] = v + self.leveluprate[k] * level
 			self.inst.q_system[k]:set(self.bonus[k])
