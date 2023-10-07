@@ -175,6 +175,21 @@ function GLOBAL.c_testquests(inst)
     inst.components.quest_component.max_amount_of_quests = old_max
 end
 
+if GLOBAL.TUNING.QUEST_COMPONENT.DEBUG then
+    local string_util = require("strings/strings_combinator")
+    function GLOBAL.debug_strings()
+        for key, lang_strings in ipairs(string_util.getAllStrings()) do
+            GLOBAL.STRINGS.QUEST_COMPONENT = lang_strings
+            package.loaded["quests"] = nil
+            devprint(key)
+            local quests = require("quests")
+            devprint(quests[110].description)
+        end
+        GLOBAL.STRINGS.QUEST_COMPONENTGLOBAL.STRINGS.QUEST_COMPONENT = string_util.getLanguageStrings(GLOBAL.TUNING.QUEST_COMPONENT.LANGUAGE)
+    end
+end
+
+
 AddClassPostConstruct("screens/consolescreen",function(self)
     local old_init = self.DoInit
     self.DoInit = function(self,...)

@@ -67,24 +67,11 @@ end
 local _strings = string_util.getAllStrings()
 
 local function FormatString(str,...)
-	if ... then
+	if ... and str ~= "" then
 		--devprint("FormatString",str,...)
 		return string.format(str,...)
 	else
 		return str
-	end
-end
-
-if QUEST_COMPONENT.DEBUG then
-	function GLOBAL.debug_strings()
-		for key, lang_strings in ipairs(string_util.getAllStrings()) do
-			STR_QUEST_COMPONENT = lang_strings
-			package.loaded["quests"] = nil
-			devprint(key)
-			local quests = require("quests")
-			devprint(quests[110].description)
-		end
-		STR_QUEST_COMPONENT = string_util.getLanguageStrings(GLOBAL.TUNING.QUEST_COMPONENT.LANGUAGE)
 	end
 end
 
