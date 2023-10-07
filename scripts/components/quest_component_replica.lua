@@ -101,7 +101,7 @@ function Quest_Component:AddQuest(name,current_amount,custom_vars)
 		end
 		new_quest.rewards = new_quest.custom_rewards ~= nil and type(new_quest.custom_rewards) == "function" and new_quest.custom_rewards(self.inst,new_quest.rewards,new_quest.custom_vars) or new_quest.rewards
 		self._quests[name] = new_quest
-		if new_quest.victim ~= "" then
+		if new_quest.victim ~= "" and new_quest.victim ~= nil then
 			self._current_victims[name] = new_quest.victim
 		end
 	end

@@ -12,42 +12,15 @@ local function StopTask(entity, task)
 	end
 end
 
-local function OnForfeit(inst,fn,quest_name)
-	local function OnForfeitedQuest(inst,name)
-		if name == quest_name then
-			fn(inst)
-			inst:RemoveEventCallback("forfeited_quest",OnForfeitedQuest)
-		end
-	end
-	inst:ListenForEvent("forfeited_quest",OnForfeitedQuest)
-end
-
-local function GetCurrentAmount(player,quest_name)
-	if player and player.components.quest_component then
-		if player.components.quest_component.quests[quest_name] then
-			return player.components.quest_component.quests[quest_name].current_amount or 0
-		end
-	end
-	return 0
-end
-
-local function GetValues(player,quest_name,value_name)
-	if player.components.quest_component == nil then return end
-	local value = 0
-	local saved_value = player.components.quest_component:GetQuestData(quest_name,value_name)
-	return saved_value or value
-end
-
-local function RemoveValues(player,quest_name)
-	if player.components.quest_component == nil then return end
-	player.components.quest_component.quest_data[quest_name] = nil
-end
-
-local function ScaleQuest(inst,quest,val)
-	if inst.components.quest_component then
-		inst.components.quest_component.scaled_quests[quest] = val
-	end
-end
+local quest_functions = require("quest_util/quest_functions")
+local GetCurrentAmount = quest_functions.GetCurrentAmount
+local GetValues = quest_functions.GetValues
+local RemoveValues = quest_functions.RemoveValues
+local MakeScalable = quest_functions.MakeScalable
+local ScaleQuest = quest_functions.ScaleQuest
+local ScaleEnd = quest_functions.ScaleEnd
+local CreateQuest = quest_functions.CreateQuest
+local OnForfeit = quest_functions.OnForfeit
 
 local quests = {
 

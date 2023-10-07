@@ -239,7 +239,7 @@ function Quest_Component:AddQuest(name,debug)
 	end
 	--Change the rewards depending on the custom_rewards function
 	new_quest.rewards = quest.custom_rewards ~= nil and type(quest.custom_rewards) == "function" and quest.custom_rewards(self.inst,new_quest.rewards,new_quest.custom_vars) or new_quest.rewards
-	if new_quest.victim ~= "" then
+	if new_quest.victim ~= "" and new_quest.victim ~= nil then
 		if self.current_victims[new_quest.victim] == nil then
 			self.current_victims[new_quest.victim] = {}
 		end

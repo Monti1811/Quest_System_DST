@@ -427,78 +427,7 @@ function GLOBAL.SetBossFightRewards(difficulty,rewards,overwrite)
 	end
 end
 
-local function GetCurrentAmount(player,quest_name)
-	local quest_component = player.components.quest_component
-	if quest_component then
-		if quest_component.quests[quest_name] then
-			return quest_component.quests[quest_name].current_amount or 0
-		end
-	end
-	return 0
-end
-
-local function GetValues(player,quest_name,value_name)
-	local quest_component = player.components.quest_component
-	if quest_component == nil then
-		return
-	end
-	local value = 0
-	local saved_value = quest_component:GetQuestData(quest_name,value_name)
-	return saved_value or value
-end
-
-local function RemoveValues(player,quest_name)
-	local quest_component = player.components.quest_component
-	if quest_component == nil then
-		return
-	end
-	quest_component.quest_data[quest_name] = nil
-end
-
-local function MakeScalable(inst, amount, quest_name, getScaleFn)
-	local quest_component = inst.components.quest_component
-	local max_scale = quest_component and quest_component.scaled_quests[quest_name] and quest_component.scaled_quests[quest_name] + 1 or 1
-	local scale = getScaleFn and getScaleFn(max_scale) or math.random(math.max(max_scale-1, 1),max_scale)
-	return {scale = scale}
-end
-
-local function ScaleQuest(inst,quest,val)
-	local quest_component = inst.components.quest_component
-	if quest_component then
-		quest_component.scaled_quests[quest] = val
-	end
-end
-
-local function ScaleEnd(inst,items,quest_name)
-	local quest_component = inst.components.quest_component
-	local quest = quest_component.quests[quest_name]
-	local scale = quest and quest.custom_vars and quest.custom_vars.scale or 1
-	local old_scale = quest_component.scaled_quests[quest_name]
-	if old_scale then
-		scale = math.max(old_scale,scale)
-	end
-	ScaleQuest(inst,quest_name,scale)
-end
-
-local function OnForfeit(inst,fn,quest_name)
-	local OnFinishedQuest = function() end
-	local function OnForfeitedQuest(_inst,name)
-		if name == quest_name then
-			fn(_inst)
-			_inst:RemoveEventCallback("forfeited_quest",OnForfeitedQuest)
-			_inst:RemoveEventCallback("finished_quest",OnFinishedQuest)
-		end
-	end
-	OnFinishedQuest = function(_inst,name)
-		if name == quest_name then
-			fn(_inst)
-			_inst:RemoveEventCallback("finished_quest",OnFinishedQuest)
-			_inst:RemoveEventCallback("forfeited_quest",OnForfeitedQuest)
-		end
-	end
-	inst:ListenForEvent("forfeited_quest",OnForfeitedQuest)
-	inst:ListenForEvent("finished_quest",OnFinishedQuest)
-end
+local quest_functions = require("quest_util/quest_functions")
 
 function GLOBAL.SetQuestSystemEnv(env)
 	env = env or GLOBAL.getfenv(2)
@@ -516,12 +445,13 @@ function GLOBAL.SetQuestSystemEnv(env)
 	env.GetQuestString = GLOBAL.GetQuestString
 	env.GetRewardString = GLOBAL.GetRewardString
 	env.GetKillString = GLOBAL.GetKillString
-	env.GetCurrentAmount = GetCurrentAmount
-	env.GetValues = GetValues
-	env.RemoveValues = RemoveValues
-	env.MakeScalable = MakeScalable
-	env.ScaleEnd = ScaleEnd
-	env.OnForfeit = OnForfeit
+	env.GetCurrentAmount = quest_functions.GetCurrentAmount
+	env.GetValues = quest_functions.GetValues
+	env.RemoveValues = quest_functions.RemoveValues
+	env.MakeScalable = quest_functions.MakeScalable
+	env.ScaleEnd = quest_functions.ScaleEnd
+	env.OnForfeit = quest_functions.OnForfeit
 	env.custom_functions = QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS
+	env.CreateQuest = quest_functions.CreateQuest
 	GLOBAL.setfenv(1,env)
 end

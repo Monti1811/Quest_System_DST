@@ -1452,7 +1452,7 @@ function Quest_Board_Widget:AddQuestVerify()
                 local GOAL_TABLE =  QUEST_BOARD.PREFABS_MOBS[string.gsub(victim,"start_fn_","")]
                 quest.counter_name = GOAL_TABLE and GOAL_TABLE["counter"]
                 quest.start_fn = victim
-                quest.victim = ""
+                quest.victim = nil
                 quest.tex = GOAL_TABLE and GOAL_TABLE["tex"]
                 quest.atlas = GOAL_TABLE and GOAL_TABLE["atlas"]
             else

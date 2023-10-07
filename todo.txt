@@ -20,10 +20,10 @@ bug fixes:
 
 
 todos:
---gräber ausheben mission							: done
---remove victim = "" for most quests, replace with victim = nil
+--gräber ausheben mission										: done
+--remove victim = "" for most quests, replace with victim = nil : done
 
 quest_ideas:
--- stehlen von eier von großen vögeln
+-- stehlen von eier von großen vögeln							:done
 
 todo check quests:
