@@ -185,7 +185,7 @@ if GLOBAL.TUNING.QUEST_COMPONENT.DEBUG then
             local quests = require("quests")
             devprint(quests[110].description)
         end
-        GLOBAL.STRINGS.QUEST_COMPONENTGLOBAL.STRINGS.QUEST_COMPONENT = string_util.getLanguageStrings(GLOBAL.TUNING.QUEST_COMPONENT.LANGUAGE)
+        GLOBAL.STRINGS.QUEST_COMPONENT = string_util.getLanguageStrings(GLOBAL.TUNING.QUEST_COMPONENT.LANGUAGE)
     end
 end
 

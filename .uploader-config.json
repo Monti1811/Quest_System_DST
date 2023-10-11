@@ -15,6 +15,7 @@
 		"venv/",
         ".uploader-config.json",
         "scripts/remove_quests.lua",
+        "scripts/own_quests.lua",
         "modicon.png",
 		"modicon.xcf",
 		"todo.txt",

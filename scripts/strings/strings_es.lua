@@ -1113,6 +1113,34 @@ return {
 			COUNTER = "Daños",
 			HOVER = "Inflige %s de daño con cerbatanas",
 		},
+		["What Is Hunger?"] = {
+			NAME = "¿Qué es el hambre?",
+			DESCRIPTION = "La constante es un lugar duro, ¡pero he oído hablar de gente que ni siquiera sabe lo que es el hambre! ¡Demuéstrame que eres uno de ellos manteniéndote por encima del 80%% de hambre durante %s segundos!",
+			COUNTER = "Segundos por encima del 80% de hambre",
+			HOVER = "Permanecer %s segundos por encima del 80%% de hambre a la vez",
+		},
+		["Repairing The Past"] = {
+			NAME = "Reparar el pasado",
+			DESCRIPTION = "El pasado es algo que no podemos cambiar, ¡pero podemos repararlo! ¡Necesito a alguien que repare %s objetos con un %s!",
+			COUNTER = "Artículos reparados",
+			HOVER = "Reparar %s elementos con un %s",
+		},
+		["A Soul For A Soul"] = {
+			NAME = "Un alma para un alma",
+			DESCRIPTION = "Se dice que el alma de una persona persiste a pesar de los cambios físicos. ¡Quiero probar esta teoría! ¡Demuéstrame que eres digno de ello transformándote en otro personaje!",
+			COUNTER = "Transformaciones",
+			HOVER = "Cambia a otro personaje con un ídolo de roca lunar",
+		},
+		["Dancing With The Devil"] = {
+			NAME = "Bailando con el diablo",
+			DESCRIPTION = "El Diablo, también conocido como el Antiguo Tejedor de Combustible, es una criatura muy fuerte que lleva mucho tiempo aterrorizando las ruinas. Todos viven temiéndole, ¡pero no deberían tener miedo! ¡Necesito que alguien les muestre que el Diablo no es tan aterrador como creen bailando %s veces cerca de él!",
+			COUNTER = "Bailes",
+			HOVER = "Baila %s veces cerca del Antiguo Tejedor de Combustible",
+		},
+		["Hell's Guardian"] = {
+			NAME = "Guardián del Infierno",
+			DESCRIPTION = "La Libélula guarda la entrada al infierno, ¡pero yo quiero entrar! Necesito que alguien la derrote para poder entrar en la Piscina de Magma.",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Mantente por encima del 90% de cordura durante x segundos a la vez.",

@@ -1455,6 +1455,30 @@ local custom_functions = {
 		OnForfeit(player,OnForfeitedQuest,quest_name)
 	end,
 
+	["repair x times with item y"] = function(player, amount, quest_name, items, repair_items, repair_event)
+		repair_event = repair_event or "forgerepair"
+		items = type(items) == "string" and {[items] = true} or items
+		repair_items = type(repair_items) == "string" and {[repair_items] = true} or repair_items
+		local current = GetCurrentAmount(player,quest_name)
+		local function OnRepaired(_, data)
+			if items == nil or (data.target and items[data.target.prefab]) then
+				if repair_items == nil or (data.repair_item and repair_items[data.repair_item.prefab]) then
+					player:PushEvent("quest_update",{quest = quest_name,amount = 1})
+					current = current + 1
+					if current >= amount then
+						player:RemoveEventCallback(repair_event, OnRepaired)
+					end
+				end
+			end
+		end
+		player:ListenForEvent(repair_event, OnRepaired)
+		local function OnForfeitedQuest(_player)
+			_player:RemoveEventCallback(repair_event, OnRepaired)
+		end
+		OnForfeit(player,OnForfeitedQuest,quest_name)
+	end,
+
+
 	["stay x amount of time on y boat"] = function(player,amount,boat,at_once,quest_name)
 		local current = GetCurrentAmount(player,quest_name)
 		local OnEmbarked = function() end

@@ -366,6 +366,19 @@ end
 
 AddComponentPostInit("spellcaster", OnCastSpell)
 
+local function OnRepair(self)
+	local old_OnRepair = self.OnRepair
+	function self:OnRepair(target, doer, ...)
+		local ret = old_OnRepair(self, target, doer, ...)
+		if ret and doer then
+			doer:PushEvent("forgerepair", { target = target, repair_item = self.inst })
+		end
+		return ret
+	end
+end
+
+AddComponentPostInit("forgerepair", OnRepair)
+
 local function OnFinishConstruction(self)
 	local old_OnConstruct = self.OnConstruct
 	function self:OnConstruct(doer, items, ...)

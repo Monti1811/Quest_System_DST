@@ -1111,6 +1111,34 @@ return {
 			COUNTER = "Schaden",
 			HOVER = "Verursache %s Schaden mit Schlagpfeilen",
 		},
+		["What Is Hunger?"] = {
+			NAME = "Was ist Hunger?",
+			DESCRIPTION = "Die Konstante ist ein harter Ort, aber ich habe von Leuten gehört, die nicht einmal wissen, was Hunger ist! Zeig mir, dass du einer von ihnen bist, indem du für %s Sekunden über 80%% Hunger bleibst!",
+			COUNTER = "Sekunden über 80% Hunger",
+			HOVER = "Bleibe %s Sekunden über 80%% Hunger auf einmal",
+		},
+		["Repairing The Past"] = {
+			NAME = "Die Vergangenheit reparieren",
+			DESCRIPTION = "Die Vergangenheit ist etwas, das wir nicht ändern können, aber wir können sie reparieren! Ich brauche jemanden, der %s Gegenstände mit einem %s repariert!",
+			COUNTER = "Reparierte Gegenstände",
+			HOVER = "Reparieren Sie %s Elemente mit einem %s",
+		},
+		["A Soul For A Soul"] = {
+			NAME = "Eine Seele für eine Seele",
+			DESCRIPTION = "Man sagt, dass die Seele eines Menschen durch körperliche Veränderungen hindurch bestehen bleibt. Ich möchte diese Theorie testen! Zeig mir, dass du dessen würdig bist, indem du dich in einen anderen Charakter verwandelst!",
+			COUNTER = "Verwandlungen",
+			HOVER = "Wechsle zu einem anderen Charakter mit einem Mondfelsen-Idol",
+		},
+		["Dancing With The Devil"] = {
+			NAME = "Der Tanz mit dem Teufel",
+			DESCRIPTION = "Der Teufel, auch bekannt als der alte Fuelweaver, ist eine sehr starke Kreatur, die die Ruinen schon seit langer Zeit terrorisiert. Alle leben in Angst vor ihm, aber sie sollten keine Angst haben! Ich brauche jemanden, der ihnen zeigt, dass der Teufel nicht so schrecklich ist, wie sie denken, indem er %s mal in seiner Nähe tanzt!",
+			COUNTER = "Tänze",
+			HOVER = "Tanze %s mal in der Nähe des Alten Brennstoffwebers",
+		},
+		["Hell's Guardian"] = {
+			NAME = "Wächter der Hölle",
+			DESCRIPTION = "Die Libelle bewacht den Eingang zur Hölle, aber ich will sie betreten! Ich brauche jemanden, der sie besiegt, damit ich den Magmapool betreten kann!",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Bleibe für x Sekunden auf einmal bei über 90% Sanity!",

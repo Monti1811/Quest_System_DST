@@ -64,8 +64,10 @@ local bosses = {
 
 	},
 
-	MEDIUM = {
+	NORMAL = {
+
 		{name = "cherry_watcher", health = 3500, damage = 150, scale = 1.6},
+
 	},
 
 	DIFFICULT = {

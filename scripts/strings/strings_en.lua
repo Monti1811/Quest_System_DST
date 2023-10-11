@@ -1566,6 +1566,48 @@ return {
 
 		},
 
+		["What Is Hunger?"] = {
+
+			NAME = "What Is Hunger?",
+			DESCRIPTION = "The constant is a harsh place, but I have heard of people who don't even know what hunger is! Show me that you are one of them by staying above 80%% hunger for %s seconds!",
+			COUNTER = "Seconds above 80% hunger",
+			HOVER = "Stay %s seconds above 80%% hunger at once",
+
+		},
+
+		["Repairing The Past"] = {
+
+			NAME = "Repairing The Past",
+			DESCRIPTION = "The past is something that we can't change, but we can repair it! I need someone to repair %s items with a %s!",
+			COUNTER = "Items repaired",
+			HOVER = "Repair %s items with a %s",
+
+		},
+
+		["A Soul For A Soul"] = {
+
+			NAME = "A Soul For A Soul",
+			DESCRIPTION = "People have said that the soul of a person persists through physical changes. I want to test this theory! Show me that you are worthy of this by transforming yourself into a another character!",
+			COUNTER = "Transformations",
+			HOVER = "Switch to another character with a Moon Rock Idol",
+
+		},
+
+		["Dancing With The Devil"] = {
+
+			NAME = "Dancing With The Devil",
+			DESCRIPTION = "The Devil aka the Ancient Fuelweaver is a very strong creature that has been terrorizing the ruins for a long time. Everyone lives in fear of him, but they should not be afraid! I need someone to show them that the Devil is not as terrifying as they think by dancing %s times near it!",
+			COUNTER = "Dances",
+			HOVER = "Dance %s times near the Ancient Fuelweaver",
+
+		},
+
+		["Hell's Guardian"] = {
+
+			NAME = "Hell's Guardian",
+			DESCRIPTION = "The Dragonfly guards the entrance to hell, but I want to enter it! I need someone to defeat it so that I can enter the Magma Pool!",
+
+		},
 
 		
 

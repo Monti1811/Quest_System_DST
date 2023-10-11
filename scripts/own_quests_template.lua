@@ -30,10 +30,12 @@ return {
 		custom_rewards_paths = { --if you want to add custom reward paths, add them here. Make a table with the name of the reward as the key and the value is a table with index 1 the tex path and index 2 the atlas path. See the example below.
 			whatever = {
 				"whatever.tex",
-				"whatever.xml",
+				"whatever.xml", --for vanilla items not needed, the game will automatically find it
 			}
 		},
 		anim_prefab = nil, --if you want to add a specific animation of an entity here, add the prefab name here. It will only appear if it is included in the scrapbooks data. If you chose a victim, it will automatically set as the victim prefab, you can still override it.
+		tex = nil, --if you want to add a custom tex, add the tex path here. It will only appear if it is included in the scrapbooks data. If you chose a victim, it will automatically set as the victim prefab, you can still override it.
+		atlas = nil, --if you want to add a custom atlas, add the atlas path here. It will only appear if it is included in the scrapbooks data. If you chose a victim, it will automatically set as the victim prefab, you can still override it.
 	}),
 
 

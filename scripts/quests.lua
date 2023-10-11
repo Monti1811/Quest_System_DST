@@ -1252,7 +1252,7 @@ local quests = {
 					quest.description = GetQuestString("The Biggest Veggy","DESCRIPTION",veggy,veggy,size)
 					quest.hovertext = GetQuestString("The Biggest Veggy","HOVER",veggy,size)
 					quest.tex = data.victim and data.victim..".tex" or quest.tex
-					local inv_atlas = {tomato_oversized = true,pumpkin_oversized = true,watermelon_oversized = true,}
+					--local inv_atlas = {tomato_oversized = true,pumpkin_oversized = true,watermelon_oversized = true,}
 					--if data.victim and inv_atlas[data.victim] then
 					--	quest.atlas = "images/inventoryimages2.xml"
 					--end
@@ -1260,6 +1260,7 @@ local quests = {
 				end
 				return quest
 			end,
+			no_scale_end = true,
 		},
 	}),
 	--46
@@ -2489,6 +2490,7 @@ local quests = {
 				end
 				return quest
 			end,
+			no_scale_end = true,
 		},
 	}),
 	--92
@@ -3529,6 +3531,127 @@ local quests = {
 		end,
 		difficulty = 4,
 		tex = "blowdart_pipe.tex",
+	}),
+	--146
+	CreateQuest({
+		name = "What Is Hunger?",
+		amount = 480,
+		rewards = {meat = 10, [":func:health;10"] = 16},
+		points = 125,
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["stay x time"](inst, "hunger", 1, 0.8, amount, quest_name, true)
+		end,
+		difficulty = 1,
+		tex = "bonestew.tex",
+		scalable = {
+			amount = {[1] = 480, [3] = 1440, [5] = 2880},
+			points = {[1] = 125, [3] = 750, [5] = 1500},
+			rewards = {
+				[1] = {meat_dried = 10, [":func:health;10"] = 16},
+				[3] = {meat_dried = 20, [":func:health;50"] = 16},
+				[5] = {meat_dried = 40, [":func:health;100"] = 16},
+			},
+			post_fn = function(inst, scaled_quest, quest_data)
+				scaled_quest.description = GetQuestString(scaled_quest.name, "DESCRIPTION", scaled_quest.amount)
+			end,
+			scale_steps = {1,3,5},
+		},
+	}),
+	--147
+	CreateQuest({
+		name = "Repairing The Past",
+		amount = 5,
+		rewards = {},
+		points = 1200,
+		start_fn = function(inst, amount, quest_name)
+			local data = inst.components.quest_component.quests[quest_name] and inst.components.quest_component.quests[quest_name].custom_vars
+			local repairkit = data and data.repairkit or "lunarplant_kit"
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["repair x times with item y"](inst, amount, quest_name, nil, {[repairkit] = true})
+		end,
+		difficulty = 3,
+		tex = "lunarplant_kit.tex",
+		description = GetQuestString("Repairing The Past", "DESCRIPTION", 5, STRINGS.NAMES[string.upper("lunarplant_kit")]),
+		hovertext = GetQuestString("Repairing The Past", "HOVER", 5, STRINGS.NAMES[string.upper("lunarplant_kit")]),
+		scalable = {
+			custom_vars_fn = function(inst)
+				local repair_kits = {"lunarplant_kit", "voidcloth_kit", "wagpunkbits_kit"}
+				return { repairkit = repair_kits[math.random(#repair_kits)] }
+			end,
+			variable_fn = function(inst, scaled_quest, quest_data)
+				if quest_data then
+					local repairkit = quest_data.repairkit and STRINGS.NAMES[string.upper(quest_data.repairkit)] or quest_data.repairkit or "nil"
+					scaled_quest.hovertext = GetQuestString("Repairing The Past", "HOVER", scaled_quest.amount, repairkit)
+					scaled_quest.description = GetQuestString("Repairing The Past", "DESCRIPTION", scaled_quest.amount, repairkit)
+					scaled_quest.tex = quest_data.repairkit..".tex"
+					local rewards = {
+						lunarplant_kit = {sword_lunarplant = 1, purebrilliance = 3, lunarplant_husk = 3, [":func:sanityaura;10"] = 16},
+						voidcloth_kit = {voidcloth_scythe = 1, horrorfuel = 3, voidcloth = 3, [":func:planardamage;10"] = 16},
+						wagpunkbits_kit = {wagpunkhat = 1, wagpunk_bits = 3, transistor = 3, [":func:crit;20"] = 16},
+					}
+					scaled_quest.rewards = rewards[quest_data.repairkit] or {}
+				end
+				return scaled_quest
+			end,
+			no_scale_end = true,
+		},
+	}),
+	--148
+	CreateQuest({
+		name = "A Soul For A Soul",
+		amount = 1,
+		rewards = {[":func:escapedeath;1"] = 16, [":func:planardamage;10"] = 16},
+		points = 500,
+		difficulty = 3,
+		start_fn = function(inst, amount, quest_name)
+			local function OnReroll(inst)
+				inst:PushEvent("quest_update", {quest = quest_name, amount = 1})
+			end
+			inst:ListenForEvent("ms_playerreroll", OnReroll)
+			local function OnForfeitedQuest()
+				inst:RemoveEventCallback("ms_playerreroll", OnReroll)
+			end
+			OnForfeit(inst, OnForfeitedQuest, quest_name)
+		end,
+		tex = "moonrockidol.tex"
+	}),
+	--149
+	CreateQuest({
+		name = "Dancing With The Devil",
+		amount = 10,
+		rewards = {[":func:dodge;5"] = 16, phonograph = 1, record_creepyforest = 1},
+		points = 1000,
+		difficulty = 4,
+		start_fn = function(inst, amount, quest_name)
+			local current_amount = GetCurrentAmount(inst, quest_name)
+			local function OnEmote(inst, data)
+				if data and data.tags and data.tags[1] == "dancing" then
+					local stalker = FindEntity(inst, 8, function(ent) return ent.prefab == "stalker_atrium"  end, {"stalker"})
+					if stalker then
+						current_amount = current_amount + 1
+						inst:PushEvent("quest_update", {quest = quest_name, amount = 1})
+						if current_amount >= amount then
+							inst:RemoveEventCallback("emote", OnEmote)
+						end
+					end
+				end
+			end
+			inst:ListenForEvent("emote", OnEmote)
+			local function OnForfeitedQuest()
+				inst:RemoveEventCallback("emote", OnEmote)
+			end
+			OnForfeit(inst, OnForfeitedQuest, quest_name)
+		end,
+		tex = "stalker_atrium.tex",
+		anim_prefab = "stalker_atrium",
+	}),
+	--150
+	CreateQuest({
+		name = "Hell's Guardian",
+		victim = "dragonfly",
+		amount = 1,
+		rewards = {dragon_scales = 3, [":func:planardamage;25"] = 16, [":func:summerinsulation;160"] = 16},
+		points = 1750,
+		difficulty = 5,
 	}),
 
 }

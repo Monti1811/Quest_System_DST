@@ -1114,6 +1114,34 @@ return {
 			COUNTER = "Dommages",
 			HOVER = "inflige %s de dégâts avec des fléchettes",
 		},
+		["What Is Hunger?"] = {
+			NAME = "Qu'est-ce que la faim ?",
+			DESCRIPTION = "La constante est un endroit difficile, mais j'ai entendu parler de personnes qui ne savent même pas ce qu'est la faim ! Montre-moi que tu es l'un d'entre eux en restant au-dessus de 80%% de faim pendant %s secondes !",
+			COUNTER = "Secondes au-dessus de 80 % de la faim",
+			HOVER = "Reste %s secondes au-dessus de 80%% de faim en une seule fois",
+		},
+		["Repairing The Past"] = {
+			NAME = "Réparer le passé",
+			DESCRIPTION = "Le passé est quelque chose que nous ne pouvons pas changer, mais nous pouvons le réparer ! J'ai besoin de quelqu'un pour réparer %s objets avec %s !",
+			COUNTER = "Articles réparés",
+			HOVER = "Réparer %s éléments avec %s",
+		},
+		["A Soul For A Soul"] = {
+			NAME = "Une âme pour une âme",
+			DESCRIPTION = "On dit que l'âme d'une personne persiste à travers les changements physiques. Je veux tester cette théorie ! Montre-moi que tu en es digne en te transformant en un autre personnage !",
+			COUNTER = "Transformations",
+			HOVER = "Passer à un autre personnage avec un idole de roche lunaire",
+		},
+		["Dancing With The Devil"] = {
+			NAME = "Danse avec le diable",
+			DESCRIPTION = "Le Diable, alias l'Ancien Fuelweaver, est une créature très forte qui terrorise les ruines depuis longtemps. Tout le monde vit dans la crainte de cette créature, mais il ne faut pas avoir peur ! J'ai besoin de quelqu'un pour leur montrer que le Diable n'est pas aussi terrifiant qu'ils le pensent en dansant %s fois près de lui !",
+			COUNTER = "Danses",
+			HOVER = "Danse %s fois près de l'ancien Fuelweaver",
+		},
+		["Hell's Guardian"] = {
+			NAME = "Gardien de l'enfer",
+			DESCRIPTION = "La libellule garde l'entrée de l'enfer, mais je veux y entrer ! J'ai besoin de quelqu'un pour la vaincre afin de pouvoir entrer dans la piscine de magma !",
+		},
 	},
 	QUEST_FUNCTIONS = {
 		SANITY_90 = "Rester à plus de 90 % de santé mentale pendant x secondes en une seule fois !",
