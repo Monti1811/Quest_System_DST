@@ -158,7 +158,7 @@ function GLOBAL.chester(x,y,z)
     chesterboss.Transform:SetPosition(x,y,z)
 end]]
 
-function GLOBAL.c_testquests(inst)
+function GLOBAL.c_testquests(with_rewards, inst)
     if not inst then
         inst = GLOBAL.ThePlayer--GLOBAL.ConsoleWorldEntityUnderMouse()
     end
@@ -173,6 +173,11 @@ function GLOBAL.c_testquests(inst)
     end
     GLOBAL.c_completeallquests(inst)
     inst.components.quest_component.max_amount_of_quests = old_max
+    if with_rewards then
+        for name in pairs(inst.components.quest_component.quests) do
+            inst.components.quest_component:CompleteQuest(name)
+        end
+    end
 end
 
 

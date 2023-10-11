@@ -32,7 +32,7 @@ local LevelUpComponent = Class(function(self, inst)
 
 	for _, action in ipairs(workmultiplier_actions) do
 		self.bonus.workmultiplierbonus[action] = 1
-		self.leveluprate.workmultiplierbonus[action] = 0.08 * TUNING.QUEST_COMPONENT.LEVELUPRATE
+		self.leveluprate.workmultiplierbonus[action] = 0.008 * TUNING.QUEST_COMPONENT.LEVELUPRATE
 	end
 
 	self:Init()
