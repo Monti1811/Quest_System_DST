@@ -101,9 +101,9 @@ if TheNet:GetIsServer() or TheNet:IsDedicated() then
 	end]]
 
 	
-	local file = GLOBAL.io.open("scripts/own_quests.lua","r") 
+	local file = GLOBAL.softresolvefilepath("scripts/own_quests.lua")
+	devprint("Checking if own_quests.lua exists", file)
 	if file ~= nil then
-		file:close()
 		print("[Quest System] own_quests.lua file exists, loading now!")
 		local own_quests2 = require "own_quests"
 		if type(own_quests2) == "table" then
