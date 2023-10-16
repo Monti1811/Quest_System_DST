@@ -6,12 +6,12 @@ bug fixes:
 --Wanda can't do quests that require damage received: was never a problem ?!
 --glommer machine doesn't lose durability           : fixed
 --RPG level quest shows %s instead of specific amount: probably fixed
---Feuchtgebiete 2 mal zur auswahl gehabt			: TODO
+--Feuchtgebiete 2 mal zur auswahl gehabt			: should be fixed
 --Bossfight when 2 players at same time				: probably fixed
 --make quests burnable								: fixed
 --Fix temp_boni when too many (more than 5)			: fixed
 --Refactor custom quests to json encode				: fixed
---Mirror of merms also influence other players		: TODO (I think I will leave it as an intented feature)
+--Mirror of merms also influence other players		: fixed
 --rockavocadofruit.tex wird nicht in questbuch angezeigt: fixed
 --animation have wrong size sometimes 				: fixed
 --krampussack.tex cannot be found					: fixed

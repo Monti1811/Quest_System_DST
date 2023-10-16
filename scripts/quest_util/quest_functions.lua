@@ -116,6 +116,11 @@ local function CreateQuest(data)
                 end
             end
         end
+        scalable.auto_strings = scalable.auto_strings or {
+            --counter = nil,
+            hovertext = true,
+            --description = nil,
+        }
         quest.variable_fn = scalable.variable_fn or function(inst, scaled_quest, quest_data)
             local scale = quest_data and quest_data.scale and tonumber(quest_data.scale) or nil
             if scale and scale > 1 then
@@ -124,15 +129,27 @@ local function CreateQuest(data)
                 scaled_quest.rewards = scalable.rewards[scale]
                 scaled_quest.scale = {scale}
                 scaled_quest.difficulty = scale
-                scaled_quest.hovertext = scalable.hovertext and scalable.hovertext[scale] or GetQuestString(scaled_quest.name,"HOVER", scalable.amount[scale])
-                if scalable.counter_name then
+                local amount = scaled_quest.amount
+
+                -- Set the hovertext, counter_name and description depending on if they are set in the scalable table or if the auto_strings are set to true
+                if scalable.hovertext and scalable.hovertext[scale] then
+                    scaled_quest.hovertext = scalable.hovertext[scale]
+                elseif scalable.auto_strings.hovertext then
+                    scaled_quest.hovertext = GetQuestString(scaled_quest.name,"HOVER", amount)
+                end
+                if scalable.counter_name and scalable.counter_name[scale] then
                     scaled_quest.counter_name = scalable.counter_name[scale]
+                elseif scalable.auto_strings.counter then
+                    scaled_quest.counter_name = GetQuestString(scaled_quest.name,"COUNTER", amount)
                 end
-                if scalable.description then
+                if scalable.description and scalable.description[scale] then
                     scaled_quest.description = scalable.description[scale]
+                elseif scalable.auto_strings.description then
+                    scaled_quest.description = GetQuestString(scaled_quest.name,"DESCRIPTION", amount)
                 end
+
                 if scalable.post_fn then
-                    scalable.post_fn(inst,scaled_quest,quest_data)
+                    scalable.post_fn(inst, scaled_quest, quest_data, scale)
                 end
             end
             return scaled_quest

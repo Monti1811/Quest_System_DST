@@ -1056,6 +1056,7 @@ local quests = {
 				[4] = {raincoat = 1,umbrella = 1,[":func:hungerrate;0.7"] = 16,},
 				[5] = {raincoat = 1,umbrella = 1,[":func:hungerrate;0.6"] = 16,},
 			},
+			auto_strings = {},
 			post_fn = function(inst, scaled_quest, quest_data)
 				local minutes = scaled_quest.amount/60 or 1
 				scaled_quest.hovertext = GetQuestString(scaled_quest.name, "HOVER", minutes)
@@ -1295,15 +1296,11 @@ local quests = {
 			amount = {50,100,200,400,750},
 			points = {125,250,500,750,1250},
 			rewards = {
-				[2] = {bonestew = 3,[":func:hunger;10"] = 16,},
-				[3] = {bonestew = 3,[":func:hunger;25"] = 16,},
-				[4] = {bonestew = 3,[":func:hunger;50"] = 16,},
-				[5] = {bonestew = 3,[":func:hunger;100"] = 16,},
+				[2] = {bonestew = 6,[":func:hunger;10"] = 16,},
+				[3] = {bonestew = 9,[":func:hunger;25"] = 16,},
+				[4] = {bonestew = 12,[":func:hunger;50"] = 16,},
+				[5] = {bonestew = 15,[":func:hunger;100"] = 16,},
 			},
-			post_fn = function(inst, scaled_quest, quest_data)
-				local hunger = scaled_quest.amount or 1
-				scaled_quest.hovertext = GetQuestString(scaled_quest.name, "HOVER", hunger)
-			end,
 		},
 	}),
 	--48
@@ -1324,15 +1321,11 @@ local quests = {
 			amount = {50,100,200,400,750},
 			points = {125,250,500,750,1250},
 			rewards = {
-				[2] = {icecream = 3,[":func:sanity;10"] = 16,},
-				[3] = {icecream = 3,[":func:sanity;25"] = 16,},
-				[4] = {icecream = 3,[":func:sanity;50"] = 16,},
-				[5] = {icecream = 3,[":func:sanity;100"] = 16,},
+				[2] = {icecream = 6,[":func:sanity;10"] = 16,},
+				[3] = {icecream = 9,[":func:sanity;25"] = 16,},
+				[4] = {icecream = 12,[":func:sanity;50"] = 16,},
+				[5] = {icecream = 15,[":func:sanity;100"] = 16,},
 			},
-			post_fn = function(inst, scaled_quest, quest_data)
-				local sanity = scaled_quest.amount or 1
-				scaled_quest.hovertext = GetQuestString(scaled_quest.name, "HOVER", sanity)
-			end,
 		},
 	}),
 	--49
@@ -1352,15 +1345,11 @@ local quests = {
 			amount = {50,100,200,400,750},
 			points = {125,250,500,750,1250},
 			rewards = {
-				[2] = {dragonchilisalad = 3,[":func:winterinsulation;40"] = 16,},
-				[3] = {dragonchilisalad = 3,[":func:winterinsulation;80"] = 16,},
-				[4] = {dragonchilisalad = 3,[":func:winterinsulation;120"] = 16,},
-				[5] = {dragonchilisalad = 3,[":func:winterinsulation;160"] = 16,},
+				[2] = {dragonchilisalad = 6,[":func:winterinsulation;40"] = 16,},
+				[3] = {dragonchilisalad = 9,[":func:winterinsulation;80"] = 16,},
+				[4] = {dragonchilisalad = 12,[":func:winterinsulation;120"] = 16,},
+				[5] = {dragonchilisalad = 15,[":func:winterinsulation;160"] = 16,},
 			},
-			post_fn = function(inst, scaled_quest, quest_data)
-				local insulation = scaled_quest.amount or 1
-				scaled_quest.hovertext = GetQuestString(scaled_quest.name, "HOVER", insulation)
-			end,
 		},
 	}),
 	--50
@@ -1380,21 +1369,18 @@ local quests = {
 			amount = {50,100,200,400,750},
 			points = {125,250,500,750,1250},
 			rewards = {
-				[2] = {gazpacho = 3,[":func:summerinsulation;40"] = 16,},
-				[3] = {gazpacho = 3,[":func:summerinsulation;80"] = 16,},
-				[4] = {gazpacho = 3,[":func:summerinsulation;120"] = 16,},
-				[5] = {gazpacho = 3,[":func:summerinsulation;160"] = 16,},
+				[2] = {gazpacho = 6,[":func:summerinsulation;40"] = 16,},
+				[3] = {gazpacho = 9,[":func:summerinsulation;80"] = 16,},
+				[4] = {gazpacho = 12,[":func:summerinsulation;120"] = 16,},
+				[5] = {gazpacho = 15,[":func:summerinsulation;160"] = 16,},
 			},
-			post_fn = function(inst, scaled_quest, quest_data)
-				local insulation = scaled_quest.amount or 1
-				scaled_quest.hovertext = GetQuestString(scaled_quest.name, "HOVER", insulation)
-			end,
 		},
 	}),
 	--51
 	CreateQuest({
 		name = "Survival: Life-threatening",
 		description = GetQuestString("Survival: Life-threatening","DESCRIPTION"),
+		hovertext = GetQuestString("Survival: Life-threatening","HOVER", 10),
 		amount = 1,
 		rewards = {waffles = 3},
 		points = 125,
@@ -1416,17 +1402,19 @@ local quests = {
 		tex = "health.tex",
 		atlas = "images/victims.xml",
 		scalable = {
-			amount = {10,25,50,100,200},
+			amount = {1,1,1,1,1},
 			points = {125,250,500,750,1250},
 			rewards = {
-				[2] = {waffles = 3,[":func:health;10"] = 16,},
-				[3] = {waffles = 3,[":func:health;25"] = 16,},
-				[4] = {waffles = 3,[":func:health;50"] = 16,},
-				[5] = {waffles = 3,[":func:health;100"] = 16,},
+				[2] = {waffles = 6,[":func:health;10"] = 16,},
+				[3] = {waffles = 9,[":func:health;25"] = 16,},
+				[4] = {waffles = 12,[":func:health;50"] = 16,},
+				[5] = {waffles = 15,[":func:health;100"] = 16,},
 			},
-			post_fn = function(inst, scaled_quest, quest_data)
-				local health = scaled_quest.amount or 1
-				scaled_quest.hovertext = GetQuestString(scaled_quest.name, "HOVER", health)
+			auto_strings = {},
+			post_fn = function(inst, scaled_quest, quest_data, scale)
+				local life_remaining = {10,5,3,2,1}
+				scaled_quest.custom_amount = life_remaining[scale]
+				scaled_quest.hovertext = GetQuestString(scaled_quest.name, "HOVER", scaled_quest.custom_amount)
 			end,
 		},
 	}),
@@ -1699,11 +1687,10 @@ local quests = {
 				[4] = {[":func:health;50"] = 16,[":func:sanity;50"] = 16,[":func:hunger;50"] = 16,[":func:damagereduction;0.7"] = 16,[":func:damage;10"] = 16},
 				[5] = {[":func:health;100"] = 16,[":func:sanity;100"] = 16,[":func:hunger;100"] = 16,[":func:damagereduction;0.6"] = 16,[":func:damage;20"] = 16},
 			},
-			post_fn = function(inst, scaled_quest, quest_data)
-				local level = scaled_quest.amount or 1
-				scaled_quest.hovertext = GetQuestString(scaled_quest.name, "HOVER", level)
-				scaled_quest.description = GetQuestString(scaled_quest.name, "DESCRIPTION", level)
-			end,
+			auto_strings = {
+				hovertext = true,
+				description = true,
+			},
 		},
 	}),
 	--66
@@ -3551,9 +3538,10 @@ local quests = {
 				[3] = {meat_dried = 20, [":func:health;50"] = 16},
 				[5] = {meat_dried = 40, [":func:health;100"] = 16},
 			},
-			post_fn = function(inst, scaled_quest, quest_data)
-				scaled_quest.description = GetQuestString(scaled_quest.name, "DESCRIPTION", scaled_quest.amount)
-			end,
+			auto_strings = {
+				hovertext = true,
+				description = true,
+			},
 			scale_steps = {1,3,5},
 		},
 	}),
