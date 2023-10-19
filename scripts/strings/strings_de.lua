@@ -189,6 +189,7 @@ return {
 		SHOW_BONUS = "Zeige Bonus",
 		CURR_RANK = "Derzeitiger Rang\n\nPunkte bis zum nächsten Rang: ",
 		QUEST_LINE = "Diese Mission ist Teil einer Missionsreihe!",
+		SCALING = "Skalierbare Mission (kann schwieriger werden, wenn du sie abschließt)",
 	},
 	TEMP_BONI = {
 		HEALTH = " Leben",

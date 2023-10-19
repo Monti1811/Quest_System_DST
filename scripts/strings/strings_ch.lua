@@ -189,6 +189,7 @@ return {
 		SHOW_BONUS = "显示奖金",
 		CURR_RANK = "目前排名\n\n到下一个等级的积分: ",
 		QUEST_LINE = "这个任务是一个任务线的一部分！",
+		SCALING = "可扩展任务（完成后难度会增加）",
 	},
 	TEMP_BONI = {
 		HEALTH = " 健康",

@@ -213,6 +213,7 @@ return {
 		PROGRESS = "Progress",
 		SHOW_BONUS = "Show Bonus",
 		CURR_RANK = "Current Rank\n\nPoints till next Rank: ",
+		SCALING = "Scalable Quest (can get more difficult if you complete it)",
 
 	},
 

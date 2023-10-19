@@ -100,7 +100,7 @@ local function createQuestCard(self,quest, x, y, scale, num)
     self["quest_"..num].fill:SetTint(1,1,1,0.8)
 
     self["quest_"..num].title = self["quest__"..num]:AddChild(Text(BUTTONFONT, 30, "",{unpack(BLACK)}))
-    self["quest_"..num].title:SetPosition(x, y + 165)
+    self["quest_"..num].title:SetPosition(x, y + 162)
     self["quest_"..num].title:SetScale(scale)
     --self["quest_"..num].title:SetRegionSize(150, 50)
     --print("create questcard",quest.overridename,quest.name,quest.scale,GetQuestString(quest.overridename or quest.name,"NAME",unpack{quest.scale}))
@@ -121,15 +121,22 @@ local function createQuestCard(self,quest, x, y, scale, num)
       self["quest_"..num].quest_line2:SetHoverText(STRINGS_QL.QUEST_LINE)
     end
 
+    local positions = {
+        {x-75, y + 185},
+        {x-55, y + 185},
+    }
+
     if quest.modname then
         local mod_picture = TUNING.QUEST_COMPONENT.MOD_ICONS[quest.modname]
         if mod_picture then
 
             self["quest_"..num].quest_mod_picture = self["quest__"..num]:AddChild(Image(mod_picture.atlas, mod_picture.tex))
-            self["quest_"..num].quest_mod_picture:SetPosition(x-75, y+185)
+            self["quest_"..num].quest_mod_picture:SetPosition(positions[1][1], positions[1][2])
             --self["quest_"..num].quest_mod_picture:SetTint(1,1,1,0.3)
             self["quest_"..num].quest_mod_picture:ScaleToSize(20, 20)
             self["quest_"..num].quest_mod_picture:SetHoverText(quest.modname)
+
+            table.remove(positions,1)
 
             --For entire background
             --[[self["quest_"..num].quest_mod_picture = self["quest__"..num]:AddChild(Image(mod_picture.atlas, mod_picture.tex))
@@ -139,6 +146,14 @@ local function createQuestCard(self,quest, x, y, scale, num)
             self["quest_"..num].quest_mod_picture:SetHoverText(quest.modname)]]
 
         end
+    end
+
+    if quest.variable_fn then
+        self["quest_"..num].quest_scalable_picture = self["quest__"..num]:AddChild(Image("images/victims.xml", "scaling.tex"))
+        self["quest_"..num].quest_scalable_picture:SetPosition(positions[1][1], positions[1][2])
+        --self["quest_"..num].quest_scalable_picture:SetTint(1,1,1,0.3)
+        self["quest_"..num].quest_scalable_picture:ScaleToSize(20, 20)
+        self["quest_"..num].quest_scalable_picture:SetHoverText(STRINGS_QL.SCALING)
     end
 
     self["quest_"..num].difficulty = {}

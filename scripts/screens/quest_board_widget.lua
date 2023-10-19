@@ -319,17 +319,31 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
     self.__show_quest_divider:SetPosition(0, 225)
     self.__show_quest_divider:SetScale(0.5,1)
 
+    local positions = {
+        {-300, 290},
+        {-250, 290},
+    }
+
     if quest.modname then
         local mod_picture = TUNING.QUEST_COMPONENT.MOD_ICONS[quest.modname]
         if mod_picture then
             devprint("adding mod picture", mod_picture.atlas, mod_picture.tex)
             self.quest_mod_picture = self.show_quest:AddChild(Image(mod_picture.atlas, mod_picture.tex))
-            self.quest_mod_picture:SetPosition(-300, 290)
+            self.quest_mod_picture:SetPosition(positions[1][1], positions[1][2])
             --self["quest_"..num].quest_mod_picture:SetTint(1,1,1,0.3)
             self.quest_mod_picture:ScaleToSize(50, 50)
             self.quest_mod_picture:SetHoverText(quest.modname)
 
+            table.remove(positions,1)
+
         end
+    end
+
+    if quest.variable_fn then
+        self.quest_scalable_picture = self.show_quest:AddChild(Image("images/victims.xml", "scaling.tex"))
+        self.quest_scalable_picture:SetPosition(positions[1][1], positions[1][2])
+        self.quest_scalable_picture:ScaleToSize(50, 50)
+        self.quest_scalable_picture:SetHoverText(STRINGS_QL.SCALING)
     end
 
     if quest.quest_line then

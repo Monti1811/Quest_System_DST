@@ -189,6 +189,7 @@ return {
 		SHOW_BONUS = "Afficher le bonus",
 		CURR_RANK = "Rang actuel\n\nPoints jusqu'au prochain rang: ",
 		QUEST_LINE = "Cette quête fait partie d'une ligne de quêtes!",
+		SCALING = "Quête évolutive (peut devenir plus difficile si vous la terminez)",
 	},
 	TEMP_BONI = {
 		HEALTH = " Santé",

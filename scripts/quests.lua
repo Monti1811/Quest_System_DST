@@ -3056,7 +3056,7 @@ local quests = {
 		difficulty = 3,
 		tex = "shadowrift_portal.tex",
 		atlas = "images/victims.xml",
-		--anim_prefab = "shadowrift_portal",
+		anim_prefab = "shadowrift_portal",
 	}),
 	--114
 	CreateQuest({
@@ -3523,7 +3523,7 @@ local quests = {
 	CreateQuest({
 		name = "What Is Hunger?",
 		amount = 480,
-		rewards = {meat = 10, [":func:health;10"] = 16},
+		rewards = {meat_dried = 10, [":func:health;10"] = 16},
 		points = 125,
 		start_fn = function(inst, amount, quest_name)
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["stay x time"](inst, "hunger", 1, 0.8, amount, quest_name, true)
