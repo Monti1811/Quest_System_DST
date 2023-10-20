@@ -191,7 +191,7 @@ local function create_chester()
 
     inst:AddComponent("combat")
     inst.components.combat.hiteffectsymbol = "chester_body"
-    inst.components.combat:SetDefaultDamage(TUNING.DEERCLOPS_DAMAGE * 0.1)
+    inst.components.combat:SetDefaultDamage(TUNING.DEERCLOPS_DAMAGE)
     --inst.components.combat.externaldamagetakenmultipliers:SetModifier(inst,0.1,"chester_panzer")
     inst.components.combat.playerdamagepercent = TUNING.DEERCLOPS_DAMAGE_PLAYER_PERCENT
     inst.components.combat:SetRange(2)

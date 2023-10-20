@@ -390,15 +390,11 @@ QUEST_COMPONENT.BOSSES = {
 		{name = "twinofterror1", 	health = 11000, damage = 200, scale = 1.6},
 		{name = "twinofterror2", 	health = 11000, damage = 200, scale = 1.6},
 		{name = "beequeen", 		health = 6000, damage = 200, scale = 1.6,	fn = beequeen},
-
+		{name = "mutateddeerclops", health = 10000, damage = 200, scale = 2.1},
+		{name = "mutatedwarg", health = 10000, damage = 200, scale = 2.1},
+		{name = "mutatedbearger", health = 10000, damage = 200, scale = 2.1},
 	},
 }
-
-if CurrentRelease.GreaterOrEqualTo("R31_LUNAR_MUTANTS") then
-	table.insert(QUEST_COMPONENT.BOSSES.DIFFICULT,{name = "mutateddeerclops", health = 10000, damage = 200, scale = 2.1})
-	table.insert(QUEST_COMPONENT.BOSSES.DIFFICULT,{name = "mutatedwarg", health = 10000, damage = 200, scale = 2.1})
-	table.insert(QUEST_COMPONENT.BOSSES.DIFFICULT,{name = "mutatedbearger", health = 10000, damage = 200, scale = 2.1})
-end
 
 -------------------------------------Bossfight rewards---------------------------------------------
 

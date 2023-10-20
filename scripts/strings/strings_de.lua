@@ -598,6 +598,7 @@ return {
 			DESCRIPTION = "Unser bester Hutmacher ist leider spurlos verschwunden. Jedoch sind wir gerade dringend auf neue Hüte angewiesen. Aus diesem Grund beauftragen wir Sie eine neue Kollektion an Hüten zu entwerfen und uns zukommen zu lassen. Wir senden Ihnen eine Liste der Hüte zu, welche wir von ihnen benötigen. Als Ausgleich erhalten Sie den alten Regenhut des Hutmachers.\n\n ~ Die Questagentur ~",
 			COUNTER = "Hüte hergestellt",
 			HOVER = "Stelle die folgenden Hüte her: Beefalo Hat, Feather Hat, \nRain Hat und Cat Cap",
+			MISSING = "Fehlt:",
 		},
 		["Wrong Offering"] = {
 			NAME = "Falsche Opfergabe",
@@ -797,6 +798,7 @@ return {
 			DESCRIPTION = "Obwohl die Wahrscheinlichkeit in dieser Welt zu verhungern recht hoch ist, habe ich gehört, dass einige ihrer Bewohner in Bezug auf Lebensmittel recht wohlhabend sind. Zeigen Sie mir, dass es solche Menschen gibt, die prozentuale Kalorienmengen essen, ohne auch nur einmal zu verhungern!",
 			COUNTER = "Kalorien",
 			HOVER = "Essen Sie %s Kalorien an Nahrung",
+			FORFEIT = "Ich habe 99 Probleme, aber das Verhungern war eines davon! Ich war nicht in der Lage, die Aufgabe zu erfüllen!",
 		},
 		["The Untouchable"] = {
 			NAME = "Der Unberührbare",

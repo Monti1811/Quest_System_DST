@@ -188,14 +188,12 @@ local prefabs = {
 	"lightninggoat",
 	"wobster_sheller_land",
 	"wobster_moonglass",
+	"mutateddeerclops",
+	"mutatedwarg",
+	"mutatedbearger",
+	"lunarfrog",
 }
 
-if CurrentRelease.GreaterOrEqualTo("R31_LUNAR_MUTANTS") then
-	table.insert(prefabs,"mutateddeerclops")
-	table.insert(prefabs,"mutatedwarg")
-	table.insert(prefabs,"mutatedbearger")
-	table.insert(prefabs,"lunarfrog")
-end
 
 QUEST_BOARD.PREFABS_MOBS = {}
 for _,v in ipairs(prefabs) do

@@ -597,6 +597,7 @@ return {
 			DESCRIPTION = "Malheureusement, notre meilleur chapelier a disparu sans laisser de trace. Cependant, nous avons un besoin urgent de nouveaux chapeaux en ce moment. C'est pourquoi nous vous demandons de concevoir une nouvelle collection de chapeaux et de nous les envoyer. Nous vous enverrons une liste des chapeaux dont nous avons besoin. En guise de compensation, vous recevrez le vieux chapeau de pluie du chapelier.\n\n ~ L'agence de quête ~",
 			COUNTER = "Chapeaux fabriqués",
 			HOVER = "Fabriquez les chapeaux suivants : Chapeau de bœuf, chapeau en plumes, \nchapeau de pluie et bonnet de chat",
+			MISSING = "Manquant :",
 		},
 		["Wrong Offering"] = {
 			NAME = "Offre erronée",
@@ -800,6 +801,7 @@ return {
 			DESCRIPTION = "Bien que la probabilité de mourir de faim dans ce monde soit assez élevée, j'ai entendu dire que certains de ses habitants sont très riches en ce qui concerne la nourriture. Montrez-moi qu'il existe de telles personnes en mangeant des %s de calories sans mourir de faim une seule fois !",
 			COUNTER = "Calories",
 			HOVER = "Manger %s calories de nourriture",
+			FORFEIT = "J'ai 99 problèmes, mais mourir de faim en est un ! Je n'ai pas pu terminer la quête !",
 		},
 		["The Untouchable"] = {
 			NAME = "L'intouchable",

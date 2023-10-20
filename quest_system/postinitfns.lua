@@ -550,15 +550,8 @@ end
 
 -- Add mutated tag to mutated enemies
 
-local mutated = {"mutatedhound","mutated_penguin","spider_moon","wobster_moonglass","bird_mutant","bird_mutant_spitter",
+local mutated = {"mutatedhound","mutated_penguin","spider_moon","wobster_moonglass","bird_mutant","bird_mutant_spitter","mutateddeerclops","mutatedwarg","mutatedbearger","lunarfrog",
 }
-
-if CurrentRelease.GreaterOrEqualTo("R31_LUNAR_MUTANTS") then
-    local added_mutants = {"mutateddeerclops","mutatedwarg","mutatedbearger","lunarfrog",}
-    for _,prefab in ipairs(added_mutants) do
-        table.insert(mutated,prefab)
-    end
-end
 
 for _,prefab in ipairs(mutated) do
     AddPrefabPostInit(prefab, function(inst)

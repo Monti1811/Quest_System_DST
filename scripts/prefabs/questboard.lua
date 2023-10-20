@@ -90,5 +90,5 @@ local function fn()
 	return inst
 end
 
-return 	Prefab( "common/objects/questboard", fn, assets, prefabs),
-		MakePlacer( "common/questboard_placer", "quest_board", "quest_board", "idle", nil, nil, nil, 0.9) 
+return 	Prefab( "questboard", fn, assets, prefabs),
+		MakePlacer( "questboard_placer", "quest_board", "quest_board", "idle", nil, nil, nil, 0.9)

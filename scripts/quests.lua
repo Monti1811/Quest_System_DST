@@ -2,7 +2,7 @@
 
 local farm_plants_defs = require("prefabs/farm_plant_defs")
 local FrogKing = require("quest_util/frogking")
-local Q_TUNING = STRINGS.QUEST_COMPONENT
+local Q_STRINGS = STRINGS.QUEST_COMPONENT
 
 --Helper functions
 
@@ -1750,7 +1750,6 @@ local quests = {
 		end,
 		difficulty = 2,
 		tex = "oceanfishingrod.tex",
-		atlas = "images/inventoryimages2.xml",
 	}),
 	--68 nearly nice
 	CreateQuest({
@@ -1817,16 +1816,38 @@ local quests = {
 	CreateQuest({
 		name = "The Mad Hatter",
 		description = GetQuestString("The Mad Hatter","DESCRIPTION"),
-		amount = 3,
+		amount = 4,
 		rewards = {eyebrellahat = 1, [":func:winterinsulation;120"] = 16, [":func:summerinsulation;120"] = 16,},
 		points = 650,
 		start_fn = function(inst,amount,quest_name)
 			local hats_built = inst.components.quest_component:GetQuestData(quest_name,"hats_built") or {beefalohat = false,featherhat = false,rainhat = false,catcoonhat = false}
+			local function ChangeHover()
+				local quest = inst.components.quest_component.quests[quest_name]
+				if quest then
+					local missing_string = GetQuestString(quest.name,"MISSING")
+					local first = true
+					for hat,bool in pairs(hats_built) do
+						if bool == false then
+							if first then
+								first = false
+							else
+								missing_string = missing_string..", "
+							end
+							missing_string = missing_string..STRINGS.NAMES[string.upper(hat)]
+						end
+					end
+					inst:DoTaskInTime(0, function()
+						SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "DoThingOnClient"), inst.userid, 1, missing_string, quest_name)
+					end)
+				end
+			end
+			ChangeHover()
 			local function OnBuild(inst,data)
 				if data then
 					if data.item and data.item.prefab and hats_built[data.item.prefab] == false then
 						hats_built[data.item.prefab] = true
 						inst.components.quest_component:SetQuestData(quest_name,"hats_built",hats_built)
+						ChangeHover()
 						inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
 						for hat,bool in pairs(hats_built) do
 							if bool == false then
@@ -2112,7 +2133,8 @@ local quests = {
 			local function OnDamageDone(inst,data)
 				if data then
 					if data.damageresolved > 0 then
-						if data.weapon == nil then
+						local hand = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+						if not hand then --data.weapon == nil then
 							current_amount = current_amount + data.damageresolved
 							inst:PushEvent("quest_update",{quest = quest_name,amount = data.damageresolved})
 							if current_amount >= amount then
@@ -2343,9 +2365,6 @@ local quests = {
 				TheWorld:RemoveEventCallback("entity_death",OnEntityDeath)
 			end
 			OnForfeit(inst,OnForfeitedQuest,quest_name)
-		end,
-		onfinished = function(inst)
-
 		end,
 		difficulty = 5,
 		tex = "shadow_rook.tex",
@@ -2712,6 +2731,7 @@ local quests = {
 		end,
 		difficulty = 2,
 		tex = "shovel.tex",
+		anim_prefab = "gravestone",
 	}),
 	--99
 	CreateQuest({
@@ -2738,6 +2758,9 @@ local quests = {
 			end
 			OnStarve = function(inst)
 				inst.components.quest_component:RemoveQuest(quest_name)
+				if inst.components.talker then
+					inst.components.talker:Say(Q_STRINGS.QUESTS[quest_name].FAILED)
+				end
 				inst:RemoveEventCallback("oneat",Food)
 				inst:RemoveEventCallback("startstarving", OnStarve)
 			end
@@ -3070,6 +3093,7 @@ local quests = {
 		end,
 		difficulty = 2,
 		tex = "purebrilliance.tex",
+		anim_prefab = "lunarrift_portal",
 	}),
 	--115
 	CreateQuest({
@@ -3223,6 +3247,7 @@ local quests = {
 		end,
 		difficulty = 1,
 		tex = "punchingbag.tex",
+		--anim_prefab = "punchingbag",
 	}),
 	--125
 	CreateQuest({
@@ -3236,6 +3261,7 @@ local quests = {
 		difficulty = 4,
 		tex = "station_shadow_forge.tex",
 		atlas = "images/crafting_menu_icons.xml",
+		anim_prefab = "shadow_forge",
 	}),
 	--126
 	CreateQuest({
@@ -3648,12 +3674,12 @@ local quests = {
 --Remove quests that are only able to be gotten in the beta
 
 
-if not CurrentRelease.GreaterOrEqualTo("R31_LUNAR_MUTANTS") then
+--[[if not CurrentRelease.GreaterOrEqualTo("R31_LUNAR_MUTANTS") then
 	local quests_to_remove = {145, 143,}
 	for _, quest_num in ipairs(quests_to_remove) do
 		table.remove(quests, quest_num)
 	end
-end
+end]]
 
 --Custom changes to specific quests
 

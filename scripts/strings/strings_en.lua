@@ -897,6 +897,7 @@ return {
 			DESCRIPTION = "Unfortunately, our best hat maker has disappeared without a trace. However, we are in dire need of new hats right now. For this reason we ask you to design a new collection of hats and send them to us. We will send you a list of the hats we need from you. As a compensation you will receive the old rain hat of the hatter.\n\n ~ The Quest Agency ~",
 			COUNTER = "Hats made",
 			HOVER = "Make the following hats: Beefalo Hat, \nFeather Hat, Rain Hat and Cat Cap",
+			MISSING = "Missing: ",
 
 		},
 
@@ -1166,6 +1167,7 @@ return {
 			DESCRIPTION = "Even though the probability in this world to starve is quite high, I have heard that some of their inhabitants are quite wealthy in regards to food. Show me that there exists such persons by eating %s calories worth of food without starving even once!",
 			COUNTER = "Calories",
 			HOVER = "Eat %s calories of food",
+			FORFEIT = "I've got 99 problems but starving was one! I was not able to complete the quest!",
 
 		},
 
@@ -1609,6 +1611,8 @@ return {
 			DESCRIPTION = "The Dragonfly guards the entrance to hell, but I want to enter it! I need someone to defeat it so that I can enter the Magma Pool!",
 
 		},
+
+
 
 		
 

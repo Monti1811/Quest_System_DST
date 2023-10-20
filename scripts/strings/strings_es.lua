@@ -597,6 +597,7 @@ return {
 			DESCRIPTION = "Por desgracia, nuestro mejor fabricante de sombreros ha desaparecido sin dejar rastro. Sin embargo, necesitamos urgentemente nuevos sombreros en este momento. Por eso te pedimos que diseñes una nueva colección de sombreros y nos la envíes. Te enviaremos una lista de los sombreros que necesitamos de ti. Como compensación, recibirás el antiguo sombrero de lluvia del sombrerero.\n\n ~ La Agencia Quest ~",
 			COUNTER = "Sombreros hechos",
 			HOVER = "Haz los siguientes sombreros: Sombrero de buey, sombrero de plumas, \nsombrero de lluvia y gorro de gato",
+			MISSING = "Desaparecida:",
 		},
 		["Wrong Offering"] = {
 			NAME = "Ofrenda equivocada",
@@ -799,6 +800,7 @@ return {
 			DESCRIPTION = "Aunque la probabilidad en este mundo de morir de hambre es bastante alta, he oído que algunos de sus habitantes son bastante ricos en lo que a comida se refiere. ¡Demuéstrame que existen tales personas comiendo %s calorías de comida sin pasar hambre ni una sola vez!",
 			COUNTER = "Calorías",
 			HOVER = "Comer %s calorías de comida",
+			FORFEIT = "Tengo 99 problemas, ¡pero morir de hambre era uno! No he podido completar la misión.",
 		},
 		["The Untouchable"] = {
 			NAME = "El intocable",
