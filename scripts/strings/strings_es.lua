@@ -1192,4 +1192,18 @@ return {
 		BUILD_BUFFER = "Recibir %s como construcción en buffer",
 		KRAMPUS_SACK = "%s%% Probabilidad de Krampus Sack",
 	},
+	SCRAPBOOK = {
+		NIGHTMARE_EYEBONE = "Invoca a Chester Pesadilla cuando se recoge. Chester Pesadilla seguirá al portador. Mientras Pesadilla Chester esté vivo, el ojo estará abierto.",
+		FROGKING_P_CROWN = "Se puede recargar con ranas. Cuando lo lleves, las sirenas y las ranas serán tus amigas. Las ranas te ayudarán si te atacan.",
+		FROGKING_SCEPTER = "Puede repostar con ranas. Puede lanzar un hechizo que engendrará un grano de rana solo alrededor del lanzador durante 60 segundos.",
+		GLOMMERFUELMACHINE_ITEM = "Se puede repostar con nightmarefuel. Cuando se coloca, genera Glommerfuel oscuro.",
+		GLOMMERFUELMACHINE = "Se puede repostar con nightmarefuel. Cuando se coloca, genera Glommerfuel oscuro.",
+		BLACKGLOMMERFUEL = "Puede colocarse como trampa para los enemigos. Si nada se mueve a través de ella, se disolverá al cabo de 15 segundos. El enemigo hará un 40% menos de daño, recibirá un 20% más de daño y será un 40% más lento durante 10 segundos.",
+		GLOMMER_LIGHTFLOWER = "Genera un total de 20 Glommer Fuel a lo largo del tiempo.",
+		QUESTBOARD = "Se puede utilizar para obtener una nueva misión cada día. Si está activada, también puedes crear tus propias misiones aquí.",
+		REQUEST_QUEST = "Cuando las leas, se añadirá una nueva misión a tu registro de misiones. También pueden aparecer en diferentes dificultades.",
+		SHADOW_CREST = "Se puede repostar con combustible de pesadilla. Recibirás un 33% menos de daño de las entidades de sombra. Cuando la lleves puesta, podrás usar un ataque especial contra los enemigos.",
+		SHADOW_MITRE = "Se puede repostar con combustible de pesadilla. Recibirás un 33% menos de daño de las entidades de sombra. Cuando la lleves puesta, dejarás murciélagos de sombra tras de ti si te golpean.",
+		SHADOW_LANCE = "Se puede recargar con combustible de pesadilla. Hace un 50% más de daño a las entidades lunares y utiliza menos usos contra las entidades lunares.",
+	},
 }

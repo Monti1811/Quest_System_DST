@@ -315,6 +315,21 @@ return {
 
 	},
 
+	SCRAPBOOK = {
+		NIGHTMARE_EYEBONE = "Summons Nightmare Chester when picked up. Nightmare Chester will follow the holder. While Nightmare Chester is alive, the eye will be open.",
+		FROGKING_P_CROWN = "Can be refueled with froglegs. When worn, merms and frogs will be your friends. Frogs will help you if you are attacked.",
+		FROGKING_SCEPTER = "Can be refueled with froglegs. Can cast a spell that will spawn a frograin only around the caster for 60 seconds.",
+		GLOMMERFUELMACHINE_ITEM = "Can be refueled with nightmarefuel. When placed, it will spawn Dark Glommerfuel.",
+		GLOMMERFUELMACHINE = "Can be refueled with nightmarefuel. When placed, it will spawn Dark Glommerfuel.",
+		BLACKGLOMMERFUEL = "Can be placed as a trap for enemies. If nothing moves through it, it will dissolve after 15 seconds. The enemy will do 40% less damage, receive 20% more damage and be 40% slower for 10 seconds.",
+		GLOMMER_LIGHTFLOWER = "Spawns in total 20 Glommer Fuel over time.",
+		QUESTBOARD = "Can be used to get a new quest each day. If enabled, you can also create your own quests here.",
+		REQUEST_QUEST = "When read, a new quest will be added to your quest log. They can also appear in different difficulties.",
+		SHADOW_CREST = "Can be refueled with nightmarefuel. You will receive 33% less damage from shadow entities. When worn, you can use a special attack on enemies.",
+		SHADOW_MITRE = "Can be refueled with nightmarefuel. You will receive 33% less damage from shadow entities. When worn, you will leave shadow bats behind you it hit.",
+		SHADOW_LANCE = "Can be refueled with nightmarefuel. Does 50% more damage to lunar entities and uses less uses against lunar entities.",
+	},
+
 	QUESTS = {
 
 		["The Wicked Mist Fury"] = {

@@ -1190,4 +1190,18 @@ return {
 		BUILD_BUFFER = "Erhalte %s als gepufferten Bau",
 		KRAMPUS_SACK = "%s%% Chance auf Krampussack",
 	},
+	SCRAPBOOK = {
+		NIGHTMARE_EYEBONE = "Beschwört Nightmare Chester, wenn er aufgehoben wird. Nightmare Chester wird dem Besitzer folgen. Solange Nightmare Chester am Leben ist, ist das Auge geöffnet.",
+		FROGKING_P_CROWN = "Kann mit Froschfressern aufgetankt werden. Wenn du sie trägst, werden Herms und Frösche deine Freunde sein. Frösche werden dir helfen, wenn du angegriffen wirst.",
+		FROGKING_SCEPTER = "Kann mit Froschfressern aufgetankt werden. Kann einen Zauber wirken, der 60 Sekunden lang ein Froschkorn nur um den Zaubernden herum entstehen lässt.",
+		GLOMMERFUELMACHINE_ITEM = "Kann mit Alptraumtreibstoff aufgefüllt werden. Wenn sie platziert wird, spawnen sie dunklen Glommertreibstoff.",
+		GLOMMERFUELMACHINE = "Kann mit Alptraumtreibstoff aufgefüllt werden. Wenn sie platziert wird, spawnen sie dunklen Glommertreibstoff.",
+		BLACKGLOMMERFUEL = "Kann als Falle für Feinde aufgestellt werden. Wenn sich nichts hindurch bewegt, löst sie sich nach 15 Sekunden auf. Der Gegner erleidet 40 % weniger Schaden, erhält 20 % mehr Schaden und ist 10 Sekunden lang 40 % langsamer.",
+		GLOMMER_LIGHTFLOWER = "Bringt im Laufe der Zeit insgesamt 20 Glommer Fuel hervor.",
+		QUESTBOARD = "Kann verwendet werden, um jeden Tag eine neue Mission zu erhalten. Wenn aktiviert, können Sie hier auch Ihre eigenen Missionen erstellen.",
+		REQUEST_QUEST = "Wenn du sie gelesen hast, wird eine neue Mission zu deinem Questlog hinzugefügt. Sie können auch in verschiedenen Schwierigkeitsgraden erscheinen.",
+		SHADOW_CREST = "Kann mit Alptraumtreibstoff aufgetankt werden. Du erhältst 33% weniger Schaden von Schattenwesen. Wenn du ihn trägst, kannst du einen Spezialangriff auf Feinde ausführen.",
+		SHADOW_MITRE = "Kann mit Alptraumtreibstoff aufgetankt werden. Du erhältst 33% weniger Schaden von Schattenwesen. Wenn du sie trägst, lässt du Schattenfledermäuse hinter dir, wenn du getroffen wirst.",
+		SHADOW_LANCE = "Kann mit Alptraumtreibstoff aufgetankt werden. Verursacht 50% mehr Schaden an Mondwesen und benötigt weniger Einsatz gegen Mondwesen.",
+	},
 }

@@ -1193,4 +1193,18 @@ return {
 		BUILD_BUFFER = "Recevoir %s comme construction en mémoire",
 		KRAMPUS_SACK = "%s%% Chance de sac Krampus",
 	},
+	SCRAPBOOK = {
+		NIGHTMARE_EYEBONE = "Invoque Nightmare Chester lorsqu'il est ramassé. Le Cauchemar de Chester suivra le porteur. Tant que Nightmare Chester est en vie, l'œil est ouvert.",
+		FROGKING_P_CROWN = "Peut être ravitaillé en grenouilles. Lorsqu'elles sont portées, les sirènes et les grenouilles sont vos amies. Les grenouilles vous aideront si vous êtes attaqué.",
+		FROGKING_SCEPTER = "Peut être ravitaillé en grenouilles. Peut lancer un sort qui fait apparaître une grenouille uniquement autour du lanceur de sort pendant 60 secondes.",
+		GLOMMERFUELMACHINE_ITEM = "Peut être ravitaillé en carburant de cauchemar. Lorsqu'il est placé, il génère du Dark Glommerfuel.",
+		GLOMMERFUELMACHINE = "Peut être ravitaillé en carburant de cauchemar. Lorsqu'il est placé, il génère du Dark Glommerfuel.",
+		BLACKGLOMMERFUEL = "Peut être placé comme piège pour les ennemis. Si rien ne passe au travers, il se dissout au bout de 15 secondes. L'ennemi subit 40 % de dégâts en moins, reçoit 20 % de dégâts en plus et est 40 % plus lent pendant 10 secondes.",
+		GLOMMER_LIGHTFLOWER = "Génère au total 20 Glommer Fuel au fil du temps.",
+		QUESTBOARD = "Peut être utilisé pour obtenir une nouvelle quête chaque jour. Si cette option est activée, vous pouvez également créer vos propres quêtes ici.",
+		REQUEST_QUEST = "Une fois lue, une nouvelle quête sera ajoutée à votre journal des quêtes. Elles peuvent également apparaître dans des difficultés différentes.",
+		SHADOW_CREST = "Peut être ravitaillé avec du carburant de cauchemar. Les entités de l'ombre vous infligent 33% de dégâts en moins. Lorsque vous le portez, vous pouvez utiliser une attaque spéciale sur les ennemis.",
+		SHADOW_MITRE = "Peut être ravitaillé avec du carburant de cauchemar. Vous recevrez 33% de dégâts en moins de la part des entités de l'ombre. Lorsque vous le portez, vous laissez des chauves-souris d'ombre derrière vous lorsque vous êtes touché.",
+		SHADOW_LANCE = "Peut être ravitaillé en carburant de cauchemar. Augmente de 50 % les dégâts infligés aux entités lunaires et utilise moins d'énergie contre les entités lunaires.",
+	},
 }
