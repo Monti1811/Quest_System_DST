@@ -14,6 +14,7 @@ Assets = {
 	--Big atlases (for inventoryitems and more)
 	Asset("ATLAS", "images/victims.xml"),
 	Asset("ATLAS", "images/images_quest_system.xml"),
+	Asset("ATLAS", "images/quest_component_scrapbook.xml"),
 
 	--Loading screen image
 	Asset("ATLAS", "images/loadingtip_quest_board.xml"),
@@ -111,6 +112,7 @@ modimport("quest_system/actions.lua")				--loading new/changed actions
 modimport("quest_system/consolecommands.lua")		--loading custom console commands to make debugging easier (and cheating if you want to ;))
 modimport("quest_system/init_custom_quests.lua")	--loading the custom quests saved as a persistent string and/or json encoded string
 modimport("quest_system/recipes.lua")				--loading new recipes
+modimport("quest_system/scrapbook.lua")				--loading the scrapbook data of the added items/creatures
 if GLOBAL.TUNING.QUEST_COMPONENT.DEV_MODE then
 	modimport("quest_system/random_quest_generator.lua") --load the random quest generator
 	--Debug
