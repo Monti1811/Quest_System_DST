@@ -3481,7 +3481,7 @@ local quests = {
 		rewards = {security_pulse_cage = 1, wagpunk_bits = 10},
 		points = 1750,
 		start_fn = function(inst, amount, quest_name)
-			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst, amount, nil, quest_name, function(_, victim) return victim:HasTag("mutated") and (victim:HasTag("epic") or victim:HasTag("largecreature")) end)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst, amount, nil, quest_name, function(victim) return victim:HasTag("mutated") and (victim:HasTag("epic") or victim:HasTag("largecreature")) end)
 		end,
 		onfinished = nil,
 		difficulty = 5,

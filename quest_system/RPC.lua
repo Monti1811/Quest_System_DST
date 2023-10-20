@@ -453,7 +453,6 @@ AddClientModRPCHandler("Quest_System_RPC", "RemoveTimerFromClient", RemoveTimerF
 
 local functions = {
 	[1] = function(text, quest_name)
-		devprint("hatter quest", text, quest_name, ThePlayer and ThePlayer.replica.quest_component._quests[quest_name])
 		local quest = ThePlayer and ThePlayer.replica.quest_component._quests[quest_name]
 		if quest then
 			quest.hovertext = GetQuestString(quest_name,"HOVER").."\n\n"..text
