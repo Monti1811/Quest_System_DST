@@ -190,6 +190,11 @@ return {
 		CURR_RANK = "目前排名\n\n到下一个等级的积分: ",
 		QUEST_LINE = "这个任务是一个任务线的一部分！",
 		SCALING = "可扩展任务（完成后难度会增加）",
+		GO_BACK = "返回",
+		SHOW_STATS = "显示统计",
+		SHOW_QUESTS = "显示任务",
+		TURN_LEFT = "左翻页",
+		TURN_RIGHT = "右翻页",
 	},
 	TEMP_BONI = {
 		HEALTH = " 健康",

@@ -190,6 +190,11 @@ return {
 		CURR_RANK = "Rango actual\n\nPuntos hasta el siguiente rango: ",
 		QUEST_LINE = "¡Esta búsqueda es parte de una línea de búsqueda!",
 		SCALING = "Búsqueda escalable (puede volverse más difícil si la completas)",
+		GO_BACK = "Volver atrás",
+		SHOW_STATS = "Mostrar estadísticas",
+		SHOW_QUESTS = "Mostrar misiones",
+		TURN_LEFT = "Pasar página a la izquierda",
+		TURN_RIGHT = "Pasar página a la derecha",
 	},
 	TEMP_BONI = {
 		HEALTH = " Salud",

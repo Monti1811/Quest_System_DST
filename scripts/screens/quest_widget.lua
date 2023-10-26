@@ -73,6 +73,22 @@ local function GetPlayerTable()
     return ClientObjs
 end
 
+local function SetFirstQuestAsFocus(self)
+    for num = 1, self.max_amount_of_quests do
+        if self["quest_"..num] and self["quest_"..num].description then
+            self["quest_"..num].description:SetFocus()
+            return
+        end
+    end
+end
+
+local function FindNextExistingQuest(self, num, step)
+    while (self["quest_"..num] == nil or self["quest_"..num].name == nil) and num < self.max_amount_of_quests and num > 1 do
+        num = num + step
+    end
+    return self["quest_"..num] and self["quest_"..num].name and num or nil
+end
+
 local function createEmptyQuestCard(self,_--[[tab]], x, y, scale, num)
 
     self["quest_"..num] = self["quest__"..num]:AddChild(Widget("quest_"..num))
@@ -108,17 +124,17 @@ local function createQuestCard(self,quest, x, y, scale, num)
     self["quest_"..num].title:SetAutoSizingString(title ~= "" and title or quest.name or STRINGS_QL.NO_NAME,150)
 
     if quest.quest_line then
-      self["quest_"..num].quest_line = self["quest__"..num]:AddChild(Image("images/hud.xml","tab_researchable_off.tex"))
-      self["quest_"..num].quest_line:SetPosition(x-75, y + 85)
-      --self["quest_"..num].quest_line:SetTint(1,0,0,1)
-      self["quest_"..num].quest_line:SetScale(0.4,0.4)
-      self["quest_"..num].quest_line:SetHoverText(STRINGS_QL.QUEST_LINE)
+        self["quest_"..num].quest_line = self["quest__"..num]:AddChild(Image("images/hud.xml","tab_researchable_off.tex"))
+        self["quest_"..num].quest_line:SetPosition(x-75, y + 85)
+        --self["quest_"..num].quest_line:SetTint(1,0,0,1)
+        self["quest_"..num].quest_line:SetScale(0.4,0.4)
+        self["quest_"..num].quest_line:SetHoverText(STRINGS_QL.QUEST_LINE)
 
-      self["quest_"..num].quest_line2 = self["quest__"..num]:AddChild(Image("images/hud.xml","tab_researchable_off.tex"))
-      self["quest_"..num].quest_line2:SetPosition(x+50, y + 85)
-      --self["quest_"..num].quest_line2:SetTint(1,0,0,1)
-      self["quest_"..num].quest_line2:SetScale(0.4,0.4)
-      self["quest_"..num].quest_line2:SetHoverText(STRINGS_QL.QUEST_LINE)
+        self["quest_"..num].quest_line2 = self["quest__"..num]:AddChild(Image("images/hud.xml","tab_researchable_off.tex"))
+        self["quest_"..num].quest_line2:SetPosition(x+50, y + 85)
+        --self["quest_"..num].quest_line2:SetTint(1,0,0,1)
+        self["quest_"..num].quest_line2:SetScale(0.4,0.4)
+        self["quest_"..num].quest_line2:SetHoverText(STRINGS_QL.QUEST_LINE)
     end
 
     local positions = {
@@ -159,16 +175,16 @@ local function createQuestCard(self,quest, x, y, scale, num)
     self["quest_"..num].difficulty = {}
     local difficulty = quest.difficulty and quest.difficulty < 6 and quest.difficulty > 0 and quest.difficulty or 1
     for count = 1,difficulty do
-      self["quest_"..num].difficulty["star"..tostring(count)] = self["quest__"..num]:AddChild(Image("images/global_redux.xml","star_checked.tex"))
-      self["quest_"..num].difficulty["star"..tostring(count)]:SetPosition(x - 75 + count * 25, y + 137)
-      self["quest_"..num].difficulty["star"..tostring(count)]:SetScale(scale * 0.5)
-      self["quest_"..num].difficulty["star"..tostring(count)]:SetTint(unpack(colour_difficulty[difficulty] or {1,1,1,1}))
+        self["quest_"..num].difficulty["star"..tostring(count)] = self["quest__"..num]:AddChild(Image("images/global_redux.xml","star_checked.tex"))
+        self["quest_"..num].difficulty["star"..tostring(count)]:SetPosition(x - 75 + count * 25, y + 137)
+        self["quest_"..num].difficulty["star"..tostring(count)]:SetScale(scale * 0.5)
+        self["quest_"..num].difficulty["star"..tostring(count)]:SetTint(unpack(colour_difficulty[difficulty] or {1,1,1,1}))
     end
     for count = difficulty + 1,5 do
-      self["quest_"..num].difficulty["star"..tostring(count)] = self["quest__"..num]:AddChild(Image("images/global_redux.xml","star_uncheck.tex"))
-      self["quest_"..num].difficulty["star"..tostring(count)]:SetPosition(x - 75 + count * 25, y + 137)
-      self["quest_"..num].difficulty["star"..tostring(count)]:SetScale(scale * 0.5)
-      self["quest_"..num].difficulty["star"..tostring(count)]:SetTint(unpack(colour_difficulty[difficulty] or {1,1,1,1}))
+        self["quest_"..num].difficulty["star"..tostring(count)] = self["quest__"..num]:AddChild(Image("images/global_redux.xml","star_uncheck.tex"))
+        self["quest_"..num].difficulty["star"..tostring(count)]:SetPosition(x - 75 + count * 25, y + 137)
+        self["quest_"..num].difficulty["star"..tostring(count)]:SetScale(scale * 0.5)
+        self["quest_"..num].difficulty["star"..tostring(count)]:SetTint(unpack(colour_difficulty[difficulty] or {1,1,1,1}))
     end
 
     self["quest_"..num].description = self["quest__"..num]:AddChild(ImageButton("images/global_redux.xml", "button_carny_long_normal.tex", "button_carny_long_hover.tex", "button_carny_long_disabled.tex", "button_carny_long_down.tex"))
@@ -178,10 +194,11 @@ local function createQuestCard(self,quest, x, y, scale, num)
     self["quest_"..num].description:SetText(STRINGS_QL.DESCRIPTION)
     self["quest_"..num].description:SetTextSize(20)
     self["quest_"..num].description:SetOnClick(function()
-      if self.show_rewards and self.show_rewards.shown == true then
-        self.show_rewards:Kill()
-      end
-      self:ShowDescription(quest,num)
+        if self.show_rewards and self.show_rewards.shown == true then
+            self.show_rewards:Kill()
+        end
+        self.last_selected = self["quest_"..num].description
+        self:ShowDescription(quest,num)
     end)
     self["quest_"..num].description.text:SetAutoSizingString(STRINGS_QL.DESCRIPTION,80)
 
@@ -192,10 +209,11 @@ local function createQuestCard(self,quest, x, y, scale, num)
     self["quest_"..num].rewards:SetText(STRINGS_QL.REWARDS)
     self["quest_"..num].rewards:SetTextSize(20)
     self["quest_"..num].rewards:SetOnClick(function()
-      if self.show_rewards and self.show_rewards.shown == true then
-        self.show_rewards:Kill()
-      end
-      self:ShowRewards(quest,num)
+        self.last_selected = self["quest_"..num].rewards
+        if self.show_rewards and self.show_rewards.shown == true then
+            self.show_rewards:Kill()
+        end
+        self:ShowRewards(quest,num)
     end)
     self["quest_"..num].rewards.text:SetAutoSizingString(STRINGS_QL.REWARDS,80)
 
@@ -320,20 +338,20 @@ local function createQuestCard(self,quest, x, y, scale, num)
     end
     self["quest_"..num].image:MoveToFront()
     if quest.start_fn and type(quest.start_fn) == "string" and string.find(quest.start_fn,"start_fn_") then
-      local fn = string.gsub(quest.start_fn,"start_fn_","")
-      local text = TUNING.QUEST_COMPONENT.QUEST_BOARD.PREFABS_MOBS[fn] and TUNING.QUEST_COMPONENT.QUEST_BOARD.PREFABS_MOBS[fn].text
-      if text and type(text) == "string" then
-        local new_text = string.gsub(text," x "," "..quest.amount.." ")
-        self["quest_"..num].image:SetHoverText(new_text)
-      end
+        local fn = string.gsub(quest.start_fn,"start_fn_","")
+        local text = TUNING.QUEST_COMPONENT.QUEST_BOARD.PREFABS_MOBS[fn] and TUNING.QUEST_COMPONENT.QUEST_BOARD.PREFABS_MOBS[fn].text
+        if text and type(text) == "string" then
+            local new_text = string.gsub(text," x "," "..quest.amount.." ")
+            self["quest_"..num].image:SetHoverText(new_text)
+        end
     elseif quest.hovertext ~= nil then
-      self["quest_"..num].image:SetHoverText(quest.hovertext)
+        self["quest_"..num].image:SetHoverText(quest.hovertext)
     elseif quest.victim and TUNING.QUEST_COMPONENT.QUEST_BOARD.PREFABS_MOBS[quest.victim] then
-      local text = TUNING.QUEST_COMPONENT.QUEST_BOARD.PREFABS_MOBS[quest.victim].hovertext or ""
-      local new_text = string.gsub(text," x "," "..quest.amount.." ")
-      local new_text2 = string.split(new_text,"/")
-      local new_text3 = new_text2[1]..STRINGS.NAMES[string.upper(new_text2[2])]
-      self["quest_"..num].image:SetHoverText(new_text3)
+        local text = TUNING.QUEST_COMPONENT.QUEST_BOARD.PREFABS_MOBS[quest.victim].hovertext or ""
+        local new_text = string.gsub(text," x "," "..quest.amount.." ")
+        local new_text2 = string.split(new_text,"/")
+        local new_text3 = new_text2[1]..STRINGS.NAMES[string.upper(new_text2[2])]
+        self["quest_"..num].image:SetHoverText(new_text3)
     end
 
     self["quest_"..num].button = self["quest__"..num]:AddChild(ImageButton("images/frontend.xml", "button_long.tex", "button_long_highlight.tex", "button_long_disabled.tex", nil, nil, {1,1}, {0,0}))
@@ -343,28 +361,62 @@ local function createQuestCard(self,quest, x, y, scale, num)
     self["quest_"..num].button.text:SetAutoSizingString(STRINGS_QL.GET_REWARDS, 280)
     self["quest_"..num].button.text:SetPosition(-5, 4)
     self["quest_"..num].button:SetFont(BUTTONFONT)
-    if quest.completed ~= true then 
-      self["quest_"..num].button:Disable()
+    if quest.completed ~= true then
+        self["quest_"..num].button:Unselect()
     end
 
     self["quest_"..num].button:SetOnClick(function()
-      self.ownerofscreen.replica.quest_component:CompleteQuest(quest.name)
-      SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["GetRewards"],quest.name)
-      Networking_Announcement(STRINGS_QL.RECEIVE_REWARDS.." "..(GetQuestString(quest.overridename or quest.name,"NAME") ~= "" and GetQuestString(quest.overridename or quest.name,"NAME",unpack(quest.scale)) or quest.name or "No Name").."!")
-      self:OnClose()
+        self.ownerofscreen.replica.quest_component:CompleteQuest(quest.name)
+        SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["GetRewards"],quest.name)
+        Networking_Announcement(STRINGS_QL.RECEIVE_REWARDS.." "..(GetQuestString(quest.overridename or quest.name,"NAME") ~= "" and GetQuestString(quest.overridename or quest.name,"NAME",unpack(quest.scale)) or quest.name or "No Name").."!")
+        self:OnClose()
     end)
 
     self["quest_"..num].button_close = self["quest__"..num]:AddChild(ImageButton("images/global_redux.xml", "close.tex"))
     self["quest_"..num].button_close:SetPosition(x + 75, y + 185)
     self["quest_"..num].button_close:SetScale(0.5 * scale)
     self["quest_"..num].button_close:SetOnClick(function()
-      if self.show_rewards and self.show_rewards.shown == true then
-        self.show_rewards:Kill()
-      end
-      self:AskForfeitQuest(quest,num)
+        self.last_selected = self["quest_"..num].button_close
+        if self.show_rewards and self.show_rewards.shown == true then
+            self.show_rewards:Kill()
+        end
+        self:AskForfeitQuest(quest,num)
     end)
     self["quest_"..num].button_close:SetHoverText(STRINGS_QL.FORFEIT_QUEST)
     self["quest_"..num].button_close:SetImageNormalColour(UICOLOURS.RED)
+
+    local function MoveLeft(name)
+        local next_quest_num = FindNextExistingQuest(self, num - 1, -1)
+        return next_quest_num and self["quest_"..next_quest_num][name] or nil
+    end
+    local function MoveRight(name)
+        local next_quest_num = FindNextExistingQuest(self, num + 1, 1)
+        return next_quest_num and self["quest_"..next_quest_num][name] or nil
+    end
+
+    self["quest_"..num].button_close:SetFocusChangeDir(MOVE_LEFT, function() return MoveLeft("button_close") end)
+    self["quest_"..num].button_close:SetFocusChangeDir(MOVE_RIGHT, function() return MoveRight("button_close") end)
+    self["quest_"..num].button_close:SetFocusChangeDir(MOVE_DOWN, self["quest_"..num].description)
+
+    self["quest_"..num].description:SetFocusChangeDir(MOVE_UP, self["quest_"..num].button_close)
+    self["quest_"..num].description:SetFocusChangeDir(MOVE_LEFT, function() return MoveLeft("description") end)
+    self["quest_"..num].description:SetFocusChangeDir(MOVE_RIGHT, function() return MoveRight("description") end)
+    self["quest_"..num].description:SetFocusChangeDir(MOVE_DOWN, self["quest_"..num].rewards)
+
+    self["quest_"..num].rewards:SetFocusChangeDir(MOVE_UP, self["quest_"..num].description)
+    self["quest_"..num].rewards:SetFocusChangeDir(MOVE_LEFT, function() return MoveLeft("rewards") end)
+    self["quest_"..num].rewards:SetFocusChangeDir(MOVE_RIGHT, function() return MoveRight("rewards") end)
+    self["quest_"..num].rewards:SetFocusChangeDir(MOVE_DOWN, self["quest_"..num].image)
+
+    self["quest_"..num].image:SetFocusChangeDir(MOVE_UP, self["quest_"..num].rewards)
+    self["quest_"..num].image:SetFocusChangeDir(MOVE_LEFT, function() return MoveLeft("image") end)
+    self["quest_"..num].image:SetFocusChangeDir(MOVE_RIGHT, function() return MoveRight("image") end)
+    self["quest_"..num].image:SetFocusChangeDir(MOVE_DOWN, self["quest_"..num].button)
+
+    self["quest_"..num].button:SetFocusChangeDir(MOVE_UP, self["quest_"..num].image)
+    self["quest_"..num].button:SetFocusChangeDir(MOVE_LEFT, function() return MoveLeft("image") end)
+    self["quest_"..num].button:SetFocusChangeDir(MOVE_RIGHT, function() return MoveRight("image") end)
+    self["quest_"..num].button:SetFocusChangeDir(MOVE_DOWN, function() return self.bossbutton end)
 
 end
 
@@ -435,6 +487,8 @@ local Quest_Widget = Class(Screen, function(self, inst)
 
   self:CreateQuests(inst)
 
+    SetFirstQuestAsFocus(self)
+
   self.page = 1
   self.min_page = 1
   self.max_page = math.ceil(self.max_amount_of_quests/5)
@@ -460,6 +514,7 @@ local Quest_Widget = Class(Screen, function(self, inst)
           self.stats:Hide()
       end
       self.quests_left_button:SetHoverText(STRINGS_QL["PAGE_"..(self.page-1)])
+      SetFirstQuestAsFocus(self)
   end)
   self.quests_right_button:SetHoverText(STRINGS_QL.PAGE_2)
 
@@ -482,6 +537,7 @@ local Quest_Widget = Class(Screen, function(self, inst)
           self.show_rewards:Kill()
       end
       self.quests_right_button:SetHoverText(STRINGS_QL["PAGE_"..(self.page+1)])
+      SetFirstQuestAsFocus(self)
   end)
   self.quests_left_button:SetHoverText(STRINGS_QL.PAGE_1)
   self.quests_left_button:Hide()
@@ -492,13 +548,15 @@ local Quest_Widget = Class(Screen, function(self, inst)
 
   self.stats = self.proot:AddChild(ImageButton("images/ui.xml","arrow2_left.tex","arrow2_left_over.tex","arrow_left_disabled.tex","arrow2_left_down.tex"))
   self.stats:SetPosition(-430, -220, 0)
-  self.stats:SetOnClick(
-    function()
+  self.stats:SetOnClick(function()
       self.proot:Hide()
       self.statpage:Show()
       self.initialpage:Show()
       if self.show_rewards and self.show_rewards.shown == true then
-        self.show_rewards:Kill()
+          self.show_rewards:Kill()
+      end
+      if self.bonus_button then
+          self.bonus_button:SetFocus()
       end
     end)
   self.stats:SetHoverText(STRINGS_QL.SCOREBOARD)
@@ -586,8 +644,9 @@ local Quest_Widget = Class(Screen, function(self, inst)
         self.bossbutton:SetHoverText(STRINGS_QL.BOSSFIGHT)
         self.bossbutton:SetScale(0.7,0.7)
         if inst.replica.quest_component._bossfight:value() <= 0 or TheWorld:HasTag("cave") or self.ownerofscreen:HasTag("currently_in_bossfight") then
-            self.bossbutton:Disable()
+            self.bossbutton:Unselect()
         end
+        self.bossbutton:SetFocusChangeDir(MOVE_UP, function() SetFirstQuestAsFocus(self) end)
     end
 
   self.statpage = self:AddChild(Widget("ROOT"))
@@ -620,6 +679,7 @@ local Quest_Widget = Class(Screen, function(self, inst)
         self.initialpage:Hide()
         self.stats:Show()
         self.uibottom:Show()
+        SetFirstQuestAsFocus(self)
     end
   )
   self.initialpage:SetHoverText(STRINGS_QL.PAGE_1)
@@ -737,6 +797,7 @@ local Quest_Widget = Class(Screen, function(self, inst)
         self.bonus_button:SetScale(0.8,0.8)
         self.bonus_button:SetText(STRINGS_QL.SHOW_BONUS)
         self.bonus_button:SetOnClick(function()
+            self.last_selected = self.bonus_button
             self:ShowBonus()
         end)
     end
@@ -800,10 +861,12 @@ function Quest_Widget:ShowBonus()
     self.close_bonus:SetTextSize(25)
     self.close_bonus:SetScale(1,1.25)
     self.close_bonus:SetText(STRINGS_QL.CLOSE)
-    self.close_bonus:SetOnClick(
-    function()
+    self.close_bonus:SetOnClick(function()
         self.show_bonus:Kill()
+        self.last_selected:SetFocus()
+        self.has_close_button = nil
     end)
+    self.has_close_button = self.close_bonus
 end
 
 function Quest_Widget:ShowRewards(tab)
@@ -878,10 +941,13 @@ function Quest_Widget:ShowRewards(tab)
     self.close_rewards:SetPosition( 175, 200)
     self.close_rewards:SetScale(1)
     self.close_rewards:SetOnClick(function()
-      self.show_rewards:Kill()
+        self.last_selected:SetFocus()
+        self.show_rewards:Kill()
+        self.has_close_button = nil
     end)
     self.close_rewards:SetHoverText(STRINGS_QL.CLOSE)
     self.close_rewards:SetImageNormalColour(UICOLOURS.RED)
+    self.has_close_button = self.close_rewards
 
 end
 
@@ -919,10 +985,13 @@ function Quest_Widget:ShowDescription(tab)
     self.close_rewards:SetPosition( 250, 240)
     self.close_rewards:SetScale(1)
     self.close_rewards:SetOnClick(function()
-      self.show_rewards:Kill()
+        self.last_selected:SetFocus()
+        self.show_rewards:Kill()
+        self.has_close_button = nil
     end)
     self.close_rewards:SetHoverText(STRINGS_QL.CLOSE)
     self.close_rewards:SetImageNormalColour(UICOLOURS.RED)
+    self.has_close_button = self.close_rewards
 end
 
 function Quest_Widget:AskForfeitQuest(tab,num)
@@ -940,12 +1009,17 @@ function Quest_Widget:AskForfeitQuest(tab,num)
     text = STRINGS_QL.NO,
     cb = function()
         self.show_rewards:Kill()
+        self.last_selected:SetFocus()
+        self.has_close_button = self.old_has_close_button
     end,
     }
 
     self.askforfeit = self.show_rewards:AddChild(Templates_R.CurlyWindow(450,200,nil,{button1,button2},nil,STRINGS_QL.ASK_FORFEIT))
     self.askforfeit.body:SetSize(40)
     self.askforfeit.body:SetPosition(0, 70)
+    self.askforfeit.actions.items[1]:SetFocus()
+    self.old_has_close_button = self.has_close_button
+    self.has_close_button = self.askforfeit.actions.items[2]
 end
 
 function Quest_Widget:CreateQuests(inst)
@@ -968,13 +1042,15 @@ function Quest_Widget:CreateQuests(inst)
 end
 
 function Quest_Widget:ForfeitQuest(counter)
-  if counter == nil then return end
+    if counter == nil then return end
     if self["quest__"..counter] then
-      self["quest__"..counter]:Kill()
+        self["quest__"..counter]:Kill()
     end
     self["quest__"..counter] = self["quests"..(math.floor((counter-1)/5+1))]:AddChild(Widget("quest__"..counter))
     self["quest__"..counter].cards = {}
     self["quest__"..counter].cards[counter] = createEmptyQuestCard(self,nil, -75 + 180 * ((counter-1)%5 + 1 - 2) , 0, 1,counter)
+
+    SetFirstQuestAsFocus(self)
 end
 
 
@@ -998,18 +1074,68 @@ function Quest_Widget:OnOpen()
 end
 
 function Quest_Widget:OnControl(control, down)
-  if Quest_Widget._base.OnControl(self, control, down) then
-    return true
-  end
-  if not down and (control == CONTROL_PAUSE or control == CONTROL_CANCEL) then
-    self:OnClose()
-    return true
-  end
+    if Quest_Widget._base.OnControl(self, control, down) then
+        return true
+    end
+    if down then
+        if (control == CONTROL_PAUSE or control == CONTROL_MENU_MISC_2) then
+            self:OnClose()
+            return true
+        elseif control == CONTROL_CANCEL and self.has_close_button then
+            self.has_close_button.onclick()
+            return true
+        elseif control == CONTROL_SCROLLBACK then
+            if self.quests_left_button:IsVisible() then
+                self.quests_left_button.onclick()
+                return true
+            elseif self.stats:IsVisible() then
+                self.stats.onclick()
+                return true
+            end
+        elseif control == CONTROL_SCROLLFWD then
+            if self.quests_right_button:IsVisible() then
+                self.quests_right_button.onclick()
+                return true
+            elseif self.initialpage:IsVisible() then
+                self.initialpage.onclick()
+                return true
+            end
+        end
+    end
 end
 
 function Quest_Widget:OnDestroy()
     SetAutopaused(false)
     self._base.OnDestroy(self)
+end
+
+function Quest_Widget:GetHelpText()
+    local t = {}
+    local controller_id = TheInput:GetControllerID()
+
+    table.insert(t, TheInput:GetLocalizedControl(controller_id, CONTROL_MENU_MISC_2) .. " " .. STRINGS_QL.CLOSE)
+
+    if self.has_close_button then
+        table.insert(t, TheInput:GetLocalizedControl(controller_id, CONTROL_CANCEL) .. " " .. STRINGS_QL.GO_BACK)
+    end
+
+    if self.stats:IsVisible() then
+        table.insert(t, TheInput:GetLocalizedControl(controller_id, CONTROL_SCROLLBACK) .. " " .. STRINGS_QL.SHOW_STATS)
+    end
+
+    if self.initialpage:IsVisible() then
+        table.insert(t, TheInput:GetLocalizedControl(controller_id, CONTROL_SCROLLFWD) .. " " .. STRINGS_QL.SHOW_QUESTS)
+    end
+
+    if self.quests_left_button:IsVisible() then
+        table.insert(t, TheInput:GetLocalizedControl(controller_id, CONTROL_SCROLLBACK) .. " " .. STRINGS_QL.TURN_LEFT)
+    end
+
+    if self.quests_right_button:IsVisible() then
+        table.insert(t, TheInput:GetLocalizedControl(controller_id, CONTROL_SCROLLFWD) .. " " .. STRINGS_QL.TURN_RIGHT)
+    end
+
+    return table.concat(t, "  ")
 end
 
 return Quest_Widget

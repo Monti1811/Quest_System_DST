@@ -1,17 +1,5 @@
 local SPECIALINFO = GLOBAL.STRINGS.SCRAPBOOK.SPECIALINFO
 local SCRAPBOOK_STRINGS = GLOBAL.STRINGS.QUEST_COMPONENT.SCRAPBOOK
-SPECIALINFO.NIGHTMARE_EYEBONE = SCRAPBOOK_STRINGS.NIGHTMARE_EYEBONE
-SPECIALINFO.FROGKING_P_CROWN = SCRAPBOOK_STRINGS.FROGKING_P_CROWN
-SPECIALINFO.FROGKING_SCEPTER = SCRAPBOOK_STRINGS.FROGKING_SCEPTER
-SPECIALINFO.GLOMMERFUELMACHINE_ITEM = SCRAPBOOK_STRINGS.GLOMMERFUELMACHINE_ITEM
-SPECIALINFO.GLOMMERFUELMACHINE = SCRAPBOOK_STRINGS.GLOMMERFUELMACHINE
-SPECIALINFO.BLACKGLOMMERFUEL = SCRAPBOOK_STRINGS.BLACKGLOMMERFUEL
-SPECIALINFO.GLOMMER_LIGHTFLOWER = SCRAPBOOK_STRINGS.GLOMMER_LIGHTFLOWER
-SPECIALINFO.QUESTBOARD = SCRAPBOOK_STRINGS.QUESTBOARD
-SPECIALINFO.REQUEST_QUEST = SCRAPBOOK_STRINGS.REQUEST_QUEST
-SPECIALINFO.SHADOW_CREST = SCRAPBOOK_STRINGS.SHADOW_CREST
-SPECIALINFO.SHADOW_MITRE = SCRAPBOOK_STRINGS.SHADOW_MITRE
-SPECIALINFO.SHADOW_LANCE = SCRAPBOOK_STRINGS.SHADOW_LANCE
 
 
 local ITEMS = {
@@ -24,7 +12,7 @@ local ITEMS = {
     glommer_lightflower = {name="glommer_lightflower", tex="glommer_lightflower.tex", type="item", prefab="glommer_lightflower", build="glommer_lightflower", bank="glommer_lightflower", anim="idle", specialinfo="GLOMMER_LIGHTFLOWER"},
     questboard = {name="questboard", tex="questboard.tex", type="thing", prefab="questboard", build="quest_board", bank="quest_board", anim="idle", workable="HAMMER", deps={"cutstone", "rope", "goldnugget"}, specialinfo="QUESTBOARD"},
     request_quest = {name="request_quest", tex="request_quest.tex", type="item", prefab="request_quest", build="request_quest", bank="request_quest", anim="idle", specialinfo="REQUEST_QUEST"},
-    shadow_crest = {name="shadow_crest", tex="shadow_crest.tex", subcat="armor", type="item", prefab="shadow_crest",armor=666, absorb_percent=0.9, armor_planardefense=10, build="shadow_crest",fueledtype1="NIGHTMARE", bank="shadow_crest", anim="anim", deps={"shadow_knight", "shadow_bishop", "shadow_rook", "shadow_mitre", "shadow_lance"}, notes={shadow_aligned=true}, specialinfo="SHADOW_CREST"},
+    shadow_crest = {name="shadow_crest", tex="shadow_crest.tex", subcat="armor", type="item", prefab="shadow_crest",armor=666, absorb_percent=0.9, armor_planardefense=10,waterproofer=0.2, build="shadow_crest",fueledtype1="NIGHTMARE", bank="shadow_crest", anim="anim", deps={"shadow_knight", "shadow_bishop", "shadow_rook", "shadow_mitre", "shadow_lance"}, notes={shadow_aligned=true}, specialinfo="SHADOW_CREST"},
     shadow_mitre = {name="shadow_mitre", tex="shadow_mitre.tex", subcat="armor", type="item", prefab="shadow_mitre",armor=1000, absorb_percent=0.9, armor_planardefense=10, build="shadow_mitre",fueledtype1="NIGHTMARE", bank="shadow_mitre", anim="anim", deps={"shadow_knight", "shadow_bishop", "shadow_rook", "shadow_crest", "shadow_lance"}, notes={shadow_aligned=true}, specialinfo="SHADOW_MITRE"},
     shadow_lance = {name="shadow_lance", tex="shadow_lance.tex", subcat="weapon", type="item", prefab="shadow_lance", weapondamage=45, planardamage=15, finiteuses=200, build="shadow_lance",fueledtype1="NIGHTMARE", bank="shadow_lance", anim="anim", deps={"shadow_knight", "shadow_bishop", "shadow_rook", "shadow_crest", "shadow_mitre"}, specialinfo="SHADOW_LANCE"},
 
@@ -42,6 +30,10 @@ for k, v in pairs(ITEMS) do
         v.type = v.type or "item"
         v.deps = v.deps or {}
         v.notes = v.notes or {}
+
+        if v.specialinfo then
+            SPECIALINFO[v.specialinfo] = SCRAPBOOK_STRINGS[v.specialinfo]
+        end
 
         scrapbook_prefabs[k] = true
         scrapbookdata[k] = v
@@ -64,6 +56,10 @@ for k, v in pairs(CREATURES) do
     v.type = v.type or "creature"
     v.deps = v.deps or {}
     v.notes = v.notes or {}
+
+    if v.specialinfo then
+        SPECIALINFO[v.specialinfo] = SCRAPBOOK_STRINGS[v.specialinfo]
+    end
 
     scrapbook_prefabs[k] = true
     scrapbookdata[k] = v

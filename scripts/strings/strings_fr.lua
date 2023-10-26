@@ -190,6 +190,11 @@ return {
 		CURR_RANK = "Rang actuel\n\nPoints jusqu'au prochain rang: ",
 		QUEST_LINE = "Cette quête fait partie d'une ligne de quêtes!",
 		SCALING = "Quête évolutive (peut devenir plus difficile si vous la terminez)",
+		GO_BACK = "Retour",
+		SHOW_STATS = "Afficher les statistiques",
+		SHOW_QUESTS = "Afficher les quêtes",
+		TURN_LEFT = "Tourner la page à gauche",
+		TURN_RIGHT = "Tourner la page à droite",
 	},
 	TEMP_BONI = {
 		HEALTH = " Santé",

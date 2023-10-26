@@ -190,6 +190,11 @@ return {
 		CURR_RANK = "Derzeitiger Rang\n\nPunkte bis zum nächsten Rang: ",
 		QUEST_LINE = "Diese Mission ist Teil einer Missionsreihe!",
 		SCALING = "Skalierbare Mission (kann schwieriger werden, wenn du sie abschließt)",
+		GO_BACK = "Zurückgehen",
+		SHOW_STATS = "Statistiken anzeigen",
+		SHOW_QUESTS = "Quests anzeigen",
+		TURN_LEFT = "Seite links umblättern",
+		TURN_RIGHT = "Seite rechts umblättern",
 	},
 	TEMP_BONI = {
 		HEALTH = " Leben",

@@ -214,6 +214,11 @@ return {
 		SHOW_BONUS = "Show Bonus",
 		CURR_RANK = "Current Rank\n\nPoints till next Rank: ",
 		SCALING = "Scalable Quest (can get more difficult if you complete it)",
+		GO_BACK = "Go Back",
+		SHOW_STATS = "Show Stats",
+		SHOW_QUESTS = "Show Quests",
+		TURN_LEFT = "Turn Page Left",
+		TURN_RIGHT = "Turn Page Right",
 
 	},
 

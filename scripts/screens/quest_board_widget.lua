@@ -131,16 +131,17 @@ local Quest_Board_Widget = Class(Screen, function(self, owner)
 
 
     self.new_quest:SetOnClick(function()
+        self.last_selected = self.new_quest
         self.root:Hide()
         self:ShowNewQuests()
     end)
     if self.owner.replica.quest_component._acceptedquest:value() == true then --QUEST_BOARD.ACCEPTED_QUEST == true then
-        self.new_quest:Disable()
+        self.new_quest:Select()
         --self.new_quest:SetText(STRINGS_QB.LOOK_FOR_QUESTS_ACCEPTED)
         self.new_quest.text:SetAutoSizingString(STRINGS_QB.LOOK_FOR_QUESTS_ACCEPTED,290)
     end
     if GetTableSize(self.owner.replica.quest_component._quests) >= self.owner.replica.quest_component._max_amount_of_quests:value() then
-        self.new_quest:Disable()
+        self.new_quest:Select()
         --self.new_quest:SetText(STRINGS_QB.LOOK_FOR_QUESTS_MAX)
         self.new_quest.text:SetAutoSizingString(STRINGS_QB.LOOK_FOR_QUESTS_MAX,290)
     end
@@ -151,11 +152,11 @@ local Quest_Board_Widget = Class(Screen, function(self, owner)
     self.level_rewards:SetTextSize(30)
     self.level_rewards.text:SetAutoSizingString(STRINGS_QB.OBTAIN_LEVEL_REWARDS,290)
     self.level_rewards.text:Show()
-    self.level_rewards:SetOnClick(
-        function()
-            self:CheckLevelRewards()
-            self.root:Hide()
-        end)
+    self.level_rewards:SetOnClick( function()
+        self.last_selected = self.level_rewards
+        self:CheckLevelRewards()
+        self.root:Hide()
+    end)
 
     local function CanCreateQuests(user)
         if TheNet:GetIsServerAdmin() or QUEST_COMPONENT.CAN_CREATE_CUSTOM_QUESTS[user.userid] == true then
@@ -173,11 +174,11 @@ local Quest_Board_Widget = Class(Screen, function(self, owner)
         self.create_new_quest:SetTextSize(30)
         self.create_new_quest.text:SetAutoSizingString(STRINGS_QB.CREATE_NEW_QUESTS,290)
         self.create_new_quest.text:Show()
-        self.create_new_quest:SetOnClick(
-            function()
-                self:CreateNewQuest()
-                self.root:Hide()
-            end)
+        self.create_new_quest:SetOnClick(function()
+            self.last_selected = self.create_new_quest
+            self:CreateNewQuest()
+            self.root:Hide()
+        end)
         button_amount = button_amount + 1
         table.insert(buttons,"create_new_quest")
     end
@@ -190,6 +191,7 @@ local Quest_Board_Widget = Class(Screen, function(self, owner)
         self.check_custom_quests.text:SetAutoSizingString(STRINGS_QB.MANAGE_QUESTS,290)
         self.check_custom_quests.text:Show()
         self.check_custom_quests:SetOnClick(function()
+            self.last_selected = self.check_custom_quests
             self:ShowCustomQuests()
             self.root:Hide()
         end)
@@ -202,15 +204,35 @@ local Quest_Board_Widget = Class(Screen, function(self, owner)
         table.insert(buttons,"check_custom_quests")
     end
 
+    local second_row = #buttons > 3
     for i = 1,#buttons do
+        local button = self[buttons[i]]
         if button_positions[button_amount] then
             if button_positions[button_amount][i] then
-                if self[buttons[i]] then
-                    self[buttons[i]]:SetPosition(unpack(button_positions[button_amount][i]))
+                if button then
+                    button:SetPosition(unpack(button_positions[button_amount][i]))
                 end
             end
         end
+        if i > 1 then
+            button:SetFocusChangeDir(MOVE_UP, self[buttons[i-1]])
+        end
+
+        if i < #buttons then
+            button:SetFocusChangeDir(MOVE_DOWN, self[buttons[i+1]])
+        end
+        if second_row then
+            if i < 4 and buttons[i+3] then
+                button:SetFocusChangeDir(MOVE_RIGHT, self[buttons[i+3]])
+            elseif i > 3 and buttons[i-3] then
+                button:SetFocusChangeDir(MOVE_LEFT, self[buttons[i-3]])
+            end
+        end
     end
+
+
+    self.last_selected = self[buttons[1]]
+    self.last_selected:SetFocus()
 
     self.cancel_button = self.proot:AddChild(ImageButton("images/global_redux.xml", "close.tex"))
     self.cancel_button:SetPosition(415, 310, 0)
@@ -260,18 +282,19 @@ function Quest_Board_Widget:ShowNewQuests()
             self[child_name].text:SetAutoSizingString(title ~= "" and title or quest.name or "No Title found",290)
             self[child_name].text:SetPosition(0,10)
 
-             self[child_name]:SetOnClick(function()
+            self[child_name]:SetOnClick(function()
+                self.last_selected_quest = self[child_name]
                 self:ShowQuestDetails(quest,name)
                 self.back_button:Hide()
             end)
 
             self.difficulty = {}
-            local difficulty = quest.difficulty and quest.difficulty < 6 and quest.difficulty > 0 and quest.difficulty or 1
+
             for count = 1,quest.difficulty do
                 self.difficulty["star"..tostring(count)] = self.root2:AddChild(Image("images/global_redux.xml","star_checked.tex"))
                 self.difficulty["star"..tostring(count)]:SetPosition(0 - 75 + count * 25, 255 - k*100, 0)
                 self.difficulty["star"..tostring(count)]:SetScale(0.5)
-                self.difficulty["star"..tostring(count)]:SetTint(1,1,1,1)--unpack(colour_difficulty[difficulty]))
+                self.difficulty["star"..tostring(count)]:SetTint(1,1,1,1)
                 self.difficulty["star"..tostring(count)]:SetClickable(false)
             end
 
@@ -279,22 +302,38 @@ function Quest_Board_Widget:ShowNewQuests()
                 self.difficulty["star"..tostring(count)] = self.root2:AddChild(Image("images/global_redux.xml","star_uncheck.tex"))
                 self.difficulty["star"..tostring(count)]:SetPosition(0 - 75 + count * 25, 255 - k*100, 0)
                 self.difficulty["star"..tostring(count)]:SetScale(0.5)
-                self.difficulty["star"..tostring(count)]:SetTint(1,1,1,1)--unpack(colour_difficulty[difficulty]))
+                self.difficulty["star"..tostring(count)]:SetTint(1,1,1,1)
                 self.difficulty["star"..tostring(count)]:SetClickable(false)
             end
+
         end
     end
 
+    for k = 1,3 do
+        if k > 1 then
+            self["_quest_"..k]:SetFocusChangeDir(MOVE_UP, self["_quest_"..(k-1)])
+        end
+        if k < 3 then
+            self["_quest_"..k]:SetFocusChangeDir(MOVE_DOWN, self["_quest_"..(k+1)])
+        end
+    end
+
+    self.last_selected_quest = self._quest_1
+    self.last_selected_quest:SetFocus()
+
     self.back_button = self.root2:AddChild(ImageButton("images/ui.xml","arrow2_left.tex","arrow2_left_over.tex","arrow_left_disabled.tex","arrow2_left_down.tex"))
     self.back_button:SetPosition(-410, -160, 0)
-    self.back_button:SetOnClick(
-        function()
-            self.root2:Hide()
-            self.root:Show()
-            if self.show_quest and self.show_quest.shown == true then
-                self.show_quest:Kill()
-            end
-        end)
+    self.back_button:SetOnClick(function()
+        self.has_close_button = nil
+        self.root2:Kill()
+        self.root:Show()
+        if self.show_quest and self.show_quest.shown == true then
+            self.show_quest:Kill()
+        end
+        self.last_selected:SetFocus()
+    end)
+
+    self.has_close_button = self.back_button
 
 end
 
@@ -523,30 +562,35 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
     self.accept_quest:SetScale(0.8)
     self.accept_quest:SetText(STRINGS_QB.ACCEPT_QUEST)
     self.accept_quest:SetOnClick(function()
-            self.root2:Hide()
+            self.root2:Kill()
             self.root:Show()
             if self.show_quest and self.show_quest.shown == true then
               self.show_quest:Kill()
             end
             SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["AcceptQuest"],name)
             SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["HasAcceptedQuest"])
-            self.new_quest:Disable()
+            self.new_quest:Select()
             self.new_quest:SetText(STRINGS_QB.ALREADY_ACCEPT_QUEST)
+            self.has_close_button = nil
+            self.last_selected:SetFocus()
         end)
-
+    self.accept_quest:SetFocus()
 
     self.__show_quest2.button_close = self.show_quest:AddChild(ImageButton("images/global_redux.xml", "close.tex"))
     self.__show_quest2.button_close:SetPosition( 300, 300)
     self.__show_quest2.button_close:SetScale(1)
     self.__show_quest2.button_close:SetOnClick(function()
-      if self.show_quest and self.show_quest.shown == true then
+        self.has_close_button = self.back_button
+        if self.show_quest and self.show_quest.shown == true then
+            self.show_quest:Kill()
+        end
         self.show_quest:Kill()
-      end
-      self.show_quest:Kill()
-      self.back_button:Show()
+        self.back_button:Show()
+        self.last_selected_quest:SetFocus()
     end)
     self.__show_quest2.button_close:SetHoverText(STRINGS_QB.CLOSE)
     self.__show_quest2.button_close:SetImageNormalColour(UICOLOURS.RED)
+    self.has_close_button = self.__show_quest2.button_close
 end
 
 function Quest_Board_Widget:ShowRewards(tab)
@@ -662,12 +706,17 @@ local function AskIfDelete(self,name)
     text = STRINGS_QB.NO,
     cb = function()
         self.askquestion:Kill()
+        self.remove_custom_quest:SetFocus()
+        self.has_close_button = self.cancel_button2
     end,
     }
 
     self.askquestion = self.root5:AddChild(Templates_R.CurlyWindow(350,225,nil,{button1,button2},nil,string.format(STRINGS_QB.ASK_REMOVE_QUEST,name)))
     self.askquestion.body:SetSize(40)
     self.askquestion.body:SetPosition(0, 70)
+    self.askquestion.actions.items[1]:SetFocus()
+    self.old_has_close_button = self.has_close_button
+    self.has_close_button = self.askquestion.actions.items[2]
 end
 
 function Quest_Board_Widget:ShowCustomQuests()
@@ -682,15 +731,24 @@ function Quest_Board_Widget:ShowCustomQuests()
         quest_root:SetHAnchor(ANCHOR_MIDDLE)
         quest_root:SetPosition(0, 0)
         local bg = quest_root:AddChild(Widget("bg"))
-        bg.image = bg:AddChild(Image("images/frontend_redux.xml","achievement_backing_selected.tex"))
+        bg:SetOnGainFocus(function()
+            bg.image:OnGainFocus()
+        end)
+        bg:SetOnLoseFocus(function()
+            bg.image:OnLoseFocus()
+        end)
+        bg.image = bg:AddChild(ImageButton("images/frontend_redux.xml","achievement_backing_selected.tex", "achievement_backing_selected.tex"))
         bg.image:SetScale(0.5,1.4)
+        bg.image:UseFocusOverlay("achievement_backing_hover.tex")
+        bg.image:SetFocusScale(1)
+        bg.image.hover_overlay:SetScale(1.05,1.1)
 
         bg.number = bg:AddChild(Text(UIFONT, 40,counter)) 
         bg.number:SetPosition(-300,0)
 
         bg.title = bg:AddChild(Text(UIFONT, 30,quest.name)) 
         bg.title:SetPosition(-138, 39)
-        local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas
+        local target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml")
         target_atlas = target_atlas ~= nil and softresolvefilepath(target_atlas) ~= nil and target_atlas or "images/avatars.xml"
         local target_tex = target_atlas ~= "images/avatars.xml" and quest.tex or "avatar_unknown.tex"
         bg.victim = bg:AddChild(Image(softresolvefilepath(target_atlas), target_tex))
@@ -708,11 +766,15 @@ function Quest_Board_Widget:ShowCustomQuests()
             local text = QUEST_BOARD.PREFABS_MOBS[quest.victim].hovertext or ""
             local new_text = string.gsub(text," x "," "..quest.amount.." ")
             local new_text2 = string.split(new_text,"/")
+            if new_text2[2] == "moose" then
+                new_text2[2] = "moose1"
+            end
             local new_text3 = new_text2[1]..STRINGS.NAMES[string.upper(new_text2[2])]
             bg.victim:SetHoverText(new_text3)
         end
         bg.victim_name = bg:AddChild(Text(NEWFONT_OUTLINE, 25))
         bg.victim_name:SetPosition(50, -30)
+        quest.victim = quest.victim == "moose" and "moose1" or quest.victim
         bg.victim_name:SetAutoSizingString(quest.counter_name or (quest.victim and STRINGS.NAMES[string.upper(quest.victim)]) or "Not Defined",100)
         bg.rewards = {}
         local num = 0
@@ -812,9 +874,15 @@ function Quest_Board_Widget:ShowCustomQuests()
         bg.remove:SetScale(0.8)
         bg.remove:SetHoverText(STRINGS_QB.REMOVE_QUEST)
         bg.remove:SetOnClick( function()
-           AskIfDelete(self,name)
+            self.remove_custom_quest = bg.remove
+            AskIfDelete(self,name)
         end)
         bg.remove:SetImageNormalColour(UICOLOURS.RED)
+
+        bg:SetFocusChangeDir(MOVE_RIGHT, bg.edit)
+        bg.edit:SetFocusChangeDir(MOVE_RIGHT, bg.remove)
+        bg.edit:SetFocusChangeDir(MOVE_LEFT, bg)
+        bg.remove:SetFocusChangeDir(MOVE_LEFT, bg.edit)
 
         table.insert(list_elements,bg)
     end
@@ -822,6 +890,7 @@ function Quest_Board_Widget:ShowCustomQuests()
     self.list = self.root5:AddChild(ScrollableList(list_elements, 380, 375, 125, 3, nil, nil, nil, nil, nil, -30))
     self.list:SetPosition(150,50)
     self.list:SetScale(0.95)
+    self.list:SetFocus()
 
     self.cancel_button2 = self.root5:AddChild(ImageButton("images/global_redux.xml", "close.tex"))
     self.cancel_button2:SetPosition(415, 285, 0)
@@ -838,10 +907,13 @@ function Quest_Board_Widget:ShowCustomQuests()
     self.back_button = self.root5:AddChild(ImageButton("images/ui.xml","arrow2_left.tex","arrow2_left_over.tex","arrow_left_disabled.tex","arrow2_left_down.tex"))
     self.back_button:SetPosition(-410, -160, 0)
     self.back_button:SetOnClick(function()
+        self.last_selected:SetFocus()
+        self.has_close_button = nil
         self.root5:Kill()
         self.root:Show()
         self.cancel_button:Show()
     end)
+    self.has_close_button = self.back_button
 end
 
 
@@ -851,47 +923,69 @@ function Quest_Board_Widget:CheckLevelRewards()
     self.root3 = self.bg3:AddChild(Widget("root"))
     self.root3.profileflairs = {}
     local curr_level = self.owner and self.owner.replica.quest_component and self.owner.replica.quest_component._level:value() or 1
-    for k,v in ipairs(profile_flairs) do
-        if k % 5 == 0 then
-            local level_str = "level"..k
-            self.root3.profileflairs[level_str] = self.root3:AddChild(ImageButton("images/profileflair.xml",v))
-            local posx = k < 51 and -380+((k)*70/5) or k < 101 and -380+((k-50)*70/5) or k < 151 and -380+((k-100)*70/5) or -345+((k-150)*70/5)
-            local posy = k < 51 and 200 or k < 101 and 110 or k < 151 and 20 or -70
+    for k = 5, 195, 5 do
+        local v = profile_flairs[k]
+        local level_str = "level"..k
+        self.root3.profileflairs[level_str] = self.root3:AddChild(ImageButton("images/profileflair.xml",v))
+        local posx = k < 51 and -380+((k)*70/5) or k < 101 and -380+((k-50)*70/5) or k < 151 and -380+((k-100)*70/5) or -345+((k-150)*70/5)
+        local posy = k < 51 and 200 or k < 101 and 110 or k < 151 and 20 or -70
 
-            self.root3.profileflairs[level_str]:SetPosition(posx, posy, 0)
-            self.root3.profileflairs[level_str]:SetScale(.55)
-            local str = STRINGS_QB.REWARD_LEVEL.." "..k.."\n"
-            for k,v in pairs(QUEST_BOARD.LEVEL_REWARDS[k]) do
-                str = str.."\n"..(STRINGS.NAMES[string.upper(k)] or k)..": "..v
-            end
-            self.root3.profileflairs[level_str]:SetHoverText(str)
-            self.root3.profileflairs[level_str]:SetOnClick(function()
-                SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["GetLevelRewards"],k)
-                Networking_Announcement(STRINGS_QB.ACCEPTED_REWARDS.." "..k.."!")
-                self.root3.profileflairs[level_str]:Disable()
-                self.root3.profileflairs[level_str].image:SetTint(0.15,0.15,0.15,1)
-                end)
-            self.root3.profileflairs[level_str]:Disable()
+        self.root3.profileflairs[level_str]:SetPosition(posx, posy, 0)
+        self.root3.profileflairs[level_str]:SetScale(.55)
+        local str = STRINGS_QB.REWARD_LEVEL.." "..k.."\n"
+        for k,v in pairs(QUEST_BOARD.LEVEL_REWARDS[k]) do
+            str = str.."\n"..(STRINGS.NAMES[string.upper(k)] or k)..": "..v
+        end
+        self.root3.profileflairs[level_str]:SetHoverText(str)
+        self.root3.profileflairs[level_str]:SetOnClick(function()
+            SendModRPCToServer(MOD_RPC["Quest_System_RPC"]["GetLevelRewards"],k)
+            Networking_Announcement(STRINGS_QB.ACCEPTED_REWARDS.." "..k.."!")
+            self.root3.profileflairs[level_str]:Select()
             self.root3.profileflairs[level_str].image:SetTint(0.15,0.15,0.15,1)
-            if self.owner.replica.quest_component.accepted_level_rewards[k] == true then
-                self.root3.profileflairs[level_str]:Enable()
-                self.root3.profileflairs[level_str].image:SetTint(1,1,1,1)
-            end
+            end)
+        self.root3.profileflairs[level_str]:Select()
+        self.root3.profileflairs[level_str].image:SetTint(0.15,0.15,0.15,1)
+        if self.owner.replica.quest_component.accepted_level_rewards[k] == true then
+            self.root3.profileflairs[level_str]:Unselect()
+            self.root3.profileflairs[level_str].image:SetTint(1,1,1,1)
+        end
 
-            local level_desc = "level_desc"..k
-            self.root3.profileflairs[level_desc] = self.root3:AddChild(Text(NEWFONT_OUTLINE, 20))
-            self.root3.profileflairs[level_desc]:SetAutoSizingString(STRINGS_QB.LEVEL.." "..k, 68)
-            self.root3.profileflairs[level_desc]:SetPosition(posx, posy-35)
-            --self.root3.profileflairs[level_desc]:SetScale(1,1)
+        local level_desc = "level_desc"..k
+        self.root3.profileflairs[level_desc] = self.root3:AddChild(Text(NEWFONT_OUTLINE, 20))
+        self.root3.profileflairs[level_desc]:SetAutoSizingString(STRINGS_QB.LEVEL.." "..k, 68)
+        self.root3.profileflairs[level_desc]:SetPosition(posx, posy-35)
+        --self.root3.profileflairs[level_desc]:SetScale(1,1)
+    end
+
+    for k = 5, 195, 5 do
+        local row = k < 51 and 1 or k < 101 and 2 or k < 151 and 3 or 4
+        local button = self.root3.profileflairs["level"..k]
+        if k > 1 then
+            button:SetFocusChangeDir(MOVE_LEFT, self.root3.profileflairs["level"..k-5])
+        end
+
+        if k < #profile_flairs then
+            button:SetFocusChangeDir(MOVE_RIGHT, self.root3.profileflairs["level"..k+5])
+        end
+
+        if row < 4 then
+            local change = k == 150 and 45 or 50
+            button:SetFocusChangeDir(MOVE_DOWN, self.root3.profileflairs["level"..k+change])
+        elseif row > 1 then
+            button:SetFocusChangeDir(MOVE_UP, self.root3.profileflairs["level"..k-50])
         end
     end
+    self.root3.profileflairs.level5:SetFocus()
 
     self.back_button = self.root3:AddChild(ImageButton("images/ui.xml","arrow2_left.tex","arrow2_left_over.tex","arrow_left_disabled.tex","arrow2_left_down.tex"))
     self.back_button:SetPosition(-410, -160, 0)
     self.back_button:SetOnClick(function()
-        self.root3:Hide()
+        self.has_close_button = nil
+        self.last_selected:SetFocus()
+        self.root3:Kill()
         self.root:Show()
     end)
+    self.has_close_button = self.back_button
 end
 
 
@@ -1071,6 +1165,7 @@ function Quest_Board_Widget:CreateNewQuest()
     
     for k,v in pairs(spinner_cat) do
         if k ~= 4 then
+            local filterbar
             local width = v[1] == STRINGS_QB.VICTIM and 230 or 140
             local list_elements = {}
             self["widgets_root_"..k] = self.list_root:AddChild(Widget("widgets_root"))
@@ -1102,10 +1197,12 @@ function Quest_Board_Widget:CreateNewQuest()
                     self.new_custom_quest[v[1].."_text"] = item_data[count] and item_data[count].text or "Empty"
                     self.new_custom_quest[v[1].."_modname"] = item_data[count] and item_data[count].modname
                     self["list"..k]:Hide()
+                    filterbar:Hide()
                     self["text_button_"..k].button.text:SetAutoSizingString(item_data[count].text,width)
                     self["widgets_root_"..k]:Hide()
                     self.cancel_button:Show()
                     self.back_button:Show()
+                    self.last_selected_new_quest:SetFocus()
                 end)
                 table.insert(list_elements,button)
             end
@@ -1118,37 +1215,44 @@ function Quest_Board_Widget:CreateNewQuest()
                     self.new_custom_quest[v[1].."_text"] = data.text
                     self.new_custom_quest[v[1].."_modname"] = data.modname
                     self["list"..k]:Hide()
+                    filterbar:Hide()
                     self["widgets_root_"..k]:Hide()
                     self["text_button_"..k].button.text:SetAutoSizingString(data.text,width)
                     self.cancel_button:Show()
                     self.back_button:Show()
+                    self.last_selected_new_quest:SetFocus()
                 end)
             end
 
             self["list"..k] = self.list_root:AddChild(ScrollableList(item_data, 200, 370, 60, 10, OnUpdateFn, list_elements, 30, nil, nil, 50))
             self["list"..k]:SetPosition(280,30)
 
-            
             local cancel_button = self["list"..k]:AddChild(ImageButton("images/global_redux.xml", "close.tex"))
             cancel_button:SetPosition(180, 250, 0)
             cancel_button:SetScale(1.3)
             cancel_button:SetOnClick(function()
                 self["list"..k]:Hide()
+                filterbar:Hide()
                 self.cancel_button:Show()
                 self.back_button:Show()
                 self["widgets_root_"..k]:Hide()
+                self.has_close_button = self.back_button
+                self.last_selected_new_quest:SetFocus()
             end)
             cancel_button:SetHoverText(STRINGS_QB.CLOSE)
             cancel_button:SetImageNormalColour(UICOLOURS.RED)
             cancel_button:MoveToBack()
             
-            local filterbar = self["list"..k]:AddChild(AddSearch(self,nil,self["list"..k],self.item_data))
-            filterbar:SetPosition(-250,245)
+            filterbar = self.list_root:AddChild(AddSearch(self,nil,self["list"..k],self.item_data))
+            filterbar:SetPosition(30,275)
             filterbar:SetScale(1.5)
 
             self["list"..k]:Hide()
-            self["widgets_root_"..k]:Hide() 
+            self["widgets_root_"..k]:Hide()
+            filterbar:Hide()
 
+            self["list"..k]:SetFocusChangeDir(MOVE_UP, filterbar)
+            filterbar:SetFocusChangeDir(MOVE_DOWN, self["list"..k])
       
             local spinner_bg = self.root4:AddChild(Image("images/global_redux.xml", "spinner_background_normal.tex"))
             spinner_bg:SetSize(360, 40)
@@ -1161,11 +1265,14 @@ function Quest_Board_Widget:CreateNewQuest()
                 offset = -50
             end
             self["text_button_"..k] = spinner_bg:AddChild(Templates_R.LabelButton(function() 
-                self["list"..k]:Show() 
+                self["list"..k]:Show()
+                filterbar:Show()
                 self.cancel_button:Hide()
                 self.back_button:Hide()
-                self["widgets_root_"..k]:Show() 
-
+                self["widgets_root_"..k]:Show()
+                self["list"..k]:SetFocus()
+                --filterbar:SetFocus()
+                self.has_close_button = cancel_button
             end,
             v[1],"Random",150,width_button,30,30,CHATFONT,nil,offset))
             self["text_button_"..k]:SetPosition(0,0)
@@ -1288,6 +1395,7 @@ function Quest_Board_Widget:CreateNewQuest()
     self.write_description:SetScale(0.7)
     self.write_description:SetOnClick(function()
         self:WriteDescription()
+        self.has_close_button = self.close_desc
     end)
 
 
@@ -1305,16 +1413,17 @@ function Quest_Board_Widget:CreateNewQuest()
                 if k == self.new_custom_quest[STRINGS_QB.TITLE] then
                     --self.add_quest:SetText(STRINGS_QB.QUEST_EXISTS)
                     self.add_quest.text:SetAutoSizingString(STRINGS_QB.QUEST_EXISTS,275)
-                    self.add_quest:Disable()
+                    self.add_quest:Select()
                     self.inst:DoTaskInTime(3,function()
                         self.add_quest:SetTextSize(30)
                         self.add_quest.text:SetAutoSizingString(STRINGS_QB.ADD_QUEST,275)
-                        self.add_quest:Enable()
+                        self.add_quest:Unselect()
                     end)
                     return
                 end
             end
         end
+        self.last_selected_new_quest = self.add_quest
         self:AddQuestVerify()
     end)
 
@@ -1336,6 +1445,8 @@ function Quest_Board_Widget:CreateNewQuest()
     self.back_button = self.root4:AddChild(ImageButton("images/ui.xml","arrow2_left.tex","arrow2_left_over.tex","arrow_left_disabled.tex","arrow2_left_down.tex"))
     self.back_button:SetPosition(-410, -160, 0)
     self.back_button:SetOnClick(function()
+        self.has_close_button = nil
+        self.last_selected:SetFocus()
         self.root4:Hide()
         self.list1:Hide()
         self.list2:Hide()
@@ -1362,6 +1473,60 @@ function Quest_Board_Widget:CreateNewQuest()
         end
         self.root:Show()
     end)
+    self.has_close_button = self.back_button
+
+    self.text_button_1:SetFocusChangeDir(MOVE_RIGHT, self.spinner_rewards_1)
+    self.text_button_1:SetFocusChangeDir(MOVE_DOWN, self.text_button_2)
+
+    self.text_button_2:SetFocusChangeDir(MOVE_UP, self.text_button_1)
+    self.text_button_2:SetFocusChangeDir(MOVE_RIGHT, self.spinner_rewards_2)
+    self.text_button_2:SetFocusChangeDir(MOVE_DOWN, self.text_button_3)
+
+    self.text_button_3:SetFocusChangeDir(MOVE_UP, self.text_button_2)
+    self.text_button_3:SetFocusChangeDir(MOVE_RIGHT, self.spinner_rewards_3)
+    self.text_button_3:SetFocusChangeDir(MOVE_DOWN, self.spinner_4)
+
+    self.spinner_4:SetFocusChangeDir(MOVE_UP, self.text_button_3)
+    self.spinner_4:SetFocusChangeDir(MOVE_RIGHT, self.spinner_rewards_4)
+    self.spinner_4:SetFocusChangeDir(MOVE_DOWN, self.text_button_5)
+
+    self.text_button_5:SetFocusChangeDir(MOVE_UP, self.spinner_4)
+    self.text_button_5:SetFocusChangeDir(MOVE_RIGHT, self.write_description)
+    self.text_button_5:SetFocusChangeDir(MOVE_DOWN, self.spinner_6)
+
+    self.spinner_6:SetFocusChangeDir(MOVE_UP, self.text_button_5)
+    self.spinner_6:SetFocusChangeDir(MOVE_RIGHT, self.write_description)
+    self.spinner_6:SetFocusChangeDir(MOVE_DOWN, self.spinner_7)
+
+    self.spinner_7:SetFocusChangeDir(MOVE_UP, self.spinner_6)
+    self.spinner_7:SetFocusChangeDir(MOVE_RIGHT, self.write_description)
+    self.spinner_7:SetFocusChangeDir(MOVE_DOWN, self.add_quest)
+
+    self.spinner_rewards_1:SetFocusChangeDir(MOVE_LEFT, self.text_button_1)
+    self.spinner_rewards_1:SetFocusChangeDir(MOVE_DOWN, self.spinner_rewards_2)
+
+    self.spinner_rewards_2:SetFocusChangeDir(MOVE_UP, self.spinner_rewards_1)
+    self.spinner_rewards_2:SetFocusChangeDir(MOVE_LEFT, self.text_button_2)
+    self.spinner_rewards_2:SetFocusChangeDir(MOVE_DOWN, self.spinner_rewards_3)
+
+    self.spinner_rewards_3:SetFocusChangeDir(MOVE_UP, self.spinner_rewards_2)
+    self.spinner_rewards_3:SetFocusChangeDir(MOVE_LEFT, self.text_button_3)
+    self.spinner_rewards_3:SetFocusChangeDir(MOVE_DOWN, self.spinner_rewards_4)
+
+    self.spinner_rewards_4:SetFocusChangeDir(MOVE_UP, self.spinner_rewards_3)
+    self.spinner_rewards_4:SetFocusChangeDir(MOVE_LEFT, self.spinner_4)
+    self.spinner_rewards_4:SetFocusChangeDir(MOVE_DOWN, self.write_description)
+
+    self.write_description:SetFocusChangeDir(MOVE_UP, self.spinner_rewards_4)
+    self.write_description:SetFocusChangeDir(MOVE_LEFT, self.text_button_5)
+    self.write_description:SetFocusChangeDir(MOVE_DOWN, self.add_quest)
+
+    self.add_quest:SetFocusChangeDir(MOVE_UP, self.spinner_7)
+
+    self.text_button_1:SetFocus()
+
+    self.last_selected_new_quest = self.text_button_1
+
 end
 
 
@@ -1399,10 +1564,10 @@ function Quest_Board_Widget:WriteDescription()
         function()
             local txt = self.desc_edit:GetString() or ""
             self.new_custom_quest.text = txt
-            self.save_desc:Hide()
-            self.desc_edit_bg:Hide()
-            self.desc_edit:Hide()
-            self.close_desc:Hide()
+            self.save_desc:Kill()
+            self.desc_edit_bg:Kill()
+            self.desc_edit:Kill()
+            self.close_desc:Kill()
         end)
 
     self.close_desc = self.root4:AddChild(ImageButton("images/global_redux.xml", "close.tex"))
@@ -1413,18 +1578,18 @@ function Quest_Board_Widget:WriteDescription()
         self.desc_edit_bg:Hide()
         self.desc_edit:Hide()
         self.close_desc:Hide()
+        self.has_close_button = self.back_button
     end)
     self.close_desc:SetHoverText(STRINGS_QB.CLOSE)
     self.close_desc:SetImageNormalColour(UICOLOURS.RED)
 end
 
 local function GetRewardPrefab(prefab,table)
-    if prefab == "random" or prefab == "Random" then
+    while prefab == "random" or prefab == "Random" do
         local tab = GetRandomItem(table)
-        return tab["data"]
-    else
-        return prefab
+        prefab = tab["data"]
     end
+    return prefab
 end
 
 function Quest_Board_Widget:AddQuestVerify()
@@ -1490,12 +1655,15 @@ function Quest_Board_Widget:AddQuestVerify()
             QUEST_BOARD.CUSTOM_QUEST = nil
             self.new_custom_quest = {}
             Networking_Announcement(STRINGS_QB.ADDED_SUCCESFULLY.." "..quest.name.."!")
+            self.last_selected:SetFocus()
         end,
     }
     local button2 = {
     text = STRINGS_QB.NO,
     cb = function()
         self.askquestion:Kill()
+        self.has_close_button = self.back_button
+        self.last_selected_new_quest:SetFocus()
     end,
     }
 
@@ -1503,6 +1671,8 @@ function Quest_Board_Widget:AddQuestVerify()
     self.askquestion = self.root4:AddChild(Templates_R.CurlyWindow(450,300,nil,{button1,button2},nil,question))
     self.askquestion.body:SetSize(40)
     self.askquestion.body:SetPosition(0, 70)
+    self.askquestion.actions.items[1]:SetFocus()
+    self.has_close_button = self.askquestion.actions.items[2]
 end
 
 function Quest_Board_Widget:OnClose()
@@ -1526,9 +1696,14 @@ function Quest_Board_Widget:OnControl(control, down)
   	if Quest_Board_Widget._base.OnControl(self, control, down) then
   	  	return true
  	end
-  	if down and (control == CONTROL_PAUSE or control == CONTROL_CANCEL) then
-    	self:OnClose()
-    	return true
+    if down then
+        if (control == CONTROL_PAUSE or control == CONTROL_MENU_MISC_2) then
+            self:OnClose()
+            return true
+        elseif control == CONTROL_CANCEL and self.has_close_button then
+            self.has_close_button.onclick()
+            return true
+        end
   	end
 end
 
@@ -1536,6 +1711,21 @@ function Quest_Board_Widget:OnDestroy()
     SetAutopaused(false)
     self._base.OnDestroy(self)
 end
+
+
+function Quest_Board_Widget:GetHelpText()
+    local t = {}
+    local controller_id = TheInput:GetControllerID()
+
+    table.insert(t, TheInput:GetLocalizedControl(controller_id, CONTROL_MENU_MISC_2) .. " " .. STRINGS_QB.CLOSE)
+
+    if self.has_close_button then
+        table.insert(t, TheInput:GetLocalizedControl(controller_id, CONTROL_CANCEL) .. " " .. STRINGS_QL.GO_BACK)
+    end
+
+    return table.concat(t, "  ")
+end
+
 
 
 
