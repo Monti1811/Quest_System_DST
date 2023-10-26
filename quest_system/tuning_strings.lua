@@ -280,7 +280,21 @@ local function moose(inst)
 	if inst.shouldGoAway then
 		inst.shouldGoAway = nil
 	end
-end	
+end
+
+local function mossling(inst)
+	inst.mother_dead = true
+	if inst.components.herdmember.task then
+		inst.components.herdmember.task:Cancel()
+		inst.components.herdmember.task = nil
+	end
+	if inst.worldstatewatching and inst.worldstatewatching.isspring then
+		inst:StopWatchingWorldState("ispring",inst.worldstatewatching.isspring[1])
+	end
+	if inst.shouldGoAway then
+		inst.shouldGoAway = nil
+	end
+end
 
 local function minotaur(inst)
 	local function OnDeath()
@@ -336,6 +350,10 @@ local function beequeen(inst)
 	end)
 end
 
+local function deerclops(inst)
+	inst.WantsToLeave = function() end
+end
+
 QUEST_COMPONENT.BOSSES = {
 	EASY = {
 
@@ -350,7 +368,6 @@ QUEST_COMPONENT.BOSSES = {
 		{name = "walrus", 				health = 1000, damage = 75,  scale = 1.6},
 		{name = "bird_mutant_spitter", 	health = 1000, damage = 100, scale = 1.9},
 		{name = "mutated_penguin", 		health = 1500, damage = 100, scale = 1.9, 	fn = mutated_penguin},
-		--{name = "mossling", 			health = 1000, damage = 100, scale = 1.6, 	fn = moose},
 		{name = "mosquito", 			health = 1500, damage = 100, scale = 1.9},
 		{name = "fruitdragon", 			health = 1500, damage = 100, scale = 1.6},
 		{name = "spider_warrior", 		health = 1000, damage = 100, scale = 1.9},
@@ -359,7 +376,7 @@ QUEST_COMPONENT.BOSSES = {
 	NORMAL = {
 
 		{name = "beefalo", 		health = 4000, damage = 150, scale = 1.6},
-		{name = "deerclops", 	health = 5000, damage = 150, scale = 1.9},
+		{name = "deerclops", 	health = 5000, damage = 150, scale = 1.9,	fn = deerclops},
 		{name = "spider_hider", health = 3500, damage = 125, scale = 2},
 		{name = "bishop", 		health = 3000, damage = 150, scale = 1.7},
 		{name = "worm", 		health = 5000, damage = 125, scale = 1.7},
@@ -370,13 +387,14 @@ QUEST_COMPONENT.BOSSES = {
 		{name = "spider_moon", 	health = 3500, damage = 150, scale = 1.9},
 		{name = "tallbird", 	health = 4000, damage = 150, scale = 1.7},
 		{name = "warglet", 		health = 3000, damage = 125, scale = 1.7},
+		{name = "mossling", 	health = 3000, damage = 125, scale = 1.8, 	fn = mossling},
 
 	},
 
 	DIFFICULT = {
 
 		{name = "rocky", 			health = 5000, damage = 175, scale = 2},
-		{name = "deerclops", 		health = 12000, damage = 200, scale = 2.1},
+		{name = "deerclops", 		health = 12000, damage = 200, scale = 2.1, 	fn = deerclops},
 		{name = "minotaur", 		health = 10000, damage = 200, scale = 2.1, 	fn = minotaur},
 		{name = "stalker", 			health = 6000,  damage = 200, scale = 1.4},
 		{name = "spat", 			health = 4000,  damage = 100, scale = 1.7},
@@ -390,9 +408,9 @@ QUEST_COMPONENT.BOSSES = {
 		{name = "twinofterror1", 	health = 11000, damage = 200, scale = 1.6},
 		{name = "twinofterror2", 	health = 11000, damage = 200, scale = 1.6},
 		{name = "beequeen", 		health = 6000, damage = 200, scale = 1.6,	fn = beequeen},
-		{name = "mutateddeerclops", health = 10000, damage = 200, scale = 2.1},
-		{name = "mutatedwarg", health = 10000, damage = 200, scale = 2.1},
-		{name = "mutatedbearger", health = 10000, damage = 200, scale = 2.1},
+		{name = "mutateddeerclops", health = 10000, damage = 200, scale = 2.1, 	fn = deerclops},
+		{name = "mutatedwarg", 		health = 10000, damage = 200, scale = 2.1},
+		{name = "mutatedbearger", 	health = 8000, damage = 200, scale = 2.1},
 	},
 }
 

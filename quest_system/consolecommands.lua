@@ -84,7 +84,10 @@ function GLOBAL.c_startbossfight(boss_prefab, diff, num, inst)
             end
         end
     end
-    inst.components.quest_component:StartBossFight(pos, diff, num)
+    inst:DoTaskInTime(0, function()
+        inst.components.quest_component:StartBossFight(pos, diff, num)
+    end)
+
 end
 
 function GLOBAL.c_resetquests(diff,inst)
