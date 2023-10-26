@@ -362,7 +362,7 @@ local function createQuestCard(self,quest, x, y, scale, num)
     self["quest_"..num].button.text:SetPosition(-5, 4)
     self["quest_"..num].button:SetFont(BUTTONFONT)
     if quest.completed ~= true then
-        self["quest_"..num].button:Unselect()
+        self["quest_"..num].button:Select()
     end
 
     self["quest_"..num].button:SetOnClick(function()

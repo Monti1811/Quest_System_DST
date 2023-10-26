@@ -63,13 +63,5 @@ for k, v in pairs(CREATURES) do
 
     scrapbook_prefabs[k] = true
     scrapbookdata[k] = v
-end
-
-local OldGetScrapbookIconAtlas = GLOBAL.GetScrapbookIconAtlas
-function GLOBAL.GetScrapbookIconAtlas(imagename, ...)
-    if CREATURES[string.sub(imagename, 1, -5)] then
-        return "images/quest_component_scrapbook.xml"
-    else
-        return OldGetScrapbookIconAtlas(imagename, ...)
-    end
+    RegisterScrapbookIconAtlas("images/quest_component_scrapbook.xml", v.tex)
 end
