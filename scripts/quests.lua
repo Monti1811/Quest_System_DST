@@ -2998,7 +2998,7 @@ local quests = {
 		name = "The Bird Predator",
 		amount = 10,
 		rewards = {[":func:range;0.5"] = 16, featherhat = 1, trailmix = 3},
-		points = 1000,
+		points = 300,
 		start_fn = function(inst,amount,quest_name)
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst,amount,"robin",quest_name)
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["do x y times in z days"](inst,amount,8,nil,quest_name)
@@ -3051,7 +3051,7 @@ local quests = {
 		name = "The Acid Bath",
 		amount = 300,
 		rewards = {[":func:planardefense;25"] = 8, voidcloth_scythe = 1, voidcloth_umbrella = 1},
-		points = 1200,
+		points = 550,
 		start_fn = function(inst,amount,quest_name)
 			local bathed = GetCurrentAmount(inst,quest_name)
 			local function OnAcidRain(inst, isacidrain)
@@ -3098,7 +3098,7 @@ local quests = {
 	--115
 	CreateQuest({
 		name = "A Grazers Nightmare",
-		amount = 1000,
+		amount = 300,
 		rewards = {[":func:planardamage;10"] = 8, lunarplant_kit = 1, bomb_lunarplant = 1},
 		points = 300,
 		start_fn = function(inst, amount, quest_name)

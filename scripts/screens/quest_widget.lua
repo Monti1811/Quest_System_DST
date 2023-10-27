@@ -808,17 +808,17 @@ local Quest_Widget = Class(Screen, function(self, inst)
   self.statpage:Hide()
 
   self.tasks.update_amounts = self.inst:DoPeriodicTask(1,function()
-    for i = 1,self.max_amount_of_quests do
-      if self["quest_"..i] and self["quest_"..i].progress and self["quest_"..i].name then
-        local quest = self.ownerofscreen.replica.quest_component._quests[self["quest_"..i].name]
-        if quest then
-          self["quest_"..i].progress:SetString(tostring(math.floor(quest.current_amount)).."/"..tostring(math.floor(quest.amount)))
-          if self["quest_"..i].button and not self["quest_"..i].button:IsEnabled() and quest.completed then
-            self["quest_"..i].button:Enable()
+      for i = 1,self.max_amount_of_quests do
+          if self["quest_"..i] and self["quest_"..i].progress and self["quest_"..i].name then
+              local quest = self.ownerofscreen.replica.quest_component._quests[self["quest_"..i].name]
+              if quest then
+                  self["quest_"..i].progress:SetString(tostring(math.floor(quest.current_amount)).."/"..tostring(math.floor(quest.amount)))
+                  if self["quest_"..i].button and not self["quest_"..i].button:IsEnabled() and quest.completed then
+                      self["quest_"..i].button:Unselect()
+                  end
+              end
           end
-        end
       end
-    end
   end)
 
     SetAutopaused(true)

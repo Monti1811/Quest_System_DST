@@ -140,35 +140,31 @@ local function AddDodge(inst,amount)
 	end
 	local attackdodger = inst.components.attackdodger
 	if attackdodger then
-		if amount < 0 then
-			if inst.prefab == "woodie" then
-				inst:RemoveEventCallback("transform_wereplayer", OnWerePlayer)
-				if inst:IsWeregoose() and inst.components.skilltreeupdater:IsActivated("woodie_curse_goose_3") then
-					if inst.components.attackdodger == nil then
-						inst:AddComponent("attackdodger")
-					end
-					inst.components.attackdodger:SetCooldownTime(TUNING.SKILLS.WOODIE.GOOSE_DODGE_COOLDOWN_TIME)
-					inst.components.attackdodger:SetOnDodgeFn(inst.OnDodgeAttack)
-					return
+		return
+	end
+	if amount < 0 then
+		if inst.prefab == "woodie" then
+			inst:RemoveEventCallback("transform_wereplayer", OnWerePlayer)
+			if inst:IsWeregoose() and inst.components.skilltreeupdater:IsActivated("woodie_curse_goose_3") then
+				if inst.components.attackdodger == nil then
+					inst:AddComponent("attackdodger")
 				end
+				inst.components.attackdodger:SetCooldownTime(TUNING.SKILLS.WOODIE.GOOSE_DODGE_COOLDOWN_TIME)
+				inst.components.attackdodger:SetOnDodgeFn(inst.OnDodgeAttack)
+				return
 			end
-			inst:RemoveComponent("attackdodger")
-		else
-			if inst.components.attackdodger == nil then
-				inst:AddComponent("attackdodger")
-			end
-			inst.components.attackdodger:SetCooldownTime(amount)
-			inst.components.attackdodger:SetOnDodgeFn(function()
-				local fx = SpawnPrefab("weregoose_transform_fx")
-				fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
-				fx.Transform:SetScale(1.3, 1.3, 1.3)
-			end)
-			if inst.prefab == "woodie" then
-				if inst:IsWeregoose() and inst.components.skilltreeupdater:IsActivated("woodie_curse_goose_3") then
-					inst.components.attackdodger:SetCooldownTime(cooldowntime)
-				end
-				inst:ListenForEvent("transform_wereplayer", OnWerePlayer)
-			end
+		end
+		inst:RemoveComponent("attackdodger")
+	else
+		inst:AddComponent("attackdodger")
+		inst.components.attackdodger:SetCooldownTime(amount)
+		inst.components.attackdodger:SetOnDodgeFn(function()
+			local fx = SpawnPrefab("weregoose_transform_fx")
+			fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+			fx.Transform:SetScale(1.3, 1.3, 1.3)
+		end)
+		if inst.prefab == "woodie" then
+			inst:ListenForEvent("transform_wereplayer", OnWerePlayer)
 		end
 	end
 end
@@ -422,8 +418,25 @@ local function FindSmallestBonus(self)
 	return smallest_name, self.current_active_boni[smallest_name]
 end
 
+local bonus_requirements = {
+	dodge = function(inst)
+		return not inst.components.attackdodger
+	end,
+}
+
+function TemporaryBonus:CanAddBonus(bonus)
+	if bonus_requirements[bonus] ~= nil then
+		return bonus_requirements[bonus](self.inst)
+	end
+	return true
+end
+
 function TemporaryBonus:AddBonus(bonus,name,amount,time)
 	devprint("TemporaryBonus:AddBonus",bonus,name,amount,time)
+	if not self:CanAddBonus(bonus) then
+		print("TemporaryBonus:AddBonus: Tried to add bonus, but requirements were not met", bonus, name, amount, time)
+		return
+	end
 	if time <= 0 then
 		print("TemporaryBonus:AddBonus: Tried to add bonus with negative time", bonus, name, amount, time)
 		return

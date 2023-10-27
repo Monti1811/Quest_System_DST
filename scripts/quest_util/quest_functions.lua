@@ -93,6 +93,7 @@ local function CreateQuest(data)
         quest_line = data.quest_line or nil,
         unlisted = data.unlisted or nil,
         character = data.character or nil,
+        data = data.data or nil,
     }
     --Custom reward paths can be added here
     if data.custom_rewards_paths then
