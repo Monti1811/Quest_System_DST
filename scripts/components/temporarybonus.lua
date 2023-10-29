@@ -422,6 +422,9 @@ local bonus_requirements = {
 	dodge = function(inst)
 		return not inst.components.attackdodger
 	end,
+	nightvision = function(inst)
+		return not inst.components.temporarybonus:HasBonus("nightvision")
+	end
 }
 
 function TemporaryBonus:CanAddBonus(bonus)

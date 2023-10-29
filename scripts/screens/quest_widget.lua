@@ -644,7 +644,7 @@ local Quest_Widget = Class(Screen, function(self, inst)
         self.bossbutton:SetHoverText(STRINGS_QL.BOSSFIGHT)
         self.bossbutton:SetScale(0.7,0.7)
         if inst.replica.quest_component._bossfight:value() <= 0 or TheWorld:HasTag("cave") or self.ownerofscreen:HasTag("currently_in_bossfight") then
-            self.bossbutton:Unselect()
+            self.bossbutton:Select()
         end
         self.bossbutton:SetFocusChangeDir(MOVE_UP, function() SetFirstQuestAsFocus(self) end)
     end
