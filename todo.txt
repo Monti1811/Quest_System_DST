@@ -22,6 +22,7 @@ bug fixes:
 todos:
 --gräber ausheben mission										: done
 --remove victim = "" for most quests, replace with victim = nil : done
+--add small picture near custom quests rewards					: TODO
 
 quest_ideas:
 -- stehlen von eier von großen vögeln							:done

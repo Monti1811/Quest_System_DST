@@ -2821,7 +2821,7 @@ local quests = {
 		rewards = {nightmarefuel = 20,cutstone = 5,},
 		points = 550,
 		start_fn = function(player,amount,quest_name)
-			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["protect x from y creatures z times"](player,amount,5,3,10,2,"glommer",quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["protect x from y creatures z times"](player,amount,5,2,10,2,"glommer",quest_name)
 		end,
 		difficulty = 2,
 		tex = "glommer.tex",
@@ -2839,7 +2839,7 @@ local quests = {
 		start_fn = function(player,amount,quest_name)
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["protect x from y creatures z times"](player,amount,7,3,10,3,"hutch",quest_name)
 		end,
-		difficulty = 2,
+		difficulty = 3,
 		tex = "hutch.tex",
 		atlas = "images/victims.xml",
 		hovertext = GetQuestString("The Stray Hutch","HOVER"),

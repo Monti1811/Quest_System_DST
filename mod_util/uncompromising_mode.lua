@@ -47,7 +47,7 @@ local bosses = {
 	EASY = {
 
 		{name = "aphid", health = 1000, damage = 100, scale = 2,},
-		{name = "scorpion", health = 1000, damage = 100, scale = 2,},
+		{name = "um_scorpion", health = 1000, damage = 100, scale = 2,},
 		{name = "bushcrab", health = 1000, damage = 100, scale = 2,},
 		{name = "vampirebat", health = 1000, damage = 100, scale = 2,},
 

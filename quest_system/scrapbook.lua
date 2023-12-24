@@ -35,6 +35,10 @@ for k, v in pairs(ITEMS) do
             SPECIALINFO[v.specialinfo] = SCRAPBOOK_STRINGS[v.specialinfo]
         end
 
+        if v.type == "thing" then
+            RegisterScrapbookIconAtlas("images/quest_component_scrapbook.xml", v.tex)
+        end
+
         scrapbook_prefabs[k] = true
         scrapbookdata[k] = v
     end

@@ -80,6 +80,7 @@ return {
 	},
 	TALKING = {
 		REWARDS = "我的战斗得到了奖励！",
+		BOSSFIGHT = "%s 和 %s 之间的 Boss 战已经开始！",
 	},
 	REWARDS = {
 		health = "健康奖金 为 x min",

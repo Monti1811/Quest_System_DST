@@ -279,7 +279,7 @@ local function createQuestCard(self,quest, x, y, scale, num)
         local ACTUAL_X = 120
         local ACTUAL_Y = 75
         local ax,ay = creature:GetBoundingBoxSize()
-        devprint("BoundingBoxSize", ax,ay)
+        --devprint("BoundingBoxSize", ax,ay)
 
         local SCALE = ACTUAL_X/ax
         local has_custom_values = TUNING.QUEST_COMPONENT.CUSTOM_SCALES[data.prefab]
@@ -293,7 +293,7 @@ local function createQuestCard(self,quest, x, y, scale, num)
         end
         SCALE = SCALE * (has_custom_scale or data.scrapbook_scale or 1)
         local w,h = TheSim:GetScreenSize()
-        devprint("custom scales", data.prefab, has_custom_scale, SCALE, data.scrapbook_scale, w, h, h/880)
+        --devprint("custom scales", data.prefab, has_custom_scale, SCALE, data.scrapbook_scale, w, h, h/880)
         SCALE = SCALE * h/880
         creature:GetAnimState():PlayAnimation(data.anim, true)
         --creature:SetClickable(false)
@@ -313,19 +313,19 @@ local function createQuestCard(self,quest, x, y, scale, num)
         --local posx = (offsetx+0+extraoffsetx) * (data.scrapbook_scale or has_custom_scale or 1)
         --local posy = (-offsety-75+extraoffsety) * (data.scrapbook_scale or has_custom_scale or 1)
 
-        devprint("scale image", quest.victim, SCALE, ax, ay, ax * SCALE, ay * SCALE)
+        --devprint("scale image", quest.victim, SCALE, ax, ay, ax * SCALE, ay * SCALE)
         creature:SetScale(SCALE)
         ax,ay = creature:GetBoundingBoxSize()
         local x1, y1, x2, y2 = creature:GetAnimState():GetVisualBB()
-        devprint("VisualBB", x1, y1, x2, y2)
+        --devprint("VisualBB", x1, y1, x2, y2)
         local posx = 0 + (x1+x2) * SCALE/2 + extraoffsetx * SCALE --+ ax/2
         local posy = -75 + (y1+y2)* SCALE/2 + extraoffsety * SCALE  --+ ay/2
 
         creature:SetPosition(x+ posx,y + posy)
 
         --creature:SetFacing(FACING_DOWN)
-        devprint("scaled boundingbox", creature:GetBoundingBoxSize())
-        devprint("pos",posx, posy, x+ posx,y + posy)
+        --devprint("scaled boundingbox", creature:GetBoundingBoxSize())
+        --devprint("pos",posx, posy, x+ posx,y + posy)
 
     else
         target_atlas = quest.tex and GetInventoryItemAtlas(quest.tex,true) or quest.atlas or (quest.tex and "images/victims.xml")
@@ -871,21 +871,21 @@ end
 
 function Quest_Widget:ShowRewards(tab)
 
-  self.show_rewards = self.proot:AddChild(Widget("show_rewards"))
-  --self.show_rewards:SetTint(1,1,1,1)
-  self.show_rewards:SetPosition(0,0)
-  self.show_rewards:SetScale(1,1)
+    self.show_rewards = self.proot:AddChild(Widget("show_rewards"))
+    --self.show_rewards:SetTint(1,1,1,1)
+    self.show_rewards:SetPosition(0,0)
+    self.show_rewards:SetScale(1,1)
 
-  self.show_rewards_bg = self.show_rewards:AddChild(Image("images/quest_log_page.xml","quest_log_page.tex"))
-  self.show_rewards_bg:SetPosition(0,0)
-  self.show_rewards_bg:SetScale(1,1)
+    self.show_rewards_bg = self.show_rewards:AddChild(Image("images/quest_log_page.xml","quest_log_page.tex"))
+    self.show_rewards_bg:SetPosition(0,0)
+    self.show_rewards_bg:SetScale(1,1)
 
 
-  self._show_rewards = self.show_rewards:AddChild(Text(NEWFONT_OUTLINE, 40,nil,UICOLOURS.BLACK))
+    self._show_rewards = self.show_rewards:AddChild(Text(NEWFONT_OUTLINE, 40,nil,UICOLOURS.BLACK))
 
-  local invimages = {}
-  local num = 0 
-  for k,v in pairs(tab.rewards) do
+    local invimages = {}
+    local num = 0
+    for k,v in pairs(tab.rewards) do
     num = num + 1
     local str1 = GetRewardString(k,v)
     local rew_num = (type(v) == "string" and v) or (v and tostring(math.ceil(v * TUNING.QUEST_COMPONENT.REWARDS_AMOUNT)) or 0)
@@ -906,11 +906,11 @@ function Quest_Widget:ShowRewards(tab)
 
     local tex = tab["reward_"..k.."_tex"] or (TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k] and FunctionOrValue(TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k][3], v) or k..".tex")
     local atlas = tab["reward_"..k.."_atlas"] or (TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k] and FunctionOrValue(TUNING.QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS[k][4], v)) or GetInventoryItemAtlas(tex,true)
-    devprint("atlas and tex", tex, atlas, GetInventoryItemAtlas(tex,true))
+    --devprint("atlas and tex", tex, atlas, GetInventoryItemAtlas(tex,true))
     if atlas then
-      invimages[num] = self.show_rewards:AddChild(Image(atlas,tex))
-      invimages[num]:SetPosition(120,160 - num*50)
-      invimages[num]:SetScale(0.5,0.5)
+        invimages[num] = self.show_rewards:AddChild(Image(atlas,tex))
+        invimages[num]:SetPosition(120,160 - num*50)
+        invimages[num]:SetScale(0.5,0.5)
     end
   end
   self._show_rewards:SetString(STRINGS_QL.REWARDS..":\n")

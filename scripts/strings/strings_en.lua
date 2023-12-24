@@ -97,6 +97,7 @@ return {
 	TALKING = {
 
 		REWARDS = "I got the rewards for my battle!",
+		BOSSFIGHT = "A Boss Fight between %s and %s has started!",
 
 	},
 

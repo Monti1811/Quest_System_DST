@@ -1,4 +1,5 @@
-<Atlas><Texture filename="quest_component_scrapbook.tex" />
+<Atlas>
+    <Texture filename="quest_component_scrapbook.tex"/>
     <Elements>
         <Element name="chester_boss.tex" u1="0.0009765625" u2="0.24902344" v1="0.50195312" v2="0.99804688"/>
         <Element name="frogking.tex" u1="0.25097656" u2="0.49902344" v1="0.50195312" v2="0.99804688"/>
@@ -6,5 +7,6 @@
         <Element name="glommer_small.tex" u1="0.75097656" u2="0.99902344" v1="0.50195312" v2="0.99804688"/>
         <Element name="glommerfuelmachine.tex" u1="0.0009765625" u2="0.24902344" v1="0.001953125" v2="0.49804688"/>
         <Element name="nightmarechester.tex" u1="0.25097656" u2="0.49902344" v1="0.001953125" v2="0.49804688"/>
+        <Element name="questboard.tex" u1="0.50097656" u2="0.74902344" v1="0.001953125" v2="0.49804688"/>
     </Elements>
 </Atlas>

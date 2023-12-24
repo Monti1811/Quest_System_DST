@@ -80,6 +80,7 @@ return {
 	},
 	TALKING = {
 		REWARDS = "¡Obtuve las recompensas por mi batalla!",
+		BOSSFIGHT = "¡Ha comenzado un Boss Fight entre %s y %s!",
 	},
 	REWARDS = {
 		health = "Bono de salud para x min",
