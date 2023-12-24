@@ -544,6 +544,7 @@ local function OnDeaths(self,difficulty)
 			if self.boss and self.boss:IsValid() then
 				self.boss:Remove()
 			end
+			self.boss = nil
 		end)
 		if not is_no_plattform then
 			self.inst:DoTaskInTime(5,function(inst)
@@ -570,14 +571,17 @@ local function OnDeaths(self,difficulty)
 			self.inst:DoTaskInTime(1,GiveRewards,difficulty)
 			self.inst:RemoveEventCallback("death",PlayerDeath)
 		end
+		self.boss = nil
 	end
 	self.boss:ListenForEvent("death",BossDeath)
 	self.inst:ListenForEvent("death",PlayerDeath)
 end
 
+local max_boss_tries = 5
+
 function Quest_Component:StartBossFight(pos,diff,num)
 	devprint("StartBossFight",pos,diff,num)
-	self.pos_before_fight = pos or Vector3(0,0,0)--{x=0,y=0,z=0}
+	self.pos_before_fight = pos or (TheWorld.components.playerspawner ~= nil and TheWorld.components.playerspawner:GetAnySpawnPoint()) or Vector3(0,0,0)
 	self.bossplatform = self.bossplatform or TheSim:FindFirstEntityWithTag("teleporter_boss_island")
 	local quest_loadpostpass = TheWorld.components.quest_loadpostpass
 	local plattform = self.bossplatform
@@ -607,8 +611,12 @@ function Quest_Component:StartBossFight(pos,diff,num)
     devprint("difficulty random",difficulty)
     devdumptable(difficulties)
 
-	self.boss = quest_loadpostpass:MakeBoss(nil,difficulty,number)
 
+	local current_boss_tries = 0
+	while current_boss_tries < max_boss_tries and self.boss == nil do
+		self.boss = quest_loadpostpass:MakeBoss(nil,difficulty,number)
+		current_boss_tries = current_boss_tries + 1
+	end
 	if self.boss == nil then 
 		print("[Quest System] The boss couldn't be spawned!",self.boss,difficulty,number)
 		return
@@ -635,7 +643,7 @@ function Quest_Component:StartBossFight(pos,diff,num)
 	self.boss.target_inst = self.boss:DoTaskInTime(3,Retarget,self.inst)
 	self.bossid = self.boss.GUID
 	quest_loadpostpass:InsertBoss(self.bossid,self.boss,difficulty,number)
-	TheNet:Announce("A Boss Fight between "..self.inst:GetDisplayName().." and "..self.boss:GetDisplayName().." has started!")
+	TheNet:Announce(string.format(STRINGS.QUEST_COMPONENT.TALKING.BOSSFIGHT, self.inst:GetDisplayName(), self.boss:GetDisplayName()))
 
 	devprint("bossfight",self.boss,difficulty,number)
 end
