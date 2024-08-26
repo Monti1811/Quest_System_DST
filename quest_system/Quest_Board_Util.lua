@@ -652,6 +652,9 @@ local custom_functions = {
 			end
 		end
 		ListenForEventFinishedWork = function(_, data)
+			if data.target == nil then
+				return
+			end
 			local action = data.target.components.workable and data.target.components.workable.action
 			if worktype == nil or action == worktype then
 				if workable == nil or workable[data.target.prefab] then
@@ -671,7 +674,7 @@ local custom_functions = {
 	["finish work type z for x amount of y"] = function(player,worktype,workable,how_many,quest_name)
 		local amount = GetCurrentAmount(player,quest_name)
 		workable = type(workable) == "string" and {[workable] = true} or workable
-		local ListenForEventFinishedWork
+		local ListenForEventFinishedWork = function() end
 		local function UpdateQuest()
 			amount = amount + 1
 			player:PushEvent("quest_update",{ quest = quest_name, amount = 1})
