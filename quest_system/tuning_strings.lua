@@ -25,8 +25,8 @@ QUEST_COMPONENT.COLORBLINDNESS = GetModConfigData("COLORBLINDNESS",CLIENT_DATA) 
 QUEST_COMPONENT.RESET_QUESTS = GetModConfigData("RESET_QUESTS") ~= nil and GetModConfigData("RESET_QUESTS") or 0
 QUEST_COMPONENT.PROB_CHAR_QUEST = GetModConfigData("PROB_CHAR_QUEST") ~= nil and GetModConfigData("PROB_CHAR_QUEST") or 0.1
 QUEST_COMPONENT.GIVE_CREATOR_QUEST = GetModConfigData("GIVE_CREATOR_QUEST") ~= nil and GetModConfigData("GIVE_CREATOR_QUEST") or 0
-QUEST_COMPONENT.BOSSFIGHTS = GetModConfigData("BOSSFIGHTS") ~= nil and GetModConfigData("BOSSFIGHTS") or true
-QUEST_COMPONENT.FRIENDLY_KILLS = GetModConfigData("FRIENDLY_KILLS") ~= nil and GetModConfigData("FRIENDLY_KILLS") or true
+QUEST_COMPONENT.BOSSFIGHTS = GetModConfigData("BOSSFIGHTS") ~= nil and GetModConfigData("BOSSFIGHTS")
+QUEST_COMPONENT.FRIENDLY_KILLS = GetModConfigData("FRIENDLY_KILLS") ~= nil and GetModConfigData("FRIENDLY_KILLS")
 QUEST_COMPONENT.REWARDS_AMOUNT = GetModConfigData("REWARDS_AMOUNT") or 1
 QUEST_COMPONENT.RANK = GetModConfigData("RANK") or false
 QUEST_COMPONENT.MAX_AMOUNT_GODLY_ITEMS = GetModConfigData("MAX_AMOUNT_GODLY_ITEMS") or 1
@@ -275,7 +275,7 @@ end
 -------------------------------------------Boss characteristics-----------------------------------------------
 local function moose(inst)
 	if inst.worldstatewatching and inst.worldstatewatching.isspring then
-		inst:StopWatchingWorldState("ispring",inst.worldstatewatching.isspring[1])
+		inst:StopWatchingWorldState("isspring",inst.worldstatewatching.isspring[1])
 	end
 	if inst.shouldGoAway then
 		inst.shouldGoAway = nil
@@ -289,7 +289,7 @@ local function mossling(inst)
 		inst.components.herdmember.task = nil
 	end
 	if inst.worldstatewatching and inst.worldstatewatching.isspring then
-		inst:StopWatchingWorldState("ispring",inst.worldstatewatching.isspring[1])
+		inst:StopWatchingWorldState("isspring",inst.worldstatewatching.isspring[1])
 	end
 	if inst.shouldGoAway then
 		inst.shouldGoAway = nil
@@ -354,6 +354,39 @@ local function deerclops(inst)
 	inst.WantsToLeave = function() end
 end
 
+local function mermguard(inst)
+	GLOBAL.TheWorld.event_listeners["onmermkingcreated_anywhere"][inst] = nil
+	GLOBAL.TheWorld.event_listeners["onmermkingdestroyed_anywhere"][inst] = nil
+	inst.event_listening["onmermkingcreated_anywhere"][GLOBAL.TheWorld] = nil
+	inst.event_listening["onmermkingdestroyed_anywhere"][GLOBAL.TheWorld] = nil
+	for task in pairs(inst.pendingtasks) do
+		if task.period == 0 then
+			task:Cancel()
+		end
+	end
+end
+
+local function daywalker(inst)
+	inst:ListenForEvent("minhealth", function()
+		if not GLOBAL.POPULATING then
+			inst:DoTaskInTime(2, function()
+				GLOBAL.SpawnPrefab("shadow_puff_large_front").Transform:SetPosition(inst:GetPosition():Get())
+				inst:Remove()
+			end)
+		end
+	end)
+end
+
+local function daywalker2(inst)
+	inst.OnItemUsed = function() return true  end
+	inst:DoTaskInTime(0, function()
+		inst:SetEquip("swing", "object")
+		inst:SetEquip("tackle", "spike")
+		inst:SetEquip("cannon", "cannon")
+	end)
+	daywalker(inst)
+end
+
 QUEST_COMPONENT.BOSSES = {
 	EASY = {
 
@@ -371,23 +404,28 @@ QUEST_COMPONENT.BOSSES = {
 		{name = "mosquito", 			health = 1500, damage = 100, scale = 1.9},
 		{name = "fruitdragon", 			health = 1500, damage = 100, scale = 1.6},
 		{name = "spider_warrior", 		health = 1000, damage = 100, scale = 1.9},
+		{name = "crabking_mob", 		health = 1000, damage = 100, scale = 1.9},
 	},
 
 	NORMAL = {
 
-		{name = "beefalo", 		health = 4000, damage = 150, scale = 1.6},
-		{name = "deerclops", 	health = 5000, damage = 150, scale = 1.9,	fn = deerclops},
-		{name = "spider_hider", health = 3500, damage = 125, scale = 2},
-		{name = "bishop", 		health = 3000, damage = 150, scale = 1.7},
-		{name = "worm", 		health = 5000, damage = 125, scale = 1.7},
-		{name = "grassgator", 	health = 4000, damage = 125, scale = 1.7},
-		{name = "pigguard", 	health = 4000, damage = 125, scale = 1.7},
-		{name = "krampus", 		health = 4000, damage = 125, scale = 1.7},
-		{name = "merm", 		health = 4000, damage = 125, scale = 1.7},
-		{name = "spider_moon", 	health = 3500, damage = 150, scale = 1.9},
-		{name = "tallbird", 	health = 4000, damage = 150, scale = 1.7},
-		{name = "warglet", 		health = 3000, damage = 125, scale = 1.7},
-		{name = "mossling", 	health = 3000, damage = 125, scale = 1.8, 	fn = mossling},
+		{name = "beefalo", 			health = 4000, damage = 150, scale = 1.6},
+		{name = "deerclops", 		health = 5000, damage = 150, scale = 1.9,	fn = deerclops},
+		{name = "spider_hider", 	health = 3500, damage = 125, scale = 2},
+		{name = "bishop", 			health = 3000, damage = 150, scale = 1.7},
+		{name = "worm", 			health = 5000, damage = 125, scale = 1.7},
+		{name = "grassgator", 		health = 4000, damage = 125, scale = 1.7},
+		{name = "pigguard", 		health = 4000, damage = 125, scale = 1.7},
+		{name = "krampus", 			health = 4000, damage = 125, scale = 1.7},
+		{name = "merm", 			health = 4000, damage = 125, scale = 1.7},
+		{name = "spider_moon", 		health = 3500, damage = 150, scale = 1.9},
+		{name = "tallbird", 		health = 4000, damage = 150, scale = 1.7},
+		{name = "warglet", 			health = 3000, damage = 125, scale = 1.7},
+		{name = "mossling", 		health = 3000, damage = 125, scale = 1.8, 	fn = mossling},
+		{name = "otter", 			health = 4000, damage = 125, scale = 1.9},
+		{name = "crabking_mob_knight", 	health = 4000, damage = 150, scale = 1.7},
+		{name = "mermguard_lunar", 	health = 4000, damage = 150, scale = 1.8, 	fn = mermguard},
+		{name = "mermguard_shadow", health = 4000, damage = 150, scale = 1.8, 	fn = mermguard},
 
 	},
 
@@ -411,6 +449,8 @@ QUEST_COMPONENT.BOSSES = {
 		{name = "mutateddeerclops", health = 10000, damage = 200, scale = 2.1, 	fn = deerclops},
 		{name = "mutatedwarg", 		health = 10000, damage = 200, scale = 2.1},
 		{name = "mutatedbearger", 	health = 8000, damage = 200, scale = 2.1},
+		{name = "daywalker", 		health = 12000, damage = 200, scale = 1.7, 	fn = daywalker},
+		{name = "daywalker2", 		health = 10000, damage = 150, scale = 1.7, 	fn = daywalker2},
 	},
 }
 
