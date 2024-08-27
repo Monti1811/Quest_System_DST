@@ -1,9 +1,10 @@
 local QUEST_COMPONENT = TUNING.QUEST_COMPONENT
 local REWARDS_AMOUNT =  QUEST_COMPONENT.REWARDS_AMOUNT
-local BOSSFIGHT_REWARDS = QUEST_COMPONENT.BOSSFIGHT_REWARDS
 local QUESTS = QUEST_COMPONENT.QUESTS
 local CUSTOM_QUEST_END_FUNCTIONS = QUEST_COMPONENT.CUSTOM_QUEST_END_FUNCTIONS
 local QUEST_BOARD = QUEST_COMPONENT.QUEST_BOARD
+
+local boss_fight_fns = require("quest_util/boss_fight")
 
 
 local function onlevelchange(self,level)
@@ -483,169 +484,32 @@ function Quest_Component:CheckIfBossFight()
 	end
 end
 
-local function Retarget(inst,player)
-	if not inst:IsValid() then return end
-	local combat = inst.components.combat
-	local health = inst.components.health
-	if not health or health:IsDead() then
-		return
-	end
-	if combat and player and player:IsValid() and inst:IsValid() then
-		devprint("set target",inst,player)
-		combat:SetTarget(player)
-	end
-	if inst.target_inst ~= nil then
-		inst.target_inst:Cancel()
-		inst.target_inst = nil
-	end
-
-	inst.target_inst = inst:DoTaskInTime(3,Retarget,player)
-end
-
-local function GiveRewards(inst,difficulty)
-	devprint("GiveRewards",inst,difficulty)
-	difficulty = difficulty or "NORMAL"
-
-	local num = math.random(#BOSSFIGHT_REWARDS[difficulty])
-	local inventory = inst.components.inventory
-	if num and inventory then
-		local tab = BOSSFIGHT_REWARDS[difficulty][num]
-		if tab.items and tab.amount then
-			for k,v in ipairs(tab.items) do
-				local amount = math.ceil(math.random(tab.amount[k][1],tab.amount[k][2]) * REWARDS_AMOUNT)
-				for _ = 1, amount do
-					local item = SpawnPrefab(v)
-					if item then
-						inventory:GiveItem(item)
-					end
-				end
-			end
-		end
-	end
-	if inst.components.talker then
-		inst.components.talker:Say(STRINGS.QUEST_COMPONENT.TALKING.REWARDS)
-	end
-	local points = difficulty == "EASY" and 500 or difficulty == "NORMAL" and 1000 or difficulty == "DIFFICULT" and 1500 or 500
-	inst.components.quest_component:AddPoints(points)
-end
-
-local function OnDeaths(self,difficulty)
-	devprint("OnDeaths",difficulty)
-	local pos = self.pos_before_fight or Vector3(0,0,0) --{x=0,y=0,z=0}
-	local is_no_plattform
-	if self.bossplatform == nil then 
-		is_no_plattform = true
-	end
-	local function PlayerDeath()
-		if self.inst:HasTag("currently_in_bossfight") == false then return end
-		self.bossfight = self.bossfight - 1
-		TheNet:Announce(self.inst:GetDisplayName().." was defeated!")
-		self.inst:DoTaskInTime(3,function()
-			if self.boss and self.boss:IsValid() then
-				self.boss:Remove()
-			end
-			self.boss = nil
-		end)
-		if not is_no_plattform then
-			self.inst:DoTaskInTime(5,function(inst)
-				--inst:SnapCamera()
-    			inst:ScreenFade(false, 0.5)
-    			inst:PushEvent("respawnfromghost")
-    			inst:DoTaskInTime(0.5,function()
-    				inst.Physics:Teleport(pos.x,pos.y,pos.z) 
-    				inst:RemoveTag("currently_in_bossfight") 
-    				inst:ScreenFade(true, 0.5)
-    			end)
-    		end)
-    	end
-
-	end
-	local function BossDeath()
-		if self.inst:IsValid() then
-			self.inst:AddTag("won_against_boss")
-			if self.bossplatform then
-				self.bossplatform:TurnOn()
-			end
-			self.bossfight = self.bossfight - 1
-			TheNet:Announce(self.inst:GetDisplayName().." was victorious!")
-			self.inst:DoTaskInTime(1,GiveRewards,difficulty)
-			self.inst:RemoveEventCallback("death",PlayerDeath)
-		end
-		self.boss = nil
-	end
-	self.boss:ListenForEvent("death",BossDeath)
-	self.inst:ListenForEvent("death",PlayerDeath)
-end
-
-local max_boss_tries = 5
-
 function Quest_Component:StartBossFight(pos,diff,num)
 	devprint("StartBossFight",pos,diff,num)
-	self.pos_before_fight = pos or (TheWorld.components.playerspawner ~= nil and TheWorld.components.playerspawner:GetAnySpawnPoint()) or Vector3(0,0,0)
-	self.bossplatform = self.bossplatform or TheSim:FindFirstEntityWithTag("teleporter_boss_island")
-	local quest_loadpostpass = TheWorld.components.quest_loadpostpass
-	local plattform = self.bossplatform
-	local is_no_plattform
-	if plattform == nil then 
-		plattform = self.inst 
-		is_no_plattform = true
-	end
-	self.inst:SnapCamera()
-    self.inst:ScreenFade(false, 2)
-    self.inst:DoTaskInTime(2, function()
-    	self.inst:ScreenFade(true, 0.5)
-    end)
 
-    if not is_no_plattform then
-    	self.inst:DoTaskInTime(0.5,function() self.inst.Physics:Teleport(plattform:GetPosition():Get()) end)
-    end
+	-- Set the position of the player before the fight and teleport him, if necessary
+	local is_no_plattform = boss_fight_fns.SetPositionAndTeleport(self,pos)
 
-    local difficulties = {
-		EASY = math.max(200 - self.level * 4,5),	--103 - self.level * 3 > 0 and 100 - self.level * 3 or 0,
-		NORMAL = math.max(50 - self.level,10),		--51 - self.level > 0 and 50 - self.level or 0,
-		DIFFICULT = math.min(self.level - 1,85),
-	}
+    local difficulty = diff or boss_fight_fns.GetDiff(self.level)
+    local boss_number = num or math.random(#QUEST_COMPONENT.BOSSES[difficulty])
+    devprint("difficulty:",difficulty, "number:", boss_number)
 
-    local difficulty = diff or weighted_random_choice(difficulties)
-    local number = num or math.random(#QUEST_COMPONENT.BOSSES[difficulty])
-    devprint("difficulty random",difficulty)
-    devdumptable(difficulties)
-
-
-	local current_boss_tries = 0
-	while current_boss_tries < max_boss_tries and self.boss == nil do
-		self.boss = quest_loadpostpass:MakeBoss(nil,difficulty,number)
-		current_boss_tries = current_boss_tries + 1
-	end
-	if self.boss == nil then 
-		print("[Quest System] The boss couldn't be spawned!",self.boss,difficulty,number)
+	-- Spawn Boss in the arena
+	if not boss_fight_fns.SpawnBoss(self,difficulty,boss_number) then
+		print("[Quest System] The boss couldn't be spawned!",self.boss,difficulty,boss_number)
 		return
 	end
 
-	--quest_loadpostpass.quest_bossfight_active:set(true)
+	-- Set the position of the boss
+	boss_fight_fns.SetBossPosition(self,is_no_plattform)
 
-	local x,y,z = plattform.Transform:GetWorldPosition()
-	if is_no_plattform then
-		local position = FindWalkableOffset(Vector3(x,y,z),math.random()*PI*2,16,8,true,false)
-		if position then
-			self.boss.Transform:SetPosition(x+position.x,y+position.y,z+position.z)
-		else
-			self.boss.Transform:SetPosition(x,y,z)
-		end
-	else
-		local a,b,c = x + 16*(math.random(2) == 1 and -1 or 1),y,z + 16*(math.random(2) == 1 and -1 or 1)
-		self.boss.Transform:SetPosition(a,b,c)
-		self.inst:AddTag("currently_in_bossfight")
-	end
+	-- Configure the boss
+	boss_fight_fns.ConfigureBoss(self, difficulty, boss_number, is_no_plattform)
 
-	OnDeaths(self,difficulty)
-
-	self.boss.target_inst = self.boss:DoTaskInTime(3,Retarget,self.inst)
-	self.bossid = self.boss.GUID
-	quest_loadpostpass:InsertBoss(self.bossid,self.boss,difficulty,number)
+	-- Announce the boss fight
 	TheNet:Announce(string.format(STRINGS.QUEST_COMPONENT.TALKING.BOSSFIGHT, self.inst:GetDisplayName(), self.boss:GetDisplayName()))
 
-	devprint("bossfight",self.boss,difficulty,number)
+	devprint("bossfight",self.boss,difficulty,boss_number)
 end
 
 ------------------------------------------------------
@@ -855,11 +719,10 @@ function Quest_Component:DoInit()
 		local quest_loadpostpass = TheWorld.components.quest_loadpostpass
 		if quest_loadpostpass then
 			--Find the boss if there was one.
-			local boss_saved = quest_loadpostpass.bosses[self.bossid] and quest_loadpostpass.bosses[self.bossid][1]
-			if boss_saved and boss_saved ~= "nothing" then
-				self.boss = boss_saved
-				OnDeaths(self)
-				self.boss.target_inst = self.boss:DoTaskInTime(3,Retarget,self.inst)
+			local saved_boss = quest_loadpostpass.bosses[self.bossid]
+			if saved_boss then
+				self.boss = saved_boss[1]
+				boss_fight_fns.ConfigureBoss(self, saved_boss[2], self.bossplatform ~= nil)
 			end
 		end
 		if self.inst:HasTag("won_against_boss") then

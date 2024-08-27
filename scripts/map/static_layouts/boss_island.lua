@@ -2,7 +2,7 @@ local table_map = {}
 for count = 0,60 do
   local data = {}
   data.name = "basal1_"..count
-  data.type = "basalt"
+  data.type = "qs_basalt"
   data.shape = "rectangle"
   data.x = count*32
   data.y = 0
@@ -15,7 +15,7 @@ end
 for count = 0,60 do
   local data = {}
   data.name = "basal2_"..count
-  data.type = "basalt"
+  data.type = "qs_basalt"
   data.shape = "rectangle"
   data.x = 0
   data.y = count*32
@@ -28,7 +28,7 @@ end
 for count = 0,60 do
   local data = {}
   data.name = "basal3_"..count
-  data.type = "basalt"
+  data.type = "qs_basalt"
   data.shape = "rectangle"
   data.x = 1920
   data.y = count*32
@@ -41,7 +41,7 @@ end
 for count = 0,60 do
   local data = {}
   data.name = "basal4_"..count
-  data.type = "basalt"
+  data.type = "qs_basalt"
   data.shape = "rectangle"
   data.x = count*32
   data.y = 1920

@@ -458,9 +458,10 @@ local function TeleportTo(inst,teleportee,pos)
 end
 
 local function OnInit(inst)
+    inst.position = inst:GetPosition()
     local ceiling = SpawnPrefab("boss_island_ceiling")
     ceiling.parent = inst
-    ceiling.Transform:SetPosition(inst:GetPosition():Get());
+    ceiling.Transform:SetPosition(inst.position:Get());
 end
 
 local NO_REMOVING = {"INLIMBO", "irreplaceable", "godly_item"}
@@ -497,6 +498,18 @@ local function TurnOff(inst)
     end
 end
 
+local function CountBosses()
+    local counter = 0
+    devdumptable(GLOBAL.TheWorld.components.quest_loadpostpass.bosses)
+    for _,v in pairs(GLOBAL.TheWorld.components.quest_loadpostpass.bosses) do
+        --if v ~= nil and v[1] ~= nil and v[1]:IsValid() then
+            counter = counter + 1
+        --end
+    end
+    devprint("CountBosses",counter)
+    return counter
+end
+
 AddPrefabPostInit("lavaarena_portal",function(inst)
 
 	inst:AddTag("antlion_sinkhole_blocker")
@@ -508,7 +521,6 @@ AddPrefabPostInit("lavaarena_portal",function(inst)
 
 	inst.portalfx = nil
 	inst.TurnOn = TurnOn
-
 	inst.TurnOff = TurnOff
 
 	inst:AddComponent("teleporter")
@@ -519,14 +531,17 @@ AddPrefabPostInit("lavaarena_portal",function(inst)
     inst:DoTaskInTime(0, OnInit)
 
     inst.counter = 0
+
+    -- Check periodically if players are there that didn't got a ticket home...
+    inst.check_task = inst:DoPeriodicTask(6, function()
+        local num_bosses = CountBosses()
+        local x, y, z = inst.position:Get()
+        local num_players = GLOBAL.GetTableSize(GLOBAL.FindPlayersInRange(x, y, z, 30, true))
+        for _ = 1, (num_players - num_bosses - inst.counter) do
+            inst:TurnOn()
+        end
+    end)
 end)
-
---[[local UpvalueHacker = require("quest_util/upvaluehacker")
-
-local fxs = {"spat_splat_fx","spat_splash_fx_full","spat_splash_fx_med","spat_splash_fx_low","spat_splash_fx_melted"}
-for _,fx in ipairs(fxs) do
-    AddPrefabPostInit(fx,function(inst)
-        local goo = UpvalueHacker.GetUpvalue()]]
 
 --Adding the fuel component to the custom fueltype froglegs for the frogking crown
 local FUELTYPE = GLOBAL.FUELTYPE
