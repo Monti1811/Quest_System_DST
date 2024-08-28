@@ -500,7 +500,7 @@ end
 
 local function CountBosses()
     local counter = 0
-    devdumptable(GLOBAL.TheWorld.components.quest_loadpostpass.bosses)
+    devdumptable(GLOBAL.TheWorld.components.quest_loadpostpass.bosses, nil, 1)
     for _,v in pairs(GLOBAL.TheWorld.components.quest_loadpostpass.bosses) do
         --if v ~= nil and v[1] ~= nil and v[1]:IsValid() then
             counter = counter + 1
@@ -533,7 +533,7 @@ AddPrefabPostInit("lavaarena_portal",function(inst)
     inst.counter = 0
 
     -- Check periodically if players are there that didn't got a ticket home...
-    inst.check_task = inst:DoPeriodicTask(6, function()
+    inst.check_task = inst:DoPeriodicTask(30, function()
         local num_bosses = CountBosses()
         local x, y, z = inst.position:Get()
         local num_players = GLOBAL.GetTableSize(GLOBAL.FindPlayersInRange(x, y, z, 30, true))

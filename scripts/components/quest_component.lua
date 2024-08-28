@@ -719,7 +719,9 @@ function Quest_Component:DoInit()
 		local quest_loadpostpass = TheWorld.components.quest_loadpostpass
 		if quest_loadpostpass then
 			--Find the boss if there was one.
-			local saved_boss = quest_loadpostpass.bosses[self.bossid]
+			local saved_boss = quest_loadpostpass.temp_bosses[self.bossid]
+			devprint("Checking for saved boss", self.bossid)
+			devdumptable(quest_loadpostpass.temp_bosses)
 			if saved_boss then
 				self.boss = saved_boss[1]
 				boss_fight_fns.ConfigureBoss(self, saved_boss[2], self.bossplatform ~= nil)

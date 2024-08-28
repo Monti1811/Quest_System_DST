@@ -32,8 +32,19 @@ function Quest_LoadPostPass:CanQuestLineBeDone(name)
     end
 end
 
-function Quest_LoadPostPass:InsertBoss(bossid, boss, diff, num)
-    self.bosses[bossid] = {boss, diff, num}
+function Quest_LoadPostPass:InsertBoss(bossid, boss, diff, num, old_GUID)
+    self.bosses[bossid] = {boss, diff, num, old_GUID}
+    if old_GUID then
+        self.temp_bosses[old_GUID] = self.bosses[bossid]
+    end
+end
+
+function Quest_LoadPostPass:RemoveBoss(bossid)
+    local old_GUID = self.bosses[bossid][4]
+    if old_GUID then
+        self.temp_bosses[old_GUID] = nil
+    end
+    self.bosses[bossid] = nil
 end
 
 function Quest_LoadPostPass:MakeBoss(boss, diff, num, fn)
@@ -65,16 +76,19 @@ end
 
 function Quest_LoadPostPass:OnSave()
     local bosses_players = {}
-    for k,v in pairs(self.bosses) do
-        table.insert(bosses_players,v[1].GUID)
-    end
     local _bosses = {}
-    for k,v in pairs(self.bosses) do
-        local tab = {v[1].GUID,v[2],v[3]}
-        table.insert(_bosses,tab)
+    for _, v in pairs(self.bosses) do
+        if v[1]:IsValid() then
+            table.insert(bosses_players,v[1].GUID)
+            local tab = {v[1].GUID,v[2],v[3]}
+            table.insert(_bosses,tab)
+        end
     end
     local can_create_custom_quests = TUNING.QUEST_COMPONENT.CAN_CREATE_CUSTOM_QUESTS
     SaveOwnQuests() --save the custom quests that were made, added here so that they are saved each time the world is saved
+    devprint("Quest_LoadPostPass:OnSave")
+    devdumptable(bosses_players)
+    devdumptable(_bosses)
     return {bosses_players = bosses_players,
             _bosses = _bosses,
             can_create_custom_quests = can_create_custom_quests, 
@@ -107,6 +121,8 @@ function Quest_LoadPostPass:OnLoad(data)
             self.glommerfuelmachine = data.glommerfuelmachine
         end
     end
+    devprint("Quest_LoadPostPass:OnLoad")
+    devdumptable(data)
 end
 
 function Quest_LoadPostPass:LoadPostPass(newents, savedata)
@@ -120,7 +136,7 @@ function Quest_LoadPostPass:LoadPostPass(newents, savedata)
                     local boss = targ.entity
                     local diff = self.temp_bosses[old_GUID][1]
                     local num = self.temp_bosses[old_GUID][2]
-                    self:InsertBoss(boss.GUID, boss, diff, num)
+                    self:InsertBoss(boss.GUID, boss, diff, num, old_GUID)
                     table.insert(temp_array, {boss, diff, num})
                 end
             end

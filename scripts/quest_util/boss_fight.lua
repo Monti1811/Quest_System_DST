@@ -107,7 +107,7 @@ local function GiveRewards(inst,difficulty)
 end
 
 local function OnDeaths(self, difficulty, is_no_plattform)
-    devprint("OnDeaths",difficulty)
+    devprint("OnDeaths",difficulty, is_no_plattform)
     local pos = self.pos_before_fight or Vector3(0,0,0)
     local BossDeath = function()  end
     local function PlayerDeath()
@@ -122,6 +122,7 @@ local function OnDeaths(self, difficulty, is_no_plattform)
                 self.boss:Remove()
             end
             self.boss = nil
+            TheWorld.components.quest_loadpostpass:RemoveBoss(self.bossid)
         end)
         if not is_no_plattform then
             self.inst:DoTaskInTime(5,function(inst)
@@ -156,6 +157,7 @@ local function OnDeaths(self, difficulty, is_no_plattform)
             end
             self.bossfight = self.bossfight - 1
             self.boss = nil
+            TheWorld.components.quest_loadpostpass:RemoveBoss(self.bossid)
         end
     end
 
