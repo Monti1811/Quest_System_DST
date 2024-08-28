@@ -1064,7 +1064,6 @@ function Quest_Widget:OnClose()
   if screen and screen.name:find("HUD") == nil then
     TheFrontEnd:PopScreen()
   end
-  TheFrontEnd:GetSound():PlaySound("dontstarve/HUD/click_move")
 end
 
 function Quest_Widget:OnOpen()
