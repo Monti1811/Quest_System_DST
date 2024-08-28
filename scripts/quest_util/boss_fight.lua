@@ -122,6 +122,7 @@ local function OnDeaths(self, difficulty, is_no_plattform)
                 self.boss:Remove()
             end
             self.boss = nil
+            self.bossid = nil
             TheWorld.components.quest_loadpostpass:RemoveBoss(self.bossid)
         end)
         if not is_no_plattform then
@@ -157,6 +158,7 @@ local function OnDeaths(self, difficulty, is_no_plattform)
             end
             self.bossfight = self.bossfight - 1
             self.boss = nil
+            self.bossid = nil
             TheWorld.components.quest_loadpostpass:RemoveBoss(self.bossid)
         end
     end
