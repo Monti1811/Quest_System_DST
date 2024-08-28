@@ -500,13 +500,13 @@ end
 
 local function CountBosses()
     local counter = 0
-    devdumptable(GLOBAL.TheWorld.components.quest_loadpostpass.bosses, nil, 1)
     for _,v in pairs(GLOBAL.TheWorld.components.quest_loadpostpass.bosses) do
-        --if v ~= nil and v[1] ~= nil and v[1]:IsValid() then
+        if v[1] ~= nil and v[1]:IsValid() then
             counter = counter + 1
-        --end
+        end
     end
     devprint("CountBosses",counter)
+    devdumptable(GLOBAL.TheWorld.components.quest_loadpostpass.bosses, nil, 1)
     return counter
 end
 
