@@ -3014,17 +3014,28 @@ local quests = {
 		rewards = {[":func:planardamage;25"] = 16, horrorfuel = 5, dreadstone = 10},
 		points = 1750,
 		start_fn = function(inst,amount,quest_name)
-			local function OnAttackDaywalker(inst, data)
+			local targeted_werepigs = {}
+			local OnAttackDaywalker = function()  end
+			local function OnMinHealth(target, player)
+				inst:PushEvent("quest_update",{ quest = quest_name, amount = 1, friendly_goal = true,})
+				inst:RemoveEventCallback("onattackother",OnAttackDaywalker)
+				target:RemoveEventCallback("minhealth", OnMinHealth)
+			end
+			OnAttackDaywalker = function(inst, data)
 				if data and data.target and data.target.prefab == "daywalker" then
-					if data.target.defeated then
-						inst:PushEvent("quest_update",{ quest = quest_name, amount = 1, friendly_goal = true,})
-						inst:RemoveEventCallback("onattackother",OnAttackDaywalker)
+					local target = data.target
+					if not targeted_werepigs[target] then
+						targeted_werepigs[target] = true
+						target:ListenForEvent("minhealth", OnMinHealth)
 					end
 				end
 			end
 			inst:ListenForEvent("onattackother", OnAttackDaywalker)
 			local function OnForfeitedQuest(_player)
 				_player:RemoveEventCallback("onattackother",OnAttackDaywalker)
+				for target in pairs(targeted_werepigs) do
+					target:RemoveEventCallback("minhealth", OnMinHealth)
+				end
 			end
 			OnForfeit(inst,OnForfeitedQuest,quest_name)
 		end,
@@ -3632,7 +3643,7 @@ local quests = {
 	CreateQuest({
 		name = "Dancing With The Devil",
 		amount = 10,
-		rewards = {[":func:dodge;5"] = 16, phonograph = 1, record_creepyforest = 1},
+		rewards = {[":func:dodge;5"] = 16, phonograph = 1, record = 1},
 		points = 1000,
 		difficulty = 4,
 		start_fn = function(inst, amount, quest_name)
@@ -3657,6 +3668,15 @@ local quests = {
 		end,
 		tex = "stalker_atrium.tex",
 		anim_prefab = "stalker_atrium",
+		onfinished = function(inst,items)
+			if items then
+				for k,v in pairs(items) do
+					if v.prefab == "record" then
+						TheSim:ReskinEntity(v.GUID, nil, "record_creepyforest", nil, inst.userid)
+					end
+				end
+			end
+		end,
 	}),
 	--150
 	CreateQuest({
