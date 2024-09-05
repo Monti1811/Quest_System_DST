@@ -279,6 +279,7 @@ function AttackWaves:StartAttack(player,attacksize,delta,difficulty,_victim)
 		self.inst:DoTaskInTime(0.5, function()
 			self:StartAttack(player,attacksize,delta,difficulty,_victim)
 		end)
+		return
 	end
 	local prefab = _victim or GetRandomItemWithIndex(self.victims)
 	local victim = SpawnPrefab(prefab)
