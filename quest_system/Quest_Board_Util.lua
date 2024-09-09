@@ -1160,13 +1160,13 @@ local custom_functions = {
 				SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "RemoveTimerFromClient"),player.userid,player,creature)
 			end
 		end
-		OnWin = function(_)
+		OnWin = function()
 			player:PushEvent("quest_update",{quest = quest_name,amount = 1})
 			player:RemoveEventCallback("succesfully_defended",OnWin)
 			player:RemoveEventCallback("victim_died",OnLose)
 			current = current + 1
 			if current < times then
-				AttackWave(player,times,amount,rounds,delta,difficulty,creature,quest_name,min,max)
+				AttackWave()
 			end
 			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "RemoveTimerFromClient"),player.userid,player,creature)
 		end
@@ -1693,7 +1693,7 @@ local custom_functions = {
 	["kill different creatures x y times"] = function(player,amount,quest_name,victims,check)
 		local current = GetCurrentAmount(player,quest_name)
 		local listen_functions = {}
-		local current_kills = {}
+		local current_kills = player.components.quest_component:GetQuestData(quest_name) or {}
 		for prefab, kill_amount in pairs(victims) do
 			current_kills[prefab] = GetValues(player, quest_name, prefab)
 			if current_kills[prefab] < kill_amount then

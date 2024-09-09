@@ -69,6 +69,7 @@ return {
 		TIME_LEFT = "Tiempo hasta la llegada de %s: %i",
 		ENEMIES_LEFT = "Esta ola contiene %s enemigos que debes derrotar",
 		WAVE = "Oleada %s\n%s/%s enemigos",
+		NOT_PASSABLE = "¡Necesito estar en tierra para que empiece la oleada de ataque!",
 	},
 	ACTIONS = {
 		FIGHT_GLOMMER = "¿Ser un amigo?",

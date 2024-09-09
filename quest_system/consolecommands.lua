@@ -183,6 +183,17 @@ function GLOBAL.c_testquests(with_rewards, inst)
     end
 end
 
+function GLOBAL.c_attackwave(victim, rounds, enemies, diff, inst)
+    if not inst then
+        inst = GLOBAL.ThePlayer--GLOBAL.ConsoleWorldEntityUnderMouse()
+    end
+    rounds = rounds or 1
+    enemies = enemies or 3
+    diff = diff or 1
+    victim = victim or "glommer"
+    GLOBAL.TheWorld.components.attackwaves:StartAttack(inst, {enemies, rounds}, 10, diff, victim)
+end
+
 
 AddClassPostConstruct("screens/consolescreen",function(self)
     local old_init = self.DoInit

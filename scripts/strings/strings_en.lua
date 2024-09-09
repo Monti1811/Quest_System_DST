@@ -78,6 +78,7 @@ return {
 		TIME_LEFT = "Time till %s arrives: %i",
 		ENEMIES_LEFT = "This wave contains %s enemies that you must defeat",
 		WAVE = "Wave %s\n%s/%s enemies",
+		NOT_PASSABLE = "I need to be on the ground for the attack wave to start!",
 
 	},
 
