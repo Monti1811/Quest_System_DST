@@ -40,7 +40,7 @@ function Quest_LoadPostPass:InsertBoss(bossid, boss, diff, num, old_GUID)
 end
 
 function Quest_LoadPostPass:RemoveBoss(bossid)
-    local old_GUID = self.bosses[bossid][4]
+    local old_GUID = self.bosses[bossid] and self.bosses[bossid][4]
     if old_GUID then
         self.temp_bosses[old_GUID] = nil
     end

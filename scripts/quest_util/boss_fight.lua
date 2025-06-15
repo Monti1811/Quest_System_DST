@@ -43,8 +43,9 @@ local function SpawnBoss(self, difficulty, boss_number)
 end
 
 local function SetBossPosition(self, is_no_plattform)
-    local x,y,z = self.bossplatform.Transform:GetWorldPosition()
+    local x,y,z
     if is_no_plattform then
+        x,y,z = self.inst:GetPosition():Get()
         local position = FindWalkableOffset(Vector3(x,y,z),math.random()*PI*2,16,8,true,false)
         if position then
             self.boss.Transform:SetPosition(x+position.x,y+position.y,z+position.z)
@@ -52,6 +53,7 @@ local function SetBossPosition(self, is_no_plattform)
             self.boss.Transform:SetPosition(x,y,z)
         end
     else
+        x,y,z = self.bossplatform.Transform:GetWorldPosition()
         local a,b,c = x + 16*(math.random(2) == 1 and -1 or 1),y,z + 16*(math.random(2) == 1 and -1 or 1)
         self.boss.Transform:SetPosition(a,b,c)
         self.inst:AddTag("currently_in_bossfight")
@@ -157,9 +159,9 @@ local function OnDeaths(self, difficulty, is_no_plattform)
                 self.bossplatform:TurnOn()
             end
             self.bossfight = self.bossfight - 1
+            TheWorld.components.quest_loadpostpass:RemoveBoss(self.bossid)
             self.boss = nil
             self.bossid = nil
-            TheWorld.components.quest_loadpostpass:RemoveBoss(self.bossid)
         end
     end
 
