@@ -3466,7 +3466,7 @@ local quests = {
 		points = 500,
 		start_fn = function(inst, amount, quest_name)
 			local function IsTallbirdEgg(_, data)
-				return data and data.loot and data.loot.prefab == "tallbirdegg" and 1
+				return data and data.loot and data.loot.prefab == "tallbirdegg" and 1 or nil
 			end
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["pick x y times"](inst, amount, quest_name, IsTallbirdEgg)
 		end,

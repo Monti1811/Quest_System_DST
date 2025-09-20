@@ -100,7 +100,7 @@ local function fn()
     MakeInventoryPhysics(inst)
 
 	local minimap = inst.entity:AddMiniMapEntity()
-	minimap:SetIcon("custom_hat.tex")
+	minimap:SetIcon("shadow_crest.tex")
 
     inst.AnimState:SetBank("shadow_crest")
     inst.AnimState:SetBuild("shadow_crest")
