@@ -82,6 +82,8 @@ local Quest_Board_Widget = Class(Screen, function(self, owner)
         self.new_custom_quest = QUEST_BOARD.CUSTOM_QUEST
     end
 
+    self.PRNG = PRNG_Uniform(hash(ThePlayer.userid))
+
 	Screen._ctor(self, "Quest_Board_Widget")
 
 	self.black = self:AddChild(Image("images/global.xml", "square.tex"))
@@ -452,7 +454,7 @@ function Quest_Board_Widget:ShowQuestDetails(quest,name)
         if data.scrapbook_setanim then
             creature:GetAnimState():SetPercent(data.anim,data.scrapbook_setanim)
         else
-            creature:GetAnimState():SetPercent(data.anim,rand())
+            creature:GetAnimState():SetPercent(data.anim,self.PRNG:Rand())
         end
         if data.scrapbook_overridebuild then
             creature:GetAnimState():AddOverrideBuild(data.scrapbook_overridebuild)

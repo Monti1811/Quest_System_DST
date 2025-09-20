@@ -12,7 +12,6 @@ local STRINGS_QL = STRINGS.QUEST_COMPONENT.QUEST_LOG
 local profile_flairs = require "profile_flairs"
 local scrapbookdata = require("screens/redux/scrapbookdata")
 
-
 local colour_difficulty 
 if TUNING.QUEST_COMPONENT.COLORBLINDNESS == 1 then
     colour_difficulty = {
@@ -264,7 +263,7 @@ local function createQuestCard(self,quest, x, y, scale, num)
         if data.scrapbook_setanim then
             creature:GetAnimState():SetPercent(data.anim,data.scrapbook_setanim)
         else
-            creature:GetAnimState():SetPercent(data.anim,rand())
+            creature:GetAnimState():SetPercent(data.anim, self.PRNG:Rand())
         end
         if data.scrapbook_overridebuild then
             creature:GetAnimState():AddOverrideBuild(data.scrapbook_overridebuild)
@@ -432,6 +431,8 @@ local Quest_Widget = Class(Screen, function(self, inst)
     end
 
   Screen._ctor(self, "Quest_Widget")
+
+  self.PRNG = PRNG_Uniform(hash(ThePlayer.userid))
 
   self.max_amount_of_quests = self.ownerofscreen.replica.quest_component._max_amount_of_quests:value() or 10
 
