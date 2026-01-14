@@ -425,7 +425,7 @@ local Quest_Widget = Class(Screen, function(self, inst)
   self.ownerofscreen = inst
   self.tasks = {}
 
-    if inst.replica.quest_component == nil then
+    if inst == nil or inst.replica.quest_component == nil then
         print("[Quest System] Quest_Widget: No quest component found on the player, aborting quest widget creation.")
         return
     end
