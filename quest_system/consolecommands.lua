@@ -27,7 +27,8 @@ function GLOBAL.c_showquest(inst)
     for _ = 1,5 do
         inst.components.quest_component:AddQuest(GetRandomQuest())
     end
-    inst.components.quest_component:ShowQuestHUD()
+    -- Sometimes, the underlying netvar causes a crash, deactivating this functionality for now so that it not happens again.
+    --inst.components.quest_component:ShowQuestHUD()
 end
 
 function GLOBAL.c_deletequest(name)

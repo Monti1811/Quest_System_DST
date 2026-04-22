@@ -19,9 +19,9 @@ local function onpointchange(self,point)
 	replica._points:set(point)
 end
 
-local function onhudshow(self)
+--[[local function onhudshow(self)
 	self.inst.replica.quest_component._showhud:push()
-end
+end]]
 
 local function oncompleted_questschange(self,num)
 	local replica = self.inst.replica.quest_component
@@ -186,7 +186,7 @@ nil,
 {
 	level = onlevelchange,
 	points = onpointchange,
-	showhud = onhudshow,
+	--showhud = onhudshow,
 	completed_quests = oncompleted_questschange,
 	bossfight = onbossfight,
 	rank = onrankchange,
@@ -466,13 +466,13 @@ function Quest_Component:SetOnLevelUp(fn)
 	self.onlevelup = fn
 end
 
-function Quest_Component:ShowQuestHUD()
+--[[function Quest_Component:ShowQuestHUD()
 	if self.showhud == nil then
 		self.showhud = true
 	else
 		self.showhud = not self.showhud
 	end
-end
+end]]
 
 ---------------------------------------------------------
 
