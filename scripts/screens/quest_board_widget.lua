@@ -755,6 +755,9 @@ function Quest_Board_Widget:ShowCustomQuests()
         local target_tex = target_atlas ~= "images/avatars.xml" and quest.tex or "avatar_unknown.tex"
         bg.victim = bg:AddChild(Image(softresolvefilepath(target_atlas), target_tex))
         bg.victim:SetPosition(50, 10)
+
+        local prefabname = STRINGS.NAMES[string.upper(quest.victim)] or quest.victim or "Not Defined"
+
         if quest.start_fn and type(quest.start_fn) == "string" and string.find(quest.start_fn,"start_fn_") then
             local fn = string.gsub(quest.start_fn,"start_fn_","")
             local text = QUEST_BOARD.PREFABS_MOBS[fn] and QUEST_BOARD.PREFABS_MOBS[fn].text
@@ -765,19 +768,25 @@ function Quest_Board_Widget:ShowCustomQuests()
         elseif quest.hovertext ~= nil then
             bg.victim:SetHoverText(quest.hovertext)
         elseif quest.victim and QUEST_BOARD.PREFABS_MOBS[quest.victim] then
-            local text = QUEST_BOARD.PREFABS_MOBS[quest.victim].hovertext or ""
+            local quest_board_data = QUEST_BOARD.PREFABS_MOBS[quest.victim]
+            local text = quest_board_data.hovertext or ""
             local new_text = string.gsub(text," x "," "..quest.amount.." ")
             local new_text2 = string.split(new_text,"/")
-            if new_text2[2] == "moose" then
+            --[[if new_text2[2] == "moose" then
                 new_text2[2] = "moose1"
+            elseif new_text2[2] == "stalker_forest" then
+                new_text2[2] = "stalker"
+            end]]
+            prefabname = new_text2[2] and STRINGS.NAMES[string.upper(new_text2[2])] or prefabname
+            if not prefabname or prefabname == "" then
+                prefabname = quest_board_data.text or "Not Defined"
             end
-            local new_text3 = new_text2[1]..STRINGS.NAMES[string.upper(new_text2[2])]
+            local new_text3 = new_text2[1]..prefabname
             bg.victim:SetHoverText(new_text3)
         end
         bg.victim_name = bg:AddChild(Text(NEWFONT_OUTLINE, 25))
         bg.victim_name:SetPosition(50, -30)
-        quest.victim = quest.victim == "moose" and "moose1" or quest.victim
-        bg.victim_name:SetAutoSizingString(quest.counter_name or (quest.victim and STRINGS.NAMES[string.upper(quest.victim)]) or "Not Defined",100)
+        bg.victim_name:SetAutoSizingString(quest.counter_name or prefabname,100)
         bg.rewards = {}
         local num = 0
         for prefab,amount in pairs(quest.rewards) do

@@ -2220,12 +2220,12 @@ local quests = {
 		rewards = {marble = 10,[":func:worker;1.4"] = 16,},
 		points = 275,
 		start_fn = function(inst,amount,quest_name)
-			local current = GetCurrentAmount(inst,quest_name)
+			local current_amount = GetCurrentAmount(inst,quest_name)
 			local function OnDeploy(inst,data)
 				if data and data.prefab == "marblebean" then
 					inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
-					current = current + 1
-					if current > amount then
+					current_amount = current_amount + 1
+					if current_amount > amount then
 						inst:RemoveEventCallback("deployitem",OnDeploy)
 					end
 				end
@@ -2268,6 +2268,7 @@ local quests = {
 	--84
 	CreateQuest({
 		name = "The Shadow Plague",
+		description = GetQuestString("The Shadow Plague","DESCRIPTION"),
 		amount = 30,
 		rewards = {leafymeatsouffle = 5,[":func:sanityaura;10"] = 16,[":func:healthrate;2"] = 16,},
 		points = 875,
@@ -2567,13 +2568,13 @@ local quests = {
 		rewards = {mast_malbatross_item = 1,singingshell_octave3 = 1,singingshell_octave4 = 1,singingshell_octave5 = 1},
 		points = 250,
 		start_fn = function(inst,amount,quest_name)
-			local current = GetCurrentAmount(inst,quest_name)
+			local current_amount = GetCurrentAmount(inst,quest_name)
 			local function OnHarvest(inst,data)
 				if data and data.object then
 					if data.object.prefab == "waterplant" then
-						current = current + 1
+						current_amount = current_amount + 1
 						inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
-						if current >= amount then
+						if current_amount >= amount then
 							inst:RemoveEventCallback("harvestsomething",OnHarvest)
 						end
 					end
@@ -2999,8 +3000,8 @@ local quests = {
 		amount = 10,
 		rewards = {[":func:range;0.5"] = 16, featherhat = 1, trailmix = 3},
 		points = 300,
-		start_fn = function(inst,amount,quest_name)
-			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst,amount,"robin",quest_name)
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst, amount, "robin", quest_name)
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["do x y times in z days"](inst,amount,8,nil,quest_name)
 		end,
 		difficulty = 2,
@@ -3063,7 +3064,7 @@ local quests = {
 		amount = 300,
 		rewards = {[":func:planardefense;25"] = 8, voidcloth_scythe = 1, voidcloth_umbrella = 1},
 		points = 550,
-		start_fn = function(inst,amount,quest_name)
+		start_fn = function(inst, amount, quest_name)
 			local bathed = GetCurrentAmount(inst,quest_name)
 			local function OnAcidRain(inst, isacidrain)
 				StopTask(inst, quest_name.."_task")
@@ -3098,7 +3099,7 @@ local quests = {
 		amount = 10,
 		rewards = {[":func:dodge;20"] = 8, bomb_lunarplant = 3},
 		points = 300,
-		start_fn = function(inst,amount,quest_name)
+		start_fn = function(inst, amount, quest_name)
 			local workables = {lunarrift_crystal_big = true, lunarrift_crystal_small = true}
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["finish work type z for x amount of y"](inst,ACTIONS.MINE,workables,amount,quest_name)
 		end,
