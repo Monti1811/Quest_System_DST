@@ -756,7 +756,7 @@ function Quest_Board_Widget:ShowCustomQuests()
         bg.victim = bg:AddChild(Image(softresolvefilepath(target_atlas), target_tex))
         bg.victim:SetPosition(50, 10)
 
-        local prefabname = STRINGS.NAMES[string.upper(quest.victim)] or quest.victim or "Not Defined"
+        local prefabname = (quest.victim and STRINGS.NAMES[string.upper(quest.victim)] or quest.victim) or "Not Defined"
 
         if quest.start_fn and type(quest.start_fn) == "string" and string.find(quest.start_fn,"start_fn_") then
             local fn = string.gsub(quest.start_fn,"start_fn_","")
