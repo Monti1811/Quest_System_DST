@@ -2220,12 +2220,12 @@ local quests = {
 		rewards = {marble = 10,[":func:worker;1.4"] = 16,},
 		points = 275,
 		start_fn = function(inst,amount,quest_name)
-			local current = GetCurrentAmount(inst,quest_name)
+			local current_amount = GetCurrentAmount(inst,quest_name)
 			local function OnDeploy(inst,data)
 				if data and data.prefab == "marblebean" then
 					inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
-					current = current + 1
-					if current > amount then
+					current_amount = current_amount + 1
+					if current_amount > amount then
 						inst:RemoveEventCallback("deployitem",OnDeploy)
 					end
 				end
@@ -2268,6 +2268,7 @@ local quests = {
 	--84
 	CreateQuest({
 		name = "The Shadow Plague",
+		description = GetQuestString("The Shadow Plague","DESCRIPTION"),
 		amount = 30,
 		rewards = {leafymeatsouffle = 5,[":func:sanityaura;10"] = 16,[":func:healthrate;2"] = 16,},
 		points = 875,
@@ -2567,13 +2568,13 @@ local quests = {
 		rewards = {mast_malbatross_item = 1,singingshell_octave3 = 1,singingshell_octave4 = 1,singingshell_octave5 = 1},
 		points = 250,
 		start_fn = function(inst,amount,quest_name)
-			local current = GetCurrentAmount(inst,quest_name)
+			local current_amount = GetCurrentAmount(inst,quest_name)
 			local function OnHarvest(inst,data)
 				if data and data.object then
 					if data.object.prefab == "waterplant" then
-						current = current + 1
+						current_amount = current_amount + 1
 						inst:PushEvent("quest_update",{quest = quest_name,amount = 1})
-						if current >= amount then
+						if current_amount >= amount then
 							inst:RemoveEventCallback("harvestsomething",OnHarvest)
 						end
 					end
@@ -2999,8 +3000,8 @@ local quests = {
 		amount = 10,
 		rewards = {[":func:range;0.5"] = 16, featherhat = 1, trailmix = 3},
 		points = 300,
-		start_fn = function(inst,amount,quest_name)
-			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst,amount,"robin",quest_name)
+		start_fn = function(inst, amount, quest_name)
+			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["kill x y times"](inst, amount, "robin", quest_name)
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["do x y times in z days"](inst,amount,8,nil,quest_name)
 		end,
 		difficulty = 2,
@@ -3014,17 +3015,28 @@ local quests = {
 		rewards = {[":func:planardamage;25"] = 16, horrorfuel = 5, dreadstone = 10},
 		points = 1750,
 		start_fn = function(inst,amount,quest_name)
-			local function OnAttackDaywalker(inst, data)
+			local targeted_werepigs = {}
+			local OnAttackDaywalker = function()  end
+			local function OnMinHealth(target, player)
+				inst:PushEvent("quest_update",{ quest = quest_name, amount = 1, friendly_goal = true,})
+				inst:RemoveEventCallback("onattackother",OnAttackDaywalker)
+				target:RemoveEventCallback("minhealth", OnMinHealth)
+			end
+			OnAttackDaywalker = function(inst, data)
 				if data and data.target and data.target.prefab == "daywalker" then
-					if data.target.defeated then
-						inst:PushEvent("quest_update",{ quest = quest_name, amount = 1, friendly_goal = true,})
-						inst:RemoveEventCallback("onattackother",OnAttackDaywalker)
+					local target = data.target
+					if not targeted_werepigs[target] then
+						targeted_werepigs[target] = true
+						target:ListenForEvent("minhealth", OnMinHealth)
 					end
 				end
 			end
 			inst:ListenForEvent("onattackother", OnAttackDaywalker)
 			local function OnForfeitedQuest(_player)
 				_player:RemoveEventCallback("onattackother",OnAttackDaywalker)
+				for target in pairs(targeted_werepigs) do
+					target:RemoveEventCallback("minhealth", OnMinHealth)
+				end
 			end
 			OnForfeit(inst,OnForfeitedQuest,quest_name)
 		end,
@@ -3052,7 +3064,7 @@ local quests = {
 		amount = 300,
 		rewards = {[":func:planardefense;25"] = 8, voidcloth_scythe = 1, voidcloth_umbrella = 1},
 		points = 550,
-		start_fn = function(inst,amount,quest_name)
+		start_fn = function(inst, amount, quest_name)
 			local bathed = GetCurrentAmount(inst,quest_name)
 			local function OnAcidRain(inst, isacidrain)
 				StopTask(inst, quest_name.."_task")
@@ -3087,7 +3099,7 @@ local quests = {
 		amount = 10,
 		rewards = {[":func:dodge;20"] = 8, bomb_lunarplant = 3},
 		points = 300,
-		start_fn = function(inst,amount,quest_name)
+		start_fn = function(inst, amount, quest_name)
 			local workables = {lunarrift_crystal_big = true, lunarrift_crystal_small = true}
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["finish work type z for x amount of y"](inst,ACTIONS.MINE,workables,amount,quest_name)
 		end,
@@ -3455,7 +3467,7 @@ local quests = {
 		points = 500,
 		start_fn = function(inst, amount, quest_name)
 			local function IsTallbirdEgg(_, data)
-				return data and data.loot and data.loot.prefab == "tallbirdegg" and 1
+				return data and data.loot and data.loot.prefab == "tallbirdegg" and 1 or nil
 			end
 			TUNING.QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["pick x y times"](inst, amount, quest_name, IsTallbirdEgg)
 		end,
@@ -3632,7 +3644,7 @@ local quests = {
 	CreateQuest({
 		name = "Dancing With The Devil",
 		amount = 10,
-		rewards = {[":func:dodge;5"] = 16, phonograph = 1, record_creepyforest = 1},
+		rewards = {[":func:dodge;5"] = 16, phonograph = 1, record = 1},
 		points = 1000,
 		difficulty = 4,
 		start_fn = function(inst, amount, quest_name)
@@ -3657,6 +3669,15 @@ local quests = {
 		end,
 		tex = "stalker_atrium.tex",
 		anim_prefab = "stalker_atrium",
+		onfinished = function(inst,items)
+			if items then
+				for k,v in pairs(items) do
+					if v.prefab == "record" then
+						TheSim:ReskinEntity(v.GUID, nil, "record_creepyforest", nil, inst.userid)
+					end
+				end
+			end
+		end,
 	}),
 	--150
 	CreateQuest({

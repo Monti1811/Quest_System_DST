@@ -1,6 +1,7 @@
 local Quest_LoadPostPass = Class(function(self, inst)
     self.inst = inst
     self.bosses = {}
+    self.temp_bosses = {}
     self.can_create_custom_quests = {}
     self.quest_lines = {}
 
@@ -31,14 +32,26 @@ function Quest_LoadPostPass:CanQuestLineBeDone(name)
     end
 end
 
-function Quest_LoadPostPass:InsertBoss(bossid,boss,diff,num)
-    self.bosses[bossid] = {boss,diff,num}
+function Quest_LoadPostPass:InsertBoss(bossid, boss, diff, num, old_GUID)
+    self.bosses[bossid] = {boss, diff, num, old_GUID}
+    if old_GUID then
+        self.temp_bosses[old_GUID] = self.bosses[bossid]
+    end
 end
 
-function Quest_LoadPostPass:MakeBoss(boss,diff,num,fn)
+function Quest_LoadPostPass:RemoveBoss(bossid)
+    if bossid == nil then return end
+    local old_GUID = self.bosses[bossid] and self.bosses[bossid][4]
+    if old_GUID then
+        self.temp_bosses[old_GUID] = nil
+    end
+    self.bosses[bossid] = nil
+end
+
+function Quest_LoadPostPass:MakeBoss(boss, diff, num, fn)
     if diff == nil or num == nil then return end
     local tuning = TUNING.QUEST_COMPONENT.BOSSES[diff]
-    boss = boss ~= "nothing" and boss or SpawnPrefab(tuning[num].name or "hound")
+    boss = boss or SpawnPrefab(tuning[num].name or "hound")
     if boss then
         if boss.components.health then
             boss.components.health:SetMaxHealth((tuning[num].health or 1000) * TUNING.QUEST_COMPONENT.BOSS_DIFFICULTY)
@@ -64,16 +77,19 @@ end
 
 function Quest_LoadPostPass:OnSave()
     local bosses_players = {}
-    for k,v in pairs(self.bosses) do
-        table.insert(bosses_players,v[1].GUID)
-    end
     local _bosses = {}
-    for k,v in pairs(self.bosses) do
-        local tab = {v[1].GUID,v[2],v[3]}
-        table.insert(_bosses,tab)
+    for _, v in pairs(self.bosses) do
+        if v[1]:IsValid() then
+            table.insert(bosses_players,v[1].GUID)
+            local tab = {v[1].GUID,v[2],v[3]}
+            table.insert(_bosses,tab)
+        end
     end
     local can_create_custom_quests = TUNING.QUEST_COMPONENT.CAN_CREATE_CUSTOM_QUESTS
     SaveOwnQuests() --save the custom quests that were made, added here so that they are saved each time the world is saved
+    devprint("Quest_LoadPostPass:OnSave")
+    devdumptable(bosses_players)
+    devdumptable(_bosses)
     return {bosses_players = bosses_players,
             _bosses = _bosses,
             can_create_custom_quests = can_create_custom_quests, 
@@ -89,9 +105,7 @@ function Quest_LoadPostPass:OnLoad(data)
         if data._bosses ~= nil then
             for _,v in pairs(data._bosses) do
                 if v[1] ~= nil then
-                    local tab = {"nothing",v[2],v[3]}
-                    self.bosses[v[1]] = tab
-                    devdumptable(self.bosses[v[1]])
+                    self.temp_bosses[v[1]] = {v[2],v[3]}
                 end
             end
         end
@@ -108,19 +122,30 @@ function Quest_LoadPostPass:OnLoad(data)
             self.glommerfuelmachine = data.glommerfuelmachine
         end
     end
+    devprint("Quest_LoadPostPass:OnLoad")
+    devdumptable(data)
 end
 
 function Quest_LoadPostPass:LoadPostPass(newents, savedata)
 	devprint("LoadPostPass world")
 	if savedata ~= nil then
 		if savedata.bosses_players ~= nil then
-            for k,v in ipairs(savedata.bosses_players) do
-                local targ = newents[v]
-                if targ ~= nil and self.bosses and self.bosses[v] then
-                    self.bosses[v][1] = targ.entity
-                    self.inst:DoTaskInTime(0,function() self:MakeBoss(self.bosses[v][1],self.bosses[v][2],self.bosses[v][3]) end)
+            local temp_array = {}
+            for _,old_GUID in ipairs(savedata.bosses_players) do
+                local targ = newents[old_GUID]
+                if targ ~= nil and self.temp_bosses[old_GUID] then
+                    local boss = targ.entity
+                    local diff = self.temp_bosses[old_GUID][1]
+                    local num = self.temp_bosses[old_GUID][2]
+                    self:InsertBoss(boss.GUID, boss, diff, num, old_GUID)
+                    table.insert(temp_array, {boss, diff, num})
                 end
             end
+            self.inst:DoTaskInTime(0,function()
+                for _,v in pairs(temp_array) do
+                    self:MakeBoss(v[1], v[2], v[3])
+                end
+            end)
         end
     end
     devdumptable(self.bosses)

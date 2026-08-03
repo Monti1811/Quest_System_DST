@@ -69,6 +69,7 @@ return {
 		TIME_LEFT = "Temps restant jusqu'à l'arrivée de %s: %i",
 		ENEMIES_LEFT = "Cette vague contient %s ennemis que vous devez vaincre",
 		WAVE = "Vague %s\n%s/%s ennemis",
+		NOT_PASSABLE = "Je dois être sur le terrain pour que la vague d'attaque commence !",
 	},
 	ACTIONS = {
 		FIGHT_GLOMMER = "Être un ami?!",

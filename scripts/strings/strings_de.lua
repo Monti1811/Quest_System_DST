@@ -69,6 +69,7 @@ return {
 		TIME_LEFT = "Zeit bis zum Eintreffen von %s: %i",
 		ENEMIES_LEFT = "Diese Welle enthält %s Feinde, die du besiegen musst",
 		WAVE = "Welle %s\n%s/%s Feinde",
+		NOT_PASSABLE = "Ich muss auf festem Boden sein, damit die Angriffswelle beginnen kann!",
 	},
 	ACTIONS = {
 		FIGHT_GLOMMER = "Sei ein Freund?",

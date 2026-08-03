@@ -77,6 +77,9 @@ local function OnAttacked(inst, data)
 end
 
 local function OnHitOther(inst, data)
+    if math.random() < 0.5 then
+        return
+    end
     local other = data.target
     if other ~= nil then
         if other.components.inventory then
@@ -138,7 +141,7 @@ end
 
 local function OnHealthDelta(inst)
     local percent = inst.components.health:GetPercent()
-    if percent < 0.5 then
+    if percent < 0.4 then
         inst.mode2 = true
     else
         inst.mode2 = nil
@@ -237,8 +240,6 @@ local function create_chester()
     inst:ListenForEvent("timerdone", ontimerdone)
 
     inst:AddComponent("knownlocations")
-
-    --MakeSmallBurnableCharacter(inst, "chester_body")
 
     inst:AddComponent("inventory")
 
@@ -666,7 +667,7 @@ local function doprojectilehit(inst, attacker, other)
     -- otherwise stick our target, if he was in splash radius
     if other == nil and attacker ~= nil then
         other = attacker.components.combat.target
-        if other ~= nil and not (other:IsValid() and other:IsNear(inst, 3)) then
+        if other ~= nil and not (other:IsValid() and other:IsNear(inst, 2.5)) then
             other = nil
         end
     end
@@ -677,6 +678,8 @@ local function doprojectilehit(inst, attacker, other)
         end
         if other.components.pinnable ~= nil then
             other.components.pinnable:Stick("purple_goo",splashfxlist)
+            other.components.pinnable.attacks_since_pinned = 2
+            other.components.pinnable:UpdateStuckStatus()
         end
     end
 

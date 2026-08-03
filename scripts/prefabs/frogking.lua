@@ -506,7 +506,7 @@ local function OnHitBeyblade(inst,target)
         return
     end
     --Launch the hit object
-    if target.sg and target:HasTag("player") then
+    if target.sg and target:HasTag("player") and target.replica.health and not target.replica.health:IsDead() then
         target.sg:GoToState("knockback",{radius = 2,knocker = inst})
     elseif target.components.inventoryitem then
         Launch2(target,inst,10,2,0.1,0,15)

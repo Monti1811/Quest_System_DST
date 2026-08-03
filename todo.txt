@@ -26,5 +26,7 @@ todos:
 
 quest_ideas:
 -- stehlen von eier von großen vögeln							:done
+-- kill benevolent rabbit king without transforming to rabid rk :TODO
+--- kill mimicreeps
 
 todo check quests:

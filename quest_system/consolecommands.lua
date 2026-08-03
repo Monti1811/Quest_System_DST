@@ -27,7 +27,8 @@ function GLOBAL.c_showquest(inst)
     for _ = 1,5 do
         inst.components.quest_component:AddQuest(GetRandomQuest())
     end
-    inst.components.quest_component:ShowQuestHUD()
+    -- Sometimes, the underlying netvar causes a crash, deactivating this functionality for now so that it not happens again.
+    --inst.components.quest_component:ShowQuestHUD()
 end
 
 function GLOBAL.c_deletequest(name)
@@ -181,6 +182,17 @@ function GLOBAL.c_testquests(with_rewards, inst)
             inst.components.quest_component:CompleteQuest(name)
         end
     end
+end
+
+function GLOBAL.c_attackwave(victim, rounds, enemies, diff, inst)
+    if not inst then
+        inst = GLOBAL.ThePlayer--GLOBAL.ConsoleWorldEntityUnderMouse()
+    end
+    rounds = rounds or 1
+    enemies = enemies or 3
+    diff = diff or 1
+    victim = victim or "glommer"
+    GLOBAL.TheWorld.components.attackwaves:StartAttack(inst, {enemies, rounds}, 10, diff, victim)
 end
 
 

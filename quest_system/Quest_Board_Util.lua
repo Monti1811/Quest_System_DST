@@ -193,6 +193,27 @@ local prefabs = {
 	"mutatedwarg",
 	"mutatedbearger",
 	"lunarfrog",
+	"crabking_mob",
+	"otter",
+	"crabking_mob_knight",
+	"mermguard_lunar",
+	"mermguard_shadow",
+	"itemmimic_revealed",
+	"rabbitking_lucky",
+	"rabbitking_passive",
+	"rabbitking_aggressive",
+	"worm_boss",
+	"ruinsnightmare",
+	"shadowthrall_mouth",
+	"chest_mimic_revealed",
+	"gelblob",
+	"rabbitkingminion_bunnyman",
+	"mutatedbird",
+	"alterguardian_phase1_lunarrift",
+	"wagboss_robot",
+	"alterguardian_phase4_lunarrift",
+	"wagdrone_rolling",
+	"gestalt_guard_evolved",
 }
 
 
@@ -203,7 +224,7 @@ for _,v in ipairs(prefabs) do
 end
 
 local item_list = {
-	{"random","Random"},"acorn","amulet","anchor_item","antliontrinket","archive_resonator_item","armor_bramble","armordragonfly","armorgrass","armormarble","armorruins","armor_sanity","armorskeleton","armorslurper","armorsnurtleshell","armorwood","ash","atrium_key","axe","backpack","bandage","batbat","bathbomb","bearger_fur","beargervest","bedroll_straw","bedroll_furry","bee","beef_bell","beefalowool","beemine","beeswax","boards","dug_berrybush","birdtrap","blueprint","boatpatch","boneshard","boomerang","brush","bugnet","bullkelp_root","bundlewrap","butter","butterflywings","candybag","cane","charcoal","chester_eyebone","chum","compass","compost","compostwrap","cookbook","coontail","cutgrass","cutstone","driftwood_log","dustmeringue","bird_egg","bird_egg_cooked","rottenegg","eyeturret_item","farm_hoe","farm_plow_item","featherpencil","feather_crow","feather_robin","feather_robin_winter","feather_canary","fireflies","fishingrod","flint","fossil_piece","froglegs","gears","redgem","bluegem","purplegem","greengem","yellowgem","orangegem","glasscutter","glommerflower","glommerfuel","glommerwings","gnarwail_horn","goatmilk","goldnugget","goose_feather","guano","gunpowder","hammer","strawhat","tophat","beefalohat","featherhat","beehat","minerhat","spiderhat","footballhat","earmuffshat","winterhat","bushhat","flowerhat","walrushat","slurtlehat","ruinshat","molehat","wathgrithrhat","walterhat","icehat","rainhat","catcoonhat","watermelonhat","eyebrellahat","red_mushroomhat","blue_mushroomhat","green_mushroomhat","hivehat","deserthat","goggleshat","moonstorm_goggleshat","skeletonhat","kelphat","mermhat","cookiecutterhat","batnosehat","nutrientsgoggleshat","plantregistryhat","balloonhat","alterguardianhat","hawaiianshirt","healingsalve","honey","honeycomb","horn","houndstooth","hutch_fishbowl","icepack","krampus_sack","lavae_egg","cutlichen","livinglog","log","malbatross_feather","malbatross_feathered_weave","malbatross_beak","mandrake","manrabbit_tail","mapscroll","marble","marblebean","meat","cookedmeat","meat_dried","monstermeat","cookedmonstermeat","monstermeat_dried","smallmeat","cookedsmallmeat","smallmeat_dried","drumstick","drumstick_cooked","batwing","batwing_cooked","plantmeat","plantmeat_cooked","fishmeat_small","fishmeat_small_cooked","fishmeat","fishmeat_cooked","barnacle","barnacle_cooked","batnose","batnose_cooked","messagebottle","messagebottleempty","miniboatlantern","minifan","miniflare","lantern","minisign_item","minotaurhorn","mole","moonbutterflywings","purplemooneye","bluemooneye","redmooneye","orangemooneye","yellowmooneye","greenmooneye","moonglass","moonrocknugget","moon_tree_blossom","mosquitosack","nitre","oar","oceanfish_small_1_inv","oceanfish_small_2_inv","oceanfish_small_3_inv","oceanfish_small_4_inv","oceanfish_small_5_inv","oceanfish_small_6_inv","oceanfish_small_7_inv","oceanfish_small_8_inv","oceanfish_small_9_inv","oceanfish_medium_1_inv","oceanfish_medium_2_inv","oceanfish_medium_3_inv","oceanfish_medium_4_inv","oceanfish_medium_5_inv","oceanfish_medium_6_inv","oceanfish_medium_7_inv","oceanfish_medium_8_inv","oceanfish_medium_9_inv","oceanfishinglure_spoon_red","oceanfishinglure_spoon_green","oceanfishinglure_spoon_blue","oceanfishinglure_spinner_red","oceanfishinglure_spinner_green","oceanfishinglure_spinner_blue","oceanfishinglure_hermit_rain","oceanfishinglure_hermit_snow","oceanfishinglure_hermit_drowsy","oceanfishinglure_hermit_heavy","oceanfishingrod","oceantreenut","panflute","papyrus","petals","petals_evil","phlegm","pickaxe","pig_coin","pig_token", "pigskin","piggyback","pinecone","pitchfork","poop","portableblender_item", "portablecookpot_item","portablespicer_item","portabletent","pumpkin_lantern", "raincoat","razor","redlantern","cutreeds","refined_dust","reflectivevest","reskin_tool","reviver","rock_avocado_fruit","rocks","rope","royal_jelly","seedpouch","seeds","sewing_tape","sewing_kit","shadowheart","shovel","shroom_skin","silk","singingshell_octave3","singingshell_octave4","singingshell_octave5","slingshot", "slurper_pelt","slurtle_shellpieces","slurtleslime","spear","spicepack","spice_garlic","spice_sugar","spice_chili","spice_salt","spidereggsack","spidergland","steelwool","steeringwheel_item","stinger","sweatervest","tallbirdegg","thulecite","thulecite_pieces","thurible","torch","transistor","trap","trap_bramble","trap_starfish","trap_teeth","treegrowthsolution","trunk_summer","trunk_winter","trunk_cooked","twigs","umbrella","cave_banana","corn","pumpkin","eggplant","durian","pomegranate","dragonfruit","berries","berries_juicy","carrot","fig","cactus_meat","watermelon","kelp","tomato","potato","asparagus","milkywhites","onion","garlic","pepper","wateringcan","premiumwateringcan","ruins_bat","hambat","nightstick","nightsword","trident","tentaclespike","spear_wathgrithr","whip","moonglassaxe","multitool_axe_pickaxe","saddlehorn","oar_driftwood","lighter","icestaff","firestaff","staff_tornado","trunkvest_summer","blueamulet","greenamulet","greenstaff","green_mushroomhat","yellowamulet","opalstaff","purpleamulet","onemanband","trunkvest_winter","yellowstaff","telestaff","orangestaff","orangeamulet","eyemaskhat","shieldofterror","stash_map","cursed_monkey_token","monkey_mediumhat","bananajuice","shadow_forge_kit","voidclothhat","armor_voidcloth","voidcloth_umbrella","voidcloth_scythe","armor_lunarplant","lunarplanthat","bomb_lunarplant","staff_lunarplant","sword_lunarplant","pickaxe_lunarplant","shovel_lunarplant","lunar_forge_kit","ipecacsyrup","leif_idol","walking_stick","woodcarvedhat","wolfgang_whistle","cotl_trinket","dumbbell","dumbbell_golden","dumbbell_marble","dumbbell_gem","dumbbell_heat","dumbbell_redgem","dumbbell_bluegem","bootleg","spear_wathgrithr_lightning","spear_wathgrithr_lightning_charged","saddle_wathgrithr","battlesong_container",
+	{"random","Random"},"acorn","amulet","anchor_item","antliontrinket","archive_resonator_item","armor_bramble","armordragonfly","armorgrass","armormarble","armorruins","armor_sanity","armorskeleton","armorslurper","armorsnurtleshell","armorwood","ash","atrium_key","axe","backpack","bandage","batbat","bathbomb","bearger_fur","beargervest","bedroll_straw","bedroll_furry","bee","beef_bell","beefalowool","beemine","beeswax","boards","dug_berrybush","birdtrap","blueprint","boatpatch","boneshard","boomerang","brush","bugnet","bullkelp_root","bundlewrap","butter","butterflywings","candybag","cane","charcoal","chester_eyebone","chum","compass","compost","compostwrap","cookbook","coontail","cutgrass","cutstone","driftwood_log","dustmeringue","bird_egg","bird_egg_cooked","rottenegg","eyeturret_item","farm_hoe","farm_plow_item","featherpencil","feather_crow","feather_robin","feather_robin_winter","feather_canary","fireflies","fishingrod","flint","fossil_piece","froglegs","gears","redgem","bluegem","purplegem","greengem","yellowgem","orangegem","glasscutter","glommerflower","glommerfuel","glommerwings","gnarwail_horn","goatmilk","goldnugget","goose_feather","guano","gunpowder","hammer","strawhat","tophat","beefalohat","featherhat","beehat","minerhat","spiderhat","footballhat","earmuffshat","winterhat","bushhat","flowerhat","walrushat","slurtlehat","ruinshat","molehat","wathgrithrhat","walterhat","icehat","rainhat","catcoonhat","watermelonhat","eyebrellahat","red_mushroomhat","blue_mushroomhat","green_mushroomhat","hivehat","deserthat","goggleshat","moonstorm_goggleshat","skeletonhat","kelphat","mermhat","cookiecutterhat","batnosehat","nutrientsgoggleshat","plantregistryhat","balloonhat","alterguardianhat","hawaiianshirt","healingsalve","honey","honeycomb","horn","houndstooth","hutch_fishbowl","icepack","krampus_sack","lavae_egg","cutlichen","livinglog","log","malbatross_feather","malbatross_feathered_weave","malbatross_beak","mandrake","manrabbit_tail","mapscroll","marble","marblebean","meat","cookedmeat","meat_dried","monstermeat","cookedmonstermeat","monstermeat_dried","smallmeat","cookedsmallmeat","smallmeat_dried","drumstick","drumstick_cooked","batwing","batwing_cooked","plantmeat","plantmeat_cooked","fishmeat_small","fishmeat_small_cooked","fishmeat","fishmeat_cooked","barnacle","barnacle_cooked","batnose","batnose_cooked","messagebottle","messagebottleempty","miniboatlantern","minifan","miniflare","lantern","minisign_item","minotaurhorn","mole","moonbutterflywings","purplemooneye","bluemooneye","redmooneye","orangemooneye","yellowmooneye","greenmooneye","moonglass","moonrocknugget","moon_tree_blossom","mosquitosack","nitre","oar","oceanfish_small_1_inv","oceanfish_small_2_inv","oceanfish_small_3_inv","oceanfish_small_4_inv","oceanfish_small_5_inv","oceanfish_small_6_inv","oceanfish_small_7_inv","oceanfish_small_8_inv","oceanfish_small_9_inv","oceanfish_medium_1_inv","oceanfish_medium_2_inv","oceanfish_medium_3_inv","oceanfish_medium_4_inv","oceanfish_medium_5_inv","oceanfish_medium_6_inv","oceanfish_medium_7_inv","oceanfish_medium_8_inv","oceanfish_medium_9_inv","oceanfishinglure_spoon_red","oceanfishinglure_spoon_green","oceanfishinglure_spoon_blue","oceanfishinglure_spinner_red","oceanfishinglure_spinner_green","oceanfishinglure_spinner_blue","oceanfishinglure_hermit_rain","oceanfishinglure_hermit_snow","oceanfishinglure_hermit_drowsy","oceanfishinglure_hermit_heavy","oceanfishingrod","oceantreenut","panflute","papyrus","petals","petals_evil","phlegm","pickaxe","pig_coin","pig_token", "pigskin","piggyback","pinecone","pitchfork","poop","portableblender_item", "portablecookpot_item","portablespicer_item","portabletent","pumpkin_lantern", "raincoat","razor","redlantern","cutreeds","refined_dust","reflectivevest","reskin_tool","reviver","rock_avocado_fruit","rocks","rope","royal_jelly","seedpouch","seeds","sewing_tape","sewing_kit","shadowheart","shovel","shroom_skin","silk","singingshell_octave3","singingshell_octave4","singingshell_octave5","slingshot", "slurper_pelt","slurtle_shellpieces","slurtleslime","spear","spicepack","spice_garlic","spice_sugar","spice_chili","spice_salt","spidereggsack","spidergland","steelwool","steeringwheel_item","stinger","sweatervest","tallbirdegg","thulecite","thulecite_pieces","thurible","torch","transistor","trap","trap_bramble","trap_starfish","trap_teeth","treegrowthsolution","trunk_summer","trunk_winter","trunk_cooked","twigs","umbrella","cave_banana","corn","pumpkin","eggplant","durian","pomegranate","dragonfruit","berries","berries_juicy","carrot","fig","cactus_meat","watermelon","kelp","tomato","potato","asparagus","milkywhites","onion","garlic","pepper","wateringcan","premiumwateringcan","ruins_bat","hambat","nightstick","nightsword","trident","tentaclespike","spear_wathgrithr","whip","moonglassaxe","multitool_axe_pickaxe","saddlehorn","oar_driftwood","lighter","icestaff","firestaff","staff_tornado","trunkvest_summer","blueamulet","greenamulet","greenstaff","green_mushroomhat","yellowamulet","opalstaff","purpleamulet","onemanband","trunkvest_winter","yellowstaff","telestaff","orangestaff","orangeamulet","eyemaskhat","shieldofterror","stash_map","cursed_monkey_token","monkey_mediumhat","bananajuice","shadow_forge_kit","voidclothhat","armor_voidcloth","voidcloth_umbrella","voidcloth_scythe","armor_lunarplant","lunarplanthat","bomb_lunarplant","staff_lunarplant","sword_lunarplant","pickaxe_lunarplant","shovel_lunarplant","lunar_forge_kit","ipecacsyrup","leif_idol","walking_stick","woodcarvedhat","wolfgang_whistle","cotl_trinket","dumbbell","dumbbell_golden","dumbbell_marble","dumbbell_gem","dumbbell_heat","dumbbell_redgem","dumbbell_bluegem","bootleg","spear_wathgrithr_lightning","spear_wathgrithr_lightning_charged","saddle_wathgrithr","battlesong_container","armor_lunarplant_husk","chestupgrade_stacksize","beeswax_spray","healingsalve_acid","moon_mushroomhat","scrap_monoclehat","scraphat","shroombait","wall_scrap_item","boat_ancient_item","ancienttree_seed","ancientfruit_gem","ancientfruit_nightvision","boatpatch_kelp","boat_bumper_crabking_kit","mosquitobomb","mosquitofertilizer","wurt_swampitem_shadow","wurt_swampitem_lunar","coolant","fence_electric_item","moonstorm_static_catcher","wagboss_robot_creation_parts","wagboss_robot_constructionsite_kit",
 }
 
 if CurrentRelease.GreaterOrEqualTo("R31_LUNAR_MUTANTS") then
@@ -652,6 +673,9 @@ local custom_functions = {
 			end
 		end
 		ListenForEventFinishedWork = function(_, data)
+			if data.target == nil then
+				return
+			end
 			local action = data.target.components.workable and data.target.components.workable.action
 			if worktype == nil or action == worktype then
 				if workable == nil or workable[data.target.prefab] then
@@ -671,7 +695,7 @@ local custom_functions = {
 	["finish work type z for x amount of y"] = function(player,worktype,workable,how_many,quest_name)
 		local amount = GetCurrentAmount(player,quest_name)
 		workable = type(workable) == "string" and {[workable] = true} or workable
-		local ListenForEventFinishedWork
+		local ListenForEventFinishedWork = function() end
 		local function UpdateQuest()
 			amount = amount + 1
 			player:PushEvent("quest_update",{ quest = quest_name, amount = 1})
@@ -801,61 +825,7 @@ local custom_functions = {
 	end,
 
 	["teleport x times y away"] = function(player,amount,targeted,quest_name)
-		local old_ondone
-		local teleports = GetCurrentAmount(player,quest_name)
-		local OnTelePortTarget
-		local function OnEquipStaff(_,data)
-			if data and data.eslot == EQUIPSLOTS.HANDS then
-				local spellcaster = data.item.components.spellcaster
-				if data.item.prefab == "telestaff" and spellcaster ~= nil then
-					old_ondone = spellcaster.onspellcast or function() end
-					spellcaster.onspellcast = function(item,target,pos,...)
-						OnTelePortTarget(item,target,pos)
-						return old_ondone(item,target,pos,...)
-					end
-				end
-			end
-		end
-		local function OnUnEquipStaff(_,data)
-			if data and data.item and data.eslot == EQUIPSLOTS.HANDS then
-				local spellcaster = data.item.components.spellcaster
-				if data.item.prefab == "telestaff" and spellcaster ~= nil and old_ondone ~= nil then
-					spellcaster.onspellcast = old_ondone
-				end
-			end
-		end
-		OnTelePortTarget = function(staff,target)
-			if target and (targeted == nil or target.prefab == targeted) then
-				player:PushEvent("quest_update",{quest = quest_name,amount = 1})
-			end
-			if teleports >= amount then 
-				staff.components.spellcaster.onspellcast = old_ondone
-				player:RemoveEventCallback("equip",OnEquipStaff)
-				player:RemoveEventCallback("unequip",OnUnEquipStaff)
-			end
-		end
-		player:ListenForEvent("equip",OnEquipStaff)
-		player:ListenForEvent("unequip",OnUnEquipStaff)
-		if player.components.inventory then
-			local handitem = player.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-			if handitem and handitem.prefab == "telestaff" then
-				OnEquipStaff(player,{eslot = EQUIPSLOTS.HANDS,item = handitem})
-			end
-		end
-		local function OnForfeitedQuest(_player)
-			_player:RemoveEventCallback("equip",OnEquipStaff)
-			_player:RemoveEventCallback("unequip",OnUnEquipStaff)
-			if _player.components.inventory then
-				local handitem = _player.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-				if handitem and handitem.prefab == "telestaff" then
-					local spellcaster = handitem.components.spellcaster
-					if spellcaster ~= nil and old_ondone ~= nil then
-						spellcaster.onspellcast = old_ondone
-					end
-				end
-			end
-		end
-		OnForfeit(player,OnForfeitedQuest,quest_name)
+		QUEST_COMPONENT.CUSTOM_QUEST_FUNCTIONS["cast spell x y times"](player, amount, quest_name, {telestaff = true}, targeted, nil, nil)
 	end,
 
 	["acquire x followers that are y"] = function(player,amount,fan,quest_name)
@@ -1033,9 +1003,15 @@ local custom_functions = {
 	["pick x y times"] = function(player, amount, quest_name, bool)
 		local picked = GetCurrentAmount(player,quest_name)
 		local function OnPicked(inst, data)
-			local amount_to_add = bool ~= nil and bool(inst, data) or 1
+			local amount_to_add = 1
+			if bool ~= nil then
+				amount_to_add = bool(inst, data)
+			end
 			if amount_to_add then
 				amount_to_add = type(amount_to_add) == "number" and amount_to_add or 1
+				if amount_to_add <= 0 then
+					return
+				end
 				picked = picked + amount_to_add
 				player:PushEvent("quest_update",{quest = quest_name,amount = amount_to_add})
 				if picked >= amount then
@@ -1151,13 +1127,13 @@ local custom_functions = {
 				SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "RemoveTimerFromClient"),player.userid,player,creature)
 			end
 		end
-		OnWin = function(_)
+		OnWin = function()
 			player:PushEvent("quest_update",{quest = quest_name,amount = 1})
 			player:RemoveEventCallback("succesfully_defended",OnWin)
 			player:RemoveEventCallback("victim_died",OnLose)
 			current = current + 1
 			if current < times then
-				AttackWave(player,times,amount,rounds,delta,difficulty,creature,quest_name,min,max)
+				AttackWave()
 			end
 			SendModRPCToClient(GetClientModRPC("Quest_System_RPC", "RemoveTimerFromClient"),player.userid,player,creature)
 		end
@@ -1684,7 +1660,7 @@ local custom_functions = {
 	["kill different creatures x y times"] = function(player,amount,quest_name,victims,check)
 		local current = GetCurrentAmount(player,quest_name)
 		local listen_functions = {}
-		local current_kills = {}
+		local current_kills = player.components.quest_component:GetQuestData(quest_name) or {}
 		for prefab, kill_amount in pairs(victims) do
 			current_kills[prefab] = GetValues(player, quest_name, prefab)
 			if current_kills[prefab] < kill_amount then

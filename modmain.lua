@@ -57,6 +57,7 @@ PrefabFiles = {
 	"request_quest",
 	"quest_system_fx",
 	"boss_island_ceiling",
+	"qs_basalt",
 
 	--Custom Rewards
 	"glommer_lightflower",
@@ -117,6 +118,7 @@ if GLOBAL.TUNING.QUEST_COMPONENT.DEV_MODE then
 	modimport("quest_system/random_quest_generator.lua") --load the random quest generator
 	--Debug
 	GLOBAL.CHEATS_ENABLED = true
+	GLOBAL.CHEATS_ENABLE_DPRINT = true
 	GLOBAL.require( 'debugkeys' )
 	GLOBAL.require( 'debugprint' )
 

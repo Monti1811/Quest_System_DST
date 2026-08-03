@@ -58,7 +58,7 @@ local Quest_Component = Class(function(self, inst)
     self._level = net_float(inst.GUID, "quest_component._level")
     self._points = net_float(inst.GUID, "quest_component._points")
     self._completed_quest = net_float(inst.GUID, "quest_component._completed_quest")
-    self._showhud = net_event(inst.GUID, "quest_component._showhud")
+    --self._showhud = net_event(inst.GUID, "quest_component._showhud")
     self._bossfight = net_byte(inst.GUID, "quest_component._bossfight")
     self._rank = net_byte(inst.GUID, "quest_component._rank")
 
@@ -77,9 +77,9 @@ local Quest_Component = Class(function(self, inst)
 	self.inst:ListenForEvent("quest_component._selectable_quests_dirty", self._OnPossibleQuestDirty)
 	self.inst:ListenForEvent("quest_component._accepted_level_rewards_dirty", self._OnAcceptedLevelRewards)
 
-    if not TheWorld.ismastersim then
-		self.inst:ListenForEvent("quest_component._showhud", OnShowHUDDirty)
-	end
+    --if not TheWorld.ismastersim then
+		--self.inst:ListenForEvent("quest_component._showhud", OnShowHUDDirty)
+	--end
 
 	self.quest_data = {}
 

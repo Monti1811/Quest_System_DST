@@ -48,6 +48,12 @@ local function StopBrain(inst)
 	inst:SetBrain(nil)
 end
 
+local function NoWalkOnWater(inst)
+	if inst.components.locomotor then
+		inst.components.locomotor.pathcaps["allowocean"] = nil
+	end
+end
+
 local function OnDeath(inst)
 	local pos = inst:GetPosition()
 	TheWorld:DoTaskInTime(0, function()
@@ -130,7 +136,7 @@ local AttackWaves = Class(function(self,inst)
 	self.DoAttackWave_task = {}
 
 	self.victims = {
-		glommer = true,
+		glommer = NoWalkOnWater,
 		butterfly = StopBrain,
 		moonbutterfly = true,
 		dustmoth = true,
@@ -267,18 +273,26 @@ function AttackWaves:ReleaseSpawnAfterTime(player,target,delta,attacksize)
 end
 
 
-function AttackWaves:StartAttack(player,attacksize,delta,difficulty,_victim)
+function AttackWaves:StartAttack(player,attacksize,delta,difficulty,_victim, no_repeat)
 	if player == nil or _victim == nil then
 		print("[Attackwaves] Victim or player was nil",player,attacksize,delta,difficulty,_victim)
 		return
 	end
 	devprint("StartAttack",player,attacksize,delta,difficulty, _victim)
-	local pos = Vector3(player.Transform:GetWorldPosition())
-	local new_pos = FindWalkableOffset(pos,math.random()*PI*2,math.random(16,22),500,true,false)
-	if new_pos == nil then
-		self.inst:DoTaskInTime(0.5, function()
-			self:StartAttack(player,attacksize,delta,difficulty,_victim)
+	-- Check if the player is in water or on a boat, if yes, start attack once they're back on land
+	if not player:IsOnPassablePoint(false, true) then
+		if not no_repeat then
+			player.components.talker:Say(STRINGS_AW.NOT_PASSABLE)
+		end
+		self.inst:DoTaskInTime(3, function()
+			self:StartAttack(player,attacksize,delta,difficulty,_victim, true)
 		end)
+		return
+	end
+	local pos = Vector3(player.Transform:GetWorldPosition())
+	local new_pos = FindWalkableOffset(pos,math.random()*PI*2,math.random(12,22),500,true,false)
+	if new_pos == nil then
+		new_pos = Vector3(0,0,0)
 	end
 	local prefab = _victim or GetRandomItemWithIndex(self.victims)
 	local victim = SpawnPrefab(prefab)
